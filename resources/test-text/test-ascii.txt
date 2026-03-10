@@ -1,0 +1,2 @@
+  Hello world. All plain ASCII text here.
+  No special characters at all.

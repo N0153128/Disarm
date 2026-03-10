@@ -1,0 +1,3 @@
+ Ａｌｅｒｔ　ｍｅｓｓａｇｅ  ← fullwidth chars (should normalize)
+  helloworld  ← zero-width space \u200B between hello/world (should strip)
+  ﬁle  ← ligature fi \uFB01 (should normalize to "fi")

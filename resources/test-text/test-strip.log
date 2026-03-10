@@ -1,0 +1,8 @@
+  2025-01-15 08:23:11 INFO  Application started successfully
+  2025-01-15 08:23:12 INFO  Loading configuration from /etc/app/config.properties
+  2025-01-15 08:23:13 WARN  javascript:void(0) detected in incoming request
+  2025-01-15 08:23:14 ERROR <script>document.cookie</script> found in payload
+  2025-01-15 08:23:15 DEBUG data:image/png;base64,abc123 embedded in request body
+  2025-01-15 08:23:16 INFO  Request processed from 192.168.1.42
+  2025-01-15 08:23:17 ERROR vbscript:msgbox('pwned') in user-agent header
+  2025-01-15 08:23:18 INFO  Connection closed

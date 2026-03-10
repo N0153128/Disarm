@@ -1,0 +1,6 @@
+{
+  "name": "test <script>alert(1)</script>",
+  "url": "javascript:evil()",
+  "data": "data:text/html,<b>hi</b>",
+  "safe": "normal value"
+}
