@@ -1,9 +1,5 @@
 # Disarm
-Java library for sanitizing potentially malicious media files by re-encoding images, audio, video, and text to safe formats with configurable validation and size limits.
-
-Disarm                                                                                                                                                                                                                       
-                                                                                                                                                                                                                               
-  A Java library for sanitizing potentially malicious media files by re-encoding them to safe formats. Supports images, audio, video, and text with configurable validation, size limits, and optional watermarking.           
+Java library for sanitizing potentially malicious media files by re-encoding images, audio, video, and text to safe formats with configurable validation and size limits.         
                                                                                                                                                                                                                                
   ---                                                                                                                                                                                                                          
   Features        
