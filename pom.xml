@@ -10,12 +10,12 @@
     </repositories>
 
     <groupId>dev.n0153.app</groupId>
-    <artifactId>j-disarm-img</artifactId>
+    <artifactId>disarm</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <name>j-disarm-img</name>
+    <name>disarm</name>
     <!-- FIXME change it to the project's website -->
-    <url>https://www.n0153.dev</url>
+    <url>https://disarm.n0153.dev/</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
