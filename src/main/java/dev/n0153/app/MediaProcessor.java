@@ -5,7 +5,10 @@ import dev.n0153.app.exceptions.DisarmException;
 /**
  * This interface holds processing logic.
  */
-public interface MediaProcessor {
+public interface MediaProcessor<Config extends ProcessorConfig> {
+
+    Validator<Config> getValidator();
+    ProcessingContext process(ProcessingContext context, Config config);
 
     /**
      * Default processing logic interface.
