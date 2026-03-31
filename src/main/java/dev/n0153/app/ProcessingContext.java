@@ -1,75 +1,175 @@
 package dev.n0153.app;
 
 import java.nio.file.Path;
+import java.time.Instant;
+import java.util.List;
 
 /**
  * This interface holds context data for runtime.
  */
-public interface ProcessingContext {
+public class ProcessingContext {
+    private final String id;
+    private final String fileName;
+    private final long byteSize;
+    private final String mimeType;
+    private final byte[] inputBuffer;
+    private final String stage;
+    private final String resolvedPlugin;
+    private final byte[] outputBuffer;
+    private final List<String> transformationsApplied;
+    private final List<String> warnings;
+    private final String error;
+    private final Instant startedAt;
+    private final Instant completedAt;
+    private final ProcessorConfig configSnapshot;
 
-    /**
-     * Get unique ID for current file instance.
-     * @return unique file ID
-     */
-    int getId();
+    private ProcessingContext(Builder builder) {
+        this.id = builder.id;
+        this.fileName = builder.fileName;
+        this.byteSize = builder.byteSize;
+        this.mimeType = builder.mimeType;
+        this.inputBuffer = builder.inputBuffer;
+        this.stage = builder.stage;
+        this.resolvedPlugin = builder.resolvedPlugin;
+        this.outputBuffer = builder.outputBuffer;
+        this.transformationsApplied = builder.transformationsApplied;
+        this.warnings = builder.warnings;
+        this.error = builder.error;
+        this.startedAt = builder.startedAt;
+        this.completedAt = builder.completedAt;
+        this.configSnapshot = builder.configSnapshot;
+    }
 
-    /**
-     * Get MIME type for current file instance.
-     * @return MIME type
-     */
-    String getMime();
+    public String getId() {
+        return this.id;
+    };
 
-    /**
-     * Get path to file for current file instance.
-     * @return path to file
-     */
-    Path getOsTargetPath();
+    public String getFilename() {
+        return fileName;
+    }
 
-    /**
-     * Get file media type for current file instance.
-     * @return media type (image, video, etc)
-     */
-    String getFileType();
+    public long getByteSize() {
+        return byteSize;
+    }
 
-    /**
-     * Get unique file title for current file instance.
-     * @return file title
-     */
-    String getGeneralFileTitle();
+    public String getMimeType() {
+        return mimeType;
+    }
 
-    /**
-     *
-     * @return file size
-     */
-    int getFileSize();
+    public byte[] getInputBuffer() {
+        return inputBuffer;
+    }
 
-    /**
-     * Sets unique ID for a file instance.
-     */
-    void setId();
+    public String getStage() {
+        return stage;
+    }
 
-    /**
-     * Sets MIME type for a file instance.
-     */
-    void setMime();
+    public String getResolvedPlugin() {
+        return resolvedPlugin;
+    }
 
-    /**
-     * Sets path to file.
-     */
-    void setOsTargetPath();
+    public byte[] getOutputBuffer() {
+        return outputBuffer;
+    }
 
-    /**
-     * Sets file media type.
-     */
-    void setFileType();
+    public List<String> getTransformationsApplied() {
+        return transformationsApplied;
+    }
 
-    /**
-     * Sets file unique title.
-     */
-    void setGeneralFileTitle();
+    public List<String> getWarnings() {
+        return warnings;
+    }
 
-    /**
-     * Sets file size.
-     */
-    void setFileSize();
+    public String getError() {
+        return error;
+    }
+
+    public Instant getStartedAt() {
+        return startedAt;
+    }
+
+    public Instant getCompletedAt() {
+        return completedAt;
+    }
+
+    public ProcessorConfig getConfigSnapshot() {
+        return configSnapshot;
+    }
+
+    public static class Builder {
+        private String id;
+        private String fileName;
+        private long byteSize;
+        private String mimeType;
+        private byte[] inputBuffer;
+        private String stage;
+        private String resolvedPlugin;
+        private byte[] outputBuffer;
+        private List<String> transformationsApplied;
+        private List<String> warnings;
+        private String error;
+        private Instant startedAt;
+        private Instant completedAt;
+        private ProcessorConfig configSnapshot;
+
+        public void setConfigSnapshot(ProcessorConfig configSnapshot) {
+            this.configSnapshot = configSnapshot;
+        }
+
+        public void setCompletedAt(Instant completedAt) {
+            this.completedAt = completedAt;
+        }
+
+        public void setStartedAt(Instant startedAt) {
+            this.startedAt = startedAt;
+        }
+
+        public void setError(String error) {
+            this.error = error;
+        }
+
+        public void setWarnings(List<String> warnings) {
+            this.warnings = warnings;
+        }
+
+        public void setTransformationsApplied(List<String> transformationsApplied) {
+            this.transformationsApplied = transformationsApplied;
+        }
+
+        public void setOutputBuffer(byte[] outputBuffer) {
+            this.outputBuffer = outputBuffer;
+        }
+
+        public void setResolvedPlugin(String resolvedPlugin) {
+            this.resolvedPlugin = resolvedPlugin;
+        }
+
+        public void setInputBuffer(byte[] inputBuffer) {
+            this.inputBuffer = inputBuffer;
+        }
+
+        public void setStage(String stage) {
+            this.stage = stage;
+        }
+
+        public void setMimeType(String mimeType) {
+            this.mimeType = mimeType;
+        }
+
+        public void setByteSize(long byteSize) {
+            this.byteSize = byteSize;
+        }
+
+        public void setFilename(String filename) {
+            this.fileName = filename;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public ProcessingContext build() {
+            return new ProcessingContext(this);
+        }
+    }
 }
