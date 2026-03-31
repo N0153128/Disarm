@@ -4,68 +4,23 @@ import java.nio.file.Path;
 
 public interface MediaContext {
     /**
-     * Get unique ID for current file instance.
-     * @return unique file ID
+     * Puts data into user's specified HashMap.
+     * @param key identifier
+     * @param value object to be stored
      */
-    int getId();
+    void put(String key, Object value);
 
     /**
-     * Get MIME type for current file instance.
-     * @return MIME type
+     * Fetches data from user's specified HashMap.
+     * @param key identifier
+     * @param type Object type
+     * @return specified type's object
+     * @param <ValueType> specified type
      */
-    String getMime();
+    <ValueType> ValueType get (String key, Class <ValueType> type);
 
     /**
-     * Get path to file for current file instance.
-     * @return path to file
+     * A method used by plugin caller to free up resources once the file has been processed
      */
-    Path getOsTargetPath();
-
-    /**
-     * Get file media type for current file instance.
-     * @return media type (image, video, etc)
-     */
-    String getFileType();
-
-    /**
-     * Get unique file title for current file instance.
-     * @return file title
-     */
-    String getGeneralFileTitle();
-
-    /**
-     *
-     * @return file size
-     */
-    int getFileSize();
-
-    /**
-     * Sets unique ID for a file instance.
-     */
-    void setId();
-
-    /**
-     * Sets MIME type for a file instance.
-     */
-    void setMime();
-
-    /**
-     * Sets path to file.
-     */
-    void setOsTargetPath();
-
-    /**
-     * Sets file media type.
-     */
-    void setFileType();
-
-    /**
-     * Sets file unique title.
-     */
-    void setGeneralFileTitle();
-
-    /**
-     * Sets file size.
-     */
-    void setFileSize();
+    void release();
 }
