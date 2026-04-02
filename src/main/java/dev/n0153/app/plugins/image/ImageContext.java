@@ -50,11 +50,11 @@ public class ImageContext implements MediaContext {
         return get(KEY_LOGO, Mat.class);
     }
 
-    public int getX(){
+    public int getImgX(){
         return get(KEY_X, int.class);
     }
 
-    public int getY(){
+    public int getImgY(){
         return get(KEY_Y, int.class);
     }
 
@@ -92,7 +92,7 @@ public class ImageContext implements MediaContext {
         put(KEY_LOGO, newLogo.clone());
     }
 
-    public void setX(int newX) {
+    public void setImgX(int newX) {
         if (newX < 0) {
             throw new IllegalArgumentException("X value cannot be lower than 0");
         }
@@ -102,7 +102,7 @@ public class ImageContext implements MediaContext {
         put(KEY_X, newX);
     }
 
-    public void setY(int newY) {
+    public void setImgY(int newY) {
         if (newY < 0) {
             throw new IllegalArgumentException("Y value cannot be lower than 0");
         }
