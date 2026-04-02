@@ -10,11 +10,6 @@ public class ImageConfig implements ProcessorConfig {
     }
 
     @Override
-    public int getId() {
-        return 1;
-    }
-
-    @Override
     public double getVersion() {
         return 1;
     }

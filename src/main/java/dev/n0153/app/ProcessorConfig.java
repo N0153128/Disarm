@@ -14,12 +14,6 @@ public interface ProcessorConfig {
     String getName();
 
     /**
-     * Every plugin must contain its own unique ID.
-     * @return unique ID
-     */
-    int getId();
-
-    /**
      * Every plugin must contain its own version number.
      * @return version number
      */
