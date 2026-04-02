@@ -27,13 +27,6 @@ public class ImageContext implements MediaContext {
     @Override
     public void close() throws Exception {}
 
-    private Mat image;
-    private Mat logo;
-    private int x = 0;
-    private int y = 0;
-    private String logoTitle;
-    private String imageTitle;
-
     private final String KEY_IMAGE = "image";
     private final String KEY_LOGO = "logo";
     private final String KEY_X = "x";
@@ -73,8 +66,8 @@ public class ImageContext implements MediaContext {
         if (newImage.empty()) {
             throw new IllegalArgumentException("Empty image passed");
         }
-        if (image != null) {
-            image.release();
+        if (get(KEY_IMAGE, Mat.class) != null) {
+            get(KEY_IMAGE, Mat.class).release();
         }
         put(KEY_IMAGE, newImage.clone());
     }
@@ -86,8 +79,8 @@ public class ImageContext implements MediaContext {
         if (newLogo.empty()) {
             throw new IllegalArgumentException("Empty logo passed");
         }
-        if (logo != null) {
-            logo.release();
+        if (get(KEY_LOGO, Mat.class) != null) {
+            get(KEY_LOGO, Mat.class).release();
         }
         put(KEY_LOGO, newLogo.clone());
     }
@@ -96,7 +89,7 @@ public class ImageContext implements MediaContext {
         if (newX < 0) {
             throw new IllegalArgumentException("X value cannot be lower than 0");
         }
-        if (image != null && !image.empty() && newX >= image.width()) {
+        if (get(KEY_IMAGE, Mat.class) != null && !get(KEY_IMAGE, Mat.class).empty() && newX >= get(KEY_IMAGE, Mat.class).width()) {
             throw new IllegalArgumentException("X coordinate exceeds image width");
         }
         put(KEY_X, newX);
@@ -106,7 +99,7 @@ public class ImageContext implements MediaContext {
         if (newY < 0) {
             throw new IllegalArgumentException("Y value cannot be lower than 0");
         }
-        if (image != null && !image.empty() && newY >= image.height()) {
+        if (get(KEY_IMAGE, Mat.class) != null && !get(KEY_IMAGE, Mat.class).empty() && newY >= get(KEY_IMAGE, Mat.class).height()) {
             throw new IllegalArgumentException("Y coordinate exceeds image height");
         }
         put(KEY_Y, newY);
