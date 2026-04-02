@@ -112,60 +112,74 @@ public class ProcessingContext {
         private Instant completedAt;
         private ProcessorConfig configSnapshot;
 
-        public void setConfigSnapshot(ProcessorConfig configSnapshot) {
+        public Builder setConfigSnapshot(ProcessorConfig configSnapshot) {
             this.configSnapshot = configSnapshot;
+            return this;
         }
 
-        public void setCompletedAt(Instant completedAt) {
+        public Builder setCompletedAt(Instant completedAt) {
             this.completedAt = completedAt;
+            return this;
         }
 
-        public void setStartedAt(Instant startedAt) {
+        public Builder setStartedAt(Instant startedAt) {
             this.startedAt = startedAt;
+            return this;
         }
 
-        public void setError(String error) {
+        public Builder setError(String error) {
             this.error = error;
+            return this;
         }
 
-        public void setWarnings(List<String> warnings) {
+        public Builder setWarnings(List<String> warnings) {
             this.warnings = warnings;
+            return this;
         }
 
-        public void setTransformationsApplied(List<String> transformationsApplied) {
+        public Builder setTransformationsApplied(List<String> transformationsApplied) {
             this.transformationsApplied = transformationsApplied;
+            return this;
         }
 
-        public void setOutputBuffer(byte[] outputBuffer) {
+        public Builder setOutputBuffer(byte[] outputBuffer) {
             this.outputBuffer = outputBuffer;
+            return this;
         }
 
-        public void setResolvedPlugin(String resolvedPlugin) {
+        public Builder setResolvedPlugin(String resolvedPlugin) {
             this.resolvedPlugin = resolvedPlugin;
+            return this;
         }
 
-        public void setInputBuffer(byte[] inputBuffer) {
+        public Builder setInputBuffer(byte[] inputBuffer) {
             this.inputBuffer = inputBuffer;
+            return this;
         }
 
-        public void setStage(String stage) {
+        public Builder setStage(String stage) {
             this.stage = stage;
+            return this;
         }
 
-        public void setMimeType(String mimeType) {
+        public Builder setMimeType(String mimeType) {
             this.mimeType = mimeType;
+            return this;
         }
 
-        public void setByteSize(long byteSize) {
+        public Builder setByteSize(long byteSize) {
             this.byteSize = byteSize;
+            return this;
         }
 
-        public void setFilename(String filename) {
+        public Builder setFilename(String filename) {
             this.fileName = filename;
+            return this;
         }
 
-        public void setId(String id) {
+        public Builder setId(String id) {
             this.id = id;
+            return this;
         }
 
         public ProcessingContext build() {

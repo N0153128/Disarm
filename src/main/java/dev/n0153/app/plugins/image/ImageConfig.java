@@ -86,8 +86,14 @@ public class ImageConfig implements ProcessorConfig {
         private int logoMaxHeight = 50;
 
         //setters
-        public void setLogoSizeLimit(int logoSizeLimit) {
-            this.logoSizeLimit = logoSizeLimit;
+        public void setLogoSizeLimit(int newLogoSizeLimit) {
+            if (newLogoSizeLimit < 0) {
+                throw new IllegalArgumentException("Logo size limit cannot be less than zero");
+            }
+            if (newLogoSizeLimit > generalFileSizeUpperBoundLimit) {
+                throw new IllegalArgumentException("Logo size limit cannot exceed upper bound");
+            }
+            logoSizeLimit = newLogoSizeLimit;
         }
 
         public void setKeepLogo(boolean keepLogo) {
@@ -98,20 +104,32 @@ public class ImageConfig implements ProcessorConfig {
             this.keepImage = keepImage;
         }
 
-        public void setImgMaxWidth(double imgMaxWidth) {
-            this.imgMaxWidth = imgMaxWidth;
+        public void setImgMaxWidth(double newImgMaxWidth) {
+            if (newImgMaxWidth < 0) {
+                throw new IllegalArgumentException("Image max width cannot be less than zero");
+            }
+            imgMaxWidth = newImgMaxWidth;
         }
 
-        public void setImgMaxHeight(double imgMaxHeight) {
-            this.imgMaxHeight = imgMaxHeight;
+        public void setImgMaxHeight(double newImageMaxHeight) {
+            if (newImageMaxHeight < 0) {
+                throw new IllegalArgumentException("Image max height cannot be less than zero");
+            }
+            imgMaxHeight = newImageMaxHeight;
         }
 
-        public void setLogoMaxWidth(int logoMaxWidth) {
-            this.logoMaxWidth = logoMaxWidth;
+        public void setLogoMaxWidth(int newLogoMaxWidth) {
+            if (newLogoMaxWidth < 0) {
+                throw new IllegalArgumentException("Logo max width cannot be less than zero");
+            }
+            logoMaxWidth = newLogoMaxWidth;
         }
 
-        public void setLogoMaxHeight(int logoMaxHeight) {
-            this.logoMaxHeight = logoMaxHeight;
+        public void setLogoMaxHeight(int newLogoMaxHeight) {
+            if (newLogoMaxHeight < 0) {
+                throw new IllegalArgumentException("Logo max height cannot be less than zero");
+            }
+            logoMaxHeight = newLogoMaxHeight;
         }
 
     }
