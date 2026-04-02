@@ -1,6 +1,6 @@
 package dev.n0153.app;
 
-public interface MediaContext {
+public interface MediaContext extends AutoCloseable {
     /**
      * Puts data into user's specified HashMap.
      * @param key identifier
