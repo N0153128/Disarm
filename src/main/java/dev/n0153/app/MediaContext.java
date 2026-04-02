@@ -1,7 +1,5 @@
 package dev.n0153.app;
 
-import java.nio.file.Path;
-
 public interface MediaContext {
     /**
      * Puts data into user's specified HashMap.

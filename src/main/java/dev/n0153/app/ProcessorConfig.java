@@ -8,6 +8,12 @@ import java.util.Set;
 public interface ProcessorConfig {
 
     /**
+     * Every plugin must contain its own unique name, that reflects it's functionality.
+     * @return unique plugin name
+     */
+    String getName();
+
+    /**
      * Every plugin must contain its own unique ID.
      * @return unique ID
      */
