@@ -77,13 +77,13 @@ public class ImageConfig implements ProcessorConfig {
     }
 
     public static class Builder {
-        private int logoSizeLimit; //5MB
-        private boolean keepLogo;
-        private boolean keepImage;
-        private double imgMaxWidth;
-        private double imgMaxHeight;
-        private int logoMaxWidth;
-        private int logoMaxHeight;
+        private int logoSizeLimit = 5_000_000; //5MB
+        private boolean keepLogo = true;
+        private boolean keepImage = true;
+        private double imgMaxWidth = 512;
+        private double imgMaxHeight = 512;
+        private int logoMaxWidth = 50;
+        private int logoMaxHeight = 50;
 
         //setters
         public void setLogoSizeLimit(int logoSizeLimit) {
