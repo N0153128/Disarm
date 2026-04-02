@@ -7,7 +7,7 @@ import dev.n0153.app.exceptions.DisarmException;
  */
 public interface MediaProcessor<Config extends ProcessorConfig> {
 
-    Validator<Config> getValidator();
+    MediaValidator<Config> getValidator();
     ProcessingContext process(ProcessingContext context, Config config);
 
     /**
