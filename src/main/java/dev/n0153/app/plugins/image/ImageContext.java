@@ -66,27 +66,69 @@ public class ImageContext implements MediaContext {
         return get(KEY_IMAGE_TITLE, String.class);
     }
 
-    public void setImage() {
-        put(KEY_IMAGE, image);
+    public void setImage(Mat newImage) {
+        if (newImage == null) {
+            throw new IllegalArgumentException("Image cannot be null");
+        }
+        if (newImage.empty()) {
+            throw new IllegalArgumentException("Empty image passed");
+        }
+        if (image != null) {
+            image.release();
+        }
+        put(KEY_IMAGE, newImage.clone());
     }
 
-    public void setLogo() {
-        put(KEY_LOGO, logo);
+    public void setLogo(Mat newLogo) {
+        if (newLogo == null) {
+            throw new IllegalArgumentException("Logo cannot be null");
+        }
+        if (newLogo.empty()) {
+            throw new IllegalArgumentException("Empty logo passed");
+        }
+        if (logo != null) {
+            logo.release();
+        }
+        put(KEY_LOGO, newLogo.clone());
     }
 
-    public void setX() {
-        put(KEY_X, x);
+    public void setX(int newX) {
+        if (newX < 0) {
+            throw new IllegalArgumentException("X value cannot be lower than 0");
+        }
+        if (image != null && !image.empty() && newX >= image.width()) {
+            throw new IllegalArgumentException("X coordinate exceeds image width");
+        }
+        put(KEY_X, newX);
     }
 
-    public void setY() {
-        put(KEY_Y, y);
+    public void setY(int newY) {
+        if (newY < 0) {
+            throw new IllegalArgumentException("Y value cannot be lower than 0");
+        }
+        if (image != null && !image.empty() && newY >= image.height()) {
+            throw new IllegalArgumentException("Y coordinate exceeds image height");
+        }
+        put(KEY_Y, newY);
     }
 
-    public void setLogoTitle() {
-        put(KEY_LOGO_TITLE, logoTitle);
+    public void setLogoTitle(String newLogoTitle) {
+        if (newLogoTitle == null) {
+            throw new IllegalArgumentException("Logo file name cannot be null");
+        }
+        if (newLogoTitle.isEmpty()) {
+            throw new IllegalArgumentException("Logo file name cannot be empty");
+        }
+        put(KEY_LOGO_TITLE, newLogoTitle);
     }
 
-    public void setImageTitle() {
-        put(KEY_IMAGE_TITLE, imageTitle);
+    public void setImageTitle(String newImageTitle) {
+        if (newImageTitle == null) {
+            throw new IllegalArgumentException("Logo file name cannot be null");
+        }
+        if (newImageTitle.isEmpty()) {
+            throw new IllegalArgumentException("Logo file name cannot be empty");
+        }
+        put(KEY_IMAGE_TITLE, newImageTitle);
     }
 }

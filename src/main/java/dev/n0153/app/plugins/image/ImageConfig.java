@@ -90,9 +90,6 @@ public class ImageConfig implements ProcessorConfig {
             if (newLogoSizeLimit < 0) {
                 throw new IllegalArgumentException("Logo size limit cannot be less than zero");
             }
-            if (newLogoSizeLimit > generalFileSizeUpperBoundLimit) {
-                throw new IllegalArgumentException("Logo size limit cannot exceed upper bound");
-            }
             logoSizeLimit = newLogoSizeLimit;
         }
 
