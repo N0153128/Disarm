@@ -80,6 +80,10 @@ public class ImageConfig implements ProcessorConfig {
         private int logoMaxWidth = 50;
         private int logoMaxHeight = 50;
 
+        public ImageConfig build() {
+            return new ImageConfig(this);
+        }
+
         //setters
         public void setLogoSizeLimit(int newLogoSizeLimit) {
             if (newLogoSizeLimit < 0) {
