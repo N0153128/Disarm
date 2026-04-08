@@ -5,6 +5,7 @@ import java.nio.file.Path;
 public class GlobalConfig {
     private final int generalSizeLimit;
     private final boolean keepInputs;
+    private final boolean keepResult;
     private final boolean keepOriginal;
     private final int generalFileSizeUpperBoundLimit;
     private final Path generalOutputPath;
@@ -17,6 +18,7 @@ public class GlobalConfig {
         this.generalFileSizeUpperBoundLimit = builder.generalFileSizeUpperBoundLimit;
         this.generalOutputPath = builder.generalOutputPath;
         this.targetFileLength = builder.targetFileLength;
+        this.keepResult = builder.keepResult;
     }
 
     public int getGeneralFileSizeUpperBoundLimit() {
@@ -25,6 +27,10 @@ public class GlobalConfig {
 
     public boolean getKeepInputs() {
         return keepInputs;
+    }
+
+    public boolean getKeepResult() {
+        return keepResult;
     }
 
     public boolean isKeepOriginal() {
@@ -47,6 +53,7 @@ public class GlobalConfig {
 
         private int generalSizeLimit;
         private boolean keepInputs;
+        private boolean keepResult;
         private boolean keepOriginal;
         private int generalFileSizeUpperBoundLimit;
         private Path generalOutputPath;
@@ -58,6 +65,11 @@ public class GlobalConfig {
 
         public Builder setKeepInputs(boolean newKeepInputs) {
             keepInputs = newKeepInputs;
+            return this;
+        }
+
+        public Builder setKeepResults(boolean newKeepResult) {
+            keepResult = newKeepResult;
             return this;
         }
 

@@ -1,9 +1,6 @@
 package dev.n0153.app.plugins.image;
 
-import dev.n0153.app.Image;
-import dev.n0153.app.MediaProcessor;
-import dev.n0153.app.MediaValidator;
-import dev.n0153.app.ProcessingContext;
+import dev.n0153.app.*;
 import dev.n0153.app.exceptions.DisarmException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,12 +13,14 @@ import java.util.*;
 public class ImagePlugin implements MediaProcessor<ImageConfig> {
     private ImageConfig config;
     private ImageContext context;
+    private GlobalConfig globalConfig;
     private final ImageValidator validator = new ImageValidator();
     private static final Logger logger = LogManager.getLogger(ImagePlugin.class);
 
-    public ImagePlugin(ImageConfig config, ImageContext context) {
+    public ImagePlugin(GlobalConfig globalConfig, ImageConfig config, ImageContext context) {
         this.config = config;
         this.context = context;
+        this.globalConfig = globalConfig;
     }
 
     @Override
@@ -61,7 +60,7 @@ public class ImagePlugin implements MediaProcessor<ImageConfig> {
             source.copyTo(destination);
         }
         if (config.isKeepImage()) {
-            Imgcodecs.imwrite(config.getGeneralOutputPath().resolve(state.getGeneralFileTitle()).toString(), destination);
+            Imgcodecs.imwrite(globalConfig.getGeneralOutputPath().resolve(state.getGeneralFileTitle()).toString(), destination);
         }
         context.setImage(destination);
         destination.release();
@@ -90,7 +89,7 @@ public class ImagePlugin implements MediaProcessor<ImageConfig> {
             context.setImage(source.clone());
         }
         if (config.isKeepImage()) {
-            Imgcodecs.imwrite(config.getGeneralOutputPath().resolve(state.getGeneralFileTitle()).toString(), state.getImage());
+            Imgcodecs.imwrite(globalConfig.getGeneralOutputPath().resolve(state.getGeneralFileTitle()).toString(), state.getImage());
         }
         destination.release();
     }
@@ -159,8 +158,8 @@ public class ImagePlugin implements MediaProcessor<ImageConfig> {
             Core.merge(bgrChannels, logoBGR);
             logoBGR.copyTo(imageROI, alphaMask);
 
-            if (config.getKeepResult()) {
-                Imgcodecs.imwrite(config.getGeneralOutputPath().resolve(state.getGeneralFileTitle()).toString(), state.getImage());
+            if (globalConfig.getKeepResult()) {
+                Imgcodecs.imwrite(globalConfig.getGeneralOutputPath().resolve(state.getGeneralFileTitle()).toString(), state.getImage());
             }
         }
 
