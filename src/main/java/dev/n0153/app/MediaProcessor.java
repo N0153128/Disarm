@@ -16,4 +16,5 @@ public interface MediaProcessor<Config extends ProcessorConfig> {
      */
     void process() throws DisarmException;
 
+    void register(PluginRegistry registry) throws DisarmException;
 }

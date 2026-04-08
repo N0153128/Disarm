@@ -38,6 +38,23 @@ public class ImagePlugin implements MediaProcessor<ImageConfig> {
 
     }
 
+    @Override
+    public void register(PluginRegistry registry) throws DisarmException {
+        registry.register("png",
+                new ImagePlugin(globalConfig, config, context),
+                new ImageCli());
+        registry.register("jpeg",
+                new ImagePlugin(globalConfig, config, context),
+                new ImageCli());
+        registry.register("jpg",
+                new ImagePlugin(globalConfig, config, context),
+                new ImageCli());
+        registry.register("webp",
+                new ImagePlugin(globalConfig, config, context),
+                new ImageCli());
+
+    }
+
     /**
      * Scales given image Mat object to any specified dimensions.
      * @param source OpenCV's image object.
