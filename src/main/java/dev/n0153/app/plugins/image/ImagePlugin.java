@@ -11,9 +11,9 @@ import org.opencv.imgproc.Imgproc;
 import java.util.*;
 
 public class ImagePlugin implements MediaProcessor<ImageConfig> {
-    private ImageConfig config;
-    private ImageContext context;
-    private GlobalConfig globalConfig;
+    private final ImageConfig config;
+    private final ImageContext context;
+    private final GlobalConfig globalConfig;
     private final ImageValidator validator = new ImageValidator();
     private static final Logger logger = LogManager.getLogger(ImagePlugin.class);
 
@@ -60,7 +60,7 @@ public class ImagePlugin implements MediaProcessor<ImageConfig> {
             source.copyTo(destination);
         }
         if (config.isKeepImage()) {
-            Imgcodecs.imwrite(globalConfig.getGeneralOutputPath().resolve(state.getGeneralFileTitle()).toString(), destination);
+            Imgcodecs.imwrite(globalConfig.getGeneralOutputPath().resolve(context.getImageTitle()).toString(), destination);
         }
         context.setImage(destination);
         destination.release();
@@ -89,7 +89,7 @@ public class ImagePlugin implements MediaProcessor<ImageConfig> {
             context.setImage(source.clone());
         }
         if (config.isKeepImage()) {
-            Imgcodecs.imwrite(globalConfig.getGeneralOutputPath().resolve(state.getGeneralFileTitle()).toString(), state.getImage());
+            Imgcodecs.imwrite(globalConfig.getGeneralOutputPath().resolve(context.getImageTitle()).toString(), context.getImage());
         }
         destination.release();
     }
@@ -159,7 +159,7 @@ public class ImagePlugin implements MediaProcessor<ImageConfig> {
             logoBGR.copyTo(imageROI, alphaMask);
 
             if (globalConfig.getKeepResult()) {
-                Imgcodecs.imwrite(globalConfig.getGeneralOutputPath().resolve(state.getGeneralFileTitle()).toString(), state.getImage());
+                Imgcodecs.imwrite(globalConfig.getGeneralOutputPath().resolve(context.getImageTitle()).toString(), context.getImage());
             }
         }
 
