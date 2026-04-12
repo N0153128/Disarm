@@ -2,16 +2,14 @@ package dev.n0153.app;
 
 import dev.n0153.app.exceptions.UnsupportedFileTypeException;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * This class holds information about all plugins and acts as a glue between App and plugins.
  */
 public class PluginRegistry {
-    private final Map<String, MediaProcessor<?>> processorRegistry = new HashMap<>();
-    private final Map<String, CliConfig<?, ?>> cliRegistry = new HashMap<>();
+    private final Map<Set<String>, MediaProcessor<?>> processorRegistry = new HashMap<>();
+    private final Map<Set<String>, CliConfig<?, ?>> cliRegistry = new HashMap<>();
 
     /**
      * This method is a registry point for all plugins and their respective MIME types.
@@ -20,13 +18,13 @@ public class PluginRegistry {
      * @param <Config> plugin's respective configuration.
      */
     public <Config extends ProcessorConfig> void register(
-            String mimeType,
+            Set<String> mimeType,
             MediaProcessor<Config> plugin) {
         processorRegistry.put(mimeType, plugin);
     }
 
     public <Config extends ProcessorConfig, Builder> void register(
-            String mimeType,
+            Set<String> mimeType,
             MediaProcessor<Config> plugin,
             CliConfig<Config, Builder> cliConfig) {
         processorRegistry.put(mimeType, plugin);

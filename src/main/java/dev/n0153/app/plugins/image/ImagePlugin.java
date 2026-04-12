@@ -40,19 +40,10 @@ public class ImagePlugin implements MediaProcessor<ImageConfig> {
 
     @Override
     public void register(PluginRegistry registry) throws DisarmException {
-        registry.register("png",
+        Set<String> formats = Set.of("png", "jpeg", "jpg", "webp");
+        registry.register(formats,
                 new ImagePlugin(),
                 new ImageCli());
-        registry.register("jpeg",
-                new ImagePlugin(),
-                new ImageCli());
-        registry.register("jpg",
-                new ImagePlugin(),
-                new ImageCli());
-        registry.register("webp",
-                new ImagePlugin(),
-                new ImageCli());
-
     }
 
     /**
