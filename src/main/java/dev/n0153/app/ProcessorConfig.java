@@ -22,7 +22,7 @@ public interface ProcessorConfig {
     /**
      * Describes supported formats and mime types
      */
-    enum Supports{};
+    Set<String> Supports();
 
     /**
      * Describes constrains of the supported media types and formats

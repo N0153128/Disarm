@@ -2,6 +2,8 @@ package dev.n0153.app.plugins.image;
 
 import dev.n0153.app.ProcessorConfig;
 
+import java.util.Set;
+
 public class ImageConfig implements ProcessorConfig {
 
     @Override
@@ -12,6 +14,11 @@ public class ImageConfig implements ProcessorConfig {
     @Override
     public double getVersion() {
         return 1;
+    }
+
+    @Override
+    public Set<String> Supports() {
+        return Set.of("png", "jpeg", "jpg", "webp");
     }
 
     @Override
