@@ -11,13 +11,13 @@ import org.opencv.imgproc.Imgproc;
 import java.util.*;
 
 public class ImagePlugin implements MediaProcessor<ImageConfig> {
-    private final ImageConfig config;
-    private final ImageContext context;
-    private final GlobalConfig globalConfig;
+    private ImageConfig config;
+    private ImageContext context;
+    private GlobalConfig globalConfig;
     private final ImageValidator validator = new ImageValidator();
     private static final Logger logger = LogManager.getLogger(ImagePlugin.class);
 
-    public ImagePlugin(GlobalConfig globalConfig, ImageConfig config, ImageContext context) {
+    public void createMeta(GlobalConfig globalConfig, ImageConfig config, ImageContext context) {
         this.config = config;
         this.context = context;
         this.globalConfig = globalConfig;
@@ -41,16 +41,16 @@ public class ImagePlugin implements MediaProcessor<ImageConfig> {
     @Override
     public void register(PluginRegistry registry) throws DisarmException {
         registry.register("png",
-                new ImagePlugin(globalConfig, config, context),
+                new ImagePlugin(),
                 new ImageCli());
         registry.register("jpeg",
-                new ImagePlugin(globalConfig, config, context),
+                new ImagePlugin(),
                 new ImageCli());
         registry.register("jpg",
-                new ImagePlugin(globalConfig, config, context),
+                new ImagePlugin(),
                 new ImageCli());
         registry.register("webp",
-                new ImagePlugin(globalConfig, config, context),
+                new ImagePlugin(),
                 new ImageCli());
 
     }
