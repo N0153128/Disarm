@@ -1,7 +1,6 @@
 package dev.n0153.app.plugins.image;
 
 import dev.n0153.app.CliConfig;
-import dev.n0153.app.ProcessorConfig;
 
 import java.util.Map;
 import java.util.function.BiConsumer;

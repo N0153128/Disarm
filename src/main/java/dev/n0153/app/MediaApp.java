@@ -6,4 +6,7 @@ public class MediaApp {
         this.registry = registry;
     }
 
+    public MediaProcessor<? extends MediaConfig> getPlugin() {
+        return registry.resolve("png");
+    }
 }

@@ -5,7 +5,7 @@ import java.util.Set;
 /**
  * This interface holds configuration for processors
  */
-public interface ProcessorConfig {
+public interface MediaConfig {
 
     /**
      * Every plugin must contain its own unique name, that reflects it's functionality.

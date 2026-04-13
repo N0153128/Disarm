@@ -17,13 +17,13 @@ public class PluginRegistry {
      * @param plugin plugin instance
      * @param <Config> plugin's respective configuration.
      */
-    public <Config extends ProcessorConfig> void register(
+    public <Config extends MediaConfig> void register(
             Set<String> mimeType,
             MediaProcessor<Config> plugin) {
         processorRegistry.put(mimeType, plugin);
     }
 
-    public <Config extends ProcessorConfig, Builder> void register(
+    public <Config extends MediaConfig, Builder> void register(
             Set<String> mimeType,
             MediaProcessor<Config> plugin,
             CliConfig<Config, Builder> cliConfig) {

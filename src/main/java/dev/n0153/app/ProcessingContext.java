@@ -1,6 +1,5 @@
 package dev.n0153.app;
 
-import java.nio.file.Path;
 import java.time.Instant;
 import java.util.List;
 
@@ -21,7 +20,7 @@ public class ProcessingContext {
     private final String error;
     private final Instant startedAt;
     private final Instant completedAt;
-    private final ProcessorConfig configSnapshot;
+    private final MediaConfig configSnapshot;
 
     private ProcessingContext(Builder builder) {
         this.id = builder.id;
@@ -92,7 +91,7 @@ public class ProcessingContext {
         return completedAt;
     }
 
-    public ProcessorConfig getConfigSnapshot() {
+    public MediaConfig getConfigSnapshot() {
         return configSnapshot;
     }
 
@@ -110,9 +109,9 @@ public class ProcessingContext {
         private String error;
         private Instant startedAt;
         private Instant completedAt;
-        private ProcessorConfig configSnapshot;
+        private MediaConfig configSnapshot;
 
-        public Builder setConfigSnapshot(ProcessorConfig configSnapshot) {
+        public Builder setConfigSnapshot(MediaConfig configSnapshot) {
             this.configSnapshot = configSnapshot;
             return this;
         }

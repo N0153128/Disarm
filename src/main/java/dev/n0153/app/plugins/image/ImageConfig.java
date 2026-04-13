@@ -1,10 +1,10 @@
 package dev.n0153.app.plugins.image;
 
-import dev.n0153.app.ProcessorConfig;
+import dev.n0153.app.MediaConfig;
 
 import java.util.Set;
 
-public class ImageConfig implements ProcessorConfig {
+public class ImageConfig implements MediaConfig {
 
     @Override
     public String getName() {
