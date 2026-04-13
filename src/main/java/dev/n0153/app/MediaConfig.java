@@ -40,6 +40,4 @@ public interface MediaConfig {
      * @return Log level
      */
     String getLogLevel();
-
-
 }

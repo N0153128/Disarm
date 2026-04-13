@@ -8,7 +8,7 @@ import java.util.*;
  * This class holds information about all plugins and acts as a glue between App and plugins.
  */
 public class PluginRegistry {
-    private final Map<Set<String>, MediaProcessor<?>> processorRegistry = new HashMap<>();
+    private final Map<Set<String>, MediaPlugin> processorRegistry = new HashMap<>();
     private final Map<Set<String>, CliConfig<?, ?>> cliRegistry = new HashMap<>();
 
     /**
@@ -19,13 +19,14 @@ public class PluginRegistry {
      */
     public <Config extends MediaConfig> void register(
             Set<String> mimeType,
-            MediaProcessor<Config> plugin) {
+            MediaPlugin plugin) {
         processorRegistry.put(mimeType, plugin);
     }
 
     public <Config extends MediaConfig, Builder> void register(
             Set<String> mimeType,
-            MediaProcessor<Config> plugin,
+            MediaPlugin plugin,
+            MediaConfig config,
             CliConfig<Config, Builder> cliConfig) {
         processorRegistry.put(mimeType, plugin);
         cliRegistry.put(mimeType, cliConfig);
@@ -36,8 +37,8 @@ public class PluginRegistry {
      * @param mimeType MIME type to be resolved to its respective plugin
      * @return plugin class
      */
-    public MediaProcessor<?> resolve(String mimeType) {
-        MediaProcessor<?> plugin = processorRegistry.get(mimeType);
+    public MediaPlugin resolve(String mimeType) {
+        MediaPlugin plugin = processorRegistry.get(mimeType);
         if (plugin == null) {
             throw new UnsupportedFileTypeException("No plugin registered for specified MIME type", mimeType);
         }

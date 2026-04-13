@@ -7,7 +7,6 @@ import dev.n0153.app.exceptions.DisarmException;
  */
 public interface MediaProcessor<Config extends MediaConfig> {
 
-    MediaValidator<Config> getValidator();
     ProcessingContext process(ProcessingContext context, Config config);
 
     /**
@@ -15,6 +14,5 @@ public interface MediaProcessor<Config extends MediaConfig> {
      * @throws DisarmException if processing fails
      */
     void process() throws DisarmException;
-
-    void register(PluginRegistry registry) throws DisarmException;
+    public MediaContext getContext();
 }
