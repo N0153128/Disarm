@@ -22,7 +22,7 @@ public interface MediaConfig {
     /**
      * Describes supported formats and mime types
      */
-    Set<String> Supports();
+    Set<String> supports();
 
     /**
      * Describes constrains of the supported media types and formats

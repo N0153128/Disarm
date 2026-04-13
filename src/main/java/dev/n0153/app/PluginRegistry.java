@@ -26,7 +26,6 @@ public class PluginRegistry {
     public <Config extends MediaConfig, Builder> void register(
             Set<String> mimeType,
             MediaPlugin plugin,
-            MediaConfig config,
             CliConfig<Config, Builder> cliConfig) {
         processorRegistry.put(mimeType, plugin);
         cliRegistry.put(mimeType, cliConfig);

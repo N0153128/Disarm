@@ -27,10 +27,10 @@ public class ImagePlugin implements MediaPlugin {
         return new ImageCli();
     }
 
-
     @Override
     public void register(PluginRegistry registry) throws DisarmException {
-        registry.register(config.Supports(),
+        registry.register(
+                new ImageConfig.Builder().build().supports(),
                 new ImagePlugin(),
                 new ImageCli());
     }

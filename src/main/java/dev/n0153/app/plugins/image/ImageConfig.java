@@ -18,7 +18,7 @@ public class ImageConfig implements MediaConfig {
     }
 
     @Override
-    public Set<String> Supports() {
+    public Set<String> supports() {
         return Set.of("png", "jpeg", "jpg", "webp");
     }
 
