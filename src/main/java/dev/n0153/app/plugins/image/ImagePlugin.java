@@ -2,11 +2,7 @@ package dev.n0153.app.plugins.image;
 
 import dev.n0153.app.*;
 import dev.n0153.app.exceptions.DisarmException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.opencv.core.*;
-import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.Imgproc;
 
 import java.util.*;
 
