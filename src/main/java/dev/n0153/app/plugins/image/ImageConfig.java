@@ -4,6 +4,7 @@ import dev.n0153.app.MediaConfig;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class ImageConfig implements MediaConfig {
@@ -22,7 +23,7 @@ public class ImageConfig implements MediaConfig {
 
     @Override
     public void release() {
-
+        configStorage.clear();
     }
 
     @Override
@@ -50,109 +51,107 @@ public class ImageConfig implements MediaConfig {
         return "info";
     }
 
-    private final int logoSizeLimit; //5MB
-    private final boolean keepLogo;
-    private final boolean keepImage;
-    private final double imgMaxWidth;
-    private final double imgMaxHeight;
-    private final int logoMaxWidth;
-    private final int logoMaxHeight;
+    private final int logoSizeLimit = 5_000_000; //5MB
+    private final boolean keepLogo = true;
+    private final boolean keepImage = true;
+    private final int imgMaxWidth = 512;
+    private final int imgMaxHeight = 512;
+    private final int logoMaxWidth = 50;
+    private final int logoMaxHeight = 50;
 
-    private ImageConfig(Builder builder) {
-        this.logoSizeLimit = builder.logoSizeLimit;
-        this.keepLogo = builder.keepLogo;
-        this.keepImage = builder.keepImage;
-        this.imgMaxWidth = builder.imgMaxWidth;
-        this.imgMaxHeight = builder.imgMaxHeight;
-        this.logoMaxWidth = builder.logoMaxWidth;
-        this.logoMaxHeight = builder.logoMaxHeight;
-    }
+    private final String KEY_LOGO_SIZE_LIMIT = "logoSizeLimit";
+    private final String KEY_KEEP_LOGO = "keepLogo";
+    private final String KEY_KEEP_IMAGE = "keepImage";
+    private final String KEY_IMG_MAX_WIDTH = "imgMaxWidth";
+    private final String KEY_IMG_MAX_HEIGHT = "imgMaxHeight";
+    private final String KEY_LOGO_MAX_WIDTH = "logoMaxWidth";
+    private final String KEY_LOGO_MAX_HEIGHT = "logoMaxHeight";
+
 
     //getters
     public int getLogoSizeLimit() {
-        return logoSizeLimit;
+        return Objects.requireNonNullElse(
+                get(KEY_LOGO_SIZE_LIMIT, int.class),
+                logoSizeLimit);
     }
 
     public boolean isKeepLogo() {
-        return keepLogo;
+        return Objects.requireNonNullElse(
+                get(KEY_KEEP_LOGO, boolean.class),
+                keepLogo);
     }
 
     public boolean isKeepImage() {
-        return keepImage;
+        return Objects.requireNonNullElse(
+                get(KEY_KEEP_IMAGE, boolean.class),
+                keepImage);
     }
 
-    public double getImgMaxWidth() {
-        return imgMaxWidth;
+    public int getImgMaxWidth() {
+        return Objects.requireNonNullElse(
+                get(KEY_IMG_MAX_WIDTH, int.class),
+                imgMaxWidth);
     }
 
-    public double getImgMaxHeight() {
-        return imgMaxHeight;
+    public int getImgMaxHeight() {
+        return Objects.requireNonNullElse(
+                get(KEY_IMG_MAX_HEIGHT, int.class),
+                imgMaxHeight);
     }
 
     public int getLogoMaxWidth() {
-        return logoMaxWidth;
+        return Objects.requireNonNullElse(
+                get(KEY_LOGO_MAX_WIDTH, int.class),
+                logoMaxWidth);
     }
 
     public int getLogoMaxHeight() {
-        return logoMaxHeight;
+        return Objects.requireNonNullElse(
+                get(KEY_LOGO_MAX_HEIGHT, int.class),
+                logoMaxHeight);
     }
 
-    public static class Builder {
-        private int logoSizeLimit = 5_000_000; //5MB
-        private boolean keepLogo = true;
-        private boolean keepImage = true;
-        private double imgMaxWidth = 512;
-        private double imgMaxHeight = 512;
-        private int logoMaxWidth = 50;
-        private int logoMaxHeight = 50;
-
-        public ImageConfig build() {
-            return new ImageConfig(this);
+    //setters
+    public void setLogoSizeLimit(int newLogoSizeLimit) {
+        if (newLogoSizeLimit < 0) {
+            throw new IllegalArgumentException("Logo size limit cannot be less than zero");
         }
+        put(KEY_LOGO_SIZE_LIMIT, newLogoSizeLimit);
+    }
 
-        //setters
-        public void setLogoSizeLimit(int newLogoSizeLimit) {
-            if (newLogoSizeLimit < 0) {
-                throw new IllegalArgumentException("Logo size limit cannot be less than zero");
-            }
-            logoSizeLimit = newLogoSizeLimit;
+    public void setKeepLogo(boolean keepLogo) {
+        put(KEY_KEEP_LOGO, keepLogo);
+    }
+
+    public void setKeepImage(boolean keepImage) {
+        put(KEY_KEEP_IMAGE, keepImage);
+    }
+
+    public void setImgMaxWidth(double newImgMaxWidth) {
+        if (newImgMaxWidth < 0) {
+            throw new IllegalArgumentException("Image max width cannot be less than zero");
         }
+        put(KEY_IMG_MAX_WIDTH, newImgMaxWidth);
+    }
 
-        public void setKeepLogo(boolean keepLogo) {
-            this.keepLogo = keepLogo;
+    public void setImgMaxHeight(double newImageMaxHeight) {
+        if (newImageMaxHeight < 0) {
+            throw new IllegalArgumentException("Image max height cannot be less than zero");
         }
+        put(KEY_IMG_MAX_HEIGHT, newImageMaxHeight);
+    }
 
-        public void setKeepImage(boolean keepImage) {
-            this.keepImage = keepImage;
+    public void setLogoMaxWidth(int newLogoMaxWidth) {
+        if (newLogoMaxWidth < 0) {
+            throw new IllegalArgumentException("Logo max width cannot be less than zero");
         }
+        put(KEY_LOGO_MAX_WIDTH, newLogoMaxWidth);
+    }
 
-        public void setImgMaxWidth(double newImgMaxWidth) {
-            if (newImgMaxWidth < 0) {
-                throw new IllegalArgumentException("Image max width cannot be less than zero");
-            }
-            imgMaxWidth = newImgMaxWidth;
+    public void setLogoMaxHeight(int newLogoMaxHeight) {
+        if (newLogoMaxHeight < 0) {
+            throw new IllegalArgumentException("Logo max height cannot be less than zero");
         }
-
-        public void setImgMaxHeight(double newImageMaxHeight) {
-            if (newImageMaxHeight < 0) {
-                throw new IllegalArgumentException("Image max height cannot be less than zero");
-            }
-            imgMaxHeight = newImageMaxHeight;
-        }
-
-        public void setLogoMaxWidth(int newLogoMaxWidth) {
-            if (newLogoMaxWidth < 0) {
-                throw new IllegalArgumentException("Logo max width cannot be less than zero");
-            }
-            logoMaxWidth = newLogoMaxWidth;
-        }
-
-        public void setLogoMaxHeight(int newLogoMaxHeight) {
-            if (newLogoMaxHeight < 0) {
-                throw new IllegalArgumentException("Logo max height cannot be less than zero");
-            }
-            logoMaxHeight = newLogoMaxHeight;
-        }
-
+        put(KEY_LOGO_MAX_HEIGHT, newLogoMaxHeight);
     }
 }
