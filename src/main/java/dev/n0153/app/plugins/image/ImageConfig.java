@@ -1,6 +1,5 @@
 package dev.n0153.app.plugins.image;
 
-import dev.n0153.app.Builder;
 import dev.n0153.app.MediaConfig;
 
 import java.util.Set;
