@@ -9,12 +9,20 @@ public class MediaApp {
         this.registry = registry;
     }
 
-    public void fetchPlugins() {
+    public void registerPlugins() {
         DisarmPlugins disarmPlugins = new DisarmPlugins();
         disarmPlugins.registerAll(registry);
     }
 
-    public MediaPlugin getPlugin() {
-        return registry.resolve("png");
+    public MediaPlugin getPlugin(String format) {
+        return registry.resolve(format);
+    }
+
+    public MediaValidator getValidator(MediaPlugin plugin) {
+        return plugin.getValidator();
+    }
+
+    public void initiateMeta() {
+
     }
 }

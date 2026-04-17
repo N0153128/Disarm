@@ -9,7 +9,7 @@ import java.util.*;
 public class ImagePlugin implements MediaPlugin {
 
     @Override
-    public MediaValidator<ImageConfig> getValidator() {
+    public MediaValidator getValidator() {
         return new ImageValidator();
     }
 

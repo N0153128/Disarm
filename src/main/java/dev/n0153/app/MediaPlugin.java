@@ -7,6 +7,6 @@ import dev.n0153.app.plugins.image.ImageValidator;
 public interface MediaPlugin {
     public MediaProcessor<?> getProcessor();
     public CliConfig<? extends MediaConfig, ?> getCLI();
-    public MediaValidator<? extends MediaConfig> getValidator();
+    public MediaValidator getValidator();
     void register(PluginRegistry registry) throws DisarmException;
 }

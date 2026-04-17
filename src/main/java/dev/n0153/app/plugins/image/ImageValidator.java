@@ -3,12 +3,20 @@ package dev.n0153.app.plugins.image;
 import dev.n0153.app.*;
 import dev.n0153.app.exceptions.UnsupportedFileTypeException;
 
-public class ImageValidator implements MediaValidator<ImageConfig> {
+public class ImageValidator implements MediaValidator {
+    private ImageConfig config;
+    private ImageContext context;
+
+    public void createMeta(ImageConfig config, ImageContext context) {
+        this.config = config;
+        this.context = context;
+    }
 
     @Override
-    public ValidationResult validate(ProcessingContext context, ImageConfig config) {
+    public ValidationResult validate() {
         return null;
     }
+
     public static boolean checkMimeWhiteList(String fileType, String mimeType) throws UnsupportedFileTypeException {
         if (fileType == null || mimeType == null) {
             return false;
@@ -20,5 +28,4 @@ public class ImageValidator implements MediaValidator<ImageConfig> {
             throw new UnsupportedFileTypeException("failed to detect file type", fileType, e);
         }
     }
-
 }
