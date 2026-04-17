@@ -7,13 +7,13 @@ import java.util.function.BiConsumer;
 
 public class ImageCli implements CliConfig<ImageConfig, ImageConfig.Builder> {
     private static final Map<String, BiConsumer<ImageConfig.Builder, String>> PARAM_STORAGE = Map.of(
-            "logo-size-limit", ((builder, value) -> builder.setLogoSizeLimit(Integer.parseInt(value))),
-            "keep-logo", ((builder, value) -> builder.setKeepLogo(Boolean.parseBoolean(value))),
-            "keep-image", ((builder, value) -> builder.setKeepImage(Boolean.parseBoolean(value))),
-            "image-max-width", ((builder, value) -> builder.setImgMaxWidth(Integer.parseInt(value))),
-            "image-max-height", ((builder, value) -> builder.setImgMaxHeight(Integer.parseInt(value))),
-            "logo-max-width", ((builder, value) -> builder.setLogoMaxWidth(Integer.parseInt(value))),
-            "logo-max-height", ((builder, value) -> builder.setLogoMaxHeight(Integer.parseInt(value)))
+            "--logo-size-limit", ((builder, value) -> builder.setLogoSizeLimit(Integer.parseInt(value))),
+            "--keep-logo", ((builder, value) -> builder.setKeepLogo(Boolean.parseBoolean(value))),
+            "--keep-image", ((builder, value) -> builder.setKeepImage(Boolean.parseBoolean(value))),
+            "--image-max-width", ((builder, value) -> builder.setImgMaxWidth(Integer.parseInt(value))),
+            "--image-max-height", ((builder, value) -> builder.setImgMaxHeight(Integer.parseInt(value))),
+            "--logo-max-width", ((builder, value) -> builder.setLogoMaxWidth(Integer.parseInt(value))),
+            "--logo-max-height", ((builder, value) -> builder.setLogoMaxHeight(Integer.parseInt(value)))
             );
 
     @Override
@@ -22,7 +22,8 @@ public class ImageCli implements CliConfig<ImageConfig, ImageConfig.Builder> {
     }
 
     @Override
-    public ImageConfig.Builder createBuilder() {
+    public ImageConfig.Builder createBuilder(String param, String value) {
+        BiConsumer<ImageConfig.Builder, String> func = PARAM_STORAGE.get(param);
         return new ImageConfig.Builder();
     }
 

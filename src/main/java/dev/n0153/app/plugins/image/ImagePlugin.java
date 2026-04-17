@@ -27,6 +27,12 @@ public class ImagePlugin implements MediaPlugin {
     public void register(PluginRegistry registry) throws DisarmException {
         registry.register(
                 new ImageConfig.Builder().build().supports(),
+                new ImagePlugin());
+    }
+
+    public void registerWithCli(PluginRegistry registry) throws DisarmException {
+        registry.register(
+                new ImageConfig.Builder().build().supports(),
                 new ImagePlugin(),
                 new ImageCli());
     }

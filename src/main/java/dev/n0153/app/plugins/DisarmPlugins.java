@@ -6,5 +6,6 @@ import dev.n0153.app.plugins.image.ImagePlugin;
 public class DisarmPlugins {
     public void registerAll(PluginRegistry registry) {
         new ImagePlugin().register(registry);
+        //add new plugins as they become available
     }
 }
