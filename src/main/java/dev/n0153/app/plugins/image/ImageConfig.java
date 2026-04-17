@@ -2,9 +2,28 @@ package dev.n0153.app.plugins.image;
 
 import dev.n0153.app.MediaConfig;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 public class ImageConfig implements MediaConfig {
+
+    private final Map<String, Object> configStorage = new HashMap<>();
+
+    @Override
+    public void put(String key, Object value) {
+        configStorage.put(key, value);
+    }
+
+    @Override
+    public <ValueType> ValueType get(String key, Class<ValueType> type) {
+        return type.cast(configStorage.get(key));
+    }
+
+    @Override
+    public void release() {
+
+    }
 
     @Override
     public String getName() {

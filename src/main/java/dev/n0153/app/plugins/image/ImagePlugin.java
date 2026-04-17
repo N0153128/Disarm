@@ -36,4 +36,9 @@ public class ImagePlugin implements MediaPlugin {
                 new ImagePlugin(),
                 new ImageCli());
     }
+
+    @Override
+    public MediaConfig getConfig() {
+        return new ImageConfig();
+    }
 }

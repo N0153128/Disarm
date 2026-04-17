@@ -7,6 +7,11 @@ import java.util.Set;
  */
 public interface MediaConfig {
 
+    void put(String key, Object value);
+    <ValueType> ValueType get (String key, Class <ValueType> type);
+    void release();
+
+
     /**
      * Every plugin must contain its own unique name, that reflects it's functionality.
      * @return unique plugin name

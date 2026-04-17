@@ -22,6 +22,10 @@ public class MediaApp {
         return plugin.getValidator();
     }
 
+    public MediaConfig getPlugin(MediaPlugin plugin) {
+        return plugin.getConfig();
+    }
+
     public void initiateMeta() {
 
     }
