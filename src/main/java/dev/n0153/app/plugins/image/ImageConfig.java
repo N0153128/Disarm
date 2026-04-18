@@ -9,11 +9,39 @@ import java.util.Set;
 
 public class ImageConfig implements MediaConfig {
 
-    private final Map<String, Object> configStorage = new HashMap<>();
+    private final int logoSizeLimit = 5_000_000; //5MB
+    private final boolean keepLogo = true;
+    private final boolean keepImage = true;
+    private final int imgMaxWidth = 512;
+    private final int imgMaxHeight = 512;
+    private final int logoMaxWidth = 50;
+    private final int logoMaxHeight = 50;
+
+    private final String KEY_LOGO_SIZE_LIMIT = "logoSizeLimit";
+    private final String KEY_KEEP_LOGO = "keepLogo";
+    private final String KEY_KEEP_IMAGE = "keepImage";
+    private final String KEY_IMG_MAX_WIDTH = "imgMaxWidth";
+    private final String KEY_IMG_MAX_HEIGHT = "imgMaxHeight";
+    private final String KEY_LOGO_MAX_WIDTH = "logoMaxWidth";
+    private final String KEY_LOGO_MAX_HEIGHT = "logoMaxHeight";
+
+
+    private final Map<String, Object> configStorage = new HashMap<>() {{
+        put(KEY_LOGO_SIZE_LIMIT, logoSizeLimit);
+        put(KEY_KEEP_LOGO, keepLogo);
+        put(KEY_KEEP_IMAGE, keepImage);
+        put(KEY_IMG_MAX_WIDTH, imgMaxWidth);
+        put(KEY_IMG_MAX_HEIGHT, imgMaxHeight);
+        put(KEY_LOGO_MAX_WIDTH, logoMaxWidth);
+        put(KEY_LOGO_MAX_HEIGHT, logoMaxHeight);
+    }};
 
     @Override
     public void put(String key, Object value) {
-        configStorage.put(key, value);
+        if (!configStorage.containsKey(key)) {
+            throw new IllegalArgumentException("Specified key doesn't exist");
+        }
+        configStorage.replace(key, value);
     }
 
     @Override
@@ -50,23 +78,6 @@ public class ImageConfig implements MediaConfig {
     public String getLogLevel() {
         return "info";
     }
-
-    private final int logoSizeLimit = 5_000_000; //5MB
-    private final boolean keepLogo = true;
-    private final boolean keepImage = true;
-    private final int imgMaxWidth = 512;
-    private final int imgMaxHeight = 512;
-    private final int logoMaxWidth = 50;
-    private final int logoMaxHeight = 50;
-
-    private final String KEY_LOGO_SIZE_LIMIT = "logoSizeLimit";
-    private final String KEY_KEEP_LOGO = "keepLogo";
-    private final String KEY_KEEP_IMAGE = "keepImage";
-    private final String KEY_IMG_MAX_WIDTH = "imgMaxWidth";
-    private final String KEY_IMG_MAX_HEIGHT = "imgMaxHeight";
-    private final String KEY_LOGO_MAX_WIDTH = "logoMaxWidth";
-    private final String KEY_LOGO_MAX_HEIGHT = "logoMaxHeight";
-
 
     //getters
     public int getLogoSizeLimit() {
