@@ -2,6 +2,7 @@ package dev.n0153.app.plugins.image;
 
 import dev.n0153.app.*;
 import dev.n0153.app.exceptions.UnsupportedFileTypeException;
+import org.opencv.core.Mat;
 
 public class ImageValidator implements MediaValidator {
     private ImageConfig config;
@@ -17,10 +18,15 @@ public class ImageValidator implements MediaValidator {
         return null;
     }
 
+    public boolean checkMeta() {
+        return this.config != null || this.context != null;
+    }
+
+    public static boolean checkEmpty(Mat image) {
+        return !image.empty();
+    }
+
     public static boolean checkMimeWhiteList(String fileType, String mimeType) throws UnsupportedFileTypeException {
-        if (fileType == null || mimeType == null) {
-            return false;
-        }
         try {
             FormatRegistry.AllowList list = FormatRegistry.AllowList.valueOf(fileType.toUpperCase());
             return list.isValidFormat(mimeType.toLowerCase());

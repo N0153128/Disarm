@@ -30,6 +30,11 @@ public class ImagePlugin implements MediaPlugin {
                 new ImagePlugin());
     }
 
+    @Override
+    public MediaConfig getConfig() {
+        return new ImageConfig();
+    }
+
     public void registerWithCli(PluginRegistry registry) throws DisarmException {
         registry.register(
                 new ImageConfig().supports(),
@@ -37,8 +42,4 @@ public class ImagePlugin implements MediaPlugin {
                 new ImageCli());
     }
 
-    @Override
-    public MediaConfig getConfig() {
-        return new ImageConfig();
-    }
 }
