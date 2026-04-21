@@ -26,6 +26,10 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
         this.globalConfig = globalConfig;
     }
 
+    public boolean checkMeta() {
+        return this.config != null || this.context != null;
+    }
+
     /**
      * Scales given image Mat object to any specified dimensions.
      * @param source OpenCV's image object.
