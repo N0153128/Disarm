@@ -1,17 +1,29 @@
 package dev.n0153.app;
 
 import dev.n0153.app.debug.scripts.DebugGeneral;
+import dev.n0153.app.plugins.DisarmPlugins;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 @Command(name = "disarm", description = "Sanitize media files", mixinStandardHelpOptions = true, version = "disarm v0.1")
 
 public class DisarmCLI implements Runnable{
     private static final Logger logger = LogManager.getLogger(DisarmCLI.class);
+    private final PluginRegistry registry;
+
+    public DisarmCLI(PluginRegistry registry) {
+        this.registry = registry;
+    }
+
+    private List<Object> discoverCommands() {
+        return new ArrayList<>(this.registry.cliRegistryExperimental.values());
+    }
 
     @CommandLine.Parameters(arity = "1..*", description = "input file")
     public Path[] inputPath;

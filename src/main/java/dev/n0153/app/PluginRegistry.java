@@ -1,6 +1,7 @@
 package dev.n0153.app;
 
 import dev.n0153.app.exceptions.UnsupportedFileTypeException;
+import dev.n0153.app.plugins.image.ImagePicoCli;
 
 import java.util.*;
 
@@ -9,7 +10,9 @@ import java.util.*;
  */
 public class PluginRegistry {
     private final Map<Set<String>, MediaPlugin> processorRegistry = new HashMap<>();
-    private final Map<Set<String>, CliConfig<?, ?>> cliRegistry = new HashMap<>();
+    private final Map<Set<String>, CliConfig<?>> cliRegistry = new HashMap<>();
+    public final Map<Set<String>, ImagePicoCli> cliRegistryExperimental = new HashMap<>();
+
 
     /**
      * This method is a registry point for all plugins and their respective MIME types.
@@ -23,12 +26,20 @@ public class PluginRegistry {
         processorRegistry.put(mimeType, plugin);
     }
 
-    public <Config extends MediaConfig, Builder> void register(
+    public <Config extends MediaConfig> void register(
             Set<String> mimeType,
             MediaPlugin plugin,
-            CliConfig<Config, Builder> cliConfig) {
+            CliConfig<Config> cliConfig) {
         processorRegistry.put(mimeType, plugin);
         cliRegistry.put(mimeType, cliConfig);
+    }
+
+    public void registerExperimental(
+            Set<String> mimeType,
+            MediaPlugin plugin,
+            ImagePicoCli cliConfig) {
+        processorRegistry.put(mimeType, plugin);
+        cliRegistryExperimental.put(mimeType, cliConfig);
     }
 
     /**
@@ -44,7 +55,7 @@ public class PluginRegistry {
         return plugin;
     }
 
-    public Optional<CliConfig<?, ?>> resolveCliConfig(String mimeType) {
+    public Optional<CliConfig<?>> resolveCliConfig(String mimeType) {
         return Optional.ofNullable(cliRegistry.get(mimeType));
     }
 

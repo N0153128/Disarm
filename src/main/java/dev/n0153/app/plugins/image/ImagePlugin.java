@@ -25,9 +25,10 @@ public class ImagePlugin implements MediaPlugin {
 
     @Override
     public void register(PluginRegistry registry) throws DisarmException {
-        registry.register(
+        registry.registerExperimental(
                 new ImageConfig().supports(),
-                new ImagePlugin());
+                new ImagePlugin(),
+                new ImagePicoCli());
     }
 
     @Override

@@ -1,4 +1,5 @@
 package dev.n0153.app;
+import dev.n0153.app.plugins.DisarmPlugins;
 import nu.pattern.OpenCV;
 import picocli.CommandLine;
 
@@ -9,7 +10,10 @@ public class Main {
         OpenCV.loadLocally();
         System.out.println("Working directory: " + System.getProperty("user.dir"));
         try {
-            int exitCode = new CommandLine(new DisarmCLI()).execute(args);
+            DisarmPlugins plugins = new DisarmPlugins();
+            PluginRegistry registry = new PluginRegistry();
+            plugins.registerAll(registry);
+            int exitCode = new CommandLine(new DisarmCLI(registry)).execute(args);
             System.exit(exitCode);
 
         } catch (Exception e) {

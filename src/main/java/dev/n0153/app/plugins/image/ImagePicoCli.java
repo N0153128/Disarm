@@ -1,5 +1,6 @@
 package dev.n0153.app.plugins.image;
 
+import dev.n0153.app.CliConfig;
 import dev.n0153.app.DisarmCLI;
 import dev.n0153.app.MediaConfig;
 import org.apache.logging.log4j.LogManager;
@@ -9,6 +10,8 @@ import picocli.CommandLine.Command;
 
 import javax.print.attribute.standard.Media;
 import java.nio.file.Path;
+import java.util.Map;
+import java.util.function.BiConsumer;
 
 @Command(name = "image", description = "Image Processing Plugin")
 public class ImagePicoCli implements Runnable {
