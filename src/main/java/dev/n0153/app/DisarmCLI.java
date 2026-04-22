@@ -14,7 +14,7 @@ public class DisarmCLI implements Runnable{
     private static final Logger logger = LogManager.getLogger(DisarmCLI.class);
 
     @CommandLine.Parameters(arity = "1..*", description = "input file")
-    private Path[] inputPath;
+    public Path[] inputPath;
 
     @CommandLine.Option(names = {"-o", "--output"}, description = "output file path")
     private Path outputPath;
