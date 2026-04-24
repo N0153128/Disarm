@@ -5,6 +5,8 @@ import dev.n0153.app.MediaContext;
 import dev.n0153.app.MediaProcessor;
 import dev.n0153.app.ProcessingContext;
 import dev.n0153.app.exceptions.DisarmException;
+import dev.n0153.app.exceptions.ImageProcessingException;
+import dev.n0153.app.exceptions.ValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.opencv.core.*;
@@ -28,6 +30,62 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
 
     public boolean checkMeta() {
         return this.config != null || this.context != null;
+    }
+
+
+
+    /**
+     * Scales logo from state.getLogo() to specified maximum width and height parameters.
+     * NOTE! Maximum logo width and height can be altered using
+     * BuilderConfig.setLogoMaxWidth() and BuilderConfig.setLogoMaxHeight().
+     * @since 0.1
+     */
+    public void scaleLogo() {
+        logger.info("Scaling logo to w{}:h{}", config.getLogoMaxWidth(), config.getLogoMaxHeight());
+        Mat destination = new Mat();
+        Size newsize = new Size(config.getLogoMaxWidth(), config.getLogoMaxHeight());
+        Imgproc.resize(context.getLogo(), destination, newsize);
+        context.setLogo(alterLogoTransparency(destination, config.getTransparency()));
+        if (config.isKeepLogo()) {
+            Imgcodecs.imwrite(config.getGeneralOutputPath().resolve(context.getLogoTitle()).toString(), state.getLogo());
+        }
+        destination.release();
+        logger.info("Logo scaled successfully");
+    }
+
+    /**
+     * Changes logo transparency in-place.
+     * @param image OpenCV's image object, input logo image.
+     * @param transparency New transparency value.
+     * @return Mat object with altered alpha channel value.
+     * @throws ImageProcessingException If fails to process logo image.
+     * @since 0.1
+     */
+    public Mat alterLogoTransparency(Mat image, double transparency) throws ImageProcessingException {
+        if (image == null) {
+            throw new ValidationException("Empty image was provided");
+        }
+
+        if (image.getClass() != Mat.class) {
+            throw new ValidationException("Invalid class was provided");
+        }
+        logger.info("Changing logo transparency to {}", transparency);
+        List<Mat> channels = new ArrayList<>();
+        try {
+            Core.split(image, channels);
+            if (channels.size() == 4) {
+                Mat alpha = channels.get(3);
+                alpha.convertTo(alpha, -1, transparency, 0);
+
+                Core.merge(channels, image);
+            }
+            logger.info("Logo transparency changed successfully");
+            return image;
+        } finally {
+            for (Mat channel : channels) {
+                channel.release();
+            }
+        }
     }
 
     /**

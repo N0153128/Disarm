@@ -2,6 +2,8 @@ package dev.n0153.app;
 
 import dev.n0153.app.plugins.DisarmPlugins;
 
+import java.nio.file.Path;
+
 public class MediaApp {
     private final PluginRegistry registry;
 
@@ -26,7 +28,15 @@ public class MediaApp {
         return plugin.getConfig();
     }
 
-    public void initiateMeta() {
+    private void processFile(Path osTargetPath) {
+        
+    }
+
+    public void fileDisarm(Path osTargetPath) {
+
+    }
+
+    public void fileDisarm(Path osTargetPath, Path osLogoPath) {
 
     }
 }

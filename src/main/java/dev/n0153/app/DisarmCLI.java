@@ -43,7 +43,7 @@ public class DisarmCLI implements Runnable{
     public void run() {
         logger.info("Disarm (pre-release)\nWorking file specified: {}", this.inputPath);
         BuilderConfig builder = DisarmConfig.builder();
-
+        discoverCommands();
         for (Path input : inputPath) {
             // getters and setters
             logger.info("Specified path: {}", input);
@@ -57,7 +57,7 @@ public class DisarmCLI implements Runnable{
             // finalise parameters
             DisarmConfig config = builder.build();
             DisarmState state = new DisarmState(config);
-            App app = new App(state, config);
+            MediaApp app = new MediaApp(registry);
 
             // runners
             if (debugAll) {
