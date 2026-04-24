@@ -47,7 +47,7 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
         Imgproc.resize(context.getLogo(), destination, newsize);
         context.setLogo(alterLogoTransparency(destination, config.getTransparency()));
         if (config.isKeepLogo()) {
-            Imgcodecs.imwrite(config.getGeneralOutputPath().resolve(context.getLogoTitle()).toString(), state.getLogo());
+            Imgcodecs.imwrite(globalConfig.getGeneralOutputPath().resolve(context.getLogoTitle()).toString(), context.getLogo());
         }
         destination.release();
         logger.info("Logo scaled successfully");

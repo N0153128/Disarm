@@ -16,6 +16,7 @@ public class ImageConfig implements MediaConfig {
     private final int imgMaxHeight = 512;
     private final int logoMaxWidth = 50;
     private final int logoMaxHeight = 50;
+    private final double transparency = 0.5;
 
     private final String KEY_LOGO_SIZE_LIMIT = "logoSizeLimit";
     private final String KEY_KEEP_LOGO = "keepLogo";
@@ -24,6 +25,7 @@ public class ImageConfig implements MediaConfig {
     private final String KEY_IMG_MAX_HEIGHT = "imgMaxHeight";
     private final String KEY_LOGO_MAX_WIDTH = "logoMaxWidth";
     private final String KEY_LOGO_MAX_HEIGHT = "logoMaxHeight";
+    private final String KEY_TRANSPARENCY = "transparency";
 
 
     private final Map<String, Object> configStorage = new HashMap<>() {{
@@ -34,6 +36,7 @@ public class ImageConfig implements MediaConfig {
         put(KEY_IMG_MAX_HEIGHT, imgMaxHeight);
         put(KEY_LOGO_MAX_WIDTH, logoMaxWidth);
         put(KEY_LOGO_MAX_HEIGHT, logoMaxHeight);
+        put(KEY_TRANSPARENCY, transparency);
     }};
 
     @Override
@@ -120,6 +123,12 @@ public class ImageConfig implements MediaConfig {
         return Objects.requireNonNullElse(
                 get(KEY_LOGO_MAX_HEIGHT, int.class),
                 logoMaxHeight);
+    }
+
+    public double getTransparency() {
+        return Objects.requireNonNullElse(
+                get(KEY_TRANSPARENCY, double.class),
+                transparency);
     }
 
     //setters
