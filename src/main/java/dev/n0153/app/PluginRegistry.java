@@ -10,36 +10,26 @@ import java.util.*;
  */
 public class PluginRegistry {
     private final Map<Set<String>, MediaPlugin> processorRegistry = new HashMap<>();
+    private final Map<String, MediaPlugin> processorRegistryExperimental = new HashMap<>();
     private final Map<Set<String>, CliConfig<?>> cliRegistry = new HashMap<>();
-    public final Map<Set<String>, ImagePicoCli> cliRegistryExperimental = new HashMap<>();
+    public final Map<String, ImagePicoCli> cliRegistryExperimental = new HashMap<>();
 
 
     /**
      * This method is a registry point for all plugins and their respective MIME types.
      * @param mimeType plugin's supported MIME type
      * @param plugin plugin instance
-     * @param <Config> plugin's respective configuration.
      */
-    public <Config extends MediaConfig> void register(
-            Set<String> mimeType,
-            MediaPlugin plugin) {
-        processorRegistry.put(mimeType, plugin);
-    }
-
-    public <Config extends MediaConfig> void register(
-            Set<String> mimeType,
-            MediaPlugin plugin,
-            CliConfig<Config> cliConfig) {
-        processorRegistry.put(mimeType, plugin);
-        cliRegistry.put(mimeType, cliConfig);
-    }
-
     public void registerExperimental(
             Set<String> mimeType,
             MediaPlugin plugin,
             ImagePicoCli cliConfig) {
-        processorRegistry.put(mimeType, plugin);
-        cliRegistryExperimental.put(mimeType, cliConfig);
+        for (String mime : mimeType) {
+            processorRegistryExperimental.put(mime, plugin);
+        }
+        for (String mime: mimeType) {
+            cliRegistryExperimental.put(mime, cliConfig);
+        }
     }
 
     /**
@@ -48,7 +38,7 @@ public class PluginRegistry {
      * @return plugin class
      */
     public MediaPlugin resolve(String mimeType) {
-        MediaPlugin plugin = processorRegistry.get(mimeType);
+        MediaPlugin plugin = processorRegistryExperimental.get(mimeType);
         if (plugin == null) {
             throw new UnsupportedFileTypeException("No plugin registered for specified MIME type", mimeType);
         }

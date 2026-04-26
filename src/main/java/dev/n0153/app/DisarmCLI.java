@@ -40,10 +40,24 @@ public class DisarmCLI implements Runnable{
     @CommandLine.Option(names = {"-da", "--debug-all"}, description = "test run. check all supported media types")
     private boolean debugAll;
 
+    @CommandLine.Spec
+    CommandLine.Model.CommandSpec spec;
+
+    private void init() {
+        discoverCommands().forEach(cmd ->
+                spec.addSubcommand(getCommandName(cmd), new CommandLine(cmd)));
+        logger.info("Plugin commands registered");
+    }
+
+    private static String getCommandName(Object cmd) {
+        return cmd.getClass().getAnnotation(Command.class).name();
+    }
+
     public void run() {
         logger.info("Disarm (pre-release)\nWorking file specified: {}", this.inputPath);
+        logger.warn("WARNING: using experimental app orchestrator");
         BuilderConfig builder = DisarmConfig.builder();
-        discoverCommands();
+        init();
         for (Path input : inputPath) {
             // getters and setters
             logger.info("Specified path: {}", input);

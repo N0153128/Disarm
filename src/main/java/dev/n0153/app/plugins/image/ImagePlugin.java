@@ -36,11 +36,16 @@ public class ImagePlugin implements MediaPlugin {
         return new ImageConfig();
     }
 
+    @Override
+    public String echo() {
+        return new ImageConfig().getName();
+    }
+
     public void registerWithCli(PluginRegistry registry) throws DisarmException {
-        registry.register(
+        registry.registerExperimental(
                 new ImageConfig().supports(),
                 new ImagePlugin(),
-                new ImageCli());
+                new ImagePicoCli());
     }
 
 }

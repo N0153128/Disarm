@@ -12,4 +12,5 @@ public interface MediaPlugin {
     public MediaValidator getValidator();
     public MediaConfig getConfig();
     void register(PluginRegistry registry) throws DisarmException;
+    String echo();
 }

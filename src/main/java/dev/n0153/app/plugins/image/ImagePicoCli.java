@@ -1,17 +1,10 @@
 package dev.n0153.app.plugins.image;
 
-import dev.n0153.app.CliConfig;
 import dev.n0153.app.DisarmCLI;
-import dev.n0153.app.MediaConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
-
-import javax.print.attribute.standard.Media;
-import java.nio.file.Path;
-import java.util.Map;
-import java.util.function.BiConsumer;
 
 @Command(name = "image", description = "Image Processing Plugin")
 public class ImagePicoCli implements Runnable {
@@ -57,7 +50,7 @@ public class ImagePicoCli implements Runnable {
 
     @Override
     public void run() {
-        logger.info("Image processing...");
+        logger.info("Image processing over plugin...");
         if (logoSizeLimit > 0) {
             this.config.setLogoSizeLimit(logoSizeLimit);
         }
