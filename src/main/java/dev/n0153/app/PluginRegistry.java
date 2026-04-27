@@ -12,10 +12,8 @@ import java.util.*;
  */
 public class PluginRegistry {
     private static final Logger logger = LogManager.getLogger(PluginRegistry.class);
-    private final Map<Set<String>, MediaPlugin> processorRegistry = new HashMap<>();
-    private final Map<String, MediaPlugin> processorRegistryExperimental = new HashMap<>();
-    private final Map<Set<String>, CliConfig<?>> cliRegistry = new HashMap<>();
-    public final Map<String, Runnable> cliRegistryExperimental = new HashMap<>();
+    private final Map<String, MediaPlugin> processorRegistry = new HashMap<>();
+    public final Map<String, Runnable> cliRegistry = new HashMap<>();
 
 
     /**
@@ -29,9 +27,9 @@ public class PluginRegistry {
             ImagePicoCli cliConfig,
             String fileType) {
         for (String mime : mimeType) {
-            processorRegistryExperimental.put(mime, plugin);
+            processorRegistry.put(mime, plugin);
         }
-        cliRegistryExperimental.put(fileType, cliConfig);
+        cliRegistry.put(fileType, cliConfig);
         logger.info("CLI and Plugin were registered successfully");
 
     }
@@ -42,7 +40,7 @@ public class PluginRegistry {
      * @return plugin class
      */
     public MediaPlugin resolve(String mimeType) {
-        MediaPlugin plugin = processorRegistryExperimental.get(mimeType);
+        MediaPlugin plugin = processorRegistry.get(mimeType);
         if (plugin == null) {
             throw new UnsupportedFileTypeException("No plugin registered for specified MIME type", mimeType);
         }
@@ -50,11 +48,7 @@ public class PluginRegistry {
     }
 
     public Runnable resolveCli(String fileType) {
-        return cliRegistryExperimental.get(fileType);
-    }
-
-    public Optional<CliConfig<?>> resolveCliConfig(String mimeType) {
-        return Optional.ofNullable(cliRegistry.get(mimeType));
+        return cliRegistry.get(fileType);
     }
 
     public boolean hasCliSupport(String mimeType) {
