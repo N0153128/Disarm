@@ -28,7 +28,8 @@ public class ImagePlugin implements MediaPlugin {
         registry.registerExperimental(
                 new ImageConfig().supports(),
                 new ImagePlugin(),
-                new ImagePicoCli());
+                new ImagePicoCli(),
+                "image");
     }
 
     @Override
@@ -45,7 +46,7 @@ public class ImagePlugin implements MediaPlugin {
         registry.registerExperimental(
                 new ImageConfig().supports(),
                 new ImagePlugin(),
-                new ImagePicoCli());
+                new ImagePicoCli(),
+                "image");
     }
-
 }

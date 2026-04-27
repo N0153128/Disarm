@@ -17,12 +17,6 @@ public class MediaApp {
         this.registry = registry;
     }
 
-    public void registerPlugins() {
-        DisarmPlugins disarmPlugins = new DisarmPlugins();
-        disarmPlugins.registerAll(registry);
-        logger.info("plugins registered");
-    }
-
     public MediaPlugin getPlugin(String format) {
         return registry.resolve(format);
     }
@@ -41,7 +35,6 @@ public class MediaApp {
 
     public void fileDisarm(Path osTargetPath) {
         logger.info("fileDisarm hit");
-        registerPlugins();
         try {
             String mime = Utils.getMimeType(osTargetPath);
             logger.info("detected mime: {}", mime);

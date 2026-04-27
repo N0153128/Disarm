@@ -2,6 +2,8 @@ package dev.n0153.app;
 
 import dev.n0153.app.exceptions.UnsupportedFileTypeException;
 import dev.n0153.app.plugins.image.ImagePicoCli;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
@@ -9,10 +11,11 @@ import java.util.*;
  * This class holds information about all plugins and acts as a glue between App and plugins.
  */
 public class PluginRegistry {
+    private static final Logger logger = LogManager.getLogger(PluginRegistry.class);
     private final Map<Set<String>, MediaPlugin> processorRegistry = new HashMap<>();
     private final Map<String, MediaPlugin> processorRegistryExperimental = new HashMap<>();
     private final Map<Set<String>, CliConfig<?>> cliRegistry = new HashMap<>();
-    public final Map<String, ImagePicoCli> cliRegistryExperimental = new HashMap<>();
+    public final Map<String, Runnable> cliRegistryExperimental = new HashMap<>();
 
 
     /**
@@ -23,13 +26,14 @@ public class PluginRegistry {
     public void registerExperimental(
             Set<String> mimeType,
             MediaPlugin plugin,
-            ImagePicoCli cliConfig) {
+            ImagePicoCli cliConfig,
+            String fileType) {
         for (String mime : mimeType) {
             processorRegistryExperimental.put(mime, plugin);
         }
-        for (String mime: mimeType) {
-            cliRegistryExperimental.put(mime, cliConfig);
-        }
+        cliRegistryExperimental.put(fileType, cliConfig);
+        logger.info("CLI and Plugin were registered successfully");
+
     }
 
     /**
@@ -43,6 +47,10 @@ public class PluginRegistry {
             throw new UnsupportedFileTypeException("No plugin registered for specified MIME type", mimeType);
         }
         return plugin;
+    }
+
+    public Runnable resolveCli(String fileType) {
+        return cliRegistryExperimental.get(fileType);
     }
 
     public Optional<CliConfig<?>> resolveCliConfig(String mimeType) {

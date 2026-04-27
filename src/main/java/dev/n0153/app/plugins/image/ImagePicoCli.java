@@ -50,7 +50,7 @@ public class ImagePicoCli implements Runnable {
 
     @Override
     public void run() {
-        logger.info("Image processing over plugin...");
+        logger.info("Image CLI detected");
         if (logoSizeLimit > 0) {
             this.config.setLogoSizeLimit(logoSizeLimit);
         }

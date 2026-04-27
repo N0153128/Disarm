@@ -1,6 +1,7 @@
 package dev.n0153.app;
 
 import dev.n0153.app.debug.scripts.DebugGeneral;
+import dev.n0153.app.exceptions.FileTypeDetectionException;
 import dev.n0153.app.plugins.DisarmPlugins;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +22,7 @@ public class DisarmCLI implements Runnable{
         this.registry = registry;
     }
 
-    private List<Object> discoverCommands() {
+    List<Object> discoverCommands() {
         return new ArrayList<>(this.registry.cliRegistryExperimental.values());
     }
 
@@ -43,13 +44,7 @@ public class DisarmCLI implements Runnable{
     @CommandLine.Spec
     CommandLine.Model.CommandSpec spec;
 
-    private void init() {
-        discoverCommands().forEach(cmd ->
-                spec.addSubcommand(getCommandName(cmd), new CommandLine(cmd)));
-        logger.info("Plugin commands registered");
-    }
-
-    private static String getCommandName(Object cmd) {
+    static String getCommandName(Object cmd) {
         return cmd.getClass().getAnnotation(Command.class).name();
     }
 
@@ -57,8 +52,19 @@ public class DisarmCLI implements Runnable{
         logger.info("Disarm (pre-release)\nWorking file specified: {}", this.inputPath);
         logger.warn("WARNING: using experimental app orchestrator");
         BuilderConfig builder = DisarmConfig.builder();
-        init();
         for (Path input : inputPath) {
+            // related plugin auto-detection
+            try {
+                String fileType = Utils.getFileType(input);
+                Runnable handler = registry.resolveCli(fileType);
+                if (handler != null) {
+                    handler.run();
+                } else {
+                    logger.info("no CLI handler found for {}", input.getFileName());
+                }
+            } catch (FileTypeDetectionException e) {
+                throw new RuntimeException(e);
+            }
             // getters and setters
             logger.info("Specified path: {}", input);
             if (outputPath != null) {
@@ -81,7 +87,7 @@ public class DisarmCLI implements Runnable{
             if (logo != null && Utils.isImage(input) && Utils.isImage(logo)) {
                 app.fileDisarm(input, logo);
             } else {
-                logger.info("not an image");
+                logger.info("logo not provided");
                 app.fileDisarm(input);
             }
         }
