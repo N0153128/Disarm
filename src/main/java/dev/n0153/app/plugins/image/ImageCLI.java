@@ -7,8 +7,8 @@ import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
 @Command(name = "image", description = "Image Processing Plugin")
-public class ImagePicoCli implements Runnable {
-    private static final Logger logger = LogManager.getLogger(ImagePicoCli.class);
+public class ImageCLI implements Runnable {
+    private static final Logger logger = LogManager.getLogger(ImageCLI.class);
 
     private ImageConfig config;
 

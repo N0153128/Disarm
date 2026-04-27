@@ -1,7 +1,7 @@
 package dev.n0153.app;
 
 import dev.n0153.app.exceptions.UnsupportedFileTypeException;
-import dev.n0153.app.plugins.image.ImagePicoCli;
+import dev.n0153.app.plugins.image.ImageCLI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,7 +24,7 @@ public class PluginRegistry {
     public void registerExperimental(
             Set<String> mimeType,
             MediaPlugin plugin,
-            ImagePicoCli cliConfig,
+            ImageCLI cliConfig,
             String fileType) {
         for (String mime : mimeType) {
             processorRegistry.put(mime, plugin);

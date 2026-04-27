@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public interface MediaPlugin {
     public MediaProcessor<?> getProcessor();
-    public CliConfig<? extends MediaConfig> getCLI();
+    public Runnable getCLI();
     public MediaValidator getValidator();
     public MediaConfig getConfig();
     void register(PluginRegistry registry) throws DisarmException;

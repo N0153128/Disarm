@@ -2,9 +2,6 @@ package dev.n0153.app.plugins.image;
 
 import dev.n0153.app.*;
 import dev.n0153.app.exceptions.DisarmException;
-import org.opencv.core.*;
-
-import java.util.*;
 
 public class ImagePlugin implements MediaPlugin {
 
@@ -19,8 +16,8 @@ public class ImagePlugin implements MediaPlugin {
     }
 
     @Override
-    public ImageCli getCLI() {
-        return new ImageCli();
+    public Runnable getCLI() {
+        return new ImageCLI();
     }
 
     @Override
@@ -28,7 +25,7 @@ public class ImagePlugin implements MediaPlugin {
         registry.registerExperimental(
                 new ImageConfig().supports(),
                 new ImagePlugin(),
-                new ImagePicoCli(),
+                new ImageCLI(),
                 "image");
     }
 
@@ -46,7 +43,7 @@ public class ImagePlugin implements MediaPlugin {
         registry.registerExperimental(
                 new ImageConfig().supports(),
                 new ImagePlugin(),
-                new ImagePicoCli(),
+                new ImageCLI(),
                 "image");
     }
 }
