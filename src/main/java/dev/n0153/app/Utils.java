@@ -81,7 +81,11 @@ public class Utils {
             if (!Files.isRegularFile(osTargetFile)) {
                 throw new IOException("Not a file");
             }
-            return Files.probeContentType(osTargetFile).split("/")[0];
+            String fileType = Files.probeContentType(osTargetFile);
+            if (fileType == null) {
+                throw new FileTypeDetectionException("failed to detect file type, object is null: ", osTargetFile);
+            }
+            return fileType.split("/")[0];
 
         } catch (IOException e) {
             throw new FileTypeDetectionException("failed to detect file type", osTargetFile, e);
