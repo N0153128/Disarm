@@ -75,6 +75,12 @@ public class Utils {
      */
     public static String getFileType(Path osTargetFile) throws FileTypeDetectionException {
         try {
+            if (!Files.exists(osTargetFile)) {
+                throw new IOException("File doesn't exist");
+            }; // skip non-existent paths
+            if (!Files.isRegularFile(osTargetFile)) {
+                throw new IOException("Not a file");
+            }
             return Files.probeContentType(osTargetFile).split("/")[0];
 
         } catch (IOException e) {

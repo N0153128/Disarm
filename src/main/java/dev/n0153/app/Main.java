@@ -28,6 +28,7 @@ public class Main {
                 try {
                     Path path = Path.of(arg);
                     if (!Files.exists(path)) continue; // skip non-existent paths
+                    if (!Files.isRegularFile(path)) continue; // skip directories
 
                     String fileType = Utils.getFileType(path);
                     Runnable handler = registry.resolveCli(fileType);

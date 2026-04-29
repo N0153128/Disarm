@@ -23,7 +23,7 @@ public class DisarmCLI implements Runnable{
     }
 
     List<Object> discoverCommands() {
-        return new ArrayList<>(this.registry.cliRegistryExperimental.values());
+        return new ArrayList<>(this.registry.cliRegistry.values());
     }
 
     @CommandLine.Parameters(arity = "1..*", description = "input file")
