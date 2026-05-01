@@ -95,6 +95,9 @@ public class ProcessingContext {
         return get(KEY_CONFIG_SNAPSHOT, MediaConfig.class);
     }
 
+    public void setConfigSnapshot(MediaConfig newConfigSnapshot) {
+        put(KEY_CONFIG_SNAPSHOT, newConfigSnapshot);
+    }
 
     public void setCompletedAt(Instant newCompletedAt) {
         put(KEY_COMPLETED_AT, newCompletedAt);
