@@ -25,7 +25,23 @@ public class ProcessingContext {
     private final String KEY_CONFIG_SNAPSHOT = "configSnapshot";
 
 
-    private final Map<String, Object> processingContextStorage = new HashMap<>();
+    private final Map<String, Object> processingContextStorage = new HashMap<>() {{
+        put(KEY_ID, null);
+        put(KEY_FILENAME, null);
+        put(KEY_BYTE_SIZE, null);
+        put(KEY_MIME_TYPE, null);
+        put(KEY_INPUT_BUFFER, null);
+        put(KEY_STAGE, null);
+        put(KEY_RESOLVED_PLUGIN, null);
+        put(KEY_OUTPUT_BUFFER, null);
+        put(KEY_TRANSFORMATIONS_APPLIED, null);
+        put(KEY_WARNINGS, null);
+        put(KEY_ERROR, null);
+        put(KEY_STARTED_AT, null);
+        put(KEY_COMPLETED_AT, null);
+        put(KEY_CONFIG_SNAPSHOT, null);
+
+    }};
 
     public void put(String key, Object value) {
         if (!processingContextStorage.containsKey(key)) {
