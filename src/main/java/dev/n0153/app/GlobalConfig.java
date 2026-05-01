@@ -1,108 +1,133 @@
 package dev.n0153.app;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class GlobalConfig {
-    private final int generalSizeLimit;
-    private final boolean keepInputs;
-    private final boolean keepResult;
-    private final boolean keepOriginal;
-    private final int generalFileSizeUpperBoundLimit;
-    private final Path generalOutputPath;
-    private final int targetFileLength;
+    private final int generalSizeLimit = 5_000_000; // 5MB
+    private final boolean keepInputs = false;
+    private final boolean keepResult = true;
+    private final boolean keepOriginal = true;
+    private final int generalFileSizeUpperBoundLimit = 10_000_000;
+    private final Path generalOutputPath = Paths.get("resources/output");
+    ;
+    private final int targetFileLength = 150;
 
-    private GlobalConfig(Builder builder) {
-        this.generalSizeLimit = builder.generalSizeLimit;
-        this.keepInputs = builder.keepInputs;
-        this.keepOriginal = builder.keepOriginal;
-        this.generalFileSizeUpperBoundLimit = builder.generalFileSizeUpperBoundLimit;
-        this.generalOutputPath = builder.generalOutputPath;
-        this.targetFileLength = builder.targetFileLength;
-        this.keepResult = builder.keepResult;
+    private final String KEY_GENERAL_SIZE_LIMIT = "generalSizeLimit";
+    private final String KEY_KEEP_INPUTS = "keepInputs";
+    private final String KEY_KEEP_RESULT = "keepResult";
+    private final String KEY_KEEP_ORIGINAL = "keepOriginal";
+    private final String KEY_GENERAL_FILE_SIZE_UPPER_BOUND = "generalFileSizeUpperBoundLimit";
+    private final String KEY_GENERAL_OUTPUT_PATH = "generalOutputPath";
+    private final String KEY_TARGET_FILE_LENGTH = "targetFileLength";
+
+    private final Map<String, Object> globalConfigStorage = new HashMap<>() {{
+        put(KEY_GENERAL_SIZE_LIMIT, generalSizeLimit);
+        put(KEY_KEEP_INPUTS, keepInputs);
+        put(KEY_KEEP_RESULT, keepResult);
+        put(KEY_KEEP_ORIGINAL, keepOriginal);
+        put(KEY_GENERAL_FILE_SIZE_UPPER_BOUND, generalFileSizeUpperBoundLimit);
+        put(KEY_GENERAL_OUTPUT_PATH, generalOutputPath);
+        put(KEY_TARGET_FILE_LENGTH, targetFileLength);
+    }};
+
+    public void put(String key, Object value) {
+        if (!globalConfigStorage.containsKey(key)) {
+            throw new IllegalArgumentException("Specified key doesn't exist");
+        }
+        globalConfigStorage.replace(key, value);
     }
 
+    public <ValueType> ValueType get(String key, Class<ValueType> type) {
+        return type.cast(globalConfigStorage.get(key));
+    }
+
+
     public int getGeneralFileSizeUpperBoundLimit() {
-        return generalFileSizeUpperBoundLimit;
+        return Objects.requireNonNullElse(
+                get(KEY_GENERAL_FILE_SIZE_UPPER_BOUND, int.class),
+                generalFileSizeUpperBoundLimit);
     }
 
     public boolean getKeepInputs() {
-        return keepInputs;
+        return Objects.requireNonNullElse(
+                get(KEY_KEEP_INPUTS, boolean.class),
+                keepInputs
+        );
     }
 
     public boolean getKeepResult() {
-        return keepResult;
+        return Objects.requireNonNullElse(
+                get(KEY_KEEP_RESULT, boolean.class),
+                keepResult
+        );
     }
 
     public boolean isKeepOriginal() {
-        return keepOriginal;
+        return Objects.requireNonNullElse(
+                get(KEY_KEEP_ORIGINAL, boolean.class),
+                keepOriginal
+        );
     }
 
     public Path getGeneralOutputPath() {
-        return generalOutputPath;
+        return Objects.requireNonNullElse(
+                get(KEY_GENERAL_OUTPUT_PATH, Path.class),
+                generalOutputPath
+        );
     }
 
     public int getTargetFileLength() {
-        return targetFileLength;
+        return Objects.requireNonNullElse(
+                get(KEY_TARGET_FILE_LENGTH, int.class),
+                targetFileLength
+        );
     }
 
     public int getGeneralSizeLimit() {
-        return  generalSizeLimit;
+        return Objects.requireNonNullElse(
+                get(KEY_GENERAL_SIZE_LIMIT, int.class),
+                generalSizeLimit
+        );
     }
 
-    public static class Builder {
 
-        private int generalSizeLimit;
-        private boolean keepInputs;
-        private boolean keepResult;
-        private boolean keepOriginal;
-        private int generalFileSizeUpperBoundLimit;
-        private Path generalOutputPath;
-        private int targetFileLength;
+    public void setKeepInputs(boolean newKeepInputs) {
+        put(KEY_KEEP_INPUTS, newKeepInputs);
+    }
 
-        public GlobalConfig build() {
-            return new GlobalConfig(this);
+    public void setKeepResults(boolean newKeepResult) {
+        put(KEY_KEEP_RESULT, newKeepResult);
+    }
+
+    public void setKeepOriginal(boolean newKeepOriginal) {
+        put(KEY_KEEP_ORIGINAL, newKeepOriginal);
+    }
+
+    public void setGeneralSizeLimit(int newSizeLimit) {
+        if (newSizeLimit < 0) {
+            throw new IllegalArgumentException("Size limit cannot be less than zero");
         }
-
-        public Builder setKeepInputs(boolean newKeepInputs) {
-            keepInputs = newKeepInputs;
-            return this;
+        if (newSizeLimit > generalFileSizeUpperBoundLimit) {
+            throw new IllegalArgumentException("Size limit cannot exceed upper bound");
         }
+        put(KEY_GENERAL_SIZE_LIMIT, newSizeLimit);
+    }
 
-        public Builder setKeepResults(boolean newKeepResult) {
-            keepResult = newKeepResult;
-            return this;
+    public void setGeneralOutputPath(Path newGeneralOutputPath) {
+        if (newGeneralOutputPath == null) {
+            throw new IllegalArgumentException("General output path cannot be empty");
         }
+        put(KEY_GENERAL_OUTPUT_PATH, newGeneralOutputPath);
+    }
 
-        public Builder setKeepOriginal(boolean keepOriginal) {
-            this.keepOriginal = keepOriginal;
-            return this;
+    private void setTargetFileLength(int newTargetFileLength) {
+        if (newTargetFileLength < 0) {
+            throw new IllegalArgumentException("Target file length cannot be less than zero");
         }
-
-        public Builder setGeneralSizeLimit(int newSizeLimit) {
-            if (newSizeLimit < 0) {
-                throw new IllegalArgumentException("Size limit cannot be less than zero");
-            }
-            if (newSizeLimit > generalFileSizeUpperBoundLimit) {
-                throw new IllegalArgumentException("Size limit cannot exceed upper bound");
-            }
-            generalSizeLimit = newSizeLimit;
-            return this;
-        }
-
-        public Builder setGeneralOutputPath(Path generalOutputPath) {
-            if (generalOutputPath == null) {
-                throw new IllegalArgumentException("General output path cannot be empty");
-            }
-            this.generalOutputPath = generalOutputPath;
-            return this;
-        }
-
-        private Builder setTargetFileLength(int newTargetFileLength) {
-            if (newTargetFileLength < 0) {
-                throw new IllegalArgumentException("Target file length cannot be less than zero");
-            }
-            targetFileLength = newTargetFileLength;
-            return this;
-        }
+        put(KEY_TARGET_FILE_LENGTH, newTargetFileLength);
     }
 }

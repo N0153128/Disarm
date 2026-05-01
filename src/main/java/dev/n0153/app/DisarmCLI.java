@@ -2,6 +2,7 @@ package dev.n0153.app;
 
 import dev.n0153.app.debug.scripts.DebugGeneral;
 import dev.n0153.app.exceptions.FileTypeDetectionException;
+import dev.n0153.app.exceptions.UnsupportedFileTypeException;
 import dev.n0153.app.plugins.DisarmPlugins;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
