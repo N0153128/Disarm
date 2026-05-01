@@ -1,188 +1,150 @@
 package dev.n0153.app;
 
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This interface holds context data for runtime.
  */
 public class ProcessingContext {
-    private final String id;
-    private final String fileName;
-    private final long byteSize;
-    private final String mimeType;
-    private final byte[] inputBuffer;
-    private final String stage;
-    private final String resolvedPlugin;
-    private final byte[] outputBuffer;
-    private final List<String> transformationsApplied;
-    private final List<String> warnings;
-    private final String error;
-    private final Instant startedAt;
-    private final Instant completedAt;
-    private final MediaConfig configSnapshot;
+    private final String KEY_ID = "id";
+    private final String KEY_FILENAME = "fileName";
+    private final String KEY_BYTE_SIZE = "byteSize";
+    private final String KEY_MIME_TYPE = "mimeType";
+    private final String KEY_INPUT_BUFFER = "inputBuffer";
+    private final String KEY_STAGE = "stage";
+    private final String KEY_RESOLVED_PLUGIN = "resolvedPlugin";
+    private final String KEY_OUTPUT_BUFFER = "outputBuffer";
+    private final String KEY_TRANSFORMATIONS_APPLIED = "transformationsApplied";
+    private final String KEY_WARNINGS = "warnings";
+    private final String KEY_ERROR = "error";
+    private final String KEY_STARTED_AT = "startedAt";
+    private final String KEY_COMPLETED_AT = "completedAt";
+    private final String KEY_CONFIG_SNAPSHOT = "configSnapshot";
 
-    private ProcessingContext(Builder builder) {
-        this.id = builder.id;
-        this.fileName = builder.fileName;
-        this.byteSize = builder.byteSize;
-        this.mimeType = builder.mimeType;
-        this.inputBuffer = builder.inputBuffer;
-        this.stage = builder.stage;
-        this.resolvedPlugin = builder.resolvedPlugin;
-        this.outputBuffer = builder.outputBuffer;
-        this.transformationsApplied = builder.transformationsApplied;
-        this.warnings = builder.warnings;
-        this.error = builder.error;
-        this.startedAt = builder.startedAt;
-        this.completedAt = builder.completedAt;
-        this.configSnapshot = builder.configSnapshot;
+
+    private final Map<String, Object> processingContextStorage = new HashMap<>();
+
+    public void put(String key, Object value) {
+        if (!processingContextStorage.containsKey(key)) {
+            throw new IllegalArgumentException("Specified key doesn't exist");
+        }
+        processingContextStorage.replace(key, value);
     }
 
+    public <ValueType> ValueType get(String key, Class<ValueType> type) {
+        return type.cast(processingContextStorage.get(key));
+    }
+
+
     public String getId() {
-        return this.id;
+        return get(KEY_ID, String.class);
     };
 
     public String getFilename() {
-        return fileName;
+        return get(KEY_FILENAME, String.class);
     }
 
     public long getByteSize() {
-        return byteSize;
+        return get(KEY_BYTE_SIZE, long.class);
     }
 
     public String getMimeType() {
-        return mimeType;
+        return get(KEY_MIME_TYPE, String.class);
     }
 
     public byte[] getInputBuffer() {
-        return inputBuffer;
+        return get(KEY_INPUT_BUFFER, byte[].class);
     }
 
     public String getStage() {
-        return stage;
+        return get(KEY_STAGE, String.class);
     }
 
     public String getResolvedPlugin() {
-        return resolvedPlugin;
+        return get(KEY_RESOLVED_PLUGIN, String.class);
     }
 
     public byte[] getOutputBuffer() {
-        return outputBuffer;
+        return get(KEY_OUTPUT_BUFFER, byte[].class);
     }
 
     public List<String> getTransformationsApplied() {
-        return transformationsApplied;
+        return get(KEY_TRANSFORMATIONS_APPLIED, List.class);
     }
 
     public List<String> getWarnings() {
-        return warnings;
+        return get(KEY_WARNINGS, List.class);
     }
 
     public String getError() {
-        return error;
+        return get(KEY_ERROR, String.class);
     }
 
     public Instant getStartedAt() {
-        return startedAt;
+        return get(KEY_STARTED_AT, Instant.class);
     }
 
     public Instant getCompletedAt() {
-        return completedAt;
+        return get(KEY_COMPLETED_AT, Instant.class);
     }
 
     public MediaConfig getConfigSnapshot() {
-        return configSnapshot;
+        return get(KEY_CONFIG_SNAPSHOT, MediaConfig.class);
     }
 
-    public static class Builder {
-        private String id;
-        private String fileName;
-        private long byteSize;
-        private String mimeType;
-        private byte[] inputBuffer;
-        private String stage;
-        private String resolvedPlugin;
-        private byte[] outputBuffer;
-        private List<String> transformationsApplied;
-        private List<String> warnings;
-        private String error;
-        private Instant startedAt;
-        private Instant completedAt;
-        private MediaConfig configSnapshot;
 
-        public Builder setConfigSnapshot(MediaConfig configSnapshot) {
-            this.configSnapshot = configSnapshot;
-            return this;
-        }
+    public void setCompletedAt(Instant newCompletedAt) {
+        put(KEY_COMPLETED_AT, newCompletedAt);
+    }
 
-        public Builder setCompletedAt(Instant completedAt) {
-            this.completedAt = completedAt;
-            return this;
-        }
+    public void setStartedAt(Instant newStartedAt) {
+        put(KEY_STARTED_AT, newStartedAt);
+    }
 
-        public Builder setStartedAt(Instant startedAt) {
-            this.startedAt = startedAt;
-            return this;
-        }
+    public void setError(String newError) {
+        put(KEY_ERROR, newError);
+    }
 
-        public Builder setError(String error) {
-            this.error = error;
-            return this;
-        }
+    public void setWarnings(List<String> newWarnings) {
+        put(KEY_WARNINGS, newWarnings);
+    }
 
-        public Builder setWarnings(List<String> warnings) {
-            this.warnings = warnings;
-            return this;
-        }
+    public void setTransformationsApplied(List<String> newTransformationsApplied) {
+        put(KEY_TRANSFORMATIONS_APPLIED, newTransformationsApplied);
+    }
 
-        public Builder setTransformationsApplied(List<String> transformationsApplied) {
-            this.transformationsApplied = transformationsApplied;
-            return this;
-        }
+    public void setOutputBuffer(byte[] newOutputBuffer) {
+        put(KEY_OUTPUT_BUFFER, newOutputBuffer);
+    }
 
-        public Builder setOutputBuffer(byte[] outputBuffer) {
-            this.outputBuffer = outputBuffer;
-            return this;
-        }
+    public void setResolvedPlugin(String newResolvedPlugin) {
+        put(KEY_RESOLVED_PLUGIN, newResolvedPlugin);
+    }
 
-        public Builder setResolvedPlugin(String resolvedPlugin) {
-            this.resolvedPlugin = resolvedPlugin;
-            return this;
-        }
+    public void setInputBuffer(byte[] newInputBuffer) {
+        put(KEY_INPUT_BUFFER, newInputBuffer);
+    }
 
-        public Builder setInputBuffer(byte[] inputBuffer) {
-            this.inputBuffer = inputBuffer;
-            return this;
-        }
+    public void setStage(String newStage) {
+        put(KEY_STAGE, newStage);
+    }
 
-        public Builder setStage(String stage) {
-            this.stage = stage;
-            return this;
-        }
+    public void setMimeType(String newMimeType) {
+        put(KEY_MIME_TYPE, newMimeType);
+    }
 
-        public Builder setMimeType(String mimeType) {
-            this.mimeType = mimeType;
-            return this;
-        }
+    public void setByteSize(long newByteSize) {
+        put(KEY_BYTE_SIZE, newByteSize);
+    }
 
-        public Builder setByteSize(long byteSize) {
-            this.byteSize = byteSize;
-            return this;
-        }
+    public void setFilename(String newFilename) {
+        put(KEY_FILENAME, newFilename);
+    }
 
-        public Builder setFilename(String filename) {
-            this.fileName = filename;
-            return this;
-        }
-
-        public Builder setId(String id) {
-            this.id = id;
-            return this;
-        }
-
-        public ProcessingContext build() {
-            return new ProcessingContext(this);
-        }
+    public void setId(String newId) {
+        put(KEY_ID, newId);
     }
 }
