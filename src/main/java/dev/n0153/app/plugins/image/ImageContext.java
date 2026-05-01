@@ -7,7 +7,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ImageContext implements MediaContext {
-    private final Map<String, Object> contextStorage = new HashMap<>();
+    private final Map<String, Object> contextStorage = new HashMap<>() {{
+        put(KEY_IMAGE, null);
+        put(KEY_LOGO, null);
+        put(KEY_X, null);
+        put(KEY_Y, null);
+        put(KEY_LOGO_TITLE, null);
+        put(KEY_IMAGE_TITLE, null);
+    }};
 
     @Override
     public void put(String key, Object value) {
