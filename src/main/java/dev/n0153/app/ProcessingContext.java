@@ -9,6 +9,12 @@ import java.util.Map;
  * This interface holds context data for runtime.
  */
 public class ProcessingContext {
+    private final GlobalConfig config;
+
+    public ProcessingContext(GlobalConfig config) {
+        this.config = config;
+    }
+
     private final String KEY_ID = "id";
     private final String KEY_FILENAME = "fileName";
     private final String KEY_BYTE_SIZE = "byteSize";
@@ -54,7 +60,7 @@ public class ProcessingContext {
         return type.cast(processingContextStorage.get(key));
     }
 
-
+    // getters
     public String getId() {
         return get(KEY_ID, String.class);
     };
@@ -111,6 +117,7 @@ public class ProcessingContext {
         return get(KEY_CONFIG_SNAPSHOT, MediaConfig.class);
     }
 
+    // setters
     public void setConfigSnapshot(MediaConfig newConfigSnapshot) {
         put(KEY_CONFIG_SNAPSHOT, newConfigSnapshot);
     }
@@ -160,10 +167,28 @@ public class ProcessingContext {
     }
 
     public void setFilename(String newFilename) {
-        put(KEY_FILENAME, newFilename);
+        if (newFilename == null) {
+            throw new IllegalArgumentException("File name cannot be null");
+        }
+        if (newFilename.isEmpty()) {
+            throw new IllegalArgumentException("File name cannot be empty");
+        }
+        if (newFilename.length() > config.getTargetFileLength()) {
+            throw new IllegalArgumentException("File name cannot exceed " + config.getTargetFileLength());
+        }
+         put(KEY_FILENAME, newFilename);
     }
 
     public void setId(String newId) {
+        if (newId == null) {
+            throw new IllegalArgumentException("ID cannot be null");
+        }
+        if (newId.isEmpty()) {
+            throw new IllegalArgumentException("ID cannot be empty");
+        }
+        if (newId.length() > config.getIDLength()) {
+            throw new IllegalArgumentException("ID length cannot exceed " + config.getIDLength());
+        }
         put(KEY_ID, newId);
     }
 }

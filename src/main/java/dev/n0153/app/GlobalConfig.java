@@ -13,8 +13,8 @@ public class GlobalConfig {
     private final boolean keepOriginal = true;
     private final int generalFileSizeUpperBoundLimit = 10_000_000;
     private final Path generalOutputPath = Paths.get("resources/output");
-    ;
     private final int targetFileLength = 150;
+    private final int IDLength = 150;
 
     private final String KEY_GENERAL_SIZE_LIMIT = "generalSizeLimit";
     private final String KEY_KEEP_INPUTS = "keepInputs";
@@ -23,6 +23,7 @@ public class GlobalConfig {
     private final String KEY_GENERAL_FILE_SIZE_UPPER_BOUND = "generalFileSizeUpperBoundLimit";
     private final String KEY_GENERAL_OUTPUT_PATH = "generalOutputPath";
     private final String KEY_TARGET_FILE_LENGTH = "targetFileLength";
+    private final String KEY_ID_LENGTH = "IDLength";
 
     private final Map<String, Object> globalConfigStorage = new HashMap<>() {{
         put(KEY_GENERAL_SIZE_LIMIT, generalSizeLimit);
@@ -32,6 +33,7 @@ public class GlobalConfig {
         put(KEY_GENERAL_FILE_SIZE_UPPER_BOUND, generalFileSizeUpperBoundLimit);
         put(KEY_GENERAL_OUTPUT_PATH, generalOutputPath);
         put(KEY_TARGET_FILE_LENGTH, targetFileLength);
+        put(KEY_ID_LENGTH, IDLength);
     }};
 
     public void put(String key, Object value) {
@@ -45,6 +47,11 @@ public class GlobalConfig {
         return type.cast(globalConfigStorage.get(key));
     }
 
+    public int getIDLength() {
+        return Objects.requireNonNullElse(
+                get(KEY_ID_LENGTH, int.class),
+                IDLength);
+    }
 
     public int getGeneralFileSizeUpperBoundLimit() {
         return Objects.requireNonNullElse(
@@ -129,5 +136,12 @@ public class GlobalConfig {
             throw new IllegalArgumentException("Target file length cannot be less than zero");
         }
         put(KEY_TARGET_FILE_LENGTH, newTargetFileLength);
+    }
+
+    public void setIDLength(int newIDLength) {
+        if (newIDLength < 0) {
+            throw new IllegalArgumentException("ID Length cannot be less than zero");
+        }
+        put(KEY_ID_LENGTH, newIDLength);
     }
 }
