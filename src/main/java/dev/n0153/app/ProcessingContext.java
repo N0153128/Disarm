@@ -119,42 +119,102 @@ public class ProcessingContext {
 
     // setters
     public void setConfigSnapshot(MediaConfig newConfigSnapshot) {
+        if (newConfigSnapshot == null) {
+            throw new IllegalArgumentException("Config snapshot cannot be null");
+        }
         put(KEY_CONFIG_SNAPSHOT, newConfigSnapshot);
     }
 
     public void setCompletedAt(Instant newCompletedAt) {
+        if (newCompletedAt == null) {
+            throw new IllegalArgumentException("The completion timestamp cannot be null");
+        }
+        if (getStartedAt().isAfter(newCompletedAt)) {
+            throw new IllegalArgumentException("The completion timestamp cannot be earlier than the start timestamp");
+        }
         put(KEY_COMPLETED_AT, newCompletedAt);
     }
 
     public void setStartedAt(Instant newStartedAt) {
+        if (newStartedAt == null) {
+            throw new IllegalArgumentException("The Start timestamp cannot be null");
+        }
         put(KEY_STARTED_AT, newStartedAt);
     }
 
     public void setError(String newError) {
+        if (newError == null) {
+            throw new IllegalArgumentException("Error message cannot be null");
+        }
+        if (newError.isEmpty()) {
+            throw new IllegalArgumentException("Error message cannot be empty");
+        }
         put(KEY_ERROR, newError);
     }
 
     public void setWarnings(List<String> newWarnings) {
+        if (newWarnings == null) {
+            throw new IllegalArgumentException("Warnings list cannot be null");
+        }
+        if (newWarnings.isEmpty()) {
+            throw new IllegalArgumentException("Warnings list cannot be empty");
+        }
         put(KEY_WARNINGS, newWarnings);
     }
 
     public void setTransformationsApplied(List<String> newTransformationsApplied) {
+        if (newTransformationsApplied == null) {
+            throw new IllegalArgumentException("Transformations list cannot be null");
+        }
+        if (newTransformationsApplied.isEmpty()) {
+            throw new IllegalArgumentException("Transformations list cannot be empty");
+        }
         put(KEY_TRANSFORMATIONS_APPLIED, newTransformationsApplied);
     }
 
     public void setOutputBuffer(byte[] newOutputBuffer) {
+        if (newOutputBuffer == null) {
+            throw new IllegalArgumentException("Output buffer cannot be null");
+        }
+        if (newOutputBuffer.length == 0) {
+            throw new IllegalArgumentException("Output buffer cannot be empty");
+        }
+        if (newOutputBuffer.length > config.getGeneralFileSizeUpperBoundLimit()) {
+            throw new IllegalArgumentException("Output buffer cannot exceed general file size limit");
+        }
         put(KEY_OUTPUT_BUFFER, newOutputBuffer);
     }
 
     public void setResolvedPlugin(String newResolvedPlugin) {
+        if (newResolvedPlugin == null) {
+            throw new IllegalArgumentException("Resolved plugin title cannot be null");
+        }
+        if (newResolvedPlugin.isEmpty()) {
+            throw new IllegalArgumentException("Resolved plugin title cannot be empty");
+        }
         put(KEY_RESOLVED_PLUGIN, newResolvedPlugin);
     }
 
     public void setInputBuffer(byte[] newInputBuffer) {
+        if (newInputBuffer == null) {
+            throw new IllegalArgumentException("Input buffer cannot be null");
+        }
+        if (newInputBuffer.length == 0) {
+            throw new IllegalArgumentException("Input buffer cannot be empty");
+        }
+        if (newInputBuffer.length > config.getGeneralFileSizeUpperBoundLimit()) {
+            throw new IllegalArgumentException("Input buffer cannot exceed general file size limit");
+        }
         put(KEY_INPUT_BUFFER, newInputBuffer);
     }
 
     public void setStage(String newStage) {
+        if (newStage == null) {
+            throw new IllegalArgumentException("Stage cannot be null");
+        }
+        if (newStage.isEmpty()) {
+            throw new IllegalArgumentException("Stage cannot be empty");
+        }
         put(KEY_STAGE, newStage);
     }
 
@@ -172,6 +232,12 @@ public class ProcessingContext {
     }
 
     public void setByteSize(long newByteSize) {
+        if (newByteSize < 0) {
+            throw new IllegalArgumentException("Byte size cannot be less than zero");
+        }
+        if (newByteSize == 0) {
+            throw new IllegalArgumentException("Byte size cannot be zero");
+        }
         put(KEY_BYTE_SIZE, newByteSize);
     }
 
