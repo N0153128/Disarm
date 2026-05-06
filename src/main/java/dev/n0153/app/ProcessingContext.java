@@ -159,6 +159,15 @@ public class ProcessingContext {
     }
 
     public void setMimeType(String newMimeType) {
+        if (newMimeType == null) {
+            throw new IllegalArgumentException("Mime cannot be null");
+        }
+        if (newMimeType.isEmpty()) {
+            throw new IllegalArgumentException("Mime type cannot be empty");
+        }
+        if (newMimeType.length() > config.getMimeLength()) { // this method only checks what comes after the "/", therefore the character count is restrictive.
+            throw new IllegalArgumentException("Mime type cannot exceed mime length limit");
+        }
         put(KEY_MIME_TYPE, newMimeType);
     }
 

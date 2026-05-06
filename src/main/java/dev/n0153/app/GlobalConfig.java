@@ -15,6 +15,7 @@ public class GlobalConfig {
     private final Path generalOutputPath = Paths.get("resources/output");
     private final int targetFileLength = 150;
     private final int IDLength = 150;
+    private final int mimeLength = 10;
 
     private final String KEY_GENERAL_SIZE_LIMIT = "generalSizeLimit";
     private final String KEY_KEEP_INPUTS = "keepInputs";
@@ -24,6 +25,7 @@ public class GlobalConfig {
     private final String KEY_GENERAL_OUTPUT_PATH = "generalOutputPath";
     private final String KEY_TARGET_FILE_LENGTH = "targetFileLength";
     private final String KEY_ID_LENGTH = "IDLength";
+    private final String KEY_MIME_LENGTH = "mimeLength";
 
     private final Map<String, Object> globalConfigStorage = new HashMap<>() {{
         put(KEY_GENERAL_SIZE_LIMIT, generalSizeLimit);
@@ -34,6 +36,7 @@ public class GlobalConfig {
         put(KEY_GENERAL_OUTPUT_PATH, generalOutputPath);
         put(KEY_TARGET_FILE_LENGTH, targetFileLength);
         put(KEY_ID_LENGTH, IDLength);
+        put(KEY_MIME_LENGTH, mimeLength);
     }};
 
     public void put(String key, Object value) {
@@ -51,6 +54,12 @@ public class GlobalConfig {
         return Objects.requireNonNullElse(
                 get(KEY_ID_LENGTH, int.class),
                 IDLength);
+    }
+
+    public int getMimeLength() {
+        return Objects.requireNonNullElse(
+                get(KEY_MIME_LENGTH, int.class),
+                mimeLength);
     }
 
     public int getGeneralFileSizeUpperBoundLimit() {
@@ -143,5 +152,12 @@ public class GlobalConfig {
             throw new IllegalArgumentException("ID Length cannot be less than zero");
         }
         put(KEY_ID_LENGTH, newIDLength);
+    }
+
+    public void setMimeLength(int newMimeLength) {
+        if (newMimeLength < 0) {
+            throw new IllegalArgumentException("Mime length cannot be less than zero");
+        }
+        put(KEY_MIME_LENGTH, newMimeLength);
     }
 }
