@@ -1,9 +1,6 @@
 package dev.n0153.app;
 
-import dev.n0153.app.exceptions.FileRenameException;
-import dev.n0153.app.exceptions.FileTypeDetectionException;
 import dev.n0153.app.exceptions.MimeTypeDetectionException;
-import dev.n0153.app.plugins.DisarmPlugins;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,6 +9,7 @@ import java.nio.file.Path;
 public class MediaApp {
     private final PluginRegistry registry;
     private static final Logger logger = LogManager.getLogger(MediaApp.class);
+    private final GlobalConfig globalConfig = new GlobalConfig();
 
     public MediaApp (PluginRegistry registry) {
         this.registry = registry;
@@ -25,12 +23,16 @@ public class MediaApp {
         return plugin.getValidator();
     }
 
-    public MediaConfig getPlugin(MediaPlugin plugin) {
+    public MediaConfig getConfig(MediaPlugin plugin) {
         return plugin.getConfig();
     }
 
     private void processFile(Path osTargetPath) {
 
+    }
+
+    public boolean validateGlobal(Path osTargetPath) {
+        return GlobalValidator.validate(osTargetPath, globalConfig);
     }
 
     public void fileDisarm(Path osTargetPath) {

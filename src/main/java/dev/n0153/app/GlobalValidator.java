@@ -1,7 +1,10 @@
 package dev.n0153.app;
 
+import dev.n0153.app.exceptions.InvalidPathException;
 import dev.n0153.app.exceptions.UnsafePathException;
+import dev.n0153.app.exceptions.ValidationException;
 
+import javax.naming.SizeLimitExceededException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -20,22 +23,19 @@ public class GlobalValidator {
         boolean doubleDot = osTargetPath.toString().contains("../");
 //        boolean absolute = osTargetPath.toString().startsWith("/");
         if (singleDot) {
-            throw new UnsafePathException("potentially dangerous pathing, \"./\" ", osTargetPath);
+            return false;
         }
         if (doubleDot) {
-            throw new UnsafePathException("potentially dangerous pathing, \"../\"", osTargetPath);
+            return false;
         }
         // disabled absolute path checking util networking features implemented
 //        if (absolute) {
 //            throw new UnsafePathException("potentially dangerous absolute pathing", osTargetPath);
 //        }
         if (Files.isSymbolicLink(osTargetPath)) {
-            throw new UnsafePathException("potentially dangerous symlink pathing", osTargetPath);
+            return false;
         }
-        if (!Files.exists(osTargetPath)) {
-            throw new UnsafePathException("Path doesnt exist", osTargetPath);
-        }
-        return true;
+        return Files.exists(osTargetPath);
     }
 
     /**
@@ -62,6 +62,23 @@ public class GlobalValidator {
     public static boolean ensureGlobalSizeLimit(Path osTargetPath, GlobalConfig config) {
         long size = Utils.getSize(osTargetPath);
         return size <= config.getGeneralSizeLimit();
+    }
+
+    public static boolean validate(Path osTargetPath, GlobalConfig config) {
+        if (!validatePath(osTargetPath)) {
+            throw new UnsafePathException("Potentially unsafe path", osTargetPath);
+        }
+        if (!isInputReadable(osTargetPath)) {
+            throw new InvalidPathException("Path is not readable", osTargetPath);
+        }
+        if (!isOutputPathWritable(config.getGeneralOutputPath())) {
+            throw new java.nio.file.InvalidPathException("Output path is not readable",
+                    config.getGeneralOutputPath().toString());
+        }
+        if (!ensureGlobalSizeLimit(osTargetPath, config)) {
+            throw new ValidationException("Input path exceeds global size limit");
+        }
+        return true;
     }
 
 }
