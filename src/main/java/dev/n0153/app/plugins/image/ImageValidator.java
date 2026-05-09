@@ -4,6 +4,8 @@ import dev.n0153.app.*;
 import dev.n0153.app.exceptions.UnsupportedFileTypeException;
 import org.opencv.core.Mat;
 
+import java.nio.file.Path;
+
 public class ImageValidator implements MediaValidator {
     private ImageConfig config;
     private ImageContext context;
@@ -14,8 +16,8 @@ public class ImageValidator implements MediaValidator {
     }
 
     @Override
-    public ValidationResult validate() {
-        return null;
+    public boolean validate(Path osTargetPath) {
+        return true;
     }
 
     public boolean checkMeta() {

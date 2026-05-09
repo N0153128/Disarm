@@ -1,5 +1,9 @@
 package dev.n0153.app;
 
+import dev.n0153.app.exceptions.DisarmException;
+import dev.n0153.app.exceptions.MimeTypeDetectionException;
+
+import java.nio.file.Path;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
@@ -15,20 +19,20 @@ public class ProcessingContext {
         this.config = config;
     }
 
-    private final String KEY_ID = "id";
-    private final String KEY_FILENAME = "fileName";
-    private final String KEY_BYTE_SIZE = "byteSize";
-    private final String KEY_MIME_TYPE = "mimeType";
-    private final String KEY_INPUT_BUFFER = "inputBuffer";
-    private final String KEY_STAGE = "stage";
-    private final String KEY_RESOLVED_PLUGIN = "resolvedPlugin";
-    private final String KEY_OUTPUT_BUFFER = "outputBuffer";
-    private final String KEY_TRANSFORMATIONS_APPLIED = "transformationsApplied";
-    private final String KEY_WARNINGS = "warnings";
-    private final String KEY_ERROR = "error";
-    private final String KEY_STARTED_AT = "startedAt";
-    private final String KEY_COMPLETED_AT = "completedAt";
-    private final String KEY_CONFIG_SNAPSHOT = "configSnapshot";
+    public final String KEY_ID = "id";
+    public final String KEY_FILENAME = "fileName";
+    public final String KEY_BYTE_SIZE = "byteSize";
+    public final String KEY_MIME_TYPE = "mimeType";
+    public final String KEY_INPUT_BUFFER = "inputBuffer";
+    public final String KEY_STAGE = "stage";
+    public final String KEY_RESOLVED_PLUGIN = "resolvedPlugin";
+    public final String KEY_OUTPUT_BUFFER = "outputBuffer";
+    public final String KEY_TRANSFORMATIONS_APPLIED = "transformationsApplied";
+    public final String KEY_WARNINGS = "warnings";
+    public final String KEY_ERROR = "error";
+    public final String KEY_STARTED_AT = "startedAt";
+    public final String KEY_COMPLETED_AT = "completedAt";
+    public final String KEY_CONFIG_SNAPSHOT = "configSnapshot";
 
 
     private final Map<String, Object> processingContextStorage = new HashMap<>() {{
@@ -60,6 +64,21 @@ public class ProcessingContext {
         return type.cast(processingContextStorage.get(key));
     }
 
+    public void populateContext(Path osTargetPath, MediaPlugin plugin, MediaConfig config) {
+        try {
+            put(KEY_FILENAME, osTargetPath.getFileName());
+            put(KEY_MIME_TYPE, Utils.getMimeType(osTargetPath));
+            put(KEY_STAGE, "init");
+            put(KEY_RESOLVED_PLUGIN, plugin);
+            put(KEY_TRANSFORMATIONS_APPLIED, "none");
+            put(KEY_STARTED_AT, Instant.now());
+            put(KEY_CONFIG_SNAPSHOT, config);
+
+        } catch (MimeTypeDetectionException e) {
+            throw new DisarmException(e);
+        }
+    }
+
     // getters
     public String getId() {
         return get(KEY_ID, String.class);
@@ -85,8 +104,8 @@ public class ProcessingContext {
         return get(KEY_STAGE, String.class);
     }
 
-    public String getResolvedPlugin() {
-        return get(KEY_RESOLVED_PLUGIN, String.class);
+    public MediaPlugin getResolvedPlugin() {
+        return get(KEY_RESOLVED_PLUGIN, MediaPlugin.class);
     }
 
     public byte[] getOutputBuffer() {
