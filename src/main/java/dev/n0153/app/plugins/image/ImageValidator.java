@@ -1,8 +1,12 @@
 package dev.n0153.app.plugins.image;
 
 import dev.n0153.app.*;
+import dev.n0153.app.exceptions.InvalidPathException;
+import dev.n0153.app.exceptions.UnsafePathException;
 import dev.n0153.app.exceptions.UnsupportedFileTypeException;
+import dev.n0153.app.exceptions.ValidationException;
 import org.opencv.core.Mat;
+import org.opencv.imgcodecs.Imgcodecs;
 
 import java.nio.file.Path;
 
@@ -17,6 +21,12 @@ public class ImageValidator implements MediaValidator {
 
     @Override
     public boolean validate(Path osTargetPath) {
+        if (!checkMeta()) {
+            throw new ValidationException("Plugin meta data is empty");
+        }
+        if (!checkEmpty(osTargetPath)) {
+            throw new InvalidPathException("Path is not readable", osTargetPath);
+        }
         return true;
     }
 
@@ -24,16 +34,10 @@ public class ImageValidator implements MediaValidator {
         return this.config != null || this.context != null;
     }
 
-    public static boolean checkEmpty(Mat image) {
-        return !image.empty();
-    }
-
-    public static boolean checkMimeWhiteList(String fileType, String mimeType) throws UnsupportedFileTypeException {
-        try {
-            FormatRegistry.AllowList list = FormatRegistry.AllowList.valueOf(fileType.toUpperCase());
-            return list.isValidFormat(mimeType.toLowerCase());
-        } catch(IllegalArgumentException e) {
-            throw new UnsupportedFileTypeException("failed to detect file type", fileType, e);
-        }
+    public static boolean checkEmpty(Path osTargetPath) {
+        Mat image = Imgcodecs.imread(osTargetPath.toString(), Imgcodecs.IMREAD_UNCHANGED);
+        boolean result = !image.empty();
+        image.release();
+        return result;
     }
 }
