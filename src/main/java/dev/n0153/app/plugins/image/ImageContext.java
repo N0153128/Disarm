@@ -1,8 +1,10 @@
 package dev.n0153.app.plugins.image;
 
 import dev.n0153.app.MediaContext;
+import dev.n0153.app.Utils;
 import org.opencv.core.Mat;
-
+import org.opencv.imgcodecs.Imgcodecs;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,13 +36,24 @@ public class ImageContext implements MediaContext {
     @Override
     public void close() throws Exception {}
 
-    private final String KEY_IMAGE = "image";
-    private final String KEY_LOGO = "logo";
-    private final String KEY_X = "x";
-    private final String KEY_Y = "y";
-    private final String KEY_LOGO_TITLE = "logoTitle";
-    private final String KEY_IMAGE_TITLE = "imageTitle";
+    public final String KEY_IMAGE = "image";
+    public final String KEY_LOGO = "logo";
+    public final String KEY_X = "x";
+    public final String KEY_Y = "y";
+    public final String KEY_LOGO_TITLE = "logoTitle";
+    public final String KEY_IMAGE_TITLE = "imageTitle";
 
+    public void populateContext(Path osTargetPath) {
+        put(KEY_IMAGE, Imgcodecs.imread(osTargetPath.toString(), Imgcodecs.IMREAD_UNCHANGED));
+        put(KEY_IMAGE_TITLE, Utils.getTitle(osTargetPath, false));
+    }
+
+    public void populateContext(Path osTargetPath, Path osLogoPath) {
+        put(KEY_IMAGE, Imgcodecs.imread(osTargetPath.toString(), Imgcodecs.IMREAD_UNCHANGED));
+        put(KEY_IMAGE_TITLE, Utils.getTitle(osTargetPath, false));
+        put(KEY_LOGO, Imgcodecs.imread(osLogoPath.toString(), Imgcodecs.IMREAD_UNCHANGED));
+        put(KEY_LOGO_TITLE, Utils.getTitle(osLogoPath, true));
+    }
 
     public Mat getImage() {
         return get(KEY_IMAGE, Mat.class);

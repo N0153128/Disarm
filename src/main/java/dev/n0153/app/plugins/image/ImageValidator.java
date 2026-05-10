@@ -3,8 +3,6 @@ package dev.n0153.app.plugins.image;
 import dev.n0153.app.*;
 import dev.n0153.app.exceptions.InvalidPathException;
 import dev.n0153.app.exceptions.ValidationException;
-import org.opencv.core.Mat;
-import org.opencv.imgcodecs.Imgcodecs;
 
 import java.io.IOException;
 import java.nio.file.Files;

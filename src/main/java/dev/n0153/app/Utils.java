@@ -52,6 +52,43 @@ public class Utils {
     }
 
     /**
+     * Shortcut method, generates title for a file that is currently in processing.
+     * The title is then saved to state and can be accessed with state.getGeneralFileTitle().
+     * @param logo determines if file in processing is a logo or media file
+     * @since 0.1
+     */
+    public static String getTitle(Path osTargetPath, boolean logo) {
+        LocalDateTime now = LocalDateTime.now();
+        String day = String.valueOf(now.getDayOfMonth());
+        String month = String.valueOf(now.getMonthValue());
+        String year = String.valueOf(now.getYear());
+        String hour = String.valueOf(now.getHour());
+        String minute = String.valueOf(now.getMinute());
+        String second = String.valueOf(now.getSecond());
+        String nanoSecond = String.valueOf(now.getNano());
+        String milliSecond = String.valueOf(now.getNano() / 1_000_000);
+        String type;
+        if (logo) {
+            type = "logo";
+        } else {
+            try {
+                type = Utils.getFileType(osTargetPath);
+            } catch (FileTypeDetectionException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        String objectName = null;
+        try {
+            objectName = type+"_"+year+"_"+month+"_"+day+
+                    "_"+hour+"_"+minute+"_"+second+
+                    "_"+nanoSecond+"_"+milliSecond+"."+ Utils.getFormatFromMime(Utils.getMimeType(osTargetPath));
+        } catch (MimeTypeDetectionException e) {
+            throw new RuntimeException(e);
+        }
+        return objectName;
+    }
+
+    /**
      * Renames specified file.
      * @param osTargetFile Path to file.
      * @param newTitle New title.
