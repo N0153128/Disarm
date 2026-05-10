@@ -21,14 +21,6 @@ public class MediaApp {
         return registry.resolve(format);
     }
 
-    public MediaValidator getValidator(MediaPlugin plugin) {
-        return plugin.getValidator();
-    }
-
-    public MediaConfig getConfig(MediaPlugin plugin) {
-        return plugin.getConfig();
-    }
-
     private void processFile(Path osTargetPath) {
 
     }
@@ -59,6 +51,7 @@ public class MediaApp {
                 throw new ValidationException(mediaConfig.getName() + " Plugin validation failed");
             }
             logger.info("{} plugin validations passed", mediaConfig.getName());
+            processingContext.getResolvedPlugin().getProcessor().process();
         } catch (MimeTypeDetectionException e) {
             throw new RuntimeException(e);
         }

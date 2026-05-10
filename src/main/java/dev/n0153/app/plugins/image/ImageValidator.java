@@ -2,12 +2,12 @@ package dev.n0153.app.plugins.image;
 
 import dev.n0153.app.*;
 import dev.n0153.app.exceptions.InvalidPathException;
-import dev.n0153.app.exceptions.UnsafePathException;
-import dev.n0153.app.exceptions.UnsupportedFileTypeException;
 import dev.n0153.app.exceptions.ValidationException;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class ImageValidator implements MediaValidator {
@@ -35,9 +35,10 @@ public class ImageValidator implements MediaValidator {
     }
 
     public static boolean checkEmpty(Path osTargetPath) {
-        Mat image = Imgcodecs.imread(osTargetPath.toString(), Imgcodecs.IMREAD_UNCHANGED);
-        boolean result = !image.empty();
-        image.release();
-        return result;
+        try {
+            return Files.size(osTargetPath) == 0;
+        } catch (IOException e) {
+            throw new ValidationException("Failed to check file size");
+        }
     }
 }
