@@ -4,15 +4,34 @@ import dev.n0153.app.*;
 import dev.n0153.app.exceptions.DisarmException;
 
 public class ImagePlugin implements MediaPlugin {
+    private final ImageConfig config = new ImageConfig();
+    private final ImageContext context = new ImageContext();;
+    private final ImageValidator validator = new ImageValidator();
+    private GlobalConfig globalConfig;
+
+    @Override
+    public void registerGlobalConfig(GlobalConfig globalConfig) {
+        this.globalConfig = globalConfig;
+    }
+
+    @Override
+    public boolean ensureGlobalConfig() {
+        if (globalConfig == null) {
+            throw new DisarmException(echo() + " plugin requires Global Config instance to function");
+        } else {
+            return true;
+        }
+    }
 
     @Override
     public MediaValidator getValidator() {
-        return new ImageValidator();
+        return validator;
     }
 
     @Override
     public MediaProcessor<?> getProcessor() {
-        return new ImageProcessor();
+        ensureGlobalConfig();
+        return new ImageProcessor(config, context, globalConfig);
     }
 
     @Override
@@ -22,28 +41,20 @@ public class ImagePlugin implements MediaPlugin {
 
     @Override
     public void register(PluginRegistry registry) throws DisarmException {
-        registry.registerExperimental(
-                new ImageConfig().supports(),
+        registry.register(
+                config.supports(),
                 new ImagePlugin(),
-                new ImageCLI(),
+                getCLI(),
                 "image");
     }
 
     @Override
     public MediaConfig getConfig() {
-        return new ImageConfig();
+        return config;
     }
 
     @Override
     public String echo() {
-        return new ImageConfig().getName();
-    }
-
-    public void registerWithCli(PluginRegistry registry) throws DisarmException {
-        registry.registerExperimental(
-                new ImageConfig().supports(),
-                new ImagePlugin(),
-                new ImageCLI(),
-                "image");
+        return config.getName();
     }
 }

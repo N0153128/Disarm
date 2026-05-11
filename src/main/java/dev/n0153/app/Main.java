@@ -1,6 +1,4 @@
 package dev.n0153.app;
-import dev.n0153.app.exceptions.DisarmException;
-import dev.n0153.app.exceptions.FileTypeDetectionException;
 import dev.n0153.app.plugins.DisarmPlugins;
 import nu.pattern.OpenCV;
 import org.apache.logging.log4j.LogManager;
@@ -20,9 +18,10 @@ public class Main {
         try {
             DisarmPlugins plugins = new DisarmPlugins();
             PluginRegistry registry = new PluginRegistry();
+            GlobalConfig globalConfig = new GlobalConfig();
             plugins.registerAll(registry);
 
-            DisarmCLI app = new DisarmCLI(registry);
+            DisarmCLI app = new DisarmCLI(registry, globalConfig);
             CommandLine cli = new CommandLine(app);
 
             for (String arg : args) {

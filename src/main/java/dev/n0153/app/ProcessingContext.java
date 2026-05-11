@@ -33,6 +33,7 @@ public class ProcessingContext {
     public final String KEY_STARTED_AT = "startedAt";
     public final String KEY_COMPLETED_AT = "completedAt";
     public final String KEY_CONFIG_SNAPSHOT = "configSnapshot";
+    public final String KEY_PLUGIN_PROCESSOR = "pluginProcessor";
 
 
     private final Map<String, Object> processingContextStorage = new HashMap<>() {{
@@ -50,7 +51,7 @@ public class ProcessingContext {
         put(KEY_STARTED_AT, null);
         put(KEY_COMPLETED_AT, null);
         put(KEY_CONFIG_SNAPSHOT, null);
-
+        put(KEY_PLUGIN_PROCESSOR, null);
     }};
 
     public void put(String key, Object value) {
@@ -77,6 +78,10 @@ public class ProcessingContext {
         } catch (MimeTypeDetectionException e) {
             throw new DisarmException(e);
         }
+    }
+
+    public Object getProcessor() {
+        return get(KEY_PLUGIN_PROCESSOR, Object.class);
     }
 
     // getters
@@ -137,6 +142,14 @@ public class ProcessingContext {
     }
 
     // setters
+
+    public void setPluginProcessor(MediaProcessor<?> newProcessor) {
+        if (newProcessor == null) {
+            throw new IllegalArgumentException("Plugin processor cannot be null");
+        }
+        put(KEY_PLUGIN_PROCESSOR, newProcessor);
+    }
+
     public void setConfigSnapshot(MediaConfig newConfigSnapshot) {
         if (newConfigSnapshot == null) {
             throw new IllegalArgumentException("Config snapshot cannot be null");

@@ -17,5 +17,5 @@ public interface MediaProcessor<Config extends MediaConfig> {
      */
     void process(Path osTargetPath) throws DisarmException;
     MediaContext getContext();
-    void createMeta(Object... args);
+//    void createMeta(Object... args);
 }

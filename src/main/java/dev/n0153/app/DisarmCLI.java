@@ -19,8 +19,10 @@ import java.util.List;
 public class DisarmCLI implements Runnable{
     private static final Logger logger = LogManager.getLogger(DisarmCLI.class);
     private final PluginRegistry registry;
+    private final GlobalConfig globalConfig;
 
-    public DisarmCLI(PluginRegistry registry) {
+    public DisarmCLI(PluginRegistry registry, GlobalConfig globalConfig) {
+        this.globalConfig = globalConfig;
         this.registry = registry;
     }
 
@@ -83,7 +85,7 @@ public class DisarmCLI implements Runnable{
             // finalise parameters
             DisarmConfig config = builder.build();
             DisarmState state = new DisarmState(config);
-            MediaApp app = new MediaApp(registry);
+            MediaApp app = new MediaApp(registry, globalConfig);
 
             // runners
             if (debugAll) {

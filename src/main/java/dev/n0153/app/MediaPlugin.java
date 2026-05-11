@@ -9,4 +9,6 @@ public interface MediaPlugin {
     public MediaConfig getConfig();
     void register(PluginRegistry registry) throws DisarmException;
     String echo();
+    void registerGlobalConfig(GlobalConfig globalConfig);
+    boolean ensureGlobalConfig();
 }

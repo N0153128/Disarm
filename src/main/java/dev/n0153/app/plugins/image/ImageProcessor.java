@@ -1,9 +1,6 @@
 package dev.n0153.app.plugins.image;
 
-import dev.n0153.app.GlobalConfig;
-import dev.n0153.app.MediaContext;
-import dev.n0153.app.MediaProcessor;
-import dev.n0153.app.ProcessingContext;
+import dev.n0153.app.*;
 import dev.n0153.app.exceptions.DisarmException;
 import dev.n0153.app.exceptions.ImageProcessingException;
 import dev.n0153.app.exceptions.ValidationException;
@@ -16,26 +13,22 @@ import java.nio.file.Path;
 import java.util.*;
 
 public class ImageProcessor implements MediaProcessor<ImageConfig> {
-    private ImageConfig config;
-    private ImageContext context;
-    private GlobalConfig globalConfig;
+    private final ImageConfig config;
+    private final ImageContext context;
+    private final GlobalConfig globalConfig;
     private static final Logger logger = LogManager.getLogger(ImageProcessor.class);
 
-    @Override
-    public void createMeta(Object... args) {
-        this.config = requireArgs(args, 0, ImageConfig.class);
-        this.context = requireArgs(args, 1, ImageContext.class);
-        this.globalConfig = requireArgs(args, 2, GlobalConfig.class);
+    public ImageProcessor (ImageConfig config, ImageContext context, GlobalConfig globalConfig) {
+        this.config = config;
+        this.context = context;
+        this.globalConfig = globalConfig;
     }
-
-    @SuppressWarnings("unchecked")
-    private <T> T requireArgs(Object[] args, int index, Class<T> type) {
-        if (!type.isInstance(args[index])) {
-            throw new ValidationException("Argument " + (index+1) + " must be an instance of " +
-                    type.getSimpleName());
-        }
-        return (T) args[index];
-    }
+//    @Override
+//    public void createMeta(Object... args) {
+//        this.config = Utils.requireArgs(args, 0, ImageConfig.class);
+//        this.context = Utils.requireArgs(args, 1, ImageContext.class);
+//        this.globalConfig = Utils.requireArgs(args, 2, GlobalConfig.class);
+//    }
 
     public boolean checkMeta() {
         return this.config != null || this.context != null;

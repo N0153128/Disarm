@@ -1,5 +1,6 @@
 package dev.n0153.app.plugins;
 
+import dev.n0153.app.GlobalConfig;
 import dev.n0153.app.PluginRegistry;
 import dev.n0153.app.plugins.image.ImagePlugin;
 

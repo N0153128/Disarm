@@ -10,11 +10,13 @@ import java.nio.file.Path;
 public class MediaApp {
     private final PluginRegistry registry;
     private static final Logger logger = LogManager.getLogger(MediaApp.class);
-    private final GlobalConfig globalConfig = new GlobalConfig();
-    private final ProcessingContext processingContext = new ProcessingContext(globalConfig);
+    private final GlobalConfig globalConfig;
+    private final ProcessingContext processingContext;
 
-    public MediaApp (PluginRegistry registry) {
+    public MediaApp (PluginRegistry registry, GlobalConfig globalConfig) {
         this.registry = registry;
+        this.globalConfig = globalConfig;
+        this.processingContext = new ProcessingContext(globalConfig);
     }
 
     public MediaPlugin getPlugin(String format) {
@@ -36,6 +38,7 @@ public class MediaApp {
     public void fileDisarm(Path osTargetPath) {
         logger.info("fileDisarm hit");
         try {
+            // populate context
             String mime = Utils.getMimeType(osTargetPath);
             logger.info("detected mime: {}", mime);
             MediaPlugin plugin = getPlugin(mime);
@@ -43,6 +46,10 @@ public class MediaApp {
             MediaConfig mediaConfig = plugin.getConfig();
             processingContext.populateContext(osTargetPath, plugin, mediaConfig);
             logger.info("general context populated");
+            plugin.registerGlobalConfig(globalConfig);
+            processingContext.setPluginProcessor(plugin.getProcessor());
+
+            // run validations
             if (!validateGlobal(osTargetPath)) {
                 throw new ValidationException("Global validation failed");
             }
@@ -51,6 +58,8 @@ public class MediaApp {
                 throw new ValidationException(mediaConfig.getName() + " Plugin validation failed");
             }
             logger.info("{} plugin validations passed", mediaConfig.getName());
+
+            // process input
             processingContext.getResolvedPlugin().getProcessor().process(osTargetPath);
         } catch (MimeTypeDetectionException e) {
             throw new RuntimeException(e);

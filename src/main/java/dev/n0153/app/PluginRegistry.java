@@ -21,10 +21,10 @@ public class PluginRegistry {
      * @param mimeType plugin's supported MIME type
      * @param plugin plugin instance
      */
-    public void registerExperimental(
+    public void register(
             Set<String> mimeType,
             MediaPlugin plugin,
-            ImageCLI cliConfig,
+            Runnable cliConfig,
             String fileType) {
         for (String mime : mimeType) {
             processorRegistry.put(mime, plugin);
