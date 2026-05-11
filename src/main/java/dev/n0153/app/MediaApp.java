@@ -51,7 +51,7 @@ public class MediaApp {
                 throw new ValidationException(mediaConfig.getName() + " Plugin validation failed");
             }
             logger.info("{} plugin validations passed", mediaConfig.getName());
-            processingContext.getResolvedPlugin().getProcessor().process();
+            processingContext.getResolvedPlugin().getProcessor().process(osTargetPath);
         } catch (MimeTypeDetectionException e) {
             throw new RuntimeException(e);
         }

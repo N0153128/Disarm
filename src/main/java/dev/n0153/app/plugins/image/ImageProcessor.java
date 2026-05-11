@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
-
+import java.nio.file.Path;
 import java.util.*;
 
 public class ImageProcessor implements MediaProcessor<ImageConfig> {
@@ -21,18 +21,25 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
     private GlobalConfig globalConfig;
     private static final Logger logger = LogManager.getLogger(ImageProcessor.class);
 
+    @Override
+    public void createMeta(Object... args) {
+        this.config = requireArgs(args, 0, ImageConfig.class);
+        this.context = requireArgs(args, 1, ImageContext.class);
+        this.globalConfig = requireArgs(args, 2, GlobalConfig.class);
+    }
 
-    public void createMeta(GlobalConfig globalConfig, ImageConfig config, ImageContext context) {
-        this.config = config;
-        this.context = context;
-        this.globalConfig = globalConfig;
+    @SuppressWarnings("unchecked")
+    private <T> T requireArgs(Object[] args, int index, Class<T> type) {
+        if (!type.isInstance(args[index])) {
+            throw new ValidationException("Argument " + (index+1) + " must be an instance of " +
+                    type.getSimpleName());
+        }
+        return (T) args[index];
     }
 
     public boolean checkMeta() {
         return this.config != null || this.context != null;
     }
-
-
 
     /**
      * Scales logo from state.getLogo() to specified maximum width and height parameters.
@@ -294,8 +301,12 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
     }
 
     @Override
-    public void process() throws DisarmException {
-
+    public void process(Path osTargetPath) throws DisarmException {
+        context.setImage(Imgcodecs.imread(osTargetPath.toString(), Imgcodecs.IMREAD_UNCHANGED));
+        scaleImageToScaleFactor(context.getImage());
+        if (context.getLogo() != null) {
+            applyWatermarkAtRandomPosition();
+        }
     }
 
     @Override
