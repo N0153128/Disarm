@@ -85,43 +85,43 @@ public class ImageConfig implements MediaConfig {
     //getters
     public int getLogoSizeLimit() {
         return Objects.requireNonNullElse(
-                get(KEY_LOGO_SIZE_LIMIT, int.class),
+                get(KEY_LOGO_SIZE_LIMIT, Integer.class),
                 logoSizeLimit);
     }
 
     public boolean isKeepLogo() {
         return Objects.requireNonNullElse(
-                get(KEY_KEEP_LOGO, boolean.class),
+                get(KEY_KEEP_LOGO, Boolean.class),
                 keepLogo);
     }
 
     public boolean isKeepImage() {
         return Objects.requireNonNullElse(
-                get(KEY_KEEP_IMAGE, boolean.class),
+                get(KEY_KEEP_IMAGE, Boolean.class),
                 keepImage);
     }
 
     public int getImgMaxWidth() {
         return Objects.requireNonNullElse(
-                get(KEY_IMG_MAX_WIDTH, int.class),
+                get(KEY_IMG_MAX_WIDTH, Integer.class),
                 imgMaxWidth);
     }
 
     public int getImgMaxHeight() {
         return Objects.requireNonNullElse(
-                get(KEY_IMG_MAX_HEIGHT, int.class),
+                get(KEY_IMG_MAX_HEIGHT, Integer.class),
                 imgMaxHeight);
     }
 
     public int getLogoMaxWidth() {
         return Objects.requireNonNullElse(
-                get(KEY_LOGO_MAX_WIDTH, int.class),
+                get(KEY_LOGO_MAX_WIDTH, Integer.class),
                 logoMaxWidth);
     }
 
     public int getLogoMaxHeight() {
         return Objects.requireNonNullElse(
-                get(KEY_LOGO_MAX_HEIGHT, int.class),
+                get(KEY_LOGO_MAX_HEIGHT, Integer.class),
                 logoMaxHeight);
     }
 

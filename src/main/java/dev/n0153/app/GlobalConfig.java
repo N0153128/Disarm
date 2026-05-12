@@ -105,7 +105,7 @@ public class GlobalConfig {
 
     public int getGeneralSizeLimit() {
         return Objects.requireNonNullElse(
-                get(KEY_GENERAL_SIZE_LIMIT, int.class),
+                get(KEY_GENERAL_SIZE_LIMIT, Integer.class),
                 generalSizeLimit
         );
     }

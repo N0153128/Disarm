@@ -54,7 +54,7 @@ public class MediaApp {
                 throw new ValidationException("Global validation failed");
             }
             logger.info("Global validations passed");
-            if (!validatePlugin(osTargetPath)) {
+            if (!plugin.getValidator().validate(osTargetPath)) {
                 throw new ValidationException(mediaConfig.getName() + " Plugin validation failed");
             }
             logger.info("{} plugin validations passed", mediaConfig.getName());

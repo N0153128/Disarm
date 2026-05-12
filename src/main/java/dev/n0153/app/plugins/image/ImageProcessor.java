@@ -125,8 +125,8 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
     private void scaleImageToScaleFactor(Mat source) {
         Mat destination = new Mat();
         if (source.width() > config.getImgMaxWidth() || source.height() > config.getImgMaxHeight()) {
-            double scaledWidth = config.getImgMaxWidth() / source.width();
-            double scaledHeight = config.getImgMaxHeight() / source.height();
+            double scaledWidth = (double) config.getImgMaxWidth() / source.width();
+            double scaledHeight = (double) config.getImgMaxHeight() / source.height();
             double scale = Math.min(scaledWidth, scaledHeight);
 
             int newWidth = (int) (source.width() * scale);
@@ -296,6 +296,7 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
     @Override
     public void process(Path osTargetPath) throws DisarmException {
         context.setImage(Imgcodecs.imread(osTargetPath.toString(), Imgcodecs.IMREAD_UNCHANGED));
+        context.setImageTitle(Utils.getTitle(osTargetPath, false));
         scaleImageToScaleFactor(context.getImage());
         if (context.getLogo() != null) {
             applyWatermarkAtRandomPosition();

@@ -34,7 +34,7 @@ public class ImageValidator implements MediaValidator {
 
     public static boolean checkEmpty(Path osTargetPath) {
         try {
-            return Files.size(osTargetPath) == 0;
+            return Files.size(osTargetPath) > 0;
         } catch (IOException e) {
             throw new ValidationException("Failed to check file size");
         }

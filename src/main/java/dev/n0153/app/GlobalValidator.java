@@ -72,7 +72,7 @@ public class GlobalValidator {
             throw new InvalidPathException("Path is not readable", osTargetPath);
         }
         if (!isOutputPathWritable(config.getGeneralOutputPath())) {
-            throw new java.nio.file.InvalidPathException("Output path is not readable",
+            throw new java.nio.file.InvalidPathException("Output path is not writeable: " + config.getGeneralOutputPath(),
                     config.getGeneralOutputPath().toString());
         }
         if (!ensureGlobalSizeLimit(osTargetPath, config)) {

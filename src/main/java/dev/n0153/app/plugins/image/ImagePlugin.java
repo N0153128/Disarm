@@ -25,6 +25,7 @@ public class ImagePlugin implements MediaPlugin {
 
     @Override
     public MediaValidator getValidator() {
+        validator.createMeta(config, context);
         return validator;
     }
 
