@@ -127,7 +127,7 @@ public class ImageConfig implements MediaConfig {
 
     public double getTransparency() {
         return Objects.requireNonNullElse(
-                get(KEY_TRANSPARENCY, double.class),
+                get(KEY_TRANSPARENCY, Double.class),
                 transparency);
     }
 

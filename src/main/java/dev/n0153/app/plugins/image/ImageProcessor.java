@@ -300,6 +300,8 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
         context.setImageTitle(Utils.getTitle(osTargetPath, false));
         scaleImageToScaleFactor(context.getImage());
         if (context.getLogo() != null) {
+            logger.info("logo present");
+            scaleLogo();
             applyWatermarkAtRandomPosition();
         }
     }

@@ -64,11 +64,11 @@ public class ImageContext implements MediaContext {
     }
 
     public int getImgX(){
-        return get(KEY_X, int.class);
+        return get(KEY_X, Integer.class);
     }
 
     public int getImgY(){
-        return get(KEY_Y, int.class);
+        return get(KEY_Y, Integer.class);
     }
 
     public String getLogoTitle(){

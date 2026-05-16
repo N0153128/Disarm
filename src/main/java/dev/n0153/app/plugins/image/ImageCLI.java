@@ -2,10 +2,14 @@ package dev.n0153.app.plugins.image;
 
 import dev.n0153.app.DisarmCLI;
 import dev.n0153.app.PluginRegistry;
+import dev.n0153.app.Utils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.opencv.imgcodecs.Imgcodecs;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
+
+import java.nio.file.Path;
 
 @Command(name = "image", description = "Image Processing Plugin")
 public class ImageCLI implements Runnable {
@@ -13,14 +17,19 @@ public class ImageCLI implements Runnable {
 
     private final ImageConfig config = new ImageConfig();
     private final PluginRegistry registry;
+    private final ImageContext context;
 
-    public ImageCLI (PluginRegistry registry) {
+    public ImageCLI (PluginRegistry registry, ImageContext context) {
         this.registry = registry;
+        this.context = context;
         registry.updateConfig("image", config);
     }
 
     @CommandLine.ParentCommand
     DisarmCLI inputPath;
+
+    @CommandLine.Option(names = {"-l", "--logo"}, description = "Apply watermark")
+    private Path logo;
 
     @CommandLine.Option(names = {"-lsz", "--logo-size-limit"}, description = "Change logo size limit")
     private int logoSizeLimit;
@@ -65,6 +74,10 @@ public class ImageCLI implements Runnable {
         }
         if (logoMaxHeight > 0) {
             this.config.setLogoMaxHeight(logoMaxHeight);
+        }
+        if (logo != null) {
+            this.context.setLogo(Imgcodecs.imread(logo.toString(), Imgcodecs.IMREAD_UNCHANGED));
+            this.context.setLogoTitle(Utils.getTitle(logo, true));
         }
         registry.updateConfig("image", config);
     }

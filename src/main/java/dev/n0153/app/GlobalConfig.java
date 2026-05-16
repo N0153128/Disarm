@@ -70,21 +70,21 @@ public class GlobalConfig {
 
     public boolean getKeepInputs() {
         return Objects.requireNonNullElse(
-                get(KEY_KEEP_INPUTS, boolean.class),
+                get(KEY_KEEP_INPUTS, Boolean.class),
                 keepInputs
         );
     }
 
     public boolean getKeepResult() {
         return Objects.requireNonNullElse(
-                get(KEY_KEEP_RESULT, boolean.class),
+                get(KEY_KEEP_RESULT, Boolean.class),
                 keepResult
         );
     }
 
     public boolean isKeepOriginal() {
         return Objects.requireNonNullElse(
-                get(KEY_KEEP_ORIGINAL, boolean.class),
+                get(KEY_KEEP_ORIGINAL, Boolean.class),
                 keepOriginal
         );
     }

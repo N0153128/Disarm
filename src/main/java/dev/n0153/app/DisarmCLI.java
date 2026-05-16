@@ -34,8 +34,8 @@ public class DisarmCLI implements Runnable{
     @CommandLine.Option(names = {"-o", "--output"}, description = "output file path")
     private Path outputPath;
 
-    @CommandLine.Option(names = {"-l", "--logo"}, description = "watermark specified image")
-    private Path logo;
+//    @CommandLine.Option(names = {"-l", "--logo"}, description = "watermark specified image")
+//    private Path logo;
 
     @CommandLine.Option(names = {"-do", "--delete-original"}, negatable = true, description = "delete the original file after disarming")
     private boolean deleteOriginal;
@@ -89,12 +89,12 @@ public class DisarmCLI implements Runnable{
                 DebugGeneral general = new DebugGeneral(state, config);
                 general.isEverythingWorkingQuestionMark("");
             }
-            if (logo != null && Utils.isImage(input) && Utils.isImage(logo)) {
-                app.fileDisarm(input, logo);
-            } else {
-                logger.info("logo not provided");
+//            if (logo != null && Utils.isImage(input) && Utils.isImage(logo)) {
+//                app.fileDisarm(input, logo);
+//            } else {
+//                logger.info("logo not provided");
                 app.fileDisarm(input);
-            }
+
         }
     }
 }

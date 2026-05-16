@@ -42,7 +42,7 @@ public class ImagePlugin implements MediaPlugin {
         registry.register(
                 config.supports(),
                 this,
-                new ImageCLI(registry),
+                new ImageCLI(registry, context),
                 "image",
                 config);
     }

@@ -25,18 +25,6 @@ public class MediaApp {
     }
 
     private void processFile(Path osTargetPath) {
-
-    }
-
-    public boolean validateGlobal(Path osTargetPath) {
-        return GlobalValidator.validate(osTargetPath, globalConfig);
-    }
-
-    public boolean validatePlugin(Path osTargetPath) {
-        return processingContext.getResolvedPlugin().getValidator().validate(osTargetPath);
-    }
-
-    public void fileDisarm(Path osTargetPath) {
         try {
             // populate context
             String mime = Utils.getMimeType(osTargetPath);
@@ -65,6 +53,18 @@ public class MediaApp {
         } catch (MimeTypeDetectionException | FileTypeDetectionException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public boolean validateGlobal(Path osTargetPath) {
+        return GlobalValidator.validate(osTargetPath, globalConfig);
+    }
+
+    public boolean validatePlugin(Path osTargetPath) {
+        return processingContext.getResolvedPlugin().getValidator().validate(osTargetPath);
+    }
+
+    public void fileDisarm(Path osTargetPath) {
+        processFile(osTargetPath);
     }
 
     public void fileDisarm(Path osTargetPath, Path osLogoPath) {
