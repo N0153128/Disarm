@@ -17,13 +17,6 @@ public class ImageCLI implements Runnable {
     public ImageCLI (PluginRegistry registry) {
         this.registry = registry;
         registry.updateConfig("image", config);
-//        this.config = (ImageConfig) registry.resolveConfig("image");
-        logger.info("ImageCLI hit");
-        if (config == null) {
-            logger.error("ImageConfig is null");
-        } else {
-            logger.info("ImageConfig is not null");
-        }
     }
 
     @CommandLine.ParentCommand
@@ -52,7 +45,6 @@ public class ImageCLI implements Runnable {
 
     @Override
     public void run() {
-        logger.info("Image CLI detected");
         if (logoSizeLimit > 0) {
             this.config.setLogoSizeLimit(logoSizeLimit);
         }

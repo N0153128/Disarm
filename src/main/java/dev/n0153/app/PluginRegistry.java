@@ -34,7 +34,7 @@ public class PluginRegistry {
         configRegistry.put(fileType, config);
         cliRegistry.put(fileType, cliConfig);
 
-        logger.info("CLI and Plugin were registered successfully");
+        logger.info("CLI and Plugins were registered successfully");
 
     }
 
@@ -61,8 +61,6 @@ public class PluginRegistry {
 
     public void updateConfig(String fileType, MediaConfig config) {
         configRegistry.replace(fileType, config);
-        logger.info("Media config for {} type was updated", fileType);
-
     }
 
     public boolean hasCliSupport(String mimeType) {

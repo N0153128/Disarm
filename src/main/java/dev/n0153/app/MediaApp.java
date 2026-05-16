@@ -37,7 +37,6 @@ public class MediaApp {
     }
 
     public void fileDisarm(Path osTargetPath) {
-        logger.info("fileDisarm hit");
         try {
             // populate context
             String mime = Utils.getMimeType(osTargetPath);

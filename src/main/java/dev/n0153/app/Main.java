@@ -18,8 +18,6 @@ public class Main {
         PluginRegistry registry = new PluginRegistry();
         GlobalConfig globalConfig = new GlobalConfig();
         plugins.registerAll(registry);
-        logger.info("registerAll() hit");
-
         try {
             DisarmCLI app = new DisarmCLI(registry, globalConfig);
             CommandLine cli = new CommandLine(app);
