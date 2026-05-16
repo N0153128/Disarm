@@ -295,6 +295,7 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
 
     @Override
     public void process(Path osTargetPath) throws DisarmException {
+        logger.info("current config width: {}, height: {}", config.getImgMaxWidth(), config.getImgMaxHeight());
         context.setImage(Imgcodecs.imread(osTargetPath.toString(), Imgcodecs.IMREAD_UNCHANGED));
         context.setImageTitle(Utils.getTitle(osTargetPath, false));
         scaleImageToScaleFactor(context.getImage());

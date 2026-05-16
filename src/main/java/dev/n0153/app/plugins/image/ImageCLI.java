@@ -1,6 +1,7 @@
 package dev.n0153.app.plugins.image;
 
 import dev.n0153.app.DisarmCLI;
+import dev.n0153.app.PluginRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine;
@@ -10,17 +11,18 @@ import picocli.CommandLine.Command;
 public class ImageCLI implements Runnable {
     private static final Logger logger = LogManager.getLogger(ImageCLI.class);
 
-    private ImageConfig config;
+    private final ImageConfig config = new ImageConfig();
+    private final PluginRegistry registry;
 
-    public void provideConfig(ImageConfig config) {
-        this.config = config;
-    }
-
-    public ImageConfig getConfig() {
-        if (this.config != null) {
-            return this.config;
+    public ImageCLI (PluginRegistry registry) {
+        this.registry = registry;
+        registry.updateConfig("image", config);
+//        this.config = (ImageConfig) registry.resolveConfig("image");
+        logger.info("ImageCLI hit");
+        if (config == null) {
+            logger.error("ImageConfig is null");
         } else {
-            throw new IllegalStateException("Config is empty");
+            logger.info("ImageConfig is not null");
         }
     }
 
@@ -72,5 +74,6 @@ public class ImageCLI implements Runnable {
         if (logoMaxHeight > 0) {
             this.config.setLogoMaxHeight(logoMaxHeight);
         }
+        registry.updateConfig("image", config);
     }
 }

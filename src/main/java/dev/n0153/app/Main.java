@@ -13,14 +13,14 @@ public class Main {
     private static final Logger logger = LogManager.getLogger(Main.class);
     public static void main(String[] args) {
         OpenCV.loadLocally();
-        System.out.println("Working directory: " + System.getProperty("user.dir"));
+        logger.info("Working directory: {}",  System.getProperty("user.dir"));
+        DisarmPlugins plugins = new DisarmPlugins();
+        PluginRegistry registry = new PluginRegistry();
+        GlobalConfig globalConfig = new GlobalConfig();
+        plugins.registerAll(registry);
+        logger.info("registerAll() hit");
 
         try {
-            DisarmPlugins plugins = new DisarmPlugins();
-            PluginRegistry registry = new PluginRegistry();
-            GlobalConfig globalConfig = new GlobalConfig();
-            plugins.registerAll(registry);
-
             DisarmCLI app = new DisarmCLI(registry, globalConfig);
             CommandLine cli = new CommandLine(app);
 

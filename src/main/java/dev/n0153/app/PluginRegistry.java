@@ -14,6 +14,7 @@ public class PluginRegistry {
     private static final Logger logger = LogManager.getLogger(PluginRegistry.class);
     private final Map<String, MediaPlugin> processorRegistry = new HashMap<>();
     public final Map<String, Runnable> cliRegistry = new HashMap<>();
+    private final Map<String, MediaConfig> configRegistry = new HashMap<>();
 
 
     /**
@@ -25,11 +26,14 @@ public class PluginRegistry {
             Set<String> mimeType,
             MediaPlugin plugin,
             Runnable cliConfig,
-            String fileType) {
+            String fileType,
+            MediaConfig config) {
         for (String mime : mimeType) {
             processorRegistry.put(mime, plugin);
         }
+        configRegistry.put(fileType, config);
         cliRegistry.put(fileType, cliConfig);
+
         logger.info("CLI and Plugin were registered successfully");
 
     }
@@ -49,6 +53,16 @@ public class PluginRegistry {
 
     public Runnable resolveCli(String fileType) {
         return cliRegistry.get(fileType);
+    }
+
+    public MediaConfig resolveConfig(String fileType) {
+        return configRegistry.get(fileType);
+    }
+
+    public void updateConfig(String fileType, MediaConfig config) {
+        configRegistry.replace(fileType, config);
+        logger.info("Media config for {} type was updated", fileType);
+
     }
 
     public boolean hasCliSupport(String mimeType) {

@@ -4,7 +4,7 @@ import dev.n0153.app.*;
 import dev.n0153.app.exceptions.DisarmException;
 
 public class ImagePlugin implements MediaPlugin {
-    private final ImageConfig config = new ImageConfig();
+    private MediaConfig config;
     private final ImageContext context = new ImageContext();;
     private final ImageValidator validator = new ImageValidator();
     private GlobalConfig globalConfig;
@@ -25,28 +25,26 @@ public class ImagePlugin implements MediaPlugin {
 
     @Override
     public MediaValidator getValidator() {
-        validator.createMeta(config, context);
+        validator.createMeta((ImageConfig) config, context);
         return validator;
     }
 
     @Override
-    public MediaProcessor<?> getProcessor() {
+    public MediaProcessor<?> getProcessor(MediaConfig config) {
         ensureGlobalConfig();
-        return new ImageProcessor(config, context, globalConfig);
+        return new ImageProcessor((ImageConfig) config, context, globalConfig);
     }
 
-    @Override
-    public Runnable getCLI() {
-        return new ImageCLI();
-    }
 
     @Override
-    public void register(PluginRegistry registry) throws DisarmException {
+    public void register(PluginRegistry registry, MediaConfig config) throws DisarmException {
+        this.config = config;
         registry.register(
                 config.supports(),
-                new ImagePlugin(),
-                getCLI(),
-                "image");
+                this,
+                new ImageCLI(registry),
+                "image",
+                config);
     }
 
     @Override

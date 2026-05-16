@@ -1,5 +1,6 @@
 package dev.n0153.app;
 
+import dev.n0153.app.exceptions.FileTypeDetectionException;
 import dev.n0153.app.exceptions.MimeTypeDetectionException;
 import dev.n0153.app.exceptions.ValidationException;
 import org.apache.logging.log4j.LogManager;
@@ -40,14 +41,15 @@ public class MediaApp {
         try {
             // populate context
             String mime = Utils.getMimeType(osTargetPath);
-            logger.info("detected mime: {}", mime);
+            String fileType = Utils.getFileType(osTargetPath);
+            logger.info("detected mime: {}, detected file type: {}", mime, fileType);
             MediaPlugin plugin = getPlugin(mime);
             logger.info("detected plugin: {}", plugin.echo());
-            MediaConfig mediaConfig = plugin.getConfig();
+            MediaConfig mediaConfig = registry.resolveConfig(fileType);
             processingContext.populateContext(osTargetPath, plugin, mediaConfig);
             logger.info("general context populated");
             plugin.registerGlobalConfig(globalConfig);
-            processingContext.setPluginProcessor(plugin.getProcessor());
+            processingContext.setPluginProcessor(plugin.getProcessor(mediaConfig));
 
             // run validations
             if (!validateGlobal(osTargetPath)) {
@@ -60,8 +62,8 @@ public class MediaApp {
             logger.info("{} plugin validations passed", mediaConfig.getName());
 
             // process input
-            processingContext.getResolvedPlugin().getProcessor().process(osTargetPath);
-        } catch (MimeTypeDetectionException e) {
+            processingContext.getResolvedPlugin().getProcessor(mediaConfig).process(osTargetPath);
+        } catch (MimeTypeDetectionException | FileTypeDetectionException e) {
             throw new RuntimeException(e);
         }
     }

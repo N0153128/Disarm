@@ -147,14 +147,14 @@ public class ImageConfig implements MediaConfig {
         put(KEY_KEEP_IMAGE, keepImage);
     }
 
-    public void setImgMaxWidth(double newImgMaxWidth) {
+    public void setImgMaxWidth(int newImgMaxWidth) {
         if (newImgMaxWidth < 0) {
             throw new IllegalArgumentException("Image max width cannot be less than zero");
         }
         put(KEY_IMG_MAX_WIDTH, newImgMaxWidth);
     }
 
-    public void setImgMaxHeight(double newImageMaxHeight) {
+    public void setImgMaxHeight(int newImageMaxHeight) {
         if (newImageMaxHeight < 0) {
             throw new IllegalArgumentException("Image max height cannot be less than zero");
         }
