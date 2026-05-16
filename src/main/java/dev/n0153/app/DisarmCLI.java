@@ -51,7 +51,6 @@ public class DisarmCLI implements Runnable{
     }
 
     public void run() {
-        logger.info("Disarm (pre-release)\nWorking file specified: {}", this.inputPath);
         logger.warn("WARNING: using experimental app orchestrator");
         BuilderConfig builder = DisarmConfig.builder();
         for (Path input : inputPath) {
