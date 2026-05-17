@@ -7,6 +7,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.nio.file.Path;
+import java.time.Duration;
+import java.time.Instant;
 
 public class MediaApp {
     private final PluginRegistry registry;
@@ -64,10 +66,17 @@ public class MediaApp {
     }
 
     public void fileDisarm(Path osTargetPath) {
+        if (globalConfig.getBenchmarking()) {
+            processingContext.setStartedAt(Instant.now());
+        }
         processFile(osTargetPath);
-    }
-
-    public void fileDisarm(Path osTargetPath, Path osLogoPath) {
-
+        if (globalConfig.getBenchmarking()) {
+            processingContext.setCompletedAt(Instant.now());
+            long duration = Duration.between(
+                    processingContext.getStartedAt(),
+                    processingContext.getCompletedAt())
+                    .toMillis();
+            logger.info("File processed in {}ms", duration);
+        }
     }
 }
