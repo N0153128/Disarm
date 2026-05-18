@@ -45,7 +45,7 @@ public class MediaApp {
                 throw new ValidationException("Global validation failed");
             }
             logger.info("Global validations passed");
-            if (!plugin.getValidator().validate(osTargetPath)) {
+            if (!validatePlugin(plugin, osTargetPath)) {
                 throw new ValidationException(mediaConfig.getName() + " Plugin validation failed");
             }
             logger.info("{} plugin validations passed", mediaConfig.getName());
@@ -61,8 +61,8 @@ public class MediaApp {
         return GlobalValidator.validate(osTargetPath, globalConfig);
     }
 
-    public boolean validatePlugin(Path osTargetPath) {
-        return processingContext.getResolvedPlugin().getValidator().validate(osTargetPath);
+    public boolean validatePlugin(MediaPlugin plugin, Path osTargetPath) {
+        return plugin.getValidator().validate(osTargetPath);
     }
 
     public void fileDisarm(Path osTargetPath) {
