@@ -35,7 +35,19 @@ public class PluginRegistry {
         cliRegistry.put(fileType, cliConfig);
 
         logger.info("CLI and Plugins were registered successfully");
+    }
 
+    public void register(
+            Set<String> mimeType,
+            MediaPlugin plugin,
+            String fileType,
+            MediaConfig config) {
+        for (String mime : mimeType) {
+            processorRegistry.put(mime, plugin);
+        }
+        configRegistry.put(fileType, config);
+
+        logger.info("Plugin was registered successfully");
     }
 
     /**
