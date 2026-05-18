@@ -63,11 +63,11 @@ public class PluginRegistry {
         if (configRegistry.containsKey(fileType)) {
             configRegistry.replace(fileType, config);
         } else {
-            throw new ValidationException("An entry with file type " + fileType + " doesn't exist.");
+            configRegistry.put(fileType, config);
         }
     }
 
-    public boolean hasCliSupport(String mimeType) {
-        return cliRegistry.containsKey(mimeType);
+    public Collection<Runnable> listCLI() {
+        return cliRegistry.values();
     }
 }
