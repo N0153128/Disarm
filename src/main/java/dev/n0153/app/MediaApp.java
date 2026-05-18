@@ -35,10 +35,9 @@ public class MediaApp {
             MediaPlugin plugin = getPlugin(mime);
             logger.info("detected plugin: {}", plugin.echo());
             MediaConfig mediaConfig = registry.resolveConfig(fileType);
-            processingContext.populateContext(osTargetPath, plugin, mediaConfig);
+            processingContext.populateContext(osTargetPath, plugin.echo(), mediaConfig);
             logger.info("general context populated");
             plugin.registerGlobalConfig(globalConfig);
-            processingContext.setPluginProcessor(plugin.getProcessor(mediaConfig));
             processingContext.setStage("context populated");
 
             // run validations
@@ -54,7 +53,7 @@ public class MediaApp {
             logger.info("{} plugin validations passed", mediaConfig.getName());
 
             // process input
-            processingContext.getResolvedPlugin().getProcessor(mediaConfig).process(osTargetPath);
+            getProcessor(plugin, mediaConfig).process(osTargetPath);
         } catch (MimeTypeDetectionException | FileTypeDetectionException e) {
             throw new RuntimeException(e);
         }
@@ -62,6 +61,10 @@ public class MediaApp {
 
     public boolean validateGlobal(Path osTargetPath) {
         return GlobalValidator.validate(osTargetPath, globalConfig);
+    }
+
+    public MediaProcessor<?> getProcessor(MediaPlugin plugin, MediaConfig config) {
+        return plugin.getProcessor(config);
     }
 
     public boolean validatePlugin(MediaPlugin plugin, Path osTargetPath) {
