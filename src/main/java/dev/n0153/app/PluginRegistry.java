@@ -1,7 +1,7 @@
 package dev.n0153.app;
 
 import dev.n0153.app.exceptions.UnsupportedFileTypeException;
-import dev.n0153.app.plugins.image.ImageCLI;
+import dev.n0153.app.exceptions.ValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,7 +13,7 @@ import java.util.*;
 public class PluginRegistry {
     private static final Logger logger = LogManager.getLogger(PluginRegistry.class);
     private final Map<String, MediaPlugin> processorRegistry = new HashMap<>();
-    public final Map<String, Runnable> cliRegistry = new HashMap<>();
+    private final Map<String, Runnable> cliRegistry = new HashMap<>();
     private final Map<String, MediaConfig> configRegistry = new HashMap<>();
 
 
@@ -60,7 +60,11 @@ public class PluginRegistry {
     }
 
     public void updateConfig(String fileType, MediaConfig config) {
-        configRegistry.replace(fileType, config);
+        if (configRegistry.containsKey(fileType)) {
+            configRegistry.replace(fileType, config);
+        } else {
+            throw new ValidationException("An entry with file type " + fileType + " doesn't exist.");
+        }
     }
 
     public boolean hasCliSupport(String mimeType) {
