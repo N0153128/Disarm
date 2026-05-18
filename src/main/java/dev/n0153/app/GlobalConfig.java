@@ -18,16 +18,16 @@ public class GlobalConfig {
     private final int mimeLength = 10;
     private final boolean benchmarking = false;
 
-    public final String KEY_GENERAL_SIZE_LIMIT = "generalSizeLimit";
-    public final String KEY_KEEP_INPUTS = "keepInputs";
-    public final String KEY_KEEP_RESULT = "keepResult";
-    public final String KEY_KEEP_ORIGINAL = "keepOriginal";
-    public final String KEY_GENERAL_FILE_SIZE_UPPER_BOUND = "generalFileSizeUpperBoundLimit";
-    public final String KEY_GENERAL_OUTPUT_PATH = "generalOutputPath";
-    public final String KEY_TARGET_FILE_LENGTH = "targetFileLength";
-    public final String KEY_ID_LENGTH = "IDLength";
-    public final String KEY_MIME_LENGTH = "mimeLength";
-    public final String KEY_BENCHMARKING = "benchmarking";
+    private final String KEY_GENERAL_SIZE_LIMIT = "generalSizeLimit";
+    private final String KEY_KEEP_INPUTS = "keepInputs";
+    private final String KEY_KEEP_RESULT = "keepResult";
+    private final String KEY_KEEP_ORIGINAL = "keepOriginal";
+    private final String KEY_GENERAL_FILE_SIZE_UPPER_BOUND = "generalFileSizeUpperBoundLimit";
+    private final String KEY_GENERAL_OUTPUT_PATH = "generalOutputPath";
+    private final String KEY_TARGET_FILE_LENGTH = "targetFileLength";
+    private final String KEY_ID_LENGTH = "IDLength";
+    private final String KEY_MIME_LENGTH = "mimeLength";
+    private final String KEY_BENCHMARKING = "benchmarking";
 
     private final Map<String, Object> globalConfigStorage = new HashMap<>() {{
         put(KEY_GENERAL_SIZE_LIMIT, generalSizeLimit);
