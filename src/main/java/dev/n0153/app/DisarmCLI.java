@@ -36,6 +36,11 @@ public class DisarmCLI implements Runnable{
     @CommandLine.Option(names = {"-do", "--delete-original"}, negatable = true, description = "delete the original file after disarming")
     private boolean deleteOriginal;
 
+    @CommandLine.Option(names = {"-b", "--benchmark"}, description = "Enable benchmarking to see how much time file" +
+            "processing took")
+    private boolean benchmark;
+
+
     @CommandLine.Spec
     CommandLine.Model.CommandSpec spec;
 
@@ -70,7 +75,9 @@ public class DisarmCLI implements Runnable{
             if (deleteOriginal) {
                 globalConfig.setKeepOriginal(false);
             }
-
+            if (benchmark) {
+                globalConfig.setBenchmarking(true);
+            }
             // finalise parameters
             MediaApp app = new MediaApp(registry, globalConfig);
             // runners

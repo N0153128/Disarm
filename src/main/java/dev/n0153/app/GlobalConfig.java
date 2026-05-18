@@ -16,7 +16,7 @@ public class GlobalConfig {
     private final int targetFileLength = 150;
     private final int IDLength = 150;
     private final int mimeLength = 10;
-    private final boolean benchmarking = true;
+    private final boolean benchmarking = false;
 
     public final String KEY_GENERAL_SIZE_LIMIT = "generalSizeLimit";
     public final String KEY_KEEP_INPUTS = "keepInputs";
