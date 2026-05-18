@@ -39,15 +39,18 @@ public class MediaApp {
             logger.info("general context populated");
             plugin.registerGlobalConfig(globalConfig);
             processingContext.setPluginProcessor(plugin.getProcessor(mediaConfig));
+            processingContext.setStage("context populated");
 
             // run validations
             if (!validateGlobal(osTargetPath)) {
                 throw new ValidationException("Global validation failed");
             }
+            processingContext.setStage("global validation passed");
             logger.info("Global validations passed");
             if (!validatePlugin(plugin, osTargetPath)) {
                 throw new ValidationException(mediaConfig.getName() + " Plugin validation failed");
             }
+            processingContext.setStage("plugin validation passed");
             logger.info("{} plugin validations passed", mediaConfig.getName());
 
             // process input
@@ -69,6 +72,7 @@ public class MediaApp {
         if (globalConfig.getBenchmarking()) {
             processingContext.setStartedAt(Instant.now());
         }
+        processingContext.setStage("processing started");
         processFile(osTargetPath);
         if (globalConfig.getBenchmarking()) {
             processingContext.setCompletedAt(Instant.now());
@@ -77,6 +81,7 @@ public class MediaApp {
                     processingContext.getCompletedAt())
                     .toMillis();
             logger.info("File processed in {}ms", duration);
+            processingContext.setStage("processing finished");
         }
     }
 }
