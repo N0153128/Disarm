@@ -77,11 +77,6 @@ public class ImageConfig implements MediaConfig {
         return 5_000_000;
     }
 
-    @Override
-    public String getLogLevel() {
-        return "info";
-    }
-
     //getters
     public int getLogoSizeLimit() {
         return Objects.requireNonNullElse(
