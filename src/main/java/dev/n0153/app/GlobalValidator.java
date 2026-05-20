@@ -3,8 +3,6 @@ package dev.n0153.app;
 import dev.n0153.app.exceptions.InvalidPathException;
 import dev.n0153.app.exceptions.UnsafePathException;
 import dev.n0153.app.exceptions.ValidationException;
-
-import javax.naming.SizeLimitExceededException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
