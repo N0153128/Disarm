@@ -8,8 +8,8 @@ public interface MediaPlugin {
     public MediaValidator getValidator();
     public MediaConfig getConfig();
     void register(PluginRegistry registry, MediaConfig config) throws DisarmException;
-    String echo();
     void registerGlobalConfig(GlobalConfig globalConfig);
+    String echo();
 
     default boolean ensureGlobalConfig() {
         if (getGlobalConfig() == null) {
