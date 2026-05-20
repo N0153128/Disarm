@@ -30,19 +30,9 @@ public interface MediaConfig {
     Set<String> supports();
 
     /**
-     * Describes constrains of the supported media types and formats
-     */
-    enum MediaConstrains{};
-
-    /**
      * Provides maximum allowed file size if global size limit wasn't applied.
      * @return maximum allowed file size for specified mime
      */
     int maxFileSizeInBytes(String mime);
 
-    /**
-     * Specifies log level for the plugin: Info, Debug, Warning, Error.
-     * @return Log level
-     */
-    String getLogLevel();
 }
