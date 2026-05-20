@@ -289,11 +289,6 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
     }
 
     @Override
-    public ProcessingContext process(ProcessingContext context, ImageConfig config) {
-        return null;
-    }
-
-    @Override
     public void process(Path osTargetPath) throws DisarmException {
         logger.info("current config width: {}, height: {}", config.getImgMaxWidth(), config.getImgMaxHeight());
         context.setImage(Imgcodecs.imread(osTargetPath.toString(), Imgcodecs.IMREAD_UNCHANGED));

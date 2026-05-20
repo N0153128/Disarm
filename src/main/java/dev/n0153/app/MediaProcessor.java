@@ -8,9 +8,6 @@ import java.nio.file.Path;
  * This interface holds processing logic.
  */
 public interface MediaProcessor<Config extends MediaConfig> {
-
-    ProcessingContext process(ProcessingContext context, Config config);
-
     /**
      * Default processing logic interface.
      * @throws DisarmException if processing fails
