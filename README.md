@@ -73,7 +73,6 @@ DisarmConfig config = DisarmConfig.builder()
   - -o / --output — Output directory path
   - -l / --logo — Path to logo/watermark file                                                                                                                                                                                  
   - -do / --delete-original — Delete original file after processing
-  - -da / --debug-all — Enable debug logging                                                                                                                                                                                   
                   
   Supported formats:                                                                                                                                                                                                           
   - Image: JPEG, PNG, WEBP
