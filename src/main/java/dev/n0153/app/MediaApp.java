@@ -46,6 +46,7 @@ public class MediaApp {
             }
             processingContext.setStage("global validation passed");
             logger.info("Global validations passed");
+
             if (!validatePlugin(plugin, osTargetPath)) {
                 throw new ValidationException(mediaConfig.getName() + " Plugin validation failed");
             }
@@ -68,6 +69,10 @@ public class MediaApp {
     }
 
     public boolean validatePlugin(MediaPlugin plugin, Path osTargetPath) {
+        if (plugin.getValidator() == null) {
+            logger.info("This plugin doesn't support plugin-level validation");
+            return true;
+        }
         return plugin.getValidator().validate(osTargetPath);
     }
 
