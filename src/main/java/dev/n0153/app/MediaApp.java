@@ -48,10 +48,10 @@ public class MediaApp {
             logger.info("Global validations passed");
 
             if (!validatePlugin(plugin, osTargetPath)) {
-                throw new ValidationException(mediaConfig.getName() + " Plugin validation failed");
+                throw new ValidationException(plugin.echo() + " Plugin validation failed");
             }
             processingContext.setStage("plugin validation passed");
-            logger.info("{} plugin validations passed", mediaConfig.getName());
+            logger.info("{} plugin validations passed", plugin.echo());
 
             // process input
             getProcessor(plugin, mediaConfig).process(osTargetPath);

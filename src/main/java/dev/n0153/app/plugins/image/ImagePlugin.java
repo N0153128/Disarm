@@ -45,7 +45,6 @@ public class ImagePlugin implements MediaPlugin {
         } else {
             throw new ValidationException("Global config must be provided");
         }
-
     }
 
     @Override
