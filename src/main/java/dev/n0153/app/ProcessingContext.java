@@ -62,8 +62,6 @@ public class ProcessingContext {
             put(KEY_STAGE, "init");
             put(KEY_RESOLVED_PLUGIN, plugin);
             put(KEY_STARTED_AT, Instant.now());
-            put(KEY_CONFIG_SNAPSHOT, config);
-
         } catch (MimeTypeDetectionException e) {
             throw new DisarmException(e);
         }
