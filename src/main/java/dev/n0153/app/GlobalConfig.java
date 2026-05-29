@@ -61,19 +61,19 @@ public class GlobalConfig {
 
     public int getIDLength() {
         return Objects.requireNonNullElse(
-                get(KEY_ID_LENGTH, int.class),
+                get(KEY_ID_LENGTH, Integer.class),
                 IDLength);
     }
 
     public int getMimeLength() {
         return Objects.requireNonNullElse(
-                get(KEY_MIME_LENGTH, int.class),
+                get(KEY_MIME_LENGTH, Integer.class),
                 mimeLength);
     }
 
     public int getGeneralFileSizeUpperBoundLimit() {
         return Objects.requireNonNullElse(
-                get(KEY_GENERAL_FILE_SIZE_UPPER_BOUND, int.class),
+                get(KEY_GENERAL_FILE_SIZE_UPPER_BOUND, Integer.class),
                 generalFileSizeUpperBoundLimit);
     }
 
@@ -107,7 +107,7 @@ public class GlobalConfig {
 
     public int getTargetFileLength() {
         return Objects.requireNonNullElse(
-                get(KEY_TARGET_FILE_LENGTH, int.class),
+                get(KEY_TARGET_FILE_LENGTH, Integer.class),
                 targetFileLength
         );
     }
