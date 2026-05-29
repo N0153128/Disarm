@@ -114,9 +114,6 @@ public class ProcessingContext {
     // setters
 
     public void setConfigSnapshot(MediaConfig newConfigSnapshot) {
-        if (newConfigSnapshot == null) {
-            throw new IllegalArgumentException("Config snapshot cannot be null");
-        }
         put(KEY_CONFIG_SNAPSHOT, newConfigSnapshot);
     }
 
