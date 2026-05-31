@@ -22,21 +22,10 @@ public class ImageValidator implements MediaValidator {
         if (!checkMeta()) {
             throw new ValidationException("Plugin meta data is empty");
         }
-        if (!checkEmpty(osTargetPath)) {
-            throw new InvalidPathException("Path is not readable", osTargetPath);
-        }
         return true;
     }
 
     public boolean checkMeta() {
         return this.config != null || this.context != null;
-    }
-
-    public static boolean checkEmpty(Path osTargetPath) {
-        try {
-            return Files.size(osTargetPath) > 0;
-        } catch (IOException e) {
-            throw new ValidationException("Failed to check file size");
-        }
     }
 }
