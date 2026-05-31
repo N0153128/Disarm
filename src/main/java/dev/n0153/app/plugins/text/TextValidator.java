@@ -5,6 +5,7 @@ import dev.n0153.app.exceptions.ValidationException;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -126,13 +127,12 @@ public class TextValidator implements MediaValidator {
      * @return True if encoding is appropriate.
      * @since 0.1
      */
-    public boolean validateEncoding(TextContext context) {
-        byte[] data = context.getTextContent().getBytes();
-        if (isBom(data)) {
+    public boolean validateEncoding(byte[] text) {
+        if (isBom(text)) {
             return true;
-        } else if (isUTF8(data)) {
+        } else if (isUTF8(text)) {
             return true;
-        } else return isASCII(data);
+        } else return isASCII(text);
     }
 
     public boolean checkSizeLimit(Path osTargetPath, TextConfig config) {
@@ -150,12 +150,18 @@ public class TextValidator implements MediaValidator {
 
     @Override
     public boolean validate(Path osTargetPath) {
-        if (!checkMeta()) {
-            throw new ValidationException("Text Validator: meta is empty");
+        try {
+            byte[] text = Files.readAllBytes(osTargetPath);
+            if (!checkMeta()) {
+                throw new ValidationException("Text Validator: meta is empty");
+            }
+            if (!checkSizeLimit(osTargetPath, config)) {
+                throw new ValidationException("Text File size limit exceeded");
+            }
+            return validateEncoding(text);
+        } catch (IOException e) {
+            throw new ValidationException("Failed to read bytes");
         }
-        if (!checkSizeLimit(osTargetPath, config)) {
-            throw new ValidationException("Text File size limit exceeded");
-        }
-        return validateEncoding(context);
+
     }
 }
