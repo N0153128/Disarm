@@ -3,6 +3,8 @@ package dev.n0153.app;
 import dev.n0153.app.exceptions.InvalidPathException;
 import dev.n0153.app.exceptions.UnsafePathException;
 import dev.n0153.app.exceptions.ValidationException;
+
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -62,6 +64,14 @@ public class GlobalValidator {
         return size <= config.getGeneralSizeLimit();
     }
 
+    public static boolean checkEmpty(Path osTargetPath) {
+        try {
+            return Files.size(osTargetPath) > 0;
+        } catch (IOException e) {
+            throw new ValidationException("Failed to check file size");
+        }
+    }
+
     public static boolean validate(Path osTargetPath, GlobalConfig config) {
         if (!validatePath(osTargetPath)) {
             throw new UnsafePathException("Potentially unsafe path", osTargetPath);
@@ -72,6 +82,9 @@ public class GlobalValidator {
         if (!isOutputPathWritable(config.getGeneralOutputPath())) {
             throw new java.nio.file.InvalidPathException("Output path is not writeable: " + config.getGeneralOutputPath(),
                     config.getGeneralOutputPath().toString());
+        }
+        if (!checkEmpty(osTargetPath)) {
+            throw new ValidationException("Input file is empty");
         }
         if (!ensureGlobalSizeLimit(osTargetPath, config)) {
             throw new ValidationException("Input path exceeds global size limit");

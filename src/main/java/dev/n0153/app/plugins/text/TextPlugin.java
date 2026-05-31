@@ -17,12 +17,12 @@ public class TextPlugin implements MediaPlugin {
     @Override
     public MediaProcessor<?> getProcessor(MediaConfig config) {
         ensureGlobalConfig();
-        return new TextProcessor((TextConfig), config, context, globalConfig);
+        return new TextProcessor((TextConfig) config, context, globalConfig);
     }
 
     @Override
     public MediaValidator getValidator() {
-        validator.createMeta((TextConfig), config, context);
+        validator.createMeta((TextConfig) config, context);
         return validator;
     }
 
