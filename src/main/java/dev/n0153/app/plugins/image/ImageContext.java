@@ -43,18 +43,6 @@ public class ImageContext implements MediaContext {
     public final String KEY_LOGO_TITLE = "logoTitle";
     public final String KEY_IMAGE_TITLE = "imageTitle";
 
-    public void populateContext(Path osTargetPath) {
-        put(KEY_IMAGE, Imgcodecs.imread(osTargetPath.toString(), Imgcodecs.IMREAD_UNCHANGED));
-        put(KEY_IMAGE_TITLE, Utils.getTitle(osTargetPath, false));
-    }
-
-    public void populateContext(Path osTargetPath, Path osLogoPath) {
-        put(KEY_IMAGE, Imgcodecs.imread(osTargetPath.toString(), Imgcodecs.IMREAD_UNCHANGED));
-        put(KEY_IMAGE_TITLE, Utils.getTitle(osTargetPath, false));
-        put(KEY_LOGO, Imgcodecs.imread(osLogoPath.toString(), Imgcodecs.IMREAD_UNCHANGED));
-        put(KEY_LOGO_TITLE, Utils.getTitle(osLogoPath, true));
-    }
-
     public Mat getImage() {
         return get(KEY_IMAGE, Mat.class);
     }
