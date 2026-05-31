@@ -72,16 +72,19 @@ public class TextProcessor implements MediaProcessor<TextConfig> {
 
     @Override
     public void process(Path osTargetPath) throws DisarmException {
-        logger.info("Processing image file: {}", osTargetPath.toString());
-        normalizeUnicode();
-        stripPatterns();
-        escapeHTML();
-        if (globalConfig.getKeepResult()) {
-            try {
+        try {
+            logger.info("Processing image file: {}", osTargetPath.toString());
+            byte[] text = Files.readAllBytes(osTargetPath);
+            context.setTextContent(new String(text, StandardCharsets.UTF_8));
+
+            normalizeUnicode();
+            stripPatterns();
+            escapeHTML();
+            if (globalConfig.getKeepResult()) {
                 saveTextData();
-            } catch (IOException e) {
-                throw new DisarmException("Failed to save text file");
             }
+        } catch (IOException e) {
+            throw new DisarmException("Failed to save text file");
         }
     }
 
