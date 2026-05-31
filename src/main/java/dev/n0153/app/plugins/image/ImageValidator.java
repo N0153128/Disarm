@@ -1,11 +1,7 @@
 package dev.n0153.app.plugins.image;
 
 import dev.n0153.app.*;
-import dev.n0153.app.exceptions.InvalidPathException;
 import dev.n0153.app.exceptions.ValidationException;
-
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class ImageValidator implements MediaValidator {
