@@ -33,7 +33,16 @@ public class TextPlugin implements MediaPlugin {
 
     @Override
     public void register(PluginRegistry registry, MediaConfig config) throws DisarmException {
-
+        if (ensureGlobalConfig()) {
+            this.config = config;
+            registry.register(
+                    config.supports(),
+                    this,
+                    new TextCLI(registry),
+                    "text",
+                    config
+            );
+        }
     }
 
     @Override
