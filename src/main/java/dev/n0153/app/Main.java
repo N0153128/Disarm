@@ -14,9 +14,9 @@ public class Main {
     public static void main(String[] args) {
         OpenCV.loadLocally();
         logger.info("Working directory: {}",  System.getProperty("user.dir"));
-        DisarmPlugins plugins = new DisarmPlugins();
         PluginRegistry registry = new PluginRegistry();
         GlobalConfig globalConfig = new GlobalConfig();
+        DisarmPlugins plugins = new DisarmPlugins(globalConfig);
         plugins.registerAll(registry);
         try {
             DisarmCLI app = new DisarmCLI(registry, globalConfig);

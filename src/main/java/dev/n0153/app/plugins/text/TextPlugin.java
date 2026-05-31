@@ -52,6 +52,6 @@ public class TextPlugin implements MediaPlugin {
 
     @Override
     public String echo() {
-        return config.getName();
+        return "text";
     }
 }

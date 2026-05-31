@@ -10,11 +10,21 @@ import dev.n0153.app.plugins.text.TextConfig;
 import dev.n0153.app.plugins.text.TextPlugin;
 
 public class DisarmPlugins {
+    private final GlobalConfig globalConfig;
+    public DisarmPlugins(GlobalConfig globalConfig) {
+        this.globalConfig = globalConfig;
+    }
+
     public void registerAll(PluginRegistry registry) {
         ImageConfig imageConfig = new ImageConfig();
-        new ImagePlugin().register(registry, imageConfig);
+        ImagePlugin image = new ImagePlugin();
+        image.registerGlobalConfig(globalConfig);
+        image.register(registry, imageConfig);
+
         TextConfig textConfig = new TextConfig();
-        new TextPlugin().register(registry, textConfig);
+        TextPlugin text = new TextPlugin();
+        text.registerGlobalConfig(globalConfig);
+        text.register(registry, textConfig);
         //add new plugins as they become available
     }
 }

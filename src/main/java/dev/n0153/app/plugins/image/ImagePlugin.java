@@ -54,6 +54,6 @@ public class ImagePlugin implements MediaPlugin {
 
     @Override
     public String echo() {
-        return config.getName();
+        return "image";
     }
 }
