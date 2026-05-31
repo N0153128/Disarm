@@ -50,6 +50,17 @@ public class TextProcessor implements MediaProcessor<TextConfig> {
     }
 
     /**
+     * Removes control characters, strips dangerous patterns: Script tags, control characters and dangerous URL schemes.
+     * @since 0.1
+     */
+    public void stripPatterns() {
+        String text = context.getTextContent().replaceAll("<script.*?>.*?</script>", "")
+                .replaceAll("[\\u0000-\\u001F\\u007F-\\u009F]", "")
+                .replaceAll("(javascript:|data:|vbscript:)", "");
+        context.setTextContent(text);
+    }
+
+    /**
      * Saves the sanitised text from runtime state object as a text file.
      * @throws IOException If fails to write file.
      * @since 0.1
@@ -63,6 +74,7 @@ public class TextProcessor implements MediaProcessor<TextConfig> {
     public void process(Path osTargetPath) throws DisarmException {
         logger.info("Processing image file: {}", osTargetPath.toString());
         normalizeUnicode();
+        stripPatterns();
         escapeHTML();
         if (globalConfig.getKeepResult()) {
             try {
