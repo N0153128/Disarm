@@ -87,6 +87,6 @@ public class TextProcessor implements MediaProcessor<TextConfig> {
 
     @Override
     public MediaContext getContext() {
-        return null;
+        return context;
     }
 }
