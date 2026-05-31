@@ -38,7 +38,7 @@ class VideoTest {
             state.setVideoSize(Utils.getVideoDimensions(osTargetPath));
             state.setAudioChannels(Utils.getAudioChannels(osTargetPath));
             state.setAudioBitrate(Utils.getBitrate(osTargetPath, "audio", config));
-            Utils.getTitle(state, false);
+//            Utils.getTitle(state, false);
         } catch (EncoderException | IOException e){
             throw new RuntimeException(e);
         }

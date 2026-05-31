@@ -49,7 +49,7 @@ public class AppTest {
         try {
             state.setMime(Utils.getFormatFromMime(Utils.getMimeType(osTargetPath)));
             state.setFileType(Utils.getFileType(osTargetPath));
-            Utils.getTitle(state, logo);
+            Utils.getTitle(osTargetPath, logo);
         } catch (MimeTypeDetectionException | FileTypeDetectionException e) {
             throw new RuntimeException(e);
         }
@@ -67,7 +67,7 @@ public class AppTest {
             state.setVideoSize(Utils.getVideoDimensions(osTargetPath));
             state.setAudioChannels(Utils.getAudioChannels(osTargetPath));
             state.setAudioBitrate(Utils.getBitrate(osTargetPath, "audio", config));
-            Utils.getTitle(state, false);
+            Utils.getTitle(osTargetPath, false);
         } catch (EncoderException | IOException e){
             throw new RuntimeException(e);
         }
@@ -81,7 +81,7 @@ public class AppTest {
             state.setAudioBitrate(Utils.getBitrate(osTargetPath, "audio", config));
             state.setAudioSamplingRate(Utils.getSamplingRate(osTargetPath));
             state.setAudioChannels(Utils.getAudioChannels(osTargetPath));
-            Utils.getTitle(state, false);
+            Utils.getTitle(osTargetPath, false);
         } catch (EncoderException | IOException e) {
             throw new RuntimeException(e);
         }

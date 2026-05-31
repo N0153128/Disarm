@@ -75,7 +75,7 @@ public class App {
             state.setLogo(Imgcodecs.imread(osLogoPath.toString(), Imgcodecs.IMREAD_UNCHANGED));
             String logoMime = Utils.getMimeType(osLogoPath);
             state.setMime(logoMime);
-            Utils.getTitle(state, true);
+            Utils.getTitle(osLogoPath, true);
             scaleLogo();
         } catch (MimeTypeDetectionException e) {
             logger.error("Failed to disarm logo");
@@ -388,7 +388,7 @@ public class App {
         }
 
         boolean isLogo = Objects.equals(state.getMime(), "logo");
-        Utils.getTitle(state, isLogo);
+        Utils.getTitle(osTargetPath, isLogo);
 
         if (osLogoPath != null) {
             disarmSwitch(osTargetPath, osLogoPath);

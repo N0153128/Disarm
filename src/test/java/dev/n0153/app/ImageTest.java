@@ -37,7 +37,7 @@ class ImageTest {
             state.setMime(Utils.getFormatFromMime(Utils.getMimeType(osTargetPath)));
             state.setFileType(Utils.getFileType(osTargetPath));
             state.setOsTargetFile(osTargetPath);
-            Utils.getTitle(state, false);
+            Utils.getTitle(osTargetPath, false);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

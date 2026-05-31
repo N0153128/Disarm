@@ -121,7 +121,7 @@ public class DebugAudio {
         } catch (MimeTypeDetectionException e) {
             throw new DisarmException("failed to prep data in Debug Audio");
         }
-        Utils.getTitle(state, false);
+        Utils.getTitle(osTargetPath, false);
         try {
             Audio.reEncodeAudioNative(osTargetPath);
         } catch (UnsupportedAudioFileException e) {

@@ -34,7 +34,7 @@ class AudioTest {
             state.setAudioBitrate(Utils.getBitrate(osTargetPath, "audio", config));
             state.setAudioSamplingRate(Utils.getSamplingRate(osTargetPath));
             state.setAudioChannels(Utils.getAudioChannels(osTargetPath));
-            Utils.getTitle(state, false);
+            Utils.getTitle(osTargetPath, false);
         } catch (EncoderException | IOException e) {
             throw new RuntimeException(e);
         }

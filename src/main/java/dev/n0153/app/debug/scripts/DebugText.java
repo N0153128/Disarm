@@ -36,7 +36,7 @@ public class DebugText {
             logger.debug("escaping HTML");
             state.setTextFile(Files.readString(DebugPaths.textTestLocationHTMLPlain));
             App.prepData(DebugPaths.textTestLocationHTMLPlain);
-            Utils.getTitle(state, false);
+//            Utils.getTitle(state, false);
             Text.escapeHTML();
             Text.saveTextData();
             logger.debug("done");
@@ -44,7 +44,7 @@ public class DebugText {
             logger.debug("stripping shell");
             state.setTextFile(Files.readString(DebugPaths.textTestLocationShellPlain));
             App.prepData(DebugPaths.textTestLocationShellPlain);
-            Utils.getTitle(state, false);
+//            Utils.getTitle(state, false);
             Text.stripPatterns();
             Text.saveTextData();
             logger.debug("done");
@@ -52,7 +52,7 @@ public class DebugText {
             logger.debug("validating encoding");
             state.setTextFile(Files.readString(DebugPaths.textTestLocation));
             App.prepData(DebugPaths.textTestLocation);
-            Utils.getTitle(state, false);
+//            Utils.getTitle(state, false);
             byte[] invalid = {(byte) 0xFF, (byte) 0xFF, (byte) 0xFF};
             logger.debug("validation: {}", Validator.validateEncoding(Text, state));
             Text.saveTextData();
@@ -61,7 +61,7 @@ public class DebugText {
             logger.debug("normalizing unicode");
             state.setTextFile(Files.readString(DebugPaths.textTestLocation));
             App.prepData(DebugPaths.textTestLocation);
-            Utils.getTitle(state, false);
+//            Utils.getTitle(state, false);
             Text.normalizeUnicode();
             Text.saveTextData();
             logger.debug("done");
