@@ -129,11 +129,11 @@ public class TextConfig implements MediaConfig {
     }
 
     public void setZeroLengthChars(Set<Character> newZeroLengthChars) {
-        put(KEY_ZERO_LENGTH_CHARS, zeroLengthChars);
+        put(KEY_ZERO_LENGTH_CHARS, newZeroLengthChars);
     }
 
     public void setNormalizeFrom(String newNormalizeFrom) {
-        put(KEY_NORMALIZE_FROM, normalizeFrom);
+        put(KEY_NORMALIZE_FROM, newNormalizeFrom);
     }
 
     public void setOutputEncoding(String newOutputEncoding) {
