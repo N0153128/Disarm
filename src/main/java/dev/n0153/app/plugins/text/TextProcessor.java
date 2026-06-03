@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.Normalizer;
+import java.util.regex.Pattern;
 
 public class TextProcessor implements MediaProcessor<TextConfig> {
     private final TextConfig config;
@@ -31,7 +32,7 @@ public class TextProcessor implements MediaProcessor<TextConfig> {
      * @since 0.1
      */
     public void normalizeUnicode() {
-        String text = Normalizer.normalize(context.getTextContent(), Normalizer.Form.NFKC)
+        String text = Normalizer.normalize(context.getTextContent(), config.getNormalizeForm())
                 .replaceAll("[\\u200B-\\u200D\\uFEFF]", "");
         context.setTextContent(text);
     }
@@ -55,9 +56,13 @@ public class TextProcessor implements MediaProcessor<TextConfig> {
      * @since 0.1
      */
     public void stripPatterns() {
-        String text = context.getTextContent().replaceAll("<script.*?>.*?</script>", "")
-                .replaceAll("[\\u0000-\\u001F\\u007F-\\u009F]", "")
-                .replaceAll("(javascript:|data:|vbscript:)", "");
+        String text = context.getTextContent();
+        for(String scheme : config.getUrlSchemes()) {
+            text = text.replaceAll(Pattern.quote(scheme), "");
+        }
+
+        text = text.replaceAll("<script.*?>.*?</script>", "")
+                .replaceAll("[\\u0000-\\u001F\\u007F-\\u009F]", "");
         context.setTextContent(text);
     }
 

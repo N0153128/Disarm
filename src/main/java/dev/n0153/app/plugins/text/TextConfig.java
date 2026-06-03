@@ -2,6 +2,7 @@ package dev.n0153.app.plugins.text;
 
 import dev.n0153.app.MediaConfig;
 
+import java.text.Normalizer;
 import java.util.*;
 
 public class TextConfig implements MediaConfig {
@@ -14,7 +15,7 @@ public class TextConfig implements MediaConfig {
     private final Set<Character> zeroLengthChars = new HashSet<>(Set.of(
             '\u200B', '\u200D', '\uFEFF'
     ));
-    private final String normalizeFrom = "NFKC";
+    private final Normalizer.Form normalizeForm = Normalizer.Form.NFKC;
     private final String outputEncoding = "UTF-8";
 
     private final String KEY_MAX_TEXT_SIZE = "maxTextSize";
@@ -102,10 +103,10 @@ public class TextConfig implements MediaConfig {
         );
     }
 
-    public String getNormalizeFrom() {
+    public Normalizer.Form getNormalizeForm() {
         return Objects.requireNonNullElse(
-                get(KEY_NORMALIZE_FROM, String.class),
-                normalizeFrom
+                get(KEY_NORMALIZE_FROM, Normalizer.Form.class),
+                normalizeForm
         );
     }
 
