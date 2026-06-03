@@ -129,10 +129,18 @@ public class TextValidator implements MediaValidator {
      */
     public boolean validateEncoding(byte[] text) {
         if (isBom(text)) {
+            context.setBom(true);
             return true;
         } else if (isUTF8(text)) {
+            context.setDetectedEncoding("UTF-8");
             return true;
-        } else return isASCII(text);
+        } else if (isASCII(text)) {
+            context.setDetectedEncoding("ASCII");
+            return isASCII(text);
+            }
+        else {
+            return false;
+        }
     }
 
     public boolean checkSizeLimit(Path osTargetPath, TextConfig config) {
