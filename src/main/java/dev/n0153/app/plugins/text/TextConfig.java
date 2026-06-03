@@ -19,7 +19,6 @@ public class TextConfig implements MediaConfig {
     private final String outputEncoding = "UTF-8";
 
     private final String KEY_MAX_TEXT_SIZE = "maxTextSize";
-    private final String KEY_CONTROL_CHARACTERS = "controlCharacters";
     private final String KEY_URL_SCHEMES = "urlSchemes";
     private final String KEY_ZERO_LENGTH_CHARS = "zeroLengthChars";
     private final String KEY_NORMALIZE_FROM = "normalizeFrom";
@@ -27,10 +26,9 @@ public class TextConfig implements MediaConfig {
 
     private final Map<String, Object> configStorage = new HashMap<>() {{
         put(KEY_MAX_TEXT_SIZE, maxTextSize);
-        put(KEY_CONTROL_CHARACTERS, controlCharacters);
         put(KEY_URL_SCHEMES, urlSchemes);
         put(KEY_ZERO_LENGTH_CHARS, zeroLengthChars);
-        put(KEY_NORMALIZE_FROM, normalizeFrom);
+        put(KEY_NORMALIZE_FROM, normalizeForm);
         put(KEY_OUTPUT_ENCODING, outputEncoding);
     }};
 
@@ -80,14 +78,6 @@ public class TextConfig implements MediaConfig {
         );
     }
 
-    @SuppressWarnings("unchecked")
-    public Set<Character> getControlCharacters() {
-        return Objects.requireNonNullElse(
-                get(KEY_CONTROL_CHARACTERS, Set.class),
-                controlCharacters
-        );
-    }
-
     public String[] getUrlSchemes() {
         return Objects.requireNonNullElse(
                 get(KEY_URL_SCHEMES, String[].class),
@@ -119,10 +109,6 @@ public class TextConfig implements MediaConfig {
 
     public void setMaxTextSize(int newMaxTextSize) {
         put(KEY_MAX_TEXT_SIZE, newMaxTextSize);
-    }
-
-    public void setControlCharacters(Set<Character> newControlCharacters) {
-        put(KEY_CONTROL_CHARACTERS, newControlCharacters);
     }
 
     public void setUrlSchemes(String[] newUrlSchemes) {

@@ -32,8 +32,10 @@ public class TextProcessor implements MediaProcessor<TextConfig> {
      * @since 0.1
      */
     public void normalizeUnicode() {
-        String text = Normalizer.normalize(context.getTextContent(), config.getNormalizeForm())
-                .replaceAll("[\\u200B-\\u200D\\uFEFF]", "");
+        String text = Normalizer.normalize(context.getTextContent(), config.getNormalizeForm());
+        for (char c : config.getZeroLengthChars()) {
+            text = text.replace(String.valueOf(c), "");
+        }
         context.setTextContent(text);
     }
 
