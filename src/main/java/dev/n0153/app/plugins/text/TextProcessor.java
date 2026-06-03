@@ -81,7 +81,7 @@ public class TextProcessor implements MediaProcessor<TextConfig> {
     @Override
     public void process(Path osTargetPath) throws DisarmException {
         try {
-            logger.info("Processing image file: {}", osTargetPath.toString());
+            logger.info("Processing text file: {}", osTargetPath.toString());
             byte[] text = Files.readAllBytes(osTargetPath);
             context.setTextContent(new String(text, StandardCharsets.UTF_8));
             context.setTextTitle(Utils.getTitle(osTargetPath, false));
