@@ -53,7 +53,12 @@ public class TextContext implements MediaContext {
     }
 
     public boolean isBom() {
-        return get(KEY_HAS_BOM, Boolean.class);
+        Boolean bom = get(KEY_HAS_BOM, Boolean.class);
+        if (bom == null) {
+            return false;
+        } else {
+            return get(KEY_HAS_BOM, Boolean.class);
+        }
     }
 
     public byte[] getRawBytes() {
