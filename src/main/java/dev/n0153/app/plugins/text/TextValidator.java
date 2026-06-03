@@ -153,7 +153,7 @@ public class TextValidator implements MediaValidator {
 
 
     public boolean checkMeta() {
-        return this.config != null || this.context != null;
+        return this.config != null && this.context != null;
     }
 
     @Override
