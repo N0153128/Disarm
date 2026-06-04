@@ -41,13 +41,13 @@ public class AudioCLI implements Runnable {
             this.config.setMaxAudioDuration(maxAudioDuration);
         }
         if (targetBitrate > 0) {
-            this.config.setTargetBitrate(targetBitrate);
+            this.config.setOutputBitrate(targetBitrate);
         }
         if (targetSampleRate > 0) {
-            this.config.setTargetSampleRate(targetBitrate);
+            this.config.setOutputSampleRate(targetSampleRate);
         }
         if (targetChannels > 0) {
-            this.config.setTargetChannels(targetChannels);
+            this.config.setOutputChannels(targetChannels);
         }
 
         registry.updateConfig("image", config);
