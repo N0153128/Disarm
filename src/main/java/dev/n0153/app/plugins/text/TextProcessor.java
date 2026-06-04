@@ -83,7 +83,7 @@ public class TextProcessor implements MediaProcessor<TextConfig> {
         try {
             logger.info("Processing text file: {}", osTargetPath.toString());
             byte[] text = context.getRawBytes();
-            context.setTextContent(new String(text, StandardCharsets.UTF_8));
+            context.setTextContent(new String(text, config.getOutputEncoding()));
             context.setTextTitle(Utils.getTitle(osTargetPath, false));
 
             normalizeUnicode();
