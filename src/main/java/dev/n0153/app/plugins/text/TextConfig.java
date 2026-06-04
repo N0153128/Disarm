@@ -122,7 +122,7 @@ public class TextConfig implements MediaConfig {
         put(KEY_NORMALIZE_FROM, newNormalizeFrom);
     }
 
-    public void setOutputEncoding(String newOutputEncoding) {
+    public void setOutputEncoding(Charset newOutputEncoding) {
         put(KEY_OUTPUT_ENCODING, newOutputEncoding);
     }
 }
