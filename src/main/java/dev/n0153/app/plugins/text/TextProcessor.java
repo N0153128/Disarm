@@ -75,7 +75,7 @@ public class TextProcessor implements MediaProcessor<TextConfig> {
      */
     public void saveTextData() throws IOException {
         Path toFile = globalConfig.getGeneralOutputPath().resolve(context.getTextTitle()+".txt");
-        Files.writeString(toFile, context.getTextContent(), StandardCharsets.UTF_8);
+        Files.writeString(toFile, context.getTextContent(), config.getOutputEncoding());
     }
 
     @Override
