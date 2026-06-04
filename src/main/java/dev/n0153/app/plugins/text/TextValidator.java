@@ -128,7 +128,6 @@ public class TextValidator implements MediaValidator {
      * @since 0.1
      */
     public boolean validateEncoding() {
-        byte[] text = context.getRawBytes();
         if (isBom()) {
             context.setBom(true);
             return true;
