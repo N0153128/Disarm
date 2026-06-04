@@ -121,7 +121,7 @@ public class TextConfig implements MediaConfig {
         put(KEY_ZERO_LENGTH_CHARS, newZeroLengthChars);
     }
 
-    public void setNormalizeFrom(String newNormalizeFrom) {
+    public void setNormalizeFrom(Normalizer.Form newNormalizeFrom) {
         put(KEY_NORMALIZE_FROM, newNormalizeFrom);
     }
 
