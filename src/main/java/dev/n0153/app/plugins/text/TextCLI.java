@@ -42,13 +42,19 @@ public class TextCLI  implements Runnable {
             this.config.setMaxTextSize(textSize);
         }
         if (Objects.equals(outputEncoding, "UTF-8")) {
-            this.config.setOutputEncoding(StandardCharsets.UTF_8);
+            this.config.setOutputEncoding(StandardCharsets.UTF_16);
         }
         if (Objects.equals(outputEncoding, "US_ASCII")) {
             this.config.setOutputEncoding(StandardCharsets.US_ASCII);
         }
-        if (Objects.equals(outputEncoding, "UTF-16")) {
-            this.config.setOutputEncoding(StandardCharsets.UTF_16);
+        if (Objects.equals(outputEncoding, "UTF-16BE")) {
+            this.config.setOutputEncoding(StandardCharsets.UTF_16BE);
+        }
+        if (Objects.equals(outputEncoding, "UTF-16LE")) {
+            this.config.setOutputEncoding(StandardCharsets.UTF_16LE);
+        }
+        if (Objects.equals(outputEncoding, "ISO_8859_1")) {
+            this.config.setOutputEncoding(StandardCharsets.ISO_8859_1);
         }
         if (Objects.equals(normalizeForm, "NFKC")) {
             this.config.setNormalizeForm(Normalizer.Form.NFKC);
