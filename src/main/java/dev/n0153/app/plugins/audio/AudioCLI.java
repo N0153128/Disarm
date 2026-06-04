@@ -26,28 +26,28 @@ public class AudioCLI implements Runnable {
     @CommandLine.Option(names = {"-mad", "--max-audio-duration"}, description = "Change audio duration limit")
     private int maxAudioDuration;
 
-    @CommandLine.Option(names = {"-tb", "--target-bitrate"}, description = "Change target bitrate")
-    private int targetBitrate;
+    @CommandLine.Option(names = {"-tb", "--target-bitrate"}, description = "Change output bitrate")
+    private int outputBitrate;
 
-    @CommandLine.Option(names = {"-tsr", "--target-sample-rate"}, description = "Change target sample rate")
-    private int targetSampleRate;
+    @CommandLine.Option(names = {"-tsr", "--target-sample-rate"}, description = "Change output sample rate")
+    private int outputSampleRate;
 
-    @CommandLine.Option(names = {"-tc", "--target-channels"}, description = "Change target channels. Defaults to 2 (Stereo)")
-    private int targetChannels;
+    @CommandLine.Option(names = {"-tc", "--target-channels"}, description = "Change output channels. Defaults to 2 (Stereo)")
+    private int outputChannels;
 
     @Override
     public void run() {
         if (maxAudioDuration > 0) {
             this.config.setMaxAudioDuration(maxAudioDuration);
         }
-        if (targetBitrate > 0) {
-            this.config.setOutputBitrate(targetBitrate);
+        if (outputBitrate > 0) {
+            this.config.setOutputBitrate(outputBitrate);
         }
-        if (targetSampleRate > 0) {
-            this.config.setOutputSampleRate(targetSampleRate);
+        if (outputSampleRate > 0) {
+            this.config.setOutputSampleRate(outputSampleRate);
         }
-        if (targetChannels > 0) {
-            this.config.setOutputChannels(targetChannels);
+        if (outputChannels > 0) {
+            this.config.setOutputChannels(outputChannels);
         }
 
         registry.updateConfig("image", config);
