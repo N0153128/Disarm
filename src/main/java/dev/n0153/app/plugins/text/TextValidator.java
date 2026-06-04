@@ -20,35 +20,35 @@ public class TextValidator implements MediaValidator {
 
     /**
      * Checks if specified text data contains a BOM.
-     * @param data Input text data in bytes.
      * @return True if BOM is detected.
      * @since 0.1
      */
-    public Boolean isBom(byte[] data) {
-        if (data.length < 2) return false;
+    public Boolean isBom() {
+        byte[] text = context.getRawBytes();
+        if (text.length < 2) return false;
 
         // UTF-8 BOM: EF BB BF
-        if (data.length >= 3 &&
-                data[0] == (byte) 0xEF &&
-                data[1] == (byte) 0xBB &&
-                data[2] == (byte) 0xBF) {
+        if (text.length >= 3 &&
+                text[0] == (byte) 0xEF &&
+                text[1] == (byte) 0xBB &&
+                text[2] == (byte) 0xBF) {
             return true;
         }
 
         // UTF-16 BE BOM: FE FF
-        if (data[0] == (byte) 0xFE && data[1] == (byte) 0xFF) {
+        if (text[0] == (byte) 0xFE && text[1] == (byte) 0xFF) {
             return true;
         }
 
         // UTF-16 LE BOM: FF FE
-        if (data[0] == (byte) 0xFF && data[1] == (byte) 0xFE) {
+        if (text[0] == (byte) 0xFF && text[1] == (byte) 0xFE) {
             return true;
         }
 
         // UTF-32 BE BOM: 00 00 FE FF
-        if (data.length >= 4 &&
-                data[0] == 0x00 && data[1] == 0x00 &&
-                data[2] == (byte) 0xFE && data[3] == (byte) 0xFF) {
+        if (text.length >= 4 &&
+                text[0] == 0x00 && text[1] == 0x00 &&
+                text[2] == (byte) 0xFE && text[3] == (byte) 0xFF) {
             Charset.forName("UTF-32BE");
             return true;
         }
@@ -59,12 +59,12 @@ public class TextValidator implements MediaValidator {
 
     /**
      * Checks if specified text is in ASCII encoding.
-     * @param data Input text data in bytes.
      * @return True if specified file's encoding is ASCII.
      * @since 0.1
      */
-    public Boolean isASCII(byte[] data) {
-        for (byte b : data) {
+    public Boolean isASCII() {
+        byte[] text = context.getRawBytes();
+        for (byte b : text) {
             if ((b & 0x80) != 0) {
                 return false; // Non-ASCII byte
             }
@@ -74,14 +74,14 @@ public class TextValidator implements MediaValidator {
 
     /**
      * Checks if specified text is in UTF-8 encoding.
-     * @param data Input text data in bytes.
      * @return True if specified file's encoding is UTF-8.
      * @since 0.1
      */
-    public Boolean isUTF8(byte[] data) {
+    public Boolean isUTF8() {
+        byte[] text = context.getRawBytes();
         int i = 0;
-        while (i < data.length) {
-            byte b = data[i];
+        while (i < text.length) {
+            byte b = text[i];
 
             // ASCII (0xxxxxxx)
             if ((b & 0x80) == 0) {
@@ -91,27 +91,27 @@ public class TextValidator implements MediaValidator {
 
             // 2-byte UTF-8 (110xxxxx 10xxxxxx)
             if ((b & 0xE0) == 0xC0) {
-                if (i + 1 >= data.length) return false;
-                if ((data[i + 1] & 0xC0) != 0x80) return false;
+                if (i + 1 >= text.length) return false;
+                if ((text[i + 1] & 0xC0) != 0x80) return false;
                 i += 2;
                 continue;
             }
 
             // 3-byte UTF-8 (1110xxxx 10xxxxxx 10xxxxxx)
             if ((b & 0xF0) == 0xE0) {
-                if (i + 2 >= data.length) return false;
-                if ((data[i + 1] & 0xC0) != 0x80) return false;
-                if ((data[i + 2] & 0xC0) != 0x80) return false;
+                if (i + 2 >= text.length) return false;
+                if ((text[i + 1] & 0xC0) != 0x80) return false;
+                if ((text[i + 2] & 0xC0) != 0x80) return false;
                 i += 3;
                 continue;
             }
 
             // 4-byte UTF-8 (11110xxx 10xxxxxx 10xxxxxx 10xxxxxx)
             if ((b & 0xF8) == 0xF0) {
-                if (i + 3 >= data.length) return false;
-                if ((data[i + 1] & 0xC0) != 0x80) return false;
-                if ((data[i + 2] & 0xC0) != 0x80) return false;
-                if ((data[i + 3] & 0xC0) != 0x80) return false;
+                if (i + 3 >= text.length) return false;
+                if ((text[i + 1] & 0xC0) != 0x80) return false;
+                if ((text[i + 2] & 0xC0) != 0x80) return false;
+                if ((text[i + 3] & 0xC0) != 0x80) return false;
                 i += 4;
                 continue;
             }
@@ -127,16 +127,17 @@ public class TextValidator implements MediaValidator {
      * @return True if encoding is appropriate.
      * @since 0.1
      */
-    public boolean validateEncoding(byte[] text) {
-        if (isBom(text)) {
+    public boolean validateEncoding() {
+        byte[] text = context.getRawBytes();
+        if (isBom()) {
             context.setBom(true);
             return true;
-        } else if (isUTF8(text)) {
+        } else if (isUTF8()) {
             context.setDetectedEncoding("UTF-8");
             return true;
-        } else if (isASCII(text)) {
+        } else if (isASCII()) {
             context.setDetectedEncoding("ASCII");
-            return isASCII(text);
+            return isASCII();
             }
         else {
             return false;
@@ -160,13 +161,14 @@ public class TextValidator implements MediaValidator {
     public boolean validate(Path osTargetPath) {
         try {
             byte[] text = Files.readAllBytes(osTargetPath);
+            context.setRawBytes(text);
             if (!checkMeta()) {
                 throw new ValidationException("Text Validator: meta is empty");
             }
             if (!checkSizeLimit(osTargetPath, config)) {
                 throw new ValidationException("Text File size limit exceeded");
             }
-            return validateEncoding(text);
+            return validateEncoding();
         } catch (IOException e) {
             throw new ValidationException("Failed to read bytes");
         }
