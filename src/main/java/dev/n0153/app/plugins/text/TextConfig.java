@@ -20,14 +20,14 @@ public class TextConfig implements MediaConfig {
     private final String KEY_MAX_TEXT_SIZE = "maxTextSize";
     private final String KEY_URL_SCHEMES = "urlSchemes";
     private final String KEY_ZERO_LENGTH_CHARS = "zeroLengthChars";
-    private final String KEY_NORMALIZE_FROM = "normalizeFrom";
+    private final String KEY_NORMALIZE_FORM = "normalizeForm";
     private final String KEY_OUTPUT_ENCODING = "outputEncoding";
 
     private final Map<String, Object> configStorage = new HashMap<>() {{
         put(KEY_MAX_TEXT_SIZE, maxTextSize);
         put(KEY_URL_SCHEMES, urlSchemes);
         put(KEY_ZERO_LENGTH_CHARS, zeroLengthChars);
-        put(KEY_NORMALIZE_FROM, normalizeForm);
+        put(KEY_NORMALIZE_FORM, normalizeForm);
         put(KEY_OUTPUT_ENCODING, outputEncoding);
     }};
 
@@ -94,7 +94,7 @@ public class TextConfig implements MediaConfig {
 
     public Normalizer.Form getNormalizeForm() {
         return Objects.requireNonNullElse(
-                get(KEY_NORMALIZE_FROM, Normalizer.Form.class),
+                get(KEY_NORMALIZE_FORM, Normalizer.Form.class),
                 normalizeForm
         );
     }
@@ -119,7 +119,7 @@ public class TextConfig implements MediaConfig {
     }
 
     public void setNormalizeFrom(Normalizer.Form newNormalizeFrom) {
-        put(KEY_NORMALIZE_FROM, newNormalizeFrom);
+        put(KEY_NORMALIZE_FORM, newNormalizeFrom);
     }
 
     public void setOutputEncoding(Charset newOutputEncoding) {
