@@ -10,9 +10,6 @@ import java.util.*;
 public class TextConfig implements MediaConfig {
 
     private final int maxTextSize = 5_000_000; //5MB
-    private final Set<Character> controlCharacters = new HashSet<>(Set.of(
-            '\u0000', '\u001F', '\u007F', '\u009F'
-    ));
     private final String[] urlSchemes = {"javascript:", "data:", "vbscript:"};
     private final Set<Character> zeroLengthChars = new HashSet<>(Set.of(
             '\u200B', '\u200D', '\uFEFF'
