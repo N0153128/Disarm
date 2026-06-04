@@ -2,6 +2,8 @@ package dev.n0153.app.plugins.text;
 
 import dev.n0153.app.MediaConfig;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.Normalizer;
 import java.util.*;
 
@@ -16,7 +18,7 @@ public class TextConfig implements MediaConfig {
             '\u200B', '\u200D', '\uFEFF'
     ));
     private final Normalizer.Form normalizeForm = Normalizer.Form.NFKC;
-    private final String outputEncoding = "UTF-8";
+    private final Charset outputEncoding = StandardCharsets.UTF_8;
 
     private final String KEY_MAX_TEXT_SIZE = "maxTextSize";
     private final String KEY_URL_SCHEMES = "urlSchemes";
@@ -100,9 +102,9 @@ public class TextConfig implements MediaConfig {
         );
     }
 
-    public String getOutputEncoding() {
+    public Charset getOutputEncoding() {
         return Objects.requireNonNullElse(
-                get(KEY_OUTPUT_ENCODING, String.class),
+                get(KEY_OUTPUT_ENCODING, Charset.class),
                 outputEncoding
         );
     }
