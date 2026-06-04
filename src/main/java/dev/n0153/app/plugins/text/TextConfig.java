@@ -118,8 +118,8 @@ public class TextConfig implements MediaConfig {
         put(KEY_ZERO_LENGTH_CHARS, newZeroLengthChars);
     }
 
-    public void setNormalizeFrom(Normalizer.Form newNormalizeFrom) {
-        put(KEY_NORMALIZE_FORM, newNormalizeFrom);
+    public void setNormalizeForm(Normalizer.Form newNormalizeForm) {
+        put(KEY_NORMALIZE_FORM, newNormalizeForm);
     }
 
     public void setOutputEncoding(Charset newOutputEncoding) {
