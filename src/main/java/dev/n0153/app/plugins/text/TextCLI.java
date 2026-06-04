@@ -41,30 +41,26 @@ public class TextCLI  implements Runnable {
         if (textSize > 0) {
             this.config.setMaxTextSize(textSize);
         }
-        if (!outputEncoding.isEmpty()) {
-            if (Objects.equals(outputEncoding, "UTF-8")) {
-                this.config.setOutputEncoding(StandardCharsets.UTF_8);
-            }
-            if (Objects.equals(outputEncoding, "US_ASCII")) {
-                this.config.setOutputEncoding(StandardCharsets.US_ASCII);
-            }
-            if (Objects.equals(outputEncoding, "UTF-16")) {
-                this.config.setOutputEncoding(StandardCharsets.UTF_16);
-            }
+        if (Objects.equals(outputEncoding, "UTF-8")) {
+            this.config.setOutputEncoding(StandardCharsets.UTF_8);
         }
-        if (!normalizeForm.isEmpty()) {
-            if (Objects.equals(normalizeForm, "NFKC")) {
-                this.config.setNormalizeForm(Normalizer.Form.NFKC);
-            }
-            if (Objects.equals(normalizeForm, "NFC")) {
-                this.config.setNormalizeForm(Normalizer.Form.NFC);
-            }
-            if (Objects.equals(normalizeForm, "NFD")) {
-                this.config.setNormalizeForm(Normalizer.Form.NFD);
-            }
-            if (Objects.equals(normalizeForm, "NFKD")) {
-                this.config.setNormalizeForm(Normalizer.Form.NFKD);
-            }
+        if (Objects.equals(outputEncoding, "US_ASCII")) {
+            this.config.setOutputEncoding(StandardCharsets.US_ASCII);
+        }
+        if (Objects.equals(outputEncoding, "UTF-16")) {
+            this.config.setOutputEncoding(StandardCharsets.UTF_16);
+        }
+        if (Objects.equals(normalizeForm, "NFKC")) {
+            this.config.setNormalizeForm(Normalizer.Form.NFKC);
+        }
+        if (Objects.equals(normalizeForm, "NFC")) {
+            this.config.setNormalizeForm(Normalizer.Form.NFC);
+        }
+        if (Objects.equals(normalizeForm, "NFD")) {
+            this.config.setNormalizeForm(Normalizer.Form.NFD);
+        }
+        if (Objects.equals(normalizeForm, "NFKD")) {
+            this.config.setNormalizeForm(Normalizer.Form.NFKD);
         }
 
         registry.updateConfig("text", config);
