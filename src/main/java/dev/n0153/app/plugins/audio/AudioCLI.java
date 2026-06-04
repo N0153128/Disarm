@@ -2,25 +2,19 @@ package dev.n0153.app.plugins.audio;
 
 import dev.n0153.app.DisarmCLI;
 import dev.n0153.app.PluginRegistry;
-import dev.n0153.app.Utils;
-import dev.n0153.app.plugins.image.ImageConfig;
-import dev.n0153.app.plugins.image.ImageContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.opencv.imgcodecs.Imgcodecs;
 import picocli.CommandLine;
 
-import java.nio.file.Path;
-
 public class AudioCLI implements Runnable {
-@CommandLine.Command(name = "image", description = "Image Processing Plugin")
+@CommandLine.Command(name = "audio", description = "Audio Processing Plugin")
     private static final Logger logger = LogManager.getLogger(AudioCLI.class);
 
-    private final ImageConfig config = new ImageConfig();
+    private final AudioConfig config = new AudioConfig();
     private final PluginRegistry registry;
-    private final ImageContext context;
+    private final AudioContext context;
 
-    public AudioCLI (PluginRegistry registry, ImageContext context) {
+    public AudioCLI (PluginRegistry registry, AudioContext context) {
         this.registry = registry;
         this.context = context;
         registry.updateConfig("audio", config);
@@ -29,11 +23,32 @@ public class AudioCLI implements Runnable {
     @CommandLine.ParentCommand
     DisarmCLI inputPath;
 
-    @CommandLine.Option(names = {"-mad", "--max-audio-duration"}, description = "Apply watermark")
-    private Path logo;
+    @CommandLine.Option(names = {"-mad", "--max-audio-duration"}, description = "Change audio duration limit")
+    private int maxAudioDuration;
+
+    @CommandLine.Option(names = {"-tb", "--target-bitrate"}, description = "Change target bitrate")
+    private int targetBitrate;
+
+    @CommandLine.Option(names = {"-tsr", "--target-sample-rate"}, description = "Change target sample rate")
+    private int targetSampleRate;
+
+    @CommandLine.Option(names = {"-tc", "--target-channels"}, description = "Change target channels. Defaults to 2 (Stereo)")
+    private int targetChannels;
 
     @Override
     public void run() {
+        if (maxAudioDuration > 0) {
+            this.config.setMaxAudioDuration(maxAudioDuration);
+        }
+        if (targetBitrate > 0) {
+            this.config.setTargetBitrate(targetBitrate);
+        }
+        if (targetSampleRate > 0) {
+            this.config.setTargetSampleRate(targetBitrate);
+        }
+        if (targetChannels > 0) {
+            this.config.setTargetChannels(targetChannels);
+        }
 
         registry.updateConfig("image", config);
     }
