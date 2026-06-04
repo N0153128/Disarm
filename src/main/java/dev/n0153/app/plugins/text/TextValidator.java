@@ -137,7 +137,7 @@ public class TextValidator implements MediaValidator {
             return true;
         } else if (isASCII()) {
             context.setDetectedEncoding("ASCII");
-            return isASCII();
+            return true;
             }
         else {
             return false;
