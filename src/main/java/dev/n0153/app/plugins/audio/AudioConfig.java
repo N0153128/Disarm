@@ -2,10 +2,7 @@ package dev.n0153.app.plugins.audio;
 
 import dev.n0153.app.MediaConfig;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class AudioConfig implements MediaConfig {
     private final int maxAudioDuration = 300_000;
@@ -28,6 +25,37 @@ public class AudioConfig implements MediaConfig {
         put("aif", 96_000);
         put("aiff", 96_000);
         put("aifc", 96_000);
+    }};
+
+    private static final List<String> MP3_CODECS = List.of("mp3");
+
+    private static final List<String> OGG_CODECS = List.of("vorbis", "opus", "flac",
+            "speex", "libvorbis");
+
+    private static final List<String> FLAC_CODECS = List.of("flac");
+
+    private static final List<String> WAV_CODECS = List.of("pcm", "adpcm", "mp3",
+            "a-law", "μ-law", "gsm",
+            "u-law", "pcm_u8");
+
+    private static final List<String> AU_CODECS = List.of("pcm", "μ-law", "u-law", "pcm_s16be");
+
+    private static final List<String> AIF_CODECS = List.of("pcm", "μ-law", "a-law",
+            "ima adpcm", "u-law", "pcm_s16be");
+
+    private final Map<String, List<String>> allowedAudioCodecs = new HashMap<>() {{
+        put("mp3", MP3_CODECS);
+        put("mpeg", MP3_CODECS);
+        put("ogg", OGG_CODECS);
+        put("flac", FLAC_CODECS);
+        put("wav", WAV_CODECS);
+        put("wave", WAV_CODECS);
+        put("x-wav", WAV_CODECS);
+        put("au", AU_CODECS);
+        put("basic", AU_CODECS);
+        put("aif", AIF_CODECS);
+        put("aiff", AIF_CODECS);
+        put("aifc", AIF_CODECS);
     }};
     private final int maxChannels = 2;
     private final int bitrateFallback = 320_000;
