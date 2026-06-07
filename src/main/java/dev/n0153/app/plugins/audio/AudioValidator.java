@@ -50,26 +50,12 @@ public class AudioValidator implements MediaValidator {
     /**
      * Ensures that the specified file doesn't exceed configured size limits per format.
      * @param osTargetPath Path to input file.
-     * @param config Immutable configuration.
-     * @param state Runtime state.
      * @return True if file size doesn't exceed the limits.
      * @since 0.1
      */
-    public boolean ensureSizeLimit(Path osTargetPath, DisarmConfig config, DisarmState state) {
+    public boolean ensureSizeLimit(Path osTargetPath) {
         long size = Utils.getSize(osTargetPath);
-        int errorTrigger = -1; // deliberate error trigger, in case if size limit returns null
-        if (config.getGeneralSizeLimit() > 0) {
-            return size <= config.getGeneralSizeLimit();
-        } else {
-            return switch (state.getFileType().toLowerCase()) { // checkable file is either below/equal to size limit or error is thrown
-                case "image" -> size <= DisarmConfig.getImageSizeLimits().getOrDefault(state.getMime(), errorTrigger);
-                case "text" -> size <= DisarmConfig.getTextSizeLimits().getOrDefault(state.getMime(), errorTrigger);
-                case "video" -> size <= DisarmConfig.getVideoSizeLimits().getOrDefault(state.getMime(), errorTrigger);
-                case "audio" -> size <= DisarmConfig.getAudioSizeLimits().getOrDefault(state.getMime(), errorTrigger);
-                case "logo" -> size <= config.getLogoSizeLimit();
-                default -> false;
-            };
-        }
+        return size <= config.getMaxFileSize();
     }
 
     /**

@@ -91,6 +91,7 @@ public class AudioConfig implements MediaConfig {
     private final int outputBitrate = 128_000;
     private final int outputSampleRate = 44_100;
     private final int outputChannels = 2;
+    private final int maxFileSize = 5_000_000; //5MB
 
     private final String KEY_MAX_AUDIO_DURATION = "maxAudioDuration";
     private final String KEY_MAX_BITRATES = "maxBitrates";
@@ -103,6 +104,7 @@ public class AudioConfig implements MediaConfig {
     private final String KEY_OUTPUT_CHANNELS = "outputChannels";
     private final String KEY_MIME_TO_FORMAT = "mimeToFormat";
     private final String KEY_ALLOWED_AUDIO_CODECS = "allowedAudioCodecs";
+    private final String KEY_MAX_FILE_SIZE = "maxFileSize";
 
 
     @Override
@@ -123,6 +125,7 @@ public class AudioConfig implements MediaConfig {
         put(KEY_OUTPUT_BITRATE, outputBitrate);
         put(KEY_OUTPUT_SAMPLE_RATE, outputSampleRate);
         put(KEY_OUTPUT_CHANNELS, outputChannels);
+        put(KEY_MAX_FILE_SIZE, maxFileSize);
     }};
 
     @Override
@@ -156,10 +159,14 @@ public class AudioConfig implements MediaConfig {
 
     @Override
     public int maxFileSizeInBytes(String mime) {
-        return 5_000_000; //5MB
+        return getMaxFileSize(); //5MB
     }
 
     //getters
+    public int getMaxFileSize() {
+        return get(KEY_MAX_FILE_SIZE, Integer.class);
+    }
+
     public boolean isCodecAllowed(String format, String codec) {
         List<String> codecs = allowedAudioCodecs.getOrDefault(format, List.of());
         return codecs.contains(codec);
@@ -236,6 +243,10 @@ public class AudioConfig implements MediaConfig {
         );
     }
     //setters
+
+    public void setMaxFileSize(int newMaxFileSize) {
+        put(KEY_MAX_FILE_SIZE, newMaxFileSize);
+    }
 
     public void setMaxAudioDuration(int newMaxAudioDuration) {
         put(KEY_MAX_AUDIO_DURATION, newMaxAudioDuration);
