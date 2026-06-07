@@ -21,13 +21,12 @@ public class AudioValidator implements MediaValidator {
     /**
      * Ensures that the audio track duration doesn't exceed its configured limit.
      * @param osTargetPath Path to input file.
-     * @param config Immutable configuration.
      * @return True if duration is appropriate.
      * @since 0.1
      */
-    public boolean validateAudioDuration(Path osTargetPath, DisarmConfig config) {
+    public boolean validateAudioDuration(Path osTargetPath) {
         long audioDuration = Utils.getTrackLength(osTargetPath);
-        return audioDuration <= config.getAudioMaxDuration();
+        return audioDuration <= config.getMaxAudioDuration();
     }
 
     /**
