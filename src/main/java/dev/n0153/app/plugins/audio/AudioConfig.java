@@ -28,18 +28,13 @@ public class AudioConfig implements MediaConfig {
     }};
 
     private static final List<String> MP3_CODECS = List.of("mp3");
-
     private static final List<String> OGG_CODECS = List.of("vorbis", "opus", "flac",
             "speex", "libvorbis");
-
     private static final List<String> FLAC_CODECS = List.of("flac");
-
     private static final List<String> WAV_CODECS = List.of("pcm", "adpcm", "mp3",
             "a-law", "μ-law", "gsm",
             "u-law", "pcm_u8");
-
     private static final List<String> AU_CODECS = List.of("pcm", "μ-law", "u-law", "pcm_s16be");
-
     private static final List<String> AIF_CODECS = List.of("pcm", "μ-law", "a-law",
             "ima adpcm", "u-law", "pcm_s16be");
 
@@ -57,6 +52,39 @@ public class AudioConfig implements MediaConfig {
         put("aiff", AIF_CODECS);
         put("aifc", AIF_CODECS);
     }};
+
+    private static final Map<String, String> mimeToFormat = new HashMap<>() {{
+        //mp3
+        put("mp3", "mp3");
+        put("mpeg", "mp3");
+        put("mpeg-3", "mp3");
+
+        //ogg
+        put("ogg", "ogg");
+        put("vorbis", "ogg");
+        put("x-ogg", "ogg");
+
+        //flac
+        put("flac", "flac");
+        put("x-flac", "flac");
+
+        //wav
+        put("wav", "wav");
+        put("x-wav", "wav");
+        put("wave", "wav");
+        put("vnd.wave", "wav");
+
+        //au
+        put("au", "au");
+        put("basic", "au");
+
+        //aif
+        put("aif", "aiff");
+        put("aiff", "aiff");
+        put("x-aiff", "aiff");
+        put("aifc", "aiff");
+
+    }};
     private final int maxChannels = 2;
     private final int bitrateFallback = 320_000;
     private final int samplingRateFallback = 48_000;
@@ -73,7 +101,8 @@ public class AudioConfig implements MediaConfig {
     private final String KEY_OUTPUT_BITRATE = "outputBitrate";
     private final String KEY_OUTPUT_SAMPLE_RATE = "outputSampleRate";
     private final String KEY_OUTPUT_CHANNELS = "outputChannels";
-
+    private final String KEY_MIME_TO_FORMAT = "mimeToFormat";
+    private final String KEY_ALLOWED_AUDIO_CODECS = "allowedAudioCodecs";
 
 
     @Override
@@ -131,6 +160,15 @@ public class AudioConfig implements MediaConfig {
     }
 
     //getters
+    public boolean isCodecAllowed(String format, String codec) {
+        List<String> codecs = allowedAudioCodecs.getOrDefault(format, List.of());
+        return codecs.contains(codec);
+    }
+
+    public String getFormatFromMime(String mime) {
+        return mimeToFormat.get(mime);
+    }
+
     public int getMaxAudioDuration() {
         return Objects.requireNonNullElse(
                 get(KEY_MAX_AUDIO_DURATION, Integer.class),
