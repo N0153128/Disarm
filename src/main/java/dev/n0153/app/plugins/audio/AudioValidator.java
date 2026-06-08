@@ -1,6 +1,7 @@
 package dev.n0153.app.plugins.audio;
 
 import dev.n0153.app.*;
+import dev.n0153.app.exceptions.MimeTypeDetectionException;
 import dev.n0153.app.exceptions.ValidationException;
 
 import java.nio.file.Path;
@@ -78,6 +79,26 @@ public class AudioValidator implements MediaValidator {
     public boolean validate(Path osTargetPath) {
         if (!checkMeta()) {
             throw new ValidationException("Audio Validator: meta is empty");
+        }
+        if (!validateAudioDuration(osTargetPath)) {
+            throw new ValidationException("Audio Validator: Audio duration validation failed");
+        }
+        try {
+            if (!checkAudioCodecWhiteList(Utils.getMimeType(osTargetPath), context.getAudioCodec())) {
+                throw new ValidationException("Audio Validator: Codec whitelist validation failed");
+            }
+        } catch (MimeTypeDetectionException e) {
+            throw new ValidationException("Audio Validator: failed to detect mime type");
+        }
+        if (!ensureSizeLimit(osTargetPath)) {
+            throw new ValidationException("Audio Validator: Size limit validation failed");
+        }
+        try {
+            if (!checkAudioBitrate(Utils.getMimeType(osTargetPath), context.getAudioBitrate())) {
+                throw new ValidationException("Audio Validator: Bitrate validation failed");
+            }
+        } catch (MimeTypeDetectionException e) {
+            throw new ValidationException("Audio Validator: failed to detect mime type");
         }
         return false;
     }
