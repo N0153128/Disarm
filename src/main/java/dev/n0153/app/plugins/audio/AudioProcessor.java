@@ -112,7 +112,7 @@ public class AudioProcessor implements MediaProcessor {
      * @param format Output format
      * @since 0.1
      */
-    public void reEncode(Path osTargetPath, String format) {
+    public void reEncodeDefault(Path osTargetPath, String format) {
         try {
             //create vars
             MultimediaObject input = new MultimediaObject(osTargetPath.toFile());
@@ -131,58 +131,23 @@ public class AudioProcessor implements MediaProcessor {
         }
     }
 
-    /**
-     * Shortcut method to re-encode any input file to WAV using FFmpeg.
-     * @param osTargetPath Path to input file.
-     * @since 0.1
-     */
-    public void reEncodeWav(Path osTargetPath) {
-        reEncode(osTargetPath, "wav");
-    }
-
-    /**
-     * Shortcut method to re-encode any input file to AU using FFmpeg.
-     * @param osTargetPath Path to input file.
-     * @since 0.1
-     */
-    public void reEncodeAu(Path osTargetPath) {
-        reEncode(osTargetPath, "au");
-    }
-
-    /**
-     * Shortcut method to re-encode any input file to AIFF using FFmpeg.
-     * @param osTargetPath Path to input file.
-     * @since 0.1
-     */
-    public void reEncodeAif(Path osTargetPath) {
-        reEncode(osTargetPath, "aiff");
-    }
-
-    /**
-     * Shortcut method to re-encode any input file to MP3 using FFmpeg.
-     * @param osTargetPath Path to input file.
-     * @since 0.1
-     */
-    public void reEncodeMp3(Path osTargetPath) {
-        reEncode(osTargetPath, "mp3");
-    }
-
-    /**
-     * Shortcut method to re-encode any input file to OGG using FFmpeg.
-     * @param osTargetPath Path to input file.
-     * @since 0.1
-     */
-    public void reEncodeOgg(Path osTargetPath) {
-        reEncode(osTargetPath, "ogg");
-    }
-
-    /**
-     * Shortcut method to re-encode any input file to FLAC using FFmpeg.
-     * @param osTargetPath Path to input file.
-     * @since 0.1
-     */
-    public void reEncodeFlac(Path osTargetPath) {
-        reEncode(osTargetPath, "flac");
+    public void reEncode(Path osTargetPath) {
+        try {
+            if (Objects.equals(config.getDefaultOutputTo(), "default")) {
+                String targetFormat = config.getFormatFromMime(Utils.getMimeType(osTargetPath));
+                reEncodeDefault(osTargetPath, targetFormat);
+            } else {
+                reEncodeDefault(osTargetPath, config.getDefaultOutputTo());
+            }
+        } catch (MimeTypeDetectionException e) {
+            throw new DisarmException("Audio Processor: Failed to detect mime");
+        } catch (AudioProcessingException e) {
+            try {
+                reEncodeAudioNative(osTargetPath);
+            } catch (UnsupportedAudioFileException ex) {
+                throw new DisarmException("Audio Processor: native fallback failed");
+            }
+        }
     }
 
     @Override
