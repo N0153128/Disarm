@@ -152,7 +152,18 @@ public class AudioProcessor implements MediaProcessor {
 
     @Override
     public void process(Path osTargetPath) throws DisarmException {
-
+        String mime;
+        try {
+            mime = config.getFormatFromMime(Utils.getMimeType(osTargetPath));
+            context.setAudioBitrate(Utils.getBitrate(osTargetPath, "audio"));
+            context.setAudioTitle(Utils.getTitle(osTargetPath, false));
+            context.setAudioSamplingRate(Utils.getSamplingRate(osTargetPath));
+            context.setAudioChannels(Utils.getAudioChannels(osTargetPath));
+            reEncode(osTargetPath);
+        } catch (IOException | EncoderException e) {
+            throw new DisarmException("failed to process audio");
+        }
+        logger.info("audio re-encoded successfully");
     }
 
     @Override
