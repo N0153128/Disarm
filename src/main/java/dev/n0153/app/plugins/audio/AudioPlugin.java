@@ -38,7 +38,7 @@ public class AudioPlugin implements MediaPlugin {
             registry.register(
                     config.supports(),
                     this,
-                    new AudioCLI(registry, context),
+                    new AudioCLI(registry),
                     "audio",
                     config
             );

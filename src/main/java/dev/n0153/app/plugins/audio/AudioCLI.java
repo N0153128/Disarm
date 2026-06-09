@@ -12,11 +12,9 @@ public class AudioCLI implements Runnable {
 
     private final AudioConfig config = new AudioConfig();
     private final PluginRegistry registry;
-    private final AudioContext context;
 
-    public AudioCLI (PluginRegistry registry, AudioContext context) {
+    public AudioCLI (PluginRegistry registry) {
         this.registry = registry;
-        this.context = context;
         registry.updateConfig("audio", config);
     }
 
