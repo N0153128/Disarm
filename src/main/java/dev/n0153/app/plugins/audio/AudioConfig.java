@@ -186,7 +186,7 @@ public class AudioConfig implements MediaConfig {
         );
     }
     @SuppressWarnings("unchecked")
-    public int getMaxBitrates(String format) { //TODO
+    public int getMaxBitrates(String format) {
         Map<String, Integer> rates = get(KEY_MAX_BITRATES, Map.class);
         if (rates == null) {
             rates = maxBitrates;
