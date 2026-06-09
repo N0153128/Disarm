@@ -6,8 +6,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine;
 
-public class AudioCLI implements Runnable {
 @CommandLine.Command(name = "audio", description = "Audio Processing Plugin")
+public class AudioCLI implements Runnable {
     private static final Logger logger = LogManager.getLogger(AudioCLI.class);
 
     private final AudioConfig config = new AudioConfig();
