@@ -3,7 +3,9 @@ package dev.n0153.app.plugins.audio;
 import dev.n0153.app.*;
 import dev.n0153.app.exceptions.MimeTypeDetectionException;
 import dev.n0153.app.exceptions.ValidationException;
+import ws.schild.jave.EncoderException;
 
+import java.io.IOException;
 import java.nio.file.Path;
 
 public class AudioValidator implements MediaValidator {
@@ -80,26 +82,28 @@ public class AudioValidator implements MediaValidator {
         if (!checkMeta()) {
             throw new ValidationException("Audio Validator: meta is empty");
         }
+        String mime;
+        try {
+            mime = config.getFormatFromMime(Utils.getMimeType(osTargetPath));
+        } catch (MimeTypeDetectionException e) {
+            throw new ValidationException("Audio Validator: failed to detect mime type");
+        }
         if (!validateAudioDuration(osTargetPath)) {
             throw new ValidationException("Audio Validator: Audio duration validation failed");
         }
-        try {
-            if (!checkAudioCodecWhiteList(Utils.getMimeType(osTargetPath), context.getAudioCodec())) {
-                throw new ValidationException("Audio Validator: Codec whitelist validation failed");
-            }
-        } catch (MimeTypeDetectionException e) {
-            throw new ValidationException("Audio Validator: failed to detect mime type");
+        if (!checkAudioCodecWhiteList(mime, Utils.getCodec(osTargetPath, "audio"))) {
+            throw new ValidationException("Audio Validator: Codec whitelist validation failed");
         }
         if (!ensureSizeLimit(osTargetPath)) {
             throw new ValidationException("Audio Validator: Size limit validation failed");
         }
         try {
-            if (!checkAudioBitrate(Utils.getMimeType(osTargetPath), context.getAudioBitrate())) {
+            if (!checkAudioBitrate(mime, Utils.getBitrate(osTargetPath, "audio"))) {
                 throw new ValidationException("Audio Validator: Bitrate validation failed");
             }
-        } catch (MimeTypeDetectionException e) {
-            throw new ValidationException("Audio Validator: failed to detect mime type");
+        } catch (EncoderException | IOException e) {
+            throw new ValidationException("Audio Validator: failed to detect bitrate");
         }
-        return false;
+        return true;
     }
 }

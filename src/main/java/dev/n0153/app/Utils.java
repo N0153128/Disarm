@@ -371,6 +371,32 @@ public class Utils {
     }
 
     /**
+     * Returns bitrate for specified audio/video file.
+     * @param osTargetPath Path to input file.
+     * @param mediaType Detected media type.
+     * @return Audio/Video bitrate
+     * @throws EncoderException If failed to detect media.
+     * @throws IOException If failed to calculate bitrate.
+     * @since 0.1
+     */
+    public static int getBitrate(Path osTargetPath, String mediaType) throws EncoderException, IOException {
+        MultimediaObject input = new MultimediaObject(osTargetPath.toFile());
+        int bitrate = -1;
+        if (Objects.equals(mediaType, "audio")) {
+            bitrate = input.getInfo().getAudio().getBitRate();
+            if (bitrate <= 0) {
+                throw new DisarmException("Corrupt bitrate");
+            }
+        } else if (Objects.equals(mediaType, "video")) {
+            bitrate = input.getInfo().getVideo().getBitRate();
+            if (bitrate <= 0) {
+                bitrate = calcVideoBitRate(osTargetPath);
+            }
+        }
+        return bitrate;
+    }
+
+    /**
      * Returns sampling rate for specified audio track.
      * @param osTargetPath Path to input file.
      * @return Sampling rate.
