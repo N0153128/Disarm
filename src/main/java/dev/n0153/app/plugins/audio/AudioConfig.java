@@ -153,11 +153,7 @@ public class AudioConfig implements MediaConfig {
 
     @Override
     public Set<String> supports() {
-        return Set.of("mp3", "ogg", "flac",
-                "wav", "wave", "au",
-                "aif", "aiff", "aifc",
-                "x-wav", "mpeg", "x-aiff",
-                "basic");
+        return mimeToFormat.keySet();
     }
 
     @Override
