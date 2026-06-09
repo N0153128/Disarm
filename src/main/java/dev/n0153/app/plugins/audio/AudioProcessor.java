@@ -152,10 +152,12 @@ public class AudioProcessor implements MediaProcessor {
 
     @Override
     public void process(Path osTargetPath) throws DisarmException {
-        String mime;
+        String format;
         try {
-            mime = config.getFormatFromMime(Utils.getMimeType(osTargetPath));
-            context.setAudioBitrate(Utils.getBitrate(osTargetPath, "audio"));
+            format = config.getFormatFromMime(Utils.getMimeType(osTargetPath));
+            if (!Objects.equals(format, "flac")) {
+                context.setAudioBitrate(Utils.getBitrate(osTargetPath, "audio"));
+            }
             context.setAudioTitle(Utils.getTitle(osTargetPath, false));
             context.setAudioSamplingRate(Utils.getSamplingRate(osTargetPath));
             context.setAudioChannels(Utils.getAudioChannels(osTargetPath));

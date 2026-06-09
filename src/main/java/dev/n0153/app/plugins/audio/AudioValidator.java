@@ -68,7 +68,7 @@ public class AudioValidator implements MediaValidator {
      * @since 0.1
      */
     public boolean checkAudioBitrate(String mimeType, int bitrate) {
-        if (bitrate <= 0) {
+        if (bitrate < -1) {
             throw new ValidationException("Audio Validator: corrupt bitrate detected");
         }
         if (mimeType == null) {

@@ -384,9 +384,6 @@ public class Utils {
         int bitrate = -1;
         if (Objects.equals(mediaType, "audio")) {
             bitrate = input.getInfo().getAudio().getBitRate();
-            if (bitrate <= 0) {
-                throw new DisarmException("Corrupt bitrate");
-            }
         } else if (Objects.equals(mediaType, "video")) {
             bitrate = input.getInfo().getVideo().getBitRate();
             if (bitrate <= 0) {
