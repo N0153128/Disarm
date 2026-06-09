@@ -1,6 +1,7 @@
 package dev.n0153.app.plugins.audio;
 
 import dev.n0153.app.MediaConfig;
+import dev.n0153.app.exceptions.ValidationException;
 
 import java.util.*;
 
@@ -92,6 +93,7 @@ public class AudioConfig implements MediaConfig {
     private final int outputSampleRate = 44_100;
     private final int outputChannels = 2;
     private final int maxFileSize = 5_000_000; //5MB
+    private final String defaultOutputTo = "default";
 
     private final String KEY_MAX_AUDIO_DURATION = "maxAudioDuration";
     private final String KEY_MAX_BITRATES = "maxBitrates";
@@ -105,6 +107,7 @@ public class AudioConfig implements MediaConfig {
     private final String KEY_MIME_TO_FORMAT = "mimeToFormat";
     private final String KEY_ALLOWED_AUDIO_CODECS = "allowedAudioCodecs";
     private final String KEY_MAX_FILE_SIZE = "maxFileSize";
+    private final String KEY_DEFAULT_OUTPUT_TO = "defaultOutputTo";
 
 
     @Override
@@ -163,6 +166,10 @@ public class AudioConfig implements MediaConfig {
     }
 
     //getters
+    public String getDefaultOutputTo() {
+        return get(KEY_DEFAULT_OUTPUT_TO, String.class);
+    }
+
     public int getMaxFileSize() {
         return get(KEY_MAX_FILE_SIZE, Integer.class);
     }
@@ -243,6 +250,18 @@ public class AudioConfig implements MediaConfig {
         );
     }
     //setters
+
+    public void setDefaultOutputTo(String newDefaultOutputTo) {
+        List<String> allowedValues = List.of(
+                "default", "mp3", "ogg",
+                "flac", "wav", "au",
+                "aif");
+        if (!allowedValues.contains(newDefaultOutputTo)) {
+            throw new IllegalArgumentException("Audio Config: unsupported format");
+        } else {
+            put(KEY_DEFAULT_OUTPUT_TO, newDefaultOutputTo);
+        }
+    }
 
     public void setMaxFileSize(int newMaxFileSize) {
         put(KEY_MAX_FILE_SIZE, newMaxFileSize);
