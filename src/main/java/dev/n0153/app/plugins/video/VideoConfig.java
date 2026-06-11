@@ -308,6 +308,7 @@ public class VideoConfig implements MediaConfig {
                 get(KEY_OUTPUT_FRAME_RATE, Integer.class),
                 outputFrameRate);
     }
+
     //setters
     public void setMaxVideoDuration(int newMaxVideoDuration) {
         put(KEY_MAX_VIDEO_DURATION, newMaxVideoDuration);
