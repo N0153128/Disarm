@@ -168,6 +168,6 @@ public class VideoValidator implements MediaValidator {
         if (ensureSizeLimit(osTargetPath)) {
             throw new ValidationException("Video Validator: format size validation failed");
         }
-        return false;
+        return true;
     }
 }
