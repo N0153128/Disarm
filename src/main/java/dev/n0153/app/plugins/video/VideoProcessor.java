@@ -16,6 +16,7 @@ import ws.schild.jave.encode.AudioAttributes;
 import ws.schild.jave.encode.EncodingAttributes;
 import ws.schild.jave.encode.VideoAttributes;
 
+import java.io.IOException;
 import java.nio.file.Path;
 
 public class VideoProcessor implements MediaProcessor {
@@ -92,8 +93,16 @@ public class VideoProcessor implements MediaProcessor {
         try {
             mime = Utils.getMimeType(osTargetPath);
             format = config.getFormatFromMime(mime);
+            context.setVideoTitle(Utils.getTitle(osTargetPath, false));
+            context.setVideoBitrate(Utils.getBitrate(osTargetPath, "video"));
+            context.setVideoFrameRate(Utils.getVideoFrameRate(osTargetPath));
+            context.setVideoSize(Utils.getVideoDimensions(osTargetPath));
+
+            context.setAudioBitrate(Utils.getBitrate(osTargetPath, "audio"));
+            context.setAudioSamplingRate(Utils.getSamplingRate(osTargetPath));
+
             reEncodeVideo(osTargetPath, format);
-        } catch (MimeTypeDetectionException e) {
+        } catch (IOException | EncoderException e) {
             throw new DisarmException("Video Processor: failed to detect mime");
         }
     }
