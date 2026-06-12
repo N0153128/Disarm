@@ -1,4 +1,105 @@
 package dev.n0153.app.plugins.video;
 
-public class VideoProcessor {
+import dev.n0153.app.GlobalConfig;
+import dev.n0153.app.MediaContext;
+import dev.n0153.app.MediaProcessor;
+import dev.n0153.app.Utils;
+import dev.n0153.app.exceptions.DisarmException;
+import dev.n0153.app.exceptions.MimeTypeDetectionException;
+import dev.n0153.app.exceptions.VideoProcessingException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import ws.schild.jave.Encoder;
+import ws.schild.jave.EncoderException;
+import ws.schild.jave.MultimediaObject;
+import ws.schild.jave.encode.AudioAttributes;
+import ws.schild.jave.encode.EncodingAttributes;
+import ws.schild.jave.encode.VideoAttributes;
+
+import java.nio.file.Path;
+
+public class VideoProcessor implements MediaProcessor {
+    private final VideoConfig config;
+    private final VideoContext context;
+    private final GlobalConfig globalConfig;
+    private static final Logger logger = LogManager.getLogger(VideoProcessor.class);
+
+    public VideoProcessor(VideoConfig config, VideoContext context, GlobalConfig globalConfig) {
+        this.config = config;
+        this.context = context;
+        this.globalConfig = globalConfig;
+    }
+
+    /**
+     * Main video re-encoding method, utilises Jave (FFmpeg).
+     * Accepts an input file path and format to encode to.
+     * Sanitized output is saved to configured output path.
+     * @param osTargetPath Path to input file
+     * @param format Output format
+     * @since 0.1
+     */
+    public void reEncodeVideo(Path osTargetPath, String format) {
+        try {
+            logger.info("params codec: {}, detected codec: {}", context.getVideoCodec(), context.getVideoCodec());
+
+            MultimediaObject input = new MultimediaObject(osTargetPath.toFile());
+            Path outputPath = globalConfig.getGeneralOutputPath().resolve(context.getVideoTitle());
+
+            VideoAttributes videoAttrs = new VideoAttributes();
+            videoAttrs.setCodec(context.getVideoCodec());
+            AudioAttributes audioAttrs = new AudioAttributes();
+            audioAttrs.setCodec(context.getAudioCodec());
+            EncodingAttributes attrs = setAttributes(audioAttrs, videoAttrs);
+            attrs.setOutputFormat(format);
+
+            logger.info("Video bitrate: {},\n " +
+                            "video framerate: {},\n" +
+                            "video size: {},\n" +
+                            "audio bitrate: {},\n" +
+                            "audio samplerate: {},\n"+
+                            "video codec detected: {}", context.getVideoBitrate(),
+                    context.getVideoFrameRate(),
+                    context.getVideoSize(), context.getAudioBitrate(),
+                    context.getAudioSamplingRate(), context.getVideoCodec());
+            Encoder encoder = new Encoder();
+            encoder.encode(input, outputPath.toFile(), attrs);
+            logger.info("re-encoded successfully");
+
+        } catch (EncoderException e) {
+            throw new VideoProcessingException("Failed to process video", osTargetPath, e);
+        }
+    }
+
+    private EncodingAttributes setAttributes(AudioAttributes audioAttrs, VideoAttributes videoAttrs) {
+        videoAttrs.setBitRate(context.getVideoBitrate());
+        videoAttrs.setFrameRate(context.getVideoFrameRate());
+        videoAttrs.setSize(context.getVideoSize());
+
+        audioAttrs.setBitRate(context.getAudioBitrate());
+        audioAttrs.setChannels(context.getAudioChannels());
+        audioAttrs.setSamplingRate(context.getAudioSamplingRate());
+
+        EncodingAttributes attrs = new EncodingAttributes();
+        attrs.setVideoAttributes(videoAttrs);
+        attrs.setAudioAttributes(audioAttrs);
+        return attrs;
+    }
+
+    @Override
+    public void process(Path osTargetPath) throws DisarmException {
+        String mime;
+        String format;
+        try {
+            mime = Utils.getMimeType(osTargetPath);
+            format = config.getFormatFromMime(mime);
+            reEncodeVideo(osTargetPath, format);
+        } catch (MimeTypeDetectionException e) {
+            throw new DisarmException("Video Processor: failed to detect mime");
+        }
+    }
+
+    @Override
+    public MediaContext getContext() {
+        return null;
+    }
 }
