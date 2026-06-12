@@ -108,6 +108,7 @@ public class VideoConfig implements MediaConfig {
     private final int outputSampleRate = 44_00;
     private final int outputChannels = 2;
     private final int outputFrameRate = 30;
+    private final String defaultOutputTo = "default";
 
     private final String KEY_MAX_VIDEO_DURATION = "maxVideoDuration";
     private final String KEY_MAX_FILE_SIZE = "maxFileSize";
@@ -127,6 +128,7 @@ public class VideoConfig implements MediaConfig {
     private final String KEY_OUTPUT_SAMPLING_RATE = "outputSampleRate";
     private final String KEY_OUTPUT_CHANNELS = "outputChannels";
     private final String KEY_OUTPUT_FRAME_RATE = "outputFrameRate";
+    private final String KEY_DEFAULT_OUTPUT_TO = "defaultOutputTo";
 
     private final Map<String, Object> configStorage = new HashMap<>() {{
         put(KEY_MAX_VIDEO_DURATION, maxVideoDuration);
@@ -189,6 +191,10 @@ public class VideoConfig implements MediaConfig {
     }
 
     // getters
+    public String getDefaultOutputTo() {
+        return get(KEY_DEFAULT_OUTPUT_TO, String.class);
+    }
+
     public int getMaxVideoDuration() {
         return Objects.requireNonNullElse(
                 get(KEY_MAX_VIDEO_DURATION, Integer.class),
@@ -310,10 +316,21 @@ public class VideoConfig implements MediaConfig {
     }
 
     //setters
+    public void setDefaultOutputTo(String newDefaultOutputTo) {
+        List<String> allowedValues = List.of(
+                "default", "mp3", "ogg",
+                "flac", "wav", "au",
+                "aif");
+        if (!allowedValues.contains(newDefaultOutputTo)) {
+            throw new IllegalArgumentException("Audio Config: unsupported format");
+        } else {
+            put(KEY_DEFAULT_OUTPUT_TO, newDefaultOutputTo);
+        }
+    }
+
     public void setMaxVideoDuration(int newMaxVideoDuration) {
         put(KEY_MAX_VIDEO_DURATION, newMaxVideoDuration);
     }
-
 
     @SuppressWarnings("unchecked")
     public void setMaxFileSize(String format, int newMaxFileSize) {
