@@ -48,6 +48,6 @@ public class AudioCLI implements Runnable {
             this.config.setOutputChannels(outputChannels);
         }
 
-        registry.updateConfig("image", config);
+        registry.updateConfig("audio", config);
     }
 }
