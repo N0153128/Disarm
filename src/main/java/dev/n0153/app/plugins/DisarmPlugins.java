@@ -10,6 +10,8 @@ import dev.n0153.app.plugins.image.ImageConfig;
 import dev.n0153.app.plugins.image.ImagePlugin;
 import dev.n0153.app.plugins.text.TextConfig;
 import dev.n0153.app.plugins.text.TextPlugin;
+import dev.n0153.app.plugins.video.VideoConfig;
+import dev.n0153.app.plugins.video.VideoPlugin;
 
 public class DisarmPlugins {
     private final GlobalConfig globalConfig;
@@ -32,6 +34,11 @@ public class DisarmPlugins {
         AudioPlugin audioPlugin = new AudioPlugin();
         audioPlugin.registerGlobalConfig(globalConfig);
         audioPlugin.register(registry, audioConfig);
+
+        VideoConfig videoConfig = new VideoConfig();
+        VideoPlugin videoPlugin = new VideoPlugin();
+        videoPlugin.registerGlobalConfig(globalConfig);
+        videoPlugin.register(registry, videoConfig);
         //add new plugins as they become available
     }
 }
