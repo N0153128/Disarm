@@ -2,7 +2,6 @@ package dev.n0153.app.plugins.video;
 
 import dev.n0153.app.DisarmCLI;
 import dev.n0153.app.PluginRegistry;
-import dev.n0153.app.plugins.audio.AudioCLI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine;
@@ -22,9 +21,39 @@ public class VideoCLI implements Runnable {
     @CommandLine.ParentCommand
     DisarmCLI inputPath;
 
+    @CommandLine.Option(names = {"-mvd", "--max-video-duration"}, description = "Change max video duration")
+    private int maxVideoDuration;
+
+    @CommandLine.Option(names = {"-tvb", "--target-video-bitrate"}, description = "Change target video bitrate")
+    private int targetVideoBitrate;
+
+    @CommandLine.Option(names = {"-tfr", "--target-frame-rate"}, description = "Change target frame rate")
+    private int targetFrameRate;
+
+    @CommandLine.Option(names = {"-tvc", "--target-video-codec"}, description = "Change target video codec")
+    private String targetVideoCodec;
+
+    @CommandLine.Option(names = {"-tacv", "--target-audio-codec-video"}, description = "Change target audio codec for video")
+    private String targetAudioCodec;
 
     @Override
     public void run() {
+        if (maxVideoDuration > 0) {
+            this.config.setMaxVideoDuration(maxVideoDuration);
+        }
+        if (targetVideoBitrate > 0) {
+            this.config.setOutputVideoBitrate(targetVideoBitrate);
+        }
+        if (targetFrameRate > 0) {
+            this.config.setOutputFrameRate(targetFrameRate);
+        }
+        if (!targetVideoCodec.isEmpty()) {
+            this.config.setOutputVideoCodec(targetVideoCodec);
+        }
+        if (!targetAudioCodec.isEmpty()) {
+            this.config.setOutputAudioCodec(targetAudioCodec);
+        }
 
+        registry.updateConfig("video", config);
     }
 }
