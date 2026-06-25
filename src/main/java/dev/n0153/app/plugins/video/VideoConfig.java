@@ -105,7 +105,7 @@ public class VideoConfig implements MediaConfig {
     private final String outputAudioCodec = "aac";
     private final int outputVideoBitrate = 8_000_000;
     private final int outputAudioBitrate = 128_000;
-    private final int outputSampleRate = 44_00;
+    private final int outputSampleRate = 44_100;
     private final int outputChannels = 2;
     private final int outputFrameRate = 30;
     private final String defaultOutputTo = "default";
@@ -149,6 +149,7 @@ public class VideoConfig implements MediaConfig {
         put(KEY_OUTPUT_SAMPLING_RATE, outputSampleRate);
         put(KEY_OUTPUT_CHANNELS, outputChannels);
         put(KEY_OUTPUT_FRAME_RATE, outputFrameRate);
+        put(KEY_DEFAULT_OUTPUT_TO, defaultOutputTo);
 
     }};
 
@@ -318,11 +319,9 @@ public class VideoConfig implements MediaConfig {
     //setters
     public void setDefaultOutputTo(String newDefaultOutputTo) {
         List<String> allowedValues = List.of(
-                "default", "mp3", "ogg",
-                "flac", "wav", "au",
-                "aif");
+                "default", "mp4", "webm", "matroska", "mov");
         if (!allowedValues.contains(newDefaultOutputTo)) {
-            throw new IllegalArgumentException("Audio Config: unsupported format");
+            throw new IllegalArgumentException("Video Config: unsupported format");
         } else {
             put(KEY_DEFAULT_OUTPUT_TO, newDefaultOutputTo);
         }
