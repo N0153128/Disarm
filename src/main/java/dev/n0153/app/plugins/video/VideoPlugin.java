@@ -39,7 +39,7 @@ public class VideoPlugin implements MediaPlugin {
             registry.register(
                     config.supports(),
                     this,
-                    new AudioCLI(registry),
+                    new VideoCLI(registry),
                     "video",
                     config
             );
