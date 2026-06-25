@@ -182,7 +182,7 @@ public class VideoConfig implements MediaConfig {
 
     @Override
     public Set<String> supports() {
-        return Set.of();
+        return mimeToFormat.keySet();
     }
 
     @Override
