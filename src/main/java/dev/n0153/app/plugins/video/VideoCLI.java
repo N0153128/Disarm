@@ -47,10 +47,10 @@ public class VideoCLI implements Runnable {
         if (targetFrameRate > 0) {
             this.config.setOutputFrameRate(targetFrameRate);
         }
-        if (!targetVideoCodec.isEmpty()) {
+        if (targetVideoCodec != null && !targetVideoCodec.isEmpty()) {
             this.config.setOutputVideoCodec(targetVideoCodec);
         }
-        if (!targetAudioCodec.isEmpty()) {
+        if (targetAudioCodec != null && !targetAudioCodec.isEmpty()) {
             this.config.setOutputAudioCodec(targetAudioCodec);
         }
 

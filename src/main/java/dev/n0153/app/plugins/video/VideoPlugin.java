@@ -2,7 +2,6 @@ package dev.n0153.app.plugins.video;
 
 import dev.n0153.app.*;
 import dev.n0153.app.exceptions.DisarmException;
-import dev.n0153.app.plugins.audio.AudioCLI;
 
 public class VideoPlugin implements MediaPlugin {
     private MediaConfig config;
