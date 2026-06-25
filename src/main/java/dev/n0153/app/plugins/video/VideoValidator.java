@@ -147,25 +147,25 @@ public class VideoValidator implements MediaValidator {
             throw new ValidationException("Video Validator: meta is empty");
         }
         try {
-            if (checkAudioBitrateForVideo(format, Utils.getBitrate(osTargetPath, "audio"))) {
+            if (!checkAudioBitrateForVideo(format, Utils.getBitrate(osTargetPath, "audio"))) {
                 throw new ValidationException("Video Validator: Audio bitrate validation failed");
             }
-            if (checkAudioSampleRateForVideo(format, Utils.getSamplingRate(osTargetPath))) {
+            if (!checkAudioSampleRateForVideo(format, Utils.getSamplingRate(osTargetPath))) {
                 throw new ValidationException("Video Validator: Audio sampling rate validation failed");
             }
         } catch (EncoderException | IOException e) {
             throw new ValidationException("Failed to detect bitrate");
         }
-        if (checkVideoCodecWhiteList(format, Utils.getCodec(osTargetPath, "video"))) {
+        if (!checkVideoCodecWhiteList(format, Utils.getCodec(osTargetPath, "video"))) {
             throw new ValidationException("Video Validator: Video codec validation failed");
         }
-        if (checkAudioCodecWhiteListForVideo(format, Utils.getCodec(osTargetPath, "audio"))) {
+        if (!checkAudioCodecWhiteListForVideo(format, Utils.getCodec(osTargetPath, "audio"))) {
             throw new ValidationException("Video Validator: Audio codec validation failed");
         }
-        if (validateVideoDuration(osTargetPath)) {
+        if (!validateVideoDuration(osTargetPath)) {
             throw new ValidationException("Video Validator: Video duration validation failed");
         }
-        if (ensureSizeLimit(osTargetPath)) {
+        if (!ensureSizeLimit(osTargetPath)) {
             throw new ValidationException("Video Validator: format size validation failed");
         }
         return true;
