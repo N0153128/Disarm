@@ -109,6 +109,6 @@ public class VideoProcessor implements MediaProcessor {
 
     @Override
     public MediaContext getContext() {
-        return null;
+        return context;
     }
 }
