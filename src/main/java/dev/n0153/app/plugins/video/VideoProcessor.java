@@ -5,7 +5,6 @@ import dev.n0153.app.MediaContext;
 import dev.n0153.app.MediaProcessor;
 import dev.n0153.app.Utils;
 import dev.n0153.app.exceptions.DisarmException;
-import dev.n0153.app.exceptions.MimeTypeDetectionException;
 import dev.n0153.app.exceptions.VideoProcessingException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -97,6 +96,9 @@ public class VideoProcessor implements MediaProcessor {
             context.setVideoBitrate(Utils.getBitrate(osTargetPath, "video"));
             context.setVideoFrameRate(Utils.getVideoFrameRate(osTargetPath));
             context.setVideoSize(Utils.getVideoDimensions(osTargetPath));
+            context.setVideoCodec(Utils.getCodec(osTargetPath, "video"));
+            context.setAudioCodec(Utils.getCodec(osTargetPath, "audio"));
+            context.setAudioChannels(Utils.getAudioChannels(osTargetPath));
 
             context.setAudioBitrate(Utils.getBitrate(osTargetPath, "audio"));
             context.setAudioSamplingRate(Utils.getSamplingRate(osTargetPath));
