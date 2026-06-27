@@ -100,7 +100,8 @@ public class VideoProcessor implements MediaProcessor {
             context.setAudioCodec(Utils.getCodec(osTargetPath, "audio"));
             context.setAudioChannels(Utils.getAudioChannels(osTargetPath));
 
-            context.setAudioBitrate(Utils.getBitrate(osTargetPath, "audio"));
+            int audioBitrate = Utils.getBitrate(osTargetPath, "audio");
+            context.setAudioBitrate(audioBitrate > 0 ? audioBitrate : config.getOutputAudioBitrate());
             context.setAudioSamplingRate(Utils.getSamplingRate(osTargetPath));
 
             reEncodeVideo(osTargetPath, format);
