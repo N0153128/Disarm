@@ -1,5 +1,6 @@
 package dev.n0153.app;
 
+import dev.n0153.app.exceptions.FileDeletionException;
 import dev.n0153.app.exceptions.FileTypeDetectionException;
 import dev.n0153.app.exceptions.MimeTypeDetectionException;
 import dev.n0153.app.exceptions.ValidationException;
@@ -20,6 +21,16 @@ public class MediaApp {
         this.registry = registry;
         this.globalConfig = globalConfig;
         this.processingContext = new ProcessingContext(globalConfig);
+    }
+
+    public void deleteOriginal(Path osTargetPath) {
+        if (!globalConfig.isKeepOriginal()) {
+            try{
+                Utils.fileDispose(osTargetPath);
+            } catch (FileDeletionException e) {
+                logger.info("Failed to delete specified file");
+            }
+        }
     }
 
     public MediaPlugin getPlugin(String format) {
@@ -91,5 +102,6 @@ public class MediaApp {
             logger.info("File processed in {}ms", duration);
             processingContext.setStage("processing finished");
         }
+        deleteOriginal(osTargetPath);
     }
 }
