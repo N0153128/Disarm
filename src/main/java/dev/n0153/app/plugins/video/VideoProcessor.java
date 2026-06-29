@@ -18,7 +18,7 @@ import ws.schild.jave.encode.VideoAttributes;
 import java.io.IOException;
 import java.nio.file.Path;
 
-public class VideoProcessor implements MediaProcessor {
+public class VideoProcessor implements MediaProcessor<VideoConfig> {
     private final VideoConfig config;
     private final VideoContext context;
     private final GlobalConfig globalConfig;

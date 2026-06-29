@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Objects;
 
-public class AudioProcessor implements MediaProcessor {
+public class AudioProcessor implements MediaProcessor<AudioConfig> {
     private final AudioConfig config;
     private final AudioContext context;
     private final GlobalConfig globalConfig;
