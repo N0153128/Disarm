@@ -77,12 +77,12 @@ public class Utils {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T requireArgs(Object[] args, int index, Class<T> type) {
+    public static <$T> $T requireArgs(Object[] args, int index, Class<$T> type) {
         if (!type.isInstance(args[index])) {
             throw new ValidationException("Argument " + (index+1) + " must be an instance of " +
                     type.getSimpleName());
         }
-        return (T) args[index];
+        return ($T) args[index];
     }
 
     /**
