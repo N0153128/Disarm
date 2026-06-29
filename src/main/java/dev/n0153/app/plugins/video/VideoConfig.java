@@ -351,7 +351,12 @@ public class VideoConfig implements MediaConfig {
     }
 
     public void setMaxAudioBitrate(String format, int newMaxAudioBitrate) {
-        put(KEY_MAX_AUDIO_BITRATE, newMaxAudioBitrate);
+        Map<String, Integer> rates = get(KEY_MAX_AUDIO_BITRATE, Map.class);
+        if (rates == null) {
+            rates = new HashMap<>(maxAudioBitrates);
+        }
+        rates.replace(format, newMaxAudioBitrate);
+        put(KEY_MAX_AUDIO_BITRATE, rates);
     }
 
     public void setMaxSampleRate(String format, int newMaxSampleRate) {

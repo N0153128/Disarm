@@ -40,7 +40,7 @@ public class VideoProcessor implements MediaProcessor {
      */
     public void reEncodeVideo(Path osTargetPath, String format) {
         try {
-            logger.info("params codec: {}, detected codec: {}", context.getVideoCodec(), context.getVideoCodec());
+            logger.info("params codec: {}, detected codec: {}", config.getOutputVideoCodec(), context.getVideoCodec());
 
             MultimediaObject input = new MultimediaObject(osTargetPath.toFile());
             Path outputPath = globalConfig.getGeneralOutputPath().resolve(context.getVideoTitle());
