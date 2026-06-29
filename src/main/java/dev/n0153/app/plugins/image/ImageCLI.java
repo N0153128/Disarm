@@ -77,7 +77,7 @@ public class ImageCLI implements Runnable {
         }
         if (logo != null) {
             this.context.setLogo(Imgcodecs.imread(logo.toString(), Imgcodecs.IMREAD_UNCHANGED));
-            this.context.setLogoTitle(Utils.getTitle(logo, true));
+            this.context.setLogoTitle(Utils.getTitle(logo, "png", true)); //REFACTOR THIS: logo img may not always be png
         }
         registry.updateConfig("image", config);
     }

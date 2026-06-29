@@ -3,6 +3,7 @@ package dev.n0153.app.plugins.image;
 import dev.n0153.app.*;
 import dev.n0153.app.exceptions.DisarmException;
 import dev.n0153.app.exceptions.ImageProcessingException;
+import dev.n0153.app.exceptions.MimeTypeDetectionException;
 import dev.n0153.app.exceptions.ValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -291,13 +292,17 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
     @Override
     public void process(Path osTargetPath) throws DisarmException {
         logger.info("current config width: {}, height: {}", config.getImgMaxWidth(), config.getImgMaxHeight());
-        context.setImage(Imgcodecs.imread(osTargetPath.toString(), Imgcodecs.IMREAD_UNCHANGED));
-        context.setImageTitle(Utils.getTitle(osTargetPath, false));
-        scaleImageToScaleFactor(context.getImage());
-        if (context.getLogo() != null) {
-            logger.info("logo present");
-            scaleLogo();
-            applyWatermarkAtRandomPosition();
+        try {
+            context.setImage(Imgcodecs.imread(osTargetPath.toString(), Imgcodecs.IMREAD_UNCHANGED));
+            context.setImageTitle(Utils.getTitle(osTargetPath, Utils.getMimeType(osTargetPath), false));
+            scaleImageToScaleFactor(context.getImage());
+            if (context.getLogo() != null) {
+                logger.info("logo present");
+                scaleLogo();
+                applyWatermarkAtRandomPosition();
+            }
+        } catch (MimeTypeDetectionException e) {
+            throw new DisarmException(e);
         }
     }
 

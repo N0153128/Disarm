@@ -92,7 +92,9 @@ public class VideoProcessor implements MediaProcessor {
         try {
             mime = Utils.getMimeType(osTargetPath);
             format = config.getFormatFromMime(mime);
-            context.setVideoTitle(Utils.getTitle(osTargetPath, false));
+            context.setVideoTitle(Utils.getTitle(osTargetPath,
+                    config.getFormatFromMime(Utils.getMimeType(osTargetPath)),
+                    false));
             context.setVideoBitrate(Utils.getBitrate(osTargetPath, "video"));
             context.setVideoFrameRate(Utils.getVideoFrameRate(osTargetPath));
             context.setVideoSize(Utils.getVideoDimensions(osTargetPath));

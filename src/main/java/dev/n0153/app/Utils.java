@@ -49,7 +49,7 @@ public class Utils {
      * @param logo determines if file in processing is a logo or media file
      * @since 0.1
      */
-    public static String getTitle(Path osTargetPath, boolean logo) {
+    public static String getTitle(Path osTargetPath, String format, boolean logo) {
         LocalDateTime now = LocalDateTime.now();
         String day = String.valueOf(now.getDayOfMonth());
         String month = String.valueOf(now.getMonthValue());
@@ -70,13 +70,9 @@ public class Utils {
             }
         }
         String objectName = null;
-        try {
-            objectName = type+"_"+year+"_"+month+"_"+day+
-                    "_"+hour+"_"+minute+"_"+second+
-                    "_"+nanoSecond+"_"+milliSecond+"."+ Utils.getMimeType(osTargetPath);
-        } catch (MimeTypeDetectionException e) {
-            throw new RuntimeException(e);
-        }
+        objectName = type+"_"+year+"_"+month+"_"+day+
+                "_"+hour+"_"+minute+"_"+second+
+                "_"+nanoSecond+"_"+milliSecond+"."+ format;
         return objectName;
     }
 
@@ -137,20 +133,15 @@ public class Utils {
      * @throws AudioTypeDetectionException if specified file isn't an audio file.
      * @since 0.1
      */
-    public static AudioFileFormat.Type getAudioType(Path osTargetFilePath) throws AudioTypeDetectionException {
-        try {
-            String mime = getMimeType(osTargetFilePath);
-            if (mime != null) {
-                AudioFileFormat.Type type = getExtToType().get(mime.toLowerCase());
+    public static AudioFileFormat.Type getAudioType(Path osTargetFilePath, String format) throws AudioTypeDetectionException {
+            if (format != null) {
+                AudioFileFormat.Type type = getExtToType().get(format.toLowerCase());
                 if (type != null) {
                     return type;
                 }
             } else {
                 logger.error("non-audio MIME type detected");
             }
-        } catch (IOException e) {
-            throw new AudioTypeDetectionException("failed to detect audio type", osTargetFilePath, e );
-        }
         // Fallback to WAVE
         logger.debug("Fallback to WAVE");
         return AudioFileFormat.Type.WAVE;

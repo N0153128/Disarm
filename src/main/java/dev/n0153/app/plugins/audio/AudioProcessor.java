@@ -75,7 +75,7 @@ public class AudioProcessor implements MediaProcessor {
             }
             AudioFileFormat.Type audioType;
             if (Objects.equals(Utils.getFileType(osTargetPath), "audio")) {
-                audioType = Utils.getAudioType(osTargetPath); //REFACTOR THIS
+                audioType = Utils.getAudioType(osTargetPath, config.getFormatFromMime(Utils.getMimeType(osTargetPath))); //REFACTOR THIS
             } else {
                 audioType = AudioFileFormat.Type.WAVE; // REFACTOR THIS
             }
@@ -158,7 +158,9 @@ public class AudioProcessor implements MediaProcessor {
             if (!Objects.equals(format, "flac")) {
                 context.setAudioBitrate(Utils.getBitrate(osTargetPath, "audio"));
             }
-            context.setAudioTitle(Utils.getTitle(osTargetPath, false));
+            context.setAudioTitle(Utils.getTitle(osTargetPath,
+                    config.getFormatFromMime(Utils.getMimeType(osTargetPath)),
+                    false));
             context.setAudioSamplingRate(Utils.getSamplingRate(osTargetPath));
             context.setAudioChannels(Utils.getAudioChannels(osTargetPath));
             reEncode(osTargetPath);
