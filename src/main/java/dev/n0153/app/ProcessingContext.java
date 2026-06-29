@@ -51,7 +51,7 @@ public class ProcessingContext {
         processingContextStorage.replace(key, value);
     }
 
-    public <ValueType> ValueType get(String key, Class<ValueType> type) {
+    public <$ValueType> $ValueType get(String key, Class<$ValueType> type) {
         return type.cast(processingContextStorage.get(key));
     }
 

@@ -49,7 +49,7 @@ public class GlobalConfig {
         globalConfigStorage.replace(key, value);
     }
 
-    public <ValueType> ValueType get(String key, Class<ValueType> type) {
+    public <$ValueType> $ValueType get(String key, Class<$ValueType> type) {
         return type.cast(globalConfigStorage.get(key));
     }
 

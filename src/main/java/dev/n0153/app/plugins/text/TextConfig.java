@@ -41,7 +41,7 @@ public class TextConfig implements MediaConfig {
     }
 
     @Override
-    public <ValueType> ValueType get(String key, Class<ValueType> type) {
+    public <$ValueType> $ValueType get(String key, Class<$ValueType> type) {
         return type.cast(configStorage.get(key));
     }
 

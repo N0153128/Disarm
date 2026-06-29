@@ -8,7 +8,7 @@ import java.util.Set;
 public interface MediaConfig {
 
     void put(String key, Object value);
-    <ValueType> ValueType get (String key, Class <ValueType> type);
+    <$ValueType> $ValueType get (String key, Class <$ValueType> type);
     void release();
 
 

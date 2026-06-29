@@ -13,9 +13,9 @@ public interface MediaContext extends AutoCloseable {
      * @param key identifier
      * @param type Object type
      * @return specified type's object
-     * @param <ValueType> specified type
+     * @param <$ValueType> specified type
      */
-    <ValueType> ValueType get (String key, Class <ValueType> type);
+    <$ValueType> $ValueType get (String key, Class <$ValueType> type);
 
     /**
      * A method used by plugin caller to free up resources once the file has been processed
