@@ -73,7 +73,7 @@ public class Utils {
         try {
             objectName = type+"_"+year+"_"+month+"_"+day+
                     "_"+hour+"_"+minute+"_"+second+
-                    "_"+nanoSecond+"_"+milliSecond+"."+ Utils.getFormatFromMime(Utils.getMimeType(osTargetPath));
+                    "_"+nanoSecond+"_"+milliSecond+"."+ Utils.getMimeType(osTargetPath);
         } catch (MimeTypeDetectionException e) {
             throw new RuntimeException(e);
         }
@@ -139,7 +139,7 @@ public class Utils {
      */
     public static AudioFileFormat.Type getAudioType(Path osTargetFilePath) throws AudioTypeDetectionException {
         try {
-            String mime = getFormatFromMime(getMimeType(osTargetFilePath));
+            String mime = getMimeType(osTargetFilePath);
             if (mime != null) {
                 AudioFileFormat.Type type = getExtToType().get(mime.toLowerCase());
                 if (type != null) {
@@ -174,22 +174,6 @@ public class Utils {
             throw new MimeTypeDetectionException("failed to detect mime type", osTargetFilePath, e);
         } catch (NullPointerException e) {
             throw new MimeTypeDetectionException("specified mime type isn't whitelisted", osTargetFilePath, e);
-        }
-    }
-
-    /**
-     * Returns proper format string from mime type.
-     * Example: mpeg-4 -> mp4, quicktime -> mov.
-     * @param mime Original mime type.
-     * @return String format.
-     * @since 0.1
-     */
-    public static String getFormatFromMime(String mime) {
-        FormatRegistry.MimeToFormat format = FormatRegistry.MimeToFormat.fromMime(mime);
-        if (format == null) {
-            throw new ValidationException("Mime doesn't have valid format bind: "+mime);
-        } else {
-            return format.name().toLowerCase();
         }
     }
 
