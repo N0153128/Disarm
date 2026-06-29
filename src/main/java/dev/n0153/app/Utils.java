@@ -15,6 +15,9 @@ import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -23,6 +26,22 @@ import java.util.Objects;
  */
 public class Utils {
     private static final Logger logger = LogManager.getLogger(Utils.class);
+
+    private static final Map<String, AudioFileFormat.Type> EXT_TO_TYPE = new HashMap<>();
+
+    static {
+        EXT_TO_TYPE.put("wav", AudioFileFormat.Type.WAVE);
+        EXT_TO_TYPE.put("wave", AudioFileFormat.Type.WAVE);
+        EXT_TO_TYPE.put("au", AudioFileFormat.Type.AU);
+        EXT_TO_TYPE.put("snd", AudioFileFormat.Type.SND);
+        EXT_TO_TYPE.put("aif", AudioFileFormat.Type.AIFF);
+        EXT_TO_TYPE.put("aiff", AudioFileFormat.Type.AIFF);
+        EXT_TO_TYPE.put("aifc", AudioFileFormat.Type.AIFC);
+    }
+
+    public static Map<String, AudioFileFormat.Type> getExtToType() {
+        return Collections.unmodifiableMap(EXT_TO_TYPE);
+    }
 
     /**
      * Shortcut method, generates title for a file that is currently in processing.
@@ -122,7 +141,7 @@ public class Utils {
         try {
             String mime = getFormatFromMime(getMimeType(osTargetFilePath));
             if (mime != null) {
-                AudioFileFormat.Type type = DisarmConfig.getExtToType().get(mime.toLowerCase());
+                AudioFileFormat.Type type = getExtToType().get(mime.toLowerCase());
                 if (type != null) {
                     return type;
                 }
@@ -341,33 +360,6 @@ public class Utils {
         } catch (EncoderException e) {
             throw new CodecDetectionException("Failed to detect codec", osTargetPath, e);
         }
-    }
-
-    /**
-     * Returns bitrate for specified audio/video file.
-     * @param osTargetPath Path to input file.
-     * @param mediaType Detected media type.
-     * @param config Immutable configuration
-     * @return Audio/Video bitrate
-     * @throws EncoderException If failed to detect media.
-     * @throws IOException If failed to calculate bitrate.
-     * @since 0.1
-     */
-    public static int getBitrate(Path osTargetPath, String mediaType, DisarmConfig config) throws EncoderException, IOException {
-        MultimediaObject input = new MultimediaObject(osTargetPath.toFile());
-        int bitrate = -1;
-        if (Objects.equals(mediaType, "audio")) {
-            bitrate = input.getInfo().getAudio().getBitRate();
-            if (bitrate <= 0) {
-                bitrate = config.getAudioBitrateFallback();
-            }
-        } else if (Objects.equals(mediaType, "video")) {
-            bitrate = input.getInfo().getVideo().getBitRate();
-            if (bitrate <= 0) {
-                bitrate = calcVideoBitRate(osTargetPath);
-            }
-        }
-        return bitrate;
     }
 
     /**
