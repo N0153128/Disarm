@@ -29,6 +29,7 @@ public class ProcessingContext {
     private final String KEY_STARTED_AT = "startedAt";
     private final String KEY_COMPLETED_AT = "completedAt";
     private final String KEY_CONFIG_SNAPSHOT = "configSnapshot";
+    private final String KEY_FILE_TYPE= "fileType";
 
 
     private final Map<String, Object> processingContextStorage = new HashMap<>() {{
@@ -42,6 +43,7 @@ public class ProcessingContext {
         put(KEY_STARTED_AT, null);
         put(KEY_COMPLETED_AT, null);
         put(KEY_CONFIG_SNAPSHOT, null);
+        put(KEY_FILE_TYPE, null);
     }};
 
     public void put(String key, Object value) {
@@ -67,6 +69,10 @@ public class ProcessingContext {
     }
 
     // getters
+    public String getFileType() {
+        return get(KEY_FILE_TYPE, String.class);
+    }
+
     public String getId() {
         return get(KEY_ID, String.class);
     };
@@ -192,6 +198,16 @@ public class ProcessingContext {
             throw new IllegalArgumentException("File name cannot exceed " + config.getTargetFileLength());
         }
          put(KEY_FILENAME, newFilename);
+    }
+
+    public void setFileType(String newFileType) {
+        if (newFileType == null) {
+            throw new IllegalArgumentException("File name cannot be null");
+        }
+        if (newFileType.isEmpty()) {
+            throw new IllegalArgumentException("File name cannot be empty");
+        }
+        put(KEY_FILENAME, newFileType);
     }
 
     public void setId(String newId) {
