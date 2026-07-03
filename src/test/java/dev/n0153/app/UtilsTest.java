@@ -233,7 +233,8 @@ class UtilsTest {
         try {
             Path tempFileSnd = tempDir.resolve("test.snd");
             Files.write(tempFileSnd, MIME_TO_BYTE.get("snd"));
-            AudioFileFormat.Type audioType = Utils.getAudioType(tempFileSnd);
+            String fileType = Utils.getFileType(tempFileSnd);
+            AudioFileFormat.Type audioType = Utils.getAudioType(tempFileSnd, fileType);
             assertNotNull(audioType);
             assertNotEquals(AudioFileFormat.Type.SND, audioType);
         } catch (IOException e) {
@@ -246,7 +247,8 @@ class UtilsTest {
         try {
             Path tempFileAifc = tempDir.resolve("test.aifc");
             Files.write(tempFileAifc, MIME_TO_BYTE.get("aiff"));
-            AudioFileFormat.Type audioType = Utils.getAudioType(tempFileAifc);
+            String fileType = Utils.getFileType(tempFileAifc);
+            AudioFileFormat.Type audioType = Utils.getAudioType(tempFileAifc, fileType);
             assertNotNull(audioType);
             assertEquals(AudioFileFormat.Type.AIFF, audioType);
         } catch (IOException e) {
