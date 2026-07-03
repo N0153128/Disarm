@@ -567,28 +567,28 @@ class UtilsTest {
     @Test
     void getBitrate_forAudio() {
         int bitrate = assertDoesNotThrow(() -> Utils.getBitrate(
-                DebugPaths.audioTestInputMp3, "audio", config));
+                DebugPaths.audioTestInputMp3, "audio"));
         assertNotEquals(0, bitrate);
     }
 
     @Test
     void getBitrate_forVideo() {
         int bitrate = assertDoesNotThrow(() -> Utils.getBitrate(
-                DebugPaths.videoTestInputMp4, "video", config));
+                DebugPaths.videoTestInputMp4, "video"));
         assertNotEquals(0, bitrate);
     }
 
     @Test
     void getBitrate_noneExistent() {
         assertThrows(EncoderException.class, () -> Utils.getBitrate(
-                tempDir.resolve("none.mp3"), "audio", config));
+                tempDir.resolve("none.mp3"), "audio"));
     }
 
     @Test
     void getBitrate_withEmptyMedia() {
         try {
             assertEquals(-1, Utils.getBitrate(
-                    DebugPaths.audioTestInputMp3, "", config));
+                    DebugPaths.audioTestInputMp3, ""));
         } catch (EncoderException | IOException e) {
             throw new RuntimeException(e);
         }
