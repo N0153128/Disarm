@@ -132,11 +132,11 @@ class UtilsTest {
     private void getFileTypeTest(String fileType, String mime){
         try {
             Path dummyFile = createDummyFile(mime);
-            state.setFileType(Utils.getFileType(dummyFile.toAbsolutePath()));
+            context.setFileType(Utils.getFileType(dummyFile.toAbsolutePath()));
 
-            assertNotNull(state.getFileType());
-            assertFalse(state.getFileType().isEmpty());
-            assertEquals(fileType, state.getFileType());
+            assertNotNull(context.getFileType());
+            assertFalse(context.getFileType().isEmpty());
+            assertEquals(fileType, context.getFileType());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -145,10 +145,10 @@ class UtilsTest {
     private void getMimeTypeTest(String mime, String expectedMime) {
         try {
             Path dummyFile = createDummyFile(mime);
-            state.setMime(Utils.getMimeType(dummyFile));
-            assertNotNull(state.getMime());
-            assertFalse(state.getMime().isEmpty());
-            assertEquals(expectedMime, state.getMime());
+            context.setMimeType(Utils.getMimeType(dummyFile));
+            assertNotNull(context.getMimeType());
+            assertFalse(context.getMimeType().isEmpty());
+            assertEquals(expectedMime, context.getMimeType());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -157,21 +157,25 @@ class UtilsTest {
     private void getMimeTypeTestUnsupported(String format, Class<? extends Throwable> exception) {
         Path dummyFile = createDummyFile(format);
         assertThrows(exception, () ->
-                state.setMime(Utils.getMimeType(dummyFile)));
+                context.setMimeType(Utils.getMimeType(dummyFile)));
     }
 
 
     private void getFileTypeTestUnsupported(String mime) {
         Path dummyFile = createDummyFile(mime);
         assertThrows(IllegalArgumentException.class, () ->
-                state.setFileType(Utils.getFileType(dummyFile.toAbsolutePath())));
+                context.setFileType(Utils.getFileType(dummyFile.toAbsolutePath())));
     }
 
     private void getAudioTypeTest(String mime, AudioFileFormat.Type audioFormat) {
-        Path dummyFile = createDummyFile(mime);
-        AudioFileFormat.Type audioType = Utils.getAudioType(dummyFile);
-        assertNotNull(audioType);
-        assertEquals(audioFormat, audioType);
+        try {
+            Path dummyFile = createDummyFile(mime);
+            AudioFileFormat.Type audioType = Utils.getAudioType(dummyFile, Utils.getFileType(dummyFile));
+            assertNotNull(audioType);
+            assertEquals(audioFormat, audioType);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
