@@ -79,12 +79,11 @@ class UtilsTest {
 
     @Test
     void getTitle() {
-        ("image");
+        context.setFileType("image");
         context.setMimeType("png");
 
-        Utils.getTitle(state, false);
+        String title = Utils.getTitle(createDummyFile(context.getMimeType()), context.getFileType(), false);
 
-        String title = state.getGeneralFileTitle();
         assertNotNull(title);
         assertFalse(title.isEmpty());
         assertTrue(title.matches("image_\\d+_\\d+_\\d+_\\d+_\\d+_\\d+_\\d+_\\d+\\.png"),
@@ -93,19 +92,28 @@ class UtilsTest {
 
     @Test
     void getTitle_withEmptyTypeAndMime() {
-        assertThrows(IllegalStateException.class, () -> Utils.getTitle(state, false));
+        assertThrows(IllegalStateException.class, () ->
+                Utils.getTitle(createDummyFile(""),
+                        "",
+                        false));
     }
 
     @Test
     void getTitle_withEmptyType() {
-        state.setMime("png");
-        assertThrows(IllegalStateException.class, () -> Utils.getTitle(state, false));
+        context.setMimeType("png");
+        assertThrows(IllegalStateException.class, () ->
+                Utils.getTitle(createDummyFile(context.getMimeType()),
+                        "",
+                        false));
     }
 
     @Test
     void getTitle_withEmptyMime() {
-        state.setFileType("image");
-        assertThrows(IllegalStateException.class, () -> Utils.getTitle(state, false));
+        context.setFileType("image");
+        assertThrows(IllegalStateException.class, () ->
+                Utils.getTitle(createDummyFile(""),
+                        context.getFileType(),
+                        false));
     }
 
     @Test
