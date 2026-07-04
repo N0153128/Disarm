@@ -3,6 +3,7 @@ package dev.n0153.app.plugins.audio;
 import dev.n0153.app.*;
 import dev.n0153.app.exceptions.MimeTypeDetectionException;
 import dev.n0153.app.exceptions.ValidationException;
+import dev.n0153.app.plugins.MediaUtils;
 import ws.schild.jave.EncoderException;
 
 import java.io.IOException;
@@ -28,7 +29,7 @@ public class AudioValidator implements MediaValidator {
      * @since 0.1
      */
     public boolean validateAudioDuration(Path osTargetPath) {
-        long audioDuration = Utils.getTrackLength(osTargetPath);
+        long audioDuration = MediaUtils.getTrackLength(osTargetPath);
         return audioDuration <= config.getMaxAudioDuration();
     }
 
@@ -91,14 +92,14 @@ public class AudioValidator implements MediaValidator {
         if (!validateAudioDuration(osTargetPath)) {
             throw new ValidationException("Audio Validator: Audio duration validation failed");
         }
-        if (!checkAudioCodecWhiteList(mime, Utils.getCodec(osTargetPath, "audio"))) {
+        if (!checkAudioCodecWhiteList(mime, MediaUtils.getCodec(osTargetPath, "audio"))) {
             throw new ValidationException("Audio Validator: Codec whitelist validation failed");
         }
         if (!ensureSizeLimit(osTargetPath)) {
             throw new ValidationException("Audio Validator: Size limit validation failed");
         }
         try {
-            if (!checkAudioBitrate(mime, Utils.getBitrate(osTargetPath, "audio"))) {
+            if (!checkAudioBitrate(mime, MediaUtils.getBitrate(osTargetPath, "audio"))) {
                 throw new ValidationException("Audio Validator: Bitrate validation failed");
             }
         } catch (EncoderException | IOException e) {

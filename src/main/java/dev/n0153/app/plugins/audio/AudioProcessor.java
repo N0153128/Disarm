@@ -7,6 +7,7 @@ import dev.n0153.app.Utils;
 import dev.n0153.app.exceptions.AudioProcessingException;
 import dev.n0153.app.exceptions.DisarmException;
 import dev.n0153.app.exceptions.MimeTypeDetectionException;
+import dev.n0153.app.plugins.MediaUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ws.schild.jave.Encoder;
@@ -15,6 +16,7 @@ import ws.schild.jave.MultimediaObject;
 import ws.schild.jave.encode.AudioAttributes;
 import ws.schild.jave.encode.EncodingAttributes;
 
+import javax.print.attribute.standard.Media;
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
@@ -75,7 +77,7 @@ public class AudioProcessor implements MediaProcessor<AudioConfig> {
             }
             AudioFileFormat.Type audioType;
             if (Objects.equals(Utils.getFileType(osTargetPath), "audio")) {
-                audioType = Utils.getAudioType(osTargetPath, config.getFormatFromMime(Utils.getMimeType(osTargetPath))); //REFACTOR THIS
+                audioType = AudioUtils.getAudioType(osTargetPath, config.getFormatFromMime(Utils.getMimeType(osTargetPath))); //REFACTOR THIS
             } else {
                 audioType = AudioFileFormat.Type.WAVE; // REFACTOR THIS
             }
@@ -156,13 +158,13 @@ public class AudioProcessor implements MediaProcessor<AudioConfig> {
         try {
             format = config.getFormatFromMime(Utils.getMimeType(osTargetPath));
             if (!Objects.equals(format, "flac")) {
-                context.setAudioBitrate(Utils.getBitrate(osTargetPath, "audio"));
+                context.setAudioBitrate(MediaUtils.getBitrate(osTargetPath, "audio"));
             }
             context.setAudioTitle(Utils.getTitle(osTargetPath,
                     config.getFormatFromMime(Utils.getMimeType(osTargetPath)),
                     false));
-            context.setAudioSamplingRate(Utils.getSamplingRate(osTargetPath));
-            context.setAudioChannels(Utils.getAudioChannels(osTargetPath));
+            context.setAudioSamplingRate(MediaUtils.getSamplingRate(osTargetPath));
+            context.setAudioChannels(MediaUtils.getAudioChannels(osTargetPath));
             reEncode(osTargetPath);
         } catch (IOException | EncoderException e) {
             throw new DisarmException("failed to process audio");
