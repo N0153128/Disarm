@@ -219,28 +219,4 @@ public class Utils {
         File file = osFilePath.toFile();
         return file.length();
     }
-
-    /**
-     * Returns dimensions (width, height) of a specified video file.
-     * @param osTargetPath Path to input file.
-     * @return Jave's VideoSize object, containing width and height.
-     * @throws EncoderException If failed to detect media.
-     * @since 0.1
-     */
-    public static VideoSize getVideoDimensions(Path osTargetPath) throws EncoderException {
-        MultimediaObject source = new MultimediaObject(osTargetPath.toFile());
-        return source.getInfo().getVideo().getSize();
-    }
-
-    /**
-     * Returns frame rate of a specified video file.
-     * @param osTargetPath Path to input file.
-     * @return Video frame rate.
-     * @throws EncoderException If failed to detect media.
-     * @since 0.1
-     */
-    public static int getVideoFrameRate(Path osTargetPath) throws EncoderException {
-        MultimediaObject source = new MultimediaObject(osTargetPath.toFile());
-        return (int) source.getInfo().getVideo().getFrameRate();
-    }
 }
