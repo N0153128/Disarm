@@ -160,7 +160,6 @@ class UtilsTest {
                 context.setMimeType(Utils.getMimeType(dummyFile)));
     }
 
-
     private void getFileTypeTestUnsupported(String mime) {
         Path dummyFile = createDummyFile(mime);
         assertThrows(IllegalArgumentException.class, () ->
