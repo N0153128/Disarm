@@ -166,17 +166,6 @@ class UtilsTest {
                 context.setFileType(Utils.getFileType(dummyFile.toAbsolutePath())));
     }
 
-    private void getAudioTypeTest(String mime, AudioFileFormat.Type audioFormat) {
-        try {
-            Path dummyFile = createDummyFile(mime);
-            AudioFileFormat.Type audioType = Utils.getAudioType(dummyFile, Utils.getFileType(dummyFile));
-            assertNotNull(audioType);
-            assertEquals(audioFormat, audioType);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @Test
     void getFileType_withImage() {
         getFileTypeTest("image", "png");
