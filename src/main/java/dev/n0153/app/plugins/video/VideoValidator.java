@@ -4,6 +4,7 @@ import dev.n0153.app.MediaValidator;
 import dev.n0153.app.Utils;
 import dev.n0153.app.exceptions.MimeTypeDetectionException;
 import dev.n0153.app.exceptions.ValidationException;
+import dev.n0153.app.plugins.MediaUtils;
 import ws.schild.jave.EncoderException;
 
 import java.io.IOException;
@@ -114,7 +115,7 @@ public class VideoValidator implements MediaValidator {
      * @since 0.1
      */
     public boolean validateVideoDuration(Path osTargetPath) {
-        long videoDuration = Utils.getTrackLength(osTargetPath);
+        long videoDuration = MediaUtils.getTrackLength(osTargetPath);
         return videoDuration <= config.getMaxVideoDuration();
     }
 
@@ -147,19 +148,19 @@ public class VideoValidator implements MediaValidator {
             throw new ValidationException("Video Validator: meta is empty");
         }
         try {
-            if (!checkAudioBitrateForVideo(format, Utils.getBitrate(osTargetPath, "audio"))) {
+            if (!checkAudioBitrateForVideo(format, MediaUtils.getBitrate(osTargetPath, "audio"))) {
                 throw new ValidationException("Video Validator: Audio bitrate validation failed");
             }
-            if (!checkAudioSampleRateForVideo(format, Utils.getSamplingRate(osTargetPath))) {
+            if (!checkAudioSampleRateForVideo(format, MediaUtils.getSamplingRate(osTargetPath))) {
                 throw new ValidationException("Video Validator: Audio sampling rate validation failed");
             }
         } catch (EncoderException | IOException e) {
             throw new ValidationException("Failed to detect bitrate");
         }
-        if (!checkVideoCodecWhiteList(format, Utils.getCodec(osTargetPath, "video"))) {
+        if (!checkVideoCodecWhiteList(format, MediaUtils.getCodec(osTargetPath, "video"))) {
             throw new ValidationException("Video Validator: Video codec validation failed");
         }
-        if (!checkAudioCodecWhiteListForVideo(format, Utils.getCodec(osTargetPath, "audio"))) {
+        if (!checkAudioCodecWhiteListForVideo(format, MediaUtils.getCodec(osTargetPath, "audio"))) {
             throw new ValidationException("Video Validator: Audio codec validation failed");
         }
         if (!validateVideoDuration(osTargetPath)) {

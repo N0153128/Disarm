@@ -1,8 +1,6 @@
 package dev.n0153.app.plugins.audio;
 
 import dev.n0153.app.MediaConfig;
-import dev.n0153.app.exceptions.ValidationException;
-
 import java.util.*;
 
 public class AudioConfig implements MediaConfig {

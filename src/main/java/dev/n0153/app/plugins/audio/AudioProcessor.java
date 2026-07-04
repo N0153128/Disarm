@@ -15,8 +15,6 @@ import ws.schild.jave.EncoderException;
 import ws.schild.jave.MultimediaObject;
 import ws.schild.jave.encode.AudioAttributes;
 import ws.schild.jave.encode.EncodingAttributes;
-
-import javax.print.attribute.standard.Media;
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;

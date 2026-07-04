@@ -3,7 +3,6 @@ package dev.n0153.app.plugins.video;
 import dev.n0153.app.MediaContext;
 import ws.schild.jave.info.VideoSize;
 
-import java.security.PublicKey;
 import java.util.HashMap;
 import java.util.Map;
 

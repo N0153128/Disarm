@@ -6,6 +6,7 @@ import dev.n0153.app.MediaProcessor;
 import dev.n0153.app.Utils;
 import dev.n0153.app.exceptions.DisarmException;
 import dev.n0153.app.exceptions.VideoProcessingException;
+import dev.n0153.app.plugins.MediaUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ws.schild.jave.Encoder;
@@ -95,16 +96,16 @@ public class VideoProcessor implements MediaProcessor<VideoConfig> {
             context.setVideoTitle(Utils.getTitle(osTargetPath,
                     config.getFormatFromMime(Utils.getMimeType(osTargetPath)),
                     false));
-            context.setVideoBitrate(Utils.getBitrate(osTargetPath, "video"));
-            context.setVideoFrameRate(Utils.getVideoFrameRate(osTargetPath));
-            context.setVideoSize(Utils.getVideoDimensions(osTargetPath));
-            context.setVideoCodec(Utils.getCodec(osTargetPath, "video"));
-            context.setAudioCodec(Utils.getCodec(osTargetPath, "audio"));
-            context.setAudioChannels(Utils.getAudioChannels(osTargetPath));
+            context.setVideoBitrate(MediaUtils.getBitrate(osTargetPath, "video"));
+            context.setVideoFrameRate(VideoUtils.getVideoFrameRate(osTargetPath));
+            context.setVideoSize(VideoUtils.getVideoDimensions(osTargetPath));
+            context.setVideoCodec(MediaUtils.getCodec(osTargetPath, "video"));
+            context.setAudioCodec(MediaUtils.getCodec(osTargetPath, "audio"));
+            context.setAudioChannels(MediaUtils.getAudioChannels(osTargetPath));
 
-            int audioBitrate = Utils.getBitrate(osTargetPath, "audio");
+            int audioBitrate = MediaUtils.getBitrate(osTargetPath, "audio");
             context.setAudioBitrate(audioBitrate > 0 ? audioBitrate : config.getOutputAudioBitrate());
-            context.setAudioSamplingRate(Utils.getSamplingRate(osTargetPath));
+            context.setAudioSamplingRate(MediaUtils.getSamplingRate(osTargetPath));
 
             reEncodeVideo(osTargetPath, format);
         } catch (IOException | EncoderException e) {
