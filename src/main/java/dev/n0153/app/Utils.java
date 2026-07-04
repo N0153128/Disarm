@@ -7,16 +7,12 @@ import ws.schild.jave.EncoderException;
 import ws.schild.jave.MultimediaObject;
 import ws.schild.jave.info.VideoSize;
 
-import javax.sound.sampled.AudioFileFormat;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -25,22 +21,6 @@ import java.util.Objects;
  */
 public class Utils {
     private static final Logger logger = LogManager.getLogger(Utils.class);
-
-    private static final Map<String, AudioFileFormat.Type> EXT_TO_TYPE = new HashMap<>();
-
-    static {
-        EXT_TO_TYPE.put("wav", AudioFileFormat.Type.WAVE);
-        EXT_TO_TYPE.put("wave", AudioFileFormat.Type.WAVE);
-        EXT_TO_TYPE.put("au", AudioFileFormat.Type.AU);
-        EXT_TO_TYPE.put("snd", AudioFileFormat.Type.SND);
-        EXT_TO_TYPE.put("aif", AudioFileFormat.Type.AIFF);
-        EXT_TO_TYPE.put("aiff", AudioFileFormat.Type.AIFF);
-        EXT_TO_TYPE.put("aifc", AudioFileFormat.Type.AIFC);
-    }
-
-    public static Map<String, AudioFileFormat.Type> getExtToType() {
-        return Collections.unmodifiableMap(EXT_TO_TYPE);
-    }
 
     /**
      * Shortcut method, generates title for a file that is currently in processing.
@@ -123,27 +103,6 @@ public class Utils {
         } catch (IOException e) {
             throw new FileTypeDetectionException("failed to detect file type", osTargetFile, e);
         }
-    }
-
-    /**
-     * Returns an appropriate AudioFileFormat.Type for specified audio file.
-     * @param osTargetFilePath Path to file.
-     * @return Specific AudioFileFormat.Type
-     * @throws AudioTypeDetectionException if specified file isn't an audio file.
-     * @since 0.1
-     */
-    public static AudioFileFormat.Type getAudioType(Path osTargetFilePath, String format) throws AudioTypeDetectionException {
-            if (format != null) {
-                AudioFileFormat.Type type = getExtToType().get(format.toLowerCase());
-                if (type != null) {
-                    return type;
-                }
-            } else {
-                logger.error("non-audio MIME type detected");
-            }
-        // Fallback to WAVE
-        logger.debug("Fallback to WAVE");
-        return AudioFileFormat.Type.WAVE;
     }
 
     /**
@@ -272,8 +231,6 @@ public class Utils {
         MultimediaObject source = new MultimediaObject(osTargetPath.toFile());
         return source.getInfo().getVideo().getSize();
     }
-
-
 
     /**
      * Returns frame rate of a specified video file.
