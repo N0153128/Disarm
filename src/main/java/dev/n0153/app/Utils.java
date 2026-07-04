@@ -3,9 +3,6 @@ package dev.n0153.app;
 import dev.n0153.app.exceptions.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ws.schild.jave.EncoderException;
-import ws.schild.jave.MultimediaObject;
-import ws.schild.jave.info.VideoSize;
 
 import java.io.File;
 import java.io.IOException;
