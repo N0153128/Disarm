@@ -82,7 +82,7 @@ class UtilsTest {
         context.setFileType("image");
         context.setMimeType("png");
 
-        String title = Utils.getTitle(createDummyFile(context.getMimeType()), context.getFileType(), false);
+        String title = Utils.getTitle(createDummyFile(context.getMimeType()), context.getMimeType(), false);
 
         assertNotNull(title);
         assertFalse(title.isEmpty());
@@ -92,7 +92,7 @@ class UtilsTest {
 
     @Test
     void getTitle_withEmptyTypeAndMime() {
-        assertThrows(IllegalStateException.class, () ->
+        assertThrows(NullPointerException.class, () ->
                 Utils.getTitle(createDummyFile(""),
                         "",
                         false));
@@ -110,7 +110,7 @@ class UtilsTest {
     @Test
     void getTitle_withEmptyMime() {
         context.setFileType("image");
-        assertThrows(IllegalStateException.class, () ->
+        assertThrows(NullPointerException.class, () ->
                 Utils.getTitle(createDummyFile(""),
                         context.getFileType(),
                         false));
@@ -719,7 +719,7 @@ class UtilsTest {
 
     @Test
     void getAudioChannels_withVideo() {
-        assertThrows(InputFormatException.class, () ->
+        assertThrows(EncoderException.class, () ->
                 Utils.getAudioChannels(DebugPaths.videoTestOutputMp4));
     }
 

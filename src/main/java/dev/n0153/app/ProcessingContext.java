@@ -207,7 +207,7 @@ public class ProcessingContext {
         if (newFileType.isEmpty()) {
             throw new IllegalArgumentException("File name cannot be empty");
         }
-        put(KEY_FILENAME, newFileType);
+        put(KEY_FILE_TYPE, newFileType);
     }
 
     public void setId(String newId) {

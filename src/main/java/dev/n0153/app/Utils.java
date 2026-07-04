@@ -49,7 +49,7 @@ public class Utils {
      * @param logo determines if file in processing is a logo or media file
      * @since 0.1
      */
-    public static String getTitle(Path osTargetPath, String format, boolean logo) {
+    public static String getTitle(Path osTargetPath, String mime, boolean logo) {
         LocalDateTime now = LocalDateTime.now();
         String day = String.valueOf(now.getDayOfMonth());
         String month = String.valueOf(now.getMonthValue());
@@ -72,7 +72,7 @@ public class Utils {
         String objectName = null;
         objectName = type+"_"+year+"_"+month+"_"+day+
                 "_"+hour+"_"+minute+"_"+second+
-                "_"+nanoSecond+"_"+milliSecond+"."+ format;
+                "_"+nanoSecond+"_"+milliSecond+"."+ mime;
         return objectName;
     }
 
