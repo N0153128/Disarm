@@ -160,12 +160,6 @@ class UtilsTest {
                 context.setMimeType(Utils.getMimeType(dummyFile)));
     }
 
-    private void getFileTypeTestUnsupported(String mime) {
-        Path dummyFile = createDummyFile(mime);
-        assertThrows(IllegalArgumentException.class, () ->
-                context.setFileType(Utils.getFileType(dummyFile.toAbsolutePath())));
-    }
-
     @Test
     void getFileType_withImage() {
         getFileTypeTest("image", "png");
@@ -187,18 +181,18 @@ class UtilsTest {
     }
 
     @Test
-    void getFileType_withUnsupportedPdf() {
-        getFileTypeTestUnsupported("pdf");
+    void getFileType_withPdf() {
+        getFileTypeTest("application","pdf");
     }
 
     @Test
-    void getFileType_withUnsupportedZip() {
-        getFileTypeTestUnsupported("zip");
+    void getFileType_withZip() {
+        getFileTypeTest("application", "zip");
     }
 
     @Test
-    void getFileType_withUnsupportedDocx() {
-        getFileTypeTestUnsupported("docx");
+    void getFileType_withDocx() {
+        getFileTypeTest("application", "docx");
     }
 
     @Test
