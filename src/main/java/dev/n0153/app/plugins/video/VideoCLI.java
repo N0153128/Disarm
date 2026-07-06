@@ -36,6 +36,9 @@ public class VideoCLI implements Runnable {
     @CommandLine.Option(names = {"-tacv", "--target-audio-codec-video"}, description = "Change target audio codec for video")
     private String targetAudioCodec;
 
+    @CommandLine.Option(names = {"-sav1", "--swap-av1"}, description = "Swap AV1 codec with a more performant. Accepted values: vp8 (default), vp9, av1")
+    private String swapAV1;
+
     @Override
     public void run() {
         if (maxVideoDuration > 0) {
@@ -52,6 +55,9 @@ public class VideoCLI implements Runnable {
         }
         if (targetAudioCodec != null && !targetAudioCodec.isEmpty()) {
             this.config.setOutputAudioCodec(targetAudioCodec);
+        }
+        if (swapAV1 != null) {
+            this.config.setSwapAV1(swapAV1);
         }
 
         registry.updateConfig("video", config);
