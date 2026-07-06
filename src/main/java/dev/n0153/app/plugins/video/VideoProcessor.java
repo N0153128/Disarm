@@ -108,7 +108,7 @@ public class VideoProcessor implements MediaProcessor<VideoConfig> {
             context.setVideoBitrate(MediaUtils.getBitrate(osTargetPath, "video"));
             context.setVideoFrameRate(VideoUtils.getVideoFrameRate(osTargetPath));
             context.setVideoSize(VideoUtils.getVideoDimensions(osTargetPath));
-            context.setVideoCodec(MediaUtils.getCodec(osTargetPath, "video"));
+            context.setVideoCodec(VideoUtils.getVideoCodec(osTargetPath, config.getSwapAV1()));
             context.setAudioCodec(MediaUtils.getCodec(osTargetPath, "audio"));
             context.setAudioChannels(MediaUtils.getAudioChannels(osTargetPath));
 
