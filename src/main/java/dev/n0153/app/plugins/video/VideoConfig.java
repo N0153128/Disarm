@@ -101,8 +101,8 @@ public class VideoConfig implements MediaConfig {
     private final int maxVideoWidth = 1920;
     private final int maxVideoHeight = 1080;
     private final int maxVideoFrameRate = 60;
-    private final String outputVideoCodec = "h264";
-    private final String outputAudioCodec = "aac";
+    private final String outputVideoCodec = "default";
+    private final String outputAudioCodec = "default";
     private final int outputVideoBitrate = 8_000_000;
     private final int outputAudioBitrate = 128_000;
     private final int outputSampleRate = 44_100;

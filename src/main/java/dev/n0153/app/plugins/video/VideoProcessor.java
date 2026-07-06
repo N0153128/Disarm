@@ -18,6 +18,7 @@ import ws.schild.jave.encode.VideoAttributes;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Objects;
 
 public class VideoProcessor implements MediaProcessor<VideoConfig> {
     private final VideoConfig config;
@@ -47,9 +48,17 @@ public class VideoProcessor implements MediaProcessor<VideoConfig> {
             Path outputPath = globalConfig.getGeneralOutputPath().resolve(context.getVideoTitle());
 
             VideoAttributes videoAttrs = new VideoAttributes();
-            videoAttrs.setCodec(context.getVideoCodec());
+            if (Objects.equals(config.getOutputVideoCodec(), "default")) {
+                videoAttrs.setCodec(context.getVideoCodec());
+            } else {
+                videoAttrs.setCodec(config.getOutputVideoCodec());
+            }
             AudioAttributes audioAttrs = new AudioAttributes();
-            audioAttrs.setCodec(context.getAudioCodec());
+            if (Objects.equals(config.getOutputAudioCodec(), "default")) {
+                audioAttrs.setCodec(context.getAudioCodec());
+            } else {
+                audioAttrs.setCodec(config.getOutputAudioCodec());
+            }
             EncodingAttributes attrs = setAttributes(audioAttrs, videoAttrs);
             attrs.setOutputFormat(format);
 
