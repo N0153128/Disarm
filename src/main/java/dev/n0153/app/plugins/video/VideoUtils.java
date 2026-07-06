@@ -1,6 +1,8 @@
 package dev.n0153.app.plugins.video;
 
 import dev.n0153.app.exceptions.CodecDetectionException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ws.schild.jave.EncoderException;
 import ws.schild.jave.MultimediaObject;
 import ws.schild.jave.info.MultimediaInfo;
@@ -8,6 +10,7 @@ import ws.schild.jave.info.VideoSize;
 import java.nio.file.Path;
 
 public class VideoUtils {
+    private static final Logger logger = LogManager.getLogger(VideoUtils.class);
     /**
      * Returns dimensions (width, height) of a specified video file.
      * @param osTargetPath Path to input file.
@@ -43,6 +46,9 @@ public class VideoUtils {
             }
             if ("av1".equals(codec)) {
                 codec = swapAV1;
+                if ("av1".equals(swapAV1)) {
+                    logger.warn("Using AV1 as default output codec");
+                }
             }
             return codec;
         } catch (EncoderException e) {
