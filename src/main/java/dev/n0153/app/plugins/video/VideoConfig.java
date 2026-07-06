@@ -326,7 +326,12 @@ public class VideoConfig implements MediaConfig {
     //setters
 
     public void setSwapAV1(String newSwapAV1) {
-        put(KEY_SWAP_AV1, newSwapAV1);
+        List<String> allowedCodecs = List.of("av1", "vp8", "vp9");
+        if (allowedCodecs.contains(newSwapAV1)) {
+            put(KEY_SWAP_AV1, newSwapAV1);
+        } else {
+            throw new IllegalArgumentException("Unsupported codec provided:" + newSwapAV1);
+        }
     }
 
     public void setDefaultOutputTo(String newDefaultOutputTo) {
