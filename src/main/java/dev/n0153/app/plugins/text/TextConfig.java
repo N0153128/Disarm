@@ -107,22 +107,46 @@ public class TextConfig implements MediaConfig {
     }
 
     public void setMaxTextSize(int newMaxTextSize) {
+        if (newMaxTextSize < 0) {
+            throw new IllegalArgumentException("Max text size cannot be less than zero");
+        }
+        if (newMaxTextSize == 0) {
+            throw new IllegalArgumentException("Max text size cannot be zero");
+        }
         put(KEY_MAX_TEXT_SIZE, newMaxTextSize);
     }
 
     public void setUrlSchemes(String[] newUrlSchemes) {
+        if (newUrlSchemes == null) {
+            throw new IllegalArgumentException("URL schemes array cannot be null");
+        }
+        if (newUrlSchemes.length == 0) {
+            throw new IllegalArgumentException("URL schemes array cannot be empty");
+        }
         put(KEY_URL_SCHEMES, newUrlSchemes);
     }
 
     public void setZeroLengthChars(Set<Character> newZeroLengthChars) {
+        if (newZeroLengthChars == null) {
+            throw new IllegalArgumentException("URL schemes array cannot be null");
+        }
+        if (newZeroLengthChars.isEmpty()) {
+            throw new IllegalArgumentException("URL schemes array cannot be empty");
+        }
         put(KEY_ZERO_LENGTH_CHARS, newZeroLengthChars);
     }
 
     public void setNormalizeForm(Normalizer.Form newNormalizeForm) {
+        if (newNormalizeForm == null) {
+            throw new IllegalArgumentException("Normalization form cannot be null");
+        }
         put(KEY_NORMALIZE_FORM, newNormalizeForm);
     }
 
     public void setOutputEncoding(Charset newOutputEncoding) {
+        if (newOutputEncoding == null) {
+            throw new IllegalArgumentException("Output encoding cannot be null");
+        }
         put(KEY_OUTPUT_ENCODING, newOutputEncoding);
     }
 }
