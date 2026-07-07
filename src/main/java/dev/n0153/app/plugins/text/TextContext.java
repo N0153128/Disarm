@@ -66,14 +66,29 @@ public class TextContext implements MediaContext {
     }
 
     public void setTextContent(String newTextContent) {
+        if (newTextContent == null) {
+            throw new IllegalArgumentException("Text content cannot be null");
+        }
         put(KEY_TEXT_CONTENT, newTextContent);
     }
 
     public void setTextTitle(String newTextTitle) {
+        if (newTextTitle == null) {
+            throw new IllegalArgumentException("Text title cannot be null");
+        }
+        if (newTextTitle.isEmpty()) {
+            throw new IllegalArgumentException("Text title cannot be empty");
+        }
         put(KEY_TEXT_TITLE, newTextTitle);
     }
 
     public void setDetectedEncoding(String newDetectedEncoding) {
+        if (newDetectedEncoding == null) {
+            throw new IllegalArgumentException("Text encoding cannot be null");
+        }
+        if (newDetectedEncoding.isEmpty()) {
+            throw new IllegalArgumentException("Text encoding cannot be empty");
+        }
         put(KEY_DETECTED_ENCODING, newDetectedEncoding);
     }
 
@@ -82,6 +97,12 @@ public class TextContext implements MediaContext {
     }
 
     public void setRawBytes(byte[] newRawBytes) {
+        if (newRawBytes == null) {
+            throw new IllegalArgumentException("Text raw bytes cannot be null");
+        }
+        if (newRawBytes.length == 0) {
+            throw new IllegalArgumentException("Text raw bytes cannot be empty");
+        }
         put(KEY_RAW_BYTES, newRawBytes);
     }
 }
