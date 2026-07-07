@@ -81,30 +81,72 @@ public class AudioContext implements MediaContext {
 
     //setters
     public void setAudioTitle(String newAudioTitle) {
+        if (newAudioTitle == null) {
+            throw new IllegalArgumentException("Audio title cannot be null");
+        }
+        if (newAudioTitle.isEmpty()) {
+            throw new IllegalArgumentException("Audio title cannot be empty");
+        }
         put(KEY_AUDIO_TITLE, newAudioTitle);
     }
 
     public void setAudioCodec(String newAudioCodec) {
+        if (newAudioCodec == null) {
+            throw new IllegalArgumentException("Audio codec cannot be null");
+        }
+        if (newAudioCodec.isEmpty()) {
+            throw new IllegalArgumentException("Audio codec cannot be empty");
+        }
         put(KEY_AUDIO_CODEC, newAudioCodec);
     }
 
     public void setAudioBitrate(int newAudioBitrate) {
+        if (newAudioBitrate < 0) {
+            throw new IllegalArgumentException("Audio bitrate cannot be less than zero");
+        }
+        if (newAudioBitrate == 0) {
+            throw new IllegalArgumentException("Audio bitrate cannot be zero");
+        }
         put(KEY_AUDIO_BITRATE, newAudioBitrate);
     }
 
     public void setAudioSamplingRate(int newAudioSamplingRate) {
+        if (newAudioSamplingRate < 0) {
+            throw new IllegalArgumentException("Audio sampling rate cannot be less than zero");
+        }
+        if (newAudioSamplingRate == 0) {
+            throw new IllegalArgumentException("Audio sampling rate cannot be zero");
+        }
         put(KEY_AUDIO_SAMPLING_RATE, newAudioSamplingRate);
     }
 
     public void setAudioChannels(int newAudioChannels) {
+        if (newAudioChannels < 0) {
+            throw new IllegalArgumentException("Audio channels cannot be less than zero");
+        }
+        if (newAudioChannels == 0) {
+            throw new IllegalArgumentException("Audio channels cannot be zero");
+        }
         put(KEY_AUDIO_CHANNELS, newAudioChannels);
     }
 
     public void setDetectedMime(String newDetectedMime) {
+        if (newDetectedMime == null) {
+            throw new IllegalArgumentException("Mime type cannot be null");
+        }
+        if (newDetectedMime.isEmpty()) {
+            throw new IllegalArgumentException("Mime type cannot be empty");
+        }
         put(KEY_DETECTED_MIME, newDetectedMime);
     }
 
     public void setTrackLength(int newTrackLength) {
+        if (newTrackLength < 0) {
+            throw new IllegalArgumentException("Audio track length cannot be less than zero");
+        }
+        if (newTrackLength == 0) {
+            throw new IllegalArgumentException("Audio track length cannot be zero");
+        }
         put(KEY_TRACK_LENGTH, newTrackLength);
     }
 
