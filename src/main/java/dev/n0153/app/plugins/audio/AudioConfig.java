@@ -258,15 +258,39 @@ public class AudioConfig implements MediaConfig {
     }
 
     public void setMaxFileSize(int newMaxFileSize) {
+        if (newMaxFileSize < 0) {
+            throw new IllegalArgumentException("Max file size cannot be less than zero");
+        }
+        if (newMaxFileSize == 0) {
+            throw new IllegalArgumentException("Max file size cannot be zero");
+        }
         put(KEY_MAX_FILE_SIZE, newMaxFileSize);
     }
 
     public void setMaxAudioDuration(int newMaxAudioDuration) {
+        if (newMaxAudioDuration < 0) {
+            throw new IllegalArgumentException("Max audio duration cannot be less than zero");
+        }
+        if (newMaxAudioDuration == 0) {
+            throw new IllegalArgumentException("Max audio duration cannot be zero");
+        }
         put(KEY_MAX_AUDIO_DURATION, newMaxAudioDuration);
     }
 
     @SuppressWarnings("unchecked")
     public void setMaxBitrates(String format, int newMaxBitrates) {
+        if (newMaxBitrates < 0) {
+            throw new IllegalArgumentException("Max audio bitrate cannot be less than zero");
+        }
+        if (newMaxBitrates == 0) {
+            throw new IllegalArgumentException("Max audio bitrate cannot be zero");
+        }
+        if (format == null) {
+            throw new IllegalArgumentException("Format cannot be null");
+        }
+        if (format.isEmpty()) {
+            throw new IllegalArgumentException("Format cannot be empty");
+        }
         Map<String, Integer> rates = get(KEY_MAX_BITRATES, Map.class);
         if (rates == null) {
             rates = new HashMap<>(maxBitrates);
@@ -277,6 +301,18 @@ public class AudioConfig implements MediaConfig {
 
     @SuppressWarnings("unchecked")
     public void setMaxSampleRates(String format, int newMaxSampleRates) {
+        if (newMaxSampleRates < 0) {
+            throw new IllegalArgumentException("Max audio sampling rate cannot be less than zero");
+        }
+        if (newMaxSampleRates == 0) {
+            throw new IllegalArgumentException("Max audio sampling rate cannot be zero");
+        }
+        if (format == null) {
+            throw new IllegalArgumentException("Format cannot be null");
+        }
+        if (format.isEmpty()) {
+            throw new IllegalArgumentException("Format cannot be empty");
+        }
         Map<String, Integer> rates = get(KEY_MAX_SAMPLE_RATES, Map.class);
         if (rates == null) {
             rates = new HashMap<>(maxSampleRates);
@@ -286,25 +322,61 @@ public class AudioConfig implements MediaConfig {
     }
 
     public void setMaxChannels(int newMaxChannels) {
+        if (newMaxChannels < 0) {
+            throw new IllegalArgumentException("Max audio channels cannot be less than zero");
+        }
+        if (newMaxChannels == 0) {
+            throw new IllegalArgumentException("Max audio channels cannot be zero");
+        }
         put(KEY_MAX_CHANNELS, newMaxChannels);
     }
 
     public void setBitrateFallback(int newBitrateFallback) {
+        if (newBitrateFallback < 0) {
+            throw new IllegalArgumentException("Max audio channels cannot be less than zero");
+        }
+        if (newBitrateFallback == 0) {
+            throw new IllegalArgumentException("Max audio channels cannot be zero");
+        }
         put(KEY_BITRATE_FALLBACK, newBitrateFallback);
     }
 
     public void setSamplingRateFallback(int newSamplingRateFallback) {
+        if (newSamplingRateFallback < 0) {
+            throw new IllegalArgumentException("Sampling rate fallback cannot be less than zero");
+        }
+        if (newSamplingRateFallback == 0) {
+            throw new IllegalArgumentException("Sampling rate fallback cannot be zero");
+        }
         put(KEY_SAMPLING_RATE_FALLBACK, newSamplingRateFallback);
     }
 
     public void setOutputBitrate(int newOutputBitrate) {
+        if (newOutputBitrate < 0) {
+            throw new IllegalArgumentException("Output bitrate cannot be less than zero");
+        }
+        if (newOutputBitrate == 0) {
+            throw new IllegalArgumentException("Output bitrate cannot be zero");
+        }
         put(KEY_OUTPUT_BITRATE, newOutputBitrate);
     }
 
     public void setOutputSampleRate(int newOutputSampleRate) {
+        if (newOutputSampleRate < 0) {
+            throw new IllegalArgumentException("Output sampling rate cannot be less than zero");
+        }
+        if (newOutputSampleRate == 0) {
+            throw new IllegalArgumentException("Output sampling rate cannot be zero");
+        }
         put(KEY_OUTPUT_SAMPLE_RATE, newOutputSampleRate);
     }
     public void setOutputChannels(int newOutputChannels) {
+        if (newOutputChannels < 0) {
+            throw new IllegalArgumentException("Output channels cannot be less than zero");
+        }
+        if (newOutputChannels == 0) {
+            throw new IllegalArgumentException("Output channels cannot be zero");
+        }
         put(KEY_OUTPUT_CHANNELS, newOutputChannels);
     }
 }
