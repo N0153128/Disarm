@@ -202,10 +202,13 @@ public class ProcessingContext {
 
     public void setFileType(String newFileType) {
         if (newFileType == null) {
-            throw new IllegalArgumentException("File name cannot be null");
+            throw new IllegalArgumentException("File type cannot be null");
         }
         if (newFileType.isEmpty()) {
-            throw new IllegalArgumentException("File name cannot be empty");
+            throw new IllegalArgumentException("File type cannot be empty");
+        }
+        if (newFileType.length() > 11) {
+            throw new IllegalArgumentException("File type is too long");
         }
         put(KEY_FILE_TYPE, newFileType);
     }
