@@ -345,11 +345,29 @@ public class VideoConfig implements MediaConfig {
     }
 
     public void setMaxVideoDuration(int newMaxVideoDuration) {
+        if (newMaxVideoDuration < 0) {
+            throw new IllegalArgumentException("Max video duration cannot be less than zero");
+        }
+        if (newMaxVideoDuration == 0) {
+            throw new IllegalArgumentException("Max video duration cannot be zero");
+        }
         put(KEY_MAX_VIDEO_DURATION, newMaxVideoDuration);
     }
 
     @SuppressWarnings("unchecked")
     public void setMaxFileSize(String format, int newMaxFileSize) {
+        if (newMaxFileSize < 0) {
+            throw new IllegalArgumentException("Max file size cannot be less than zero");
+        }
+        if (newMaxFileSize == 0) {
+            throw new IllegalArgumentException("Max file size cannot be zero");
+        }
+        if (format == null) {
+            throw new IllegalArgumentException("Format cannot be null");
+        }
+        if (format.isEmpty()) {
+            throw new IllegalArgumentException("Format cannot be empty");
+        }
         Map<String, Integer> rates = get(KEY_MAX_FILE_SIZE, Map.class);
         if (rates == null) {
             rates = new HashMap<>(maxFileSize);
@@ -359,6 +377,18 @@ public class VideoConfig implements MediaConfig {
     }
 
     public void setMaxVideoBitrate(String format, int newMaxVideoBitrate) {
+        if (newMaxVideoBitrate < 0) {
+            throw new IllegalArgumentException("Max video bitrate cannot be less than zero");
+        }
+        if (newMaxVideoBitrate == 0) {
+            throw new IllegalArgumentException("Max video bitrate cannot be zero");
+        }
+        if (format == null) {
+            throw new IllegalArgumentException("Format cannot be null");
+        }
+        if (format.isEmpty()) {
+            throw new IllegalArgumentException("Format cannot be empty");
+        }
         Map<String, Integer> rates = get(KEY_MAX_VIDEO_BITRATE, Map.class);
         if (rates == null) {
             rates = new HashMap<>(maxVideoBitrates);
@@ -368,6 +398,18 @@ public class VideoConfig implements MediaConfig {
     }
 
     public void setMaxAudioBitrate(String format, int newMaxAudioBitrate) {
+        if (newMaxAudioBitrate < 0) {
+            throw new IllegalArgumentException("Max audio bitrate cannot be less than zero");
+        }
+        if (newMaxAudioBitrate == 0) {
+            throw new IllegalArgumentException("Max audio bitrate cannot be zero");
+        }
+        if (format == null) {
+            throw new IllegalArgumentException("Format cannot be null");
+        }
+        if (format.isEmpty()) {
+            throw new IllegalArgumentException("Format cannot be empty");
+        }
         Map<String, Integer> rates = get(KEY_MAX_AUDIO_BITRATE, Map.class);
         if (rates == null) {
             rates = new HashMap<>(maxAudioBitrates);
@@ -377,6 +419,18 @@ public class VideoConfig implements MediaConfig {
     }
 
     public void setMaxSampleRate(String format, int newMaxSampleRate) {
+        if (newMaxSampleRate < 0) {
+            throw new IllegalArgumentException("Max audio sampling rate cannot be less than zero");
+        }
+        if (newMaxSampleRate == 0) {
+            throw new IllegalArgumentException("Max audio sampling rate cannot be zero");
+        }
+        if (format == null) {
+            throw new IllegalArgumentException("Format cannot be null");
+        }
+        if (format.isEmpty()) {
+            throw new IllegalArgumentException("Format cannot be empty");
+        }
         Map<String, Integer> rates = get(KEY_MAX_SAMPLE_RATE, Map.class);
         if (rates == null) {
             rates = new HashMap<>(maxSampleRates);
@@ -386,42 +440,102 @@ public class VideoConfig implements MediaConfig {
     }
 
     public void setMaxVideoWidth(int newMaxVideoWidth) {
+        if (newMaxVideoWidth < 0) {
+            throw new IllegalArgumentException("Max video width cannot be less than zero");
+        }
+        if (newMaxVideoWidth == 0) {
+            throw new IllegalArgumentException("Max video width cannot be zero");
+        }
         put(KEY_MAX_VIDEO_WIDTH, newMaxVideoWidth);
     }
 
     public void setMaxVideoHeight(int newMaxVideoHeight) {
+        if (newMaxVideoHeight < 0) {
+            throw new IllegalArgumentException("Max video height cannot be less than zero");
+        }
+        if (newMaxVideoHeight == 0) {
+            throw new IllegalArgumentException("Max video height cannot be zero");
+        }
         put(KEY_MAX_VIDEO_HEIGHT, newMaxVideoHeight);
     }
 
     public void setMaxVideoFrameRate(int newMaxVideoFrameRate) {
+        if (newMaxVideoFrameRate < 0) {
+            throw new IllegalArgumentException("Max video frame rate cannot be less than zero");
+        }
+        if (newMaxVideoFrameRate == 0) {
+            throw new IllegalArgumentException("Max video frame rate cannot be zero");
+        }
         put(KEY_MAX_VIDEO_FRAME_RATE, newMaxVideoFrameRate);
     }
 
     public void setOutputVideoCodec(String newOutputVideoCodec) {
+        if (newOutputVideoCodec == null) {
+            throw new IllegalArgumentException("Output video codec cannot be null");
+        }
+        if (newOutputVideoCodec.isEmpty()) {
+            throw new IllegalArgumentException("Output video codec cannot be empty");
+        }
         put(KEY_OUTPUT_VIDEO_CODEC, newOutputVideoCodec);
     }
 
     public void setOutputAudioCodec(String newOutputAudioCodec) {
+        if (newOutputAudioCodec == null) {
+            throw new IllegalArgumentException("Output audio codec cannot be null");
+        }
+        if (newOutputAudioCodec.isEmpty()) {
+            throw new IllegalArgumentException("Output audio codec cannot be empty");
+        }
         put(KEY_OUTPUT_AUDIO_CODEC, newOutputAudioCodec);
     }
 
     public void setOutputVideoBitrate(int newOutputVideoBitrate) {
+        if (newOutputVideoBitrate < 0) {
+            throw new IllegalArgumentException("Output video bitrate cannot be less than zero");
+        }
+        if (newOutputVideoBitrate == 0) {
+            throw new IllegalArgumentException("Output video bitrate cannot be zero");
+        }
         put(KEY_OUTPUT_VIDEO_BITRATE, newOutputVideoBitrate);
     }
 
     public void setOutputAudioBitrate(int newOutputAudioBitrate) {
+        if (newOutputAudioBitrate < 0) {
+            throw new IllegalArgumentException("Output audio bitrate cannot be less than zero");
+        }
+        if (newOutputAudioBitrate == 0) {
+            throw new IllegalArgumentException("Output audio bitrate cannot be zero");
+        }
         put(KEY_OUTPUT_AUDIO_BITRATE, newOutputAudioBitrate);
     }
 
     public void setOutputSampleRate(int newOutputSampleRate) {
+        if (newOutputSampleRate < 0) {
+            throw new IllegalArgumentException("Output audio sampling rate cannot be less than zero");
+        }
+        if (newOutputSampleRate == 0) {
+            throw new IllegalArgumentException("Output audio sampling rate cannot be zero");
+        }
         put(KEY_OUTPUT_SAMPLING_RATE, newOutputSampleRate);
     }
 
     public void setOutputChannels(int newOutputChannels) {
+        if (newOutputChannels < 0) {
+            throw new IllegalArgumentException("Output audio channels cannot be less than zero");
+        }
+        if (newOutputChannels == 0) {
+            throw new IllegalArgumentException("Output audio channels cannot be zero");
+        }
         put(KEY_OUTPUT_CHANNELS, newOutputChannels);
     }
 
     public void setOutputFrameRate(int newOutputFrameRate) {
+        if (newOutputFrameRate < 0) {
+            throw new IllegalArgumentException("Output video frame rate cannot be less than zero");
+        }
+        if (newOutputFrameRate == 0) {
+            throw new IllegalArgumentException("Output video frame rate cannot be zero");
+        }
         put(KEY_OUTPUT_FRAME_RATE, newOutputFrameRate);
     }
 
