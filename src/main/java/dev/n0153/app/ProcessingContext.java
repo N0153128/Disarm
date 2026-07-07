@@ -117,6 +117,9 @@ public class ProcessingContext {
     // setters
 
     public void setConfigSnapshot(MediaConfig newConfigSnapshot) {
+        if (newConfigSnapshot == null) {
+            throw new IllegalArgumentException("Config snapshot cannot be null");
+        }
         put(KEY_CONFIG_SNAPSHOT, newConfigSnapshot);
     }
 
@@ -160,6 +163,9 @@ public class ProcessingContext {
     public void setResolvedPlugin(String newResolvedPlugin) {
         if (newResolvedPlugin == null) {
             throw new IllegalArgumentException("Resolved plugin title cannot be null");
+        }
+        if (newResolvedPlugin.isEmpty()) {
+            throw new IllegalArgumentException("Resolved plugin title cannot be empty");
         }
         put(KEY_RESOLVED_PLUGIN, newResolvedPlugin);
     }
@@ -207,7 +213,7 @@ public class ProcessingContext {
         if (newFileType.isEmpty()) {
             throw new IllegalArgumentException("File type cannot be empty");
         }
-        if (newFileType.length() > 11) {
+        if (newFileType.length() > 11) { // "application" is the longest file type I can think of
             throw new IllegalArgumentException("File type is too long");
         }
         put(KEY_FILE_TYPE, newFileType);
