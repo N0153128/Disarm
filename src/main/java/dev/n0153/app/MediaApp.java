@@ -1,9 +1,6 @@
 package dev.n0153.app;
 
-import dev.n0153.app.exceptions.FileDeletionException;
-import dev.n0153.app.exceptions.FileTypeDetectionException;
-import dev.n0153.app.exceptions.MimeTypeDetectionException;
-import dev.n0153.app.exceptions.ValidationException;
+import dev.n0153.app.exceptions.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -66,6 +63,15 @@ public class MediaApp {
 
             // process input
             getProcessor(plugin, mediaConfig).process(osTargetPath);
+        } catch (DisarmException e) {
+            if (globalConfig.getSkipUnsupported()) {
+                logger.warn("Skipped [{}] - {}: {}",
+                        osTargetPath.getFileName(),
+                        e.getClass().getSimpleName(),
+                        e.getMessage());
+            } else {
+                throw new RuntimeException(e);
+            }
         } catch (MimeTypeDetectionException | FileTypeDetectionException e) {
             throw new RuntimeException(e);
         }
