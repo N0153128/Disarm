@@ -17,6 +17,7 @@ public class GlobalConfig {
     private final int IDLength = 150;
     private final int mimeLength = 10;
     private final boolean benchmarking = false;
+    private final boolean skipUnsupported = false;
 
     private final String KEY_GENERAL_SIZE_LIMIT = "generalSizeLimit";
     private final String KEY_KEEP_INPUTS = "keepInputs";
@@ -28,6 +29,7 @@ public class GlobalConfig {
     private final String KEY_ID_LENGTH = "IDLength";
     private final String KEY_MIME_LENGTH = "mimeLength";
     private final String KEY_BENCHMARKING = "benchmarking";
+    private final String KEY_SKIP_UNSUPPORTED = "skipUnsupported";
 
     private final Map<String, Object> globalConfigStorage = new HashMap<>() {{
         put(KEY_GENERAL_SIZE_LIMIT, generalSizeLimit);
@@ -40,6 +42,7 @@ public class GlobalConfig {
         put(KEY_ID_LENGTH, IDLength);
         put(KEY_MIME_LENGTH, mimeLength);
         put(KEY_BENCHMARKING, benchmarking);
+        put(KEY_SKIP_UNSUPPORTED, skipUnsupported);
     }};
 
     public void put(String key, Object value) {
@@ -51,6 +54,12 @@ public class GlobalConfig {
 
     public <$ValueType> $ValueType get(String key, Class<$ValueType> type) {
         return type.cast(globalConfigStorage.get(key));
+    }
+
+    public boolean getSkipUnsupported() {
+        return Objects.requireNonNullElse(
+                get(KEY_SKIP_UNSUPPORTED, Boolean.class),
+                skipUnsupported);
     }
 
     public boolean getBenchmarking() {
@@ -117,6 +126,10 @@ public class GlobalConfig {
                 get(KEY_GENERAL_SIZE_LIMIT, Integer.class),
                 generalSizeLimit
         );
+    }
+
+    public void setSkipUnsupported(boolean newSkipUnsupported) {
+        put(KEY_SKIP_UNSUPPORTED, newSkipUnsupported);
     }
 
     public void setBenchmarking(boolean newBenchmarking) {
