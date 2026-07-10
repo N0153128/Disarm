@@ -35,7 +35,6 @@ public class MediaApp {
     }
 
     private void processFile(Path osTargetPath) {
-        logger.info("Skip unsupported: {}",globalConfig.getSkipUnsupported());
         try {
             // populate context
             String mime = Utils.getMimeType(osTargetPath);
@@ -64,11 +63,16 @@ public class MediaApp {
 
             // process input
             getProcessor(plugin, mediaConfig).process(osTargetPath);
-        } catch (MimeTypeDetectionException | FileTypeDetectionException e) {
-            throw new RuntimeException(e);
         } catch (DisarmException e) {
-            if (globalConfig.getSkipUnsupported()) {
-                logger.warn("Skipped [{}] - {}: {}",
+            boolean isUnsupported = e instanceof UnsupportedFileTypeException
+                    || e instanceof UnsupportedFormatException;
+            if (isUnsupported && globalConfig.getSkipUnsupported()) {
+                logger.warn("Skipped unsupported [{}] - {}: {}",
+                        osTargetPath.getFileName(),
+                        e.getClass().getSimpleName(),
+                        e.getMessage());
+            } else if (!isUnsupported && globalConfig.getSkipCrashed()){
+                logger.warn("Skipped crashed [{}] - {}: {}",
                         osTargetPath.getFileName(),
                         e.getClass().getSimpleName(),
                         e.getMessage());

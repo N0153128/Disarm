@@ -1,6 +1,7 @@
 package dev.n0153.app;
 
 import dev.n0153.app.exceptions.CodecDetectionException;
+import dev.n0153.app.exceptions.DisarmException;
 import dev.n0153.app.exceptions.DurationFormattingException;
 import dev.n0153.app.exceptions.ValidationException;
 import dev.n0153.app.plugins.MediaUtils;
@@ -84,7 +85,7 @@ public class AudioUtilsTest {
             AudioFileFormat.Type audioType = AudioUtils.getAudioType(dummyFile, Utils.getFileType(dummyFile));
             assertNotNull(audioType);
             assertEquals(audioFormat, audioType);
-        } catch (IOException e) {
+        } catch (DisarmException e) {
             throw new RuntimeException(e);
         }
     }

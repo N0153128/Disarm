@@ -137,7 +137,7 @@ class UtilsTest {
             assertNotNull(context.getFileType());
             assertFalse(context.getFileType().isEmpty());
             assertEquals(fileType, context.getFileType());
-        } catch (IOException e) {
+        } catch (DisarmException e) {
             throw new RuntimeException(e);
         }
     }
@@ -149,7 +149,7 @@ class UtilsTest {
             assertNotNull(context.getMimeType());
             assertFalse(context.getMimeType().isEmpty());
             assertEquals(expectedMime, context.getMimeType());
-        } catch (IOException e) {
+        } catch (DisarmException e) {
             throw new RuntimeException(e);
         }
     }
@@ -292,7 +292,7 @@ class UtilsTest {
             } else {
                 assertFalse(Utils.isImage(dummyFile));
             }
-        } catch (IOException e) {
+        } catch (DisarmException e) {
             throw new RuntimeException(e);
         }
     }
@@ -327,7 +327,7 @@ class UtilsTest {
             } else {
                 assertFalse(Utils.isAudio(dummyFile));
             }
-        } catch (IOException e) {
+        } catch (DisarmException e) {
             throw new RuntimeException(e);
         }
     }
@@ -362,7 +362,7 @@ class UtilsTest {
             } else {
                 assertFalse(Utils.isVideo(dummyFile));
             }
-        } catch (IOException e) {
+        } catch (DisarmException e) {
             throw new RuntimeException(e);
         }
     }
@@ -397,7 +397,7 @@ class UtilsTest {
             } else {
                 assertFalse(Utils.isText(dummyFile));
             }
-        } catch (IOException e) {
+        } catch (DisarmException e) {
             throw new RuntimeException(e);
         }
     }
