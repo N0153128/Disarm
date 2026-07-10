@@ -64,6 +64,8 @@ public class MediaApp {
 
             // process input
             getProcessor(plugin, mediaConfig).process(osTargetPath);
+        } catch (MimeTypeDetectionException | FileTypeDetectionException e) {
+            throw new RuntimeException(e);
         } catch (DisarmException e) {
             if (globalConfig.getSkipUnsupported()) {
                 logger.warn("Skipped [{}] - {}: {}",
@@ -73,8 +75,6 @@ public class MediaApp {
             } else {
                 throw new RuntimeException(e);
             }
-        } catch (MimeTypeDetectionException | FileTypeDetectionException e) {
-            throw new RuntimeException(e);
         }
     }
 

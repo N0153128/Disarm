@@ -3,7 +3,7 @@ package dev.n0153.app.exceptions;
 import java.io.IOException;
 import java.nio.file.Path;
 
-public class TextDataSaveException extends IOException {
+public class TextDataSaveException extends DisarmException {
 
     private final Path pathToFile;
 

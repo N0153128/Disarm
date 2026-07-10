@@ -2,7 +2,7 @@ package dev.n0153.app.exceptions;
 
 import java.nio.file.Path;
 
-public class CodecDetectionException extends RuntimeException {
+public class CodecDetectionException extends DisarmException {
 
     private final Path pathToFile;
 

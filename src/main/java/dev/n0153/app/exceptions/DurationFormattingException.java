@@ -1,6 +1,6 @@
 package dev.n0153.app.exceptions;
 
-public class DurationFormattingException extends RuntimeException {
+public class DurationFormattingException extends DisarmException {
 
     private final String detectedString;
 

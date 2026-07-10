@@ -3,7 +3,7 @@ package dev.n0153.app.exceptions;
 import java.io.IOException;
 import java.nio.file.Path;
 
-public class EncodingValidationException extends IOException {
+public class EncodingValidationException extends DisarmException {
 
     private final Path pathToFile;
 

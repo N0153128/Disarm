@@ -3,7 +3,7 @@ package dev.n0153.app.exceptions;
 import java.io.IOException;
 import java.nio.file.Path;
 
-public class FileRenameException extends IOException {
+public class FileRenameException extends DisarmException {
 
     private final Path pathToFile;
 

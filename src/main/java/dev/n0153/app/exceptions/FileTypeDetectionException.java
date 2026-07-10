@@ -1,9 +1,8 @@
 package dev.n0153.app.exceptions;
 
-import java.io.IOException;
 import java.nio.file.Path;
 
-public class FileTypeDetectionException extends IOException {
+public class FileTypeDetectionException extends DisarmException {
 
     private final Path pathToFile;
 
