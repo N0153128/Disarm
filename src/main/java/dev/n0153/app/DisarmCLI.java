@@ -36,6 +36,9 @@ public class DisarmCLI implements Runnable{
     @CommandLine.Option(names = {"-do", "--delete-original"}, negatable = true, description = "delete the original file after disarming")
     private boolean deleteOriginal;
 
+    @CommandLine.Option(names = {"-su", "--skip-unsupported"}, description = "Skip unsupported files")
+    private boolean skipUnsupported;
+
     @CommandLine.Option(names = {"-b", "--benchmark"}, description = "Enable benchmarking to see how much time file" +
             "processing took")
     private boolean benchmark;
@@ -77,6 +80,9 @@ public class DisarmCLI implements Runnable{
             }
             if (benchmark) {
                 globalConfig.setBenchmarking(true);
+            }
+            if (skipUnsupported) {
+                globalConfig.setSkipUnsupported(true);
             }
             // finalise parameters
             MediaApp app = new MediaApp(registry, globalConfig);

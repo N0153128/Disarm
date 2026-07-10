@@ -35,6 +35,7 @@ public class MediaApp {
     }
 
     private void processFile(Path osTargetPath) {
+        logger.info("Skip unsupported: {}",globalConfig.getSkipUnsupported());
         try {
             // populate context
             String mime = Utils.getMimeType(osTargetPath);

@@ -1,6 +1,6 @@
 package dev.n0153.app.exceptions;
 
-public class UnsupportedFileTypeException extends IllegalArgumentException {
+public class UnsupportedFileTypeException extends DisarmException {
 
     private final String detectedType;
 
