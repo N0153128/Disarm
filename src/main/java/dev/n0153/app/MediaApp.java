@@ -34,7 +34,20 @@ public class MediaApp {
         return registry.resolve(format);
     }
 
+    public void dumpErrorReport(Path osTargetPath, DisarmException exception) {
+        String filename = osTargetPath.getFileName().toString();
+        String mime = Utils.getMimeType(osTargetPath);
+        String fileType = Utils.getFileType(osTargetPath);
+        String pluginResolved = getPlugin(mime).echo();
+        String stage = processingContext.getStage();
+        String exceptionName = exception.getClass().getSimpleName();
+        String exceptionMessage = exception.getMessage();
+
+
+    }
+
     private void processFile(Path osTargetPath) {
+        logger.warn("Verbose errors: {}", globalConfig.getVerboseErrors());
         try {
             // populate context
             String mime = Utils.getMimeType(osTargetPath);
