@@ -39,6 +39,9 @@ public class DisarmCLI implements Runnable{
     @CommandLine.Option(names = {"-su", "--skip-unsupported"}, description = "Skip unsupported files")
     private boolean skipUnsupported;
 
+    @CommandLine.Option(names = {"-sc", "--skip-crashed"}, description = "Skip files, crashed in processing")
+    private boolean skipCrashed;
+
     @CommandLine.Option(names = {"-b", "--benchmark"}, description = "Enable benchmarking to see how much time file" +
             "processing took")
     private boolean benchmark;
@@ -83,6 +86,9 @@ public class DisarmCLI implements Runnable{
             }
             if (skipUnsupported) {
                 globalConfig.setSkipUnsupported(true);
+            }
+            if (skipCrashed) {
+                globalConfig.setSkipCrashed(true);
             }
             // finalise parameters
             MediaApp app = new MediaApp(registry, globalConfig);
