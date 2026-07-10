@@ -19,6 +19,8 @@ public class GlobalConfig {
     private final boolean benchmarking = false;
     private final boolean skipUnsupported = false;
     private final boolean skipCrashed = false;
+    public enum VerboseErrors { OFF, CONSOLE, FILE, BOTH }
+    private final VerboseErrors verboseErrors = VerboseErrors.OFF;
 
     private final String KEY_GENERAL_SIZE_LIMIT = "generalSizeLimit";
     private final String KEY_KEEP_INPUTS = "keepInputs";
@@ -32,6 +34,7 @@ public class GlobalConfig {
     private final String KEY_BENCHMARKING = "benchmarking";
     private final String KEY_SKIP_UNSUPPORTED = "skipUnsupported";
     private final String KEY_SKIP_CRASHED = "skipCrashed";
+    private final String KEY_VERBOSE_ERRORS = "verboseErrors";
 
 
     private final Map<String, Object> globalConfigStorage = new HashMap<>() {{
@@ -47,6 +50,7 @@ public class GlobalConfig {
         put(KEY_BENCHMARKING, benchmarking);
         put(KEY_SKIP_UNSUPPORTED, skipUnsupported);
         put(KEY_SKIP_CRASHED, skipCrashed);
+        put(KEY_VERBOSE_ERRORS, verboseErrors);
     }};
 
     public void put(String key, Object value) {
@@ -58,6 +62,12 @@ public class GlobalConfig {
 
     public <$ValueType> $ValueType get(String key, Class<$ValueType> type) {
         return type.cast(globalConfigStorage.get(key));
+    }
+
+    public VerboseErrors getVerboseErrors() {
+        return Objects.requireNonNullElse(
+                get(KEY_VERBOSE_ERRORS, VerboseErrors.class),
+                verboseErrors);
     }
 
     public boolean getSkipCrashed() {
@@ -136,6 +146,13 @@ public class GlobalConfig {
                 get(KEY_GENERAL_SIZE_LIMIT, Integer.class),
                 generalSizeLimit
         );
+    }
+
+    public void setVerboseErrors(VerboseErrors newVerboseErrors) {
+        if (newVerboseErrors == null) {
+            throw new IllegalArgumentException("Verbose Errors cannot be null");
+        }
+        put(KEY_VERBOSE_ERRORS, newVerboseErrors);
     }
 
     public void setSkipCrashed(boolean newSkipCrashed) {
