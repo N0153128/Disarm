@@ -42,6 +42,9 @@ public class DisarmCLI implements Runnable{
     @CommandLine.Option(names = {"-sc", "--skip-crashed"}, description = "Skip files, crashed in processing")
     private boolean skipCrashed;
 
+    @CommandLine.Option(names = {"-ve", "--verbose-errors"})
+    private GlobalConfig.VerboseErrors verboseErrors;
+
     @CommandLine.Option(names = {"-b", "--benchmark"}, description = "Enable benchmarking to see how much time file" +
             "processing took")
     private boolean benchmark;
@@ -89,6 +92,9 @@ public class DisarmCLI implements Runnable{
             }
             if (skipCrashed) {
                 globalConfig.setSkipCrashed(true);
+            }
+            if (verboseErrors != null) {
+                globalConfig.setVerboseErrors(verboseErrors);
             }
             // finalise parameters
             MediaApp app = new MediaApp(registry, globalConfig);
