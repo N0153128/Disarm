@@ -2,6 +2,7 @@ package dev.n0153.app;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -21,6 +22,7 @@ public class GlobalConfig {
     private final boolean skipCrashed = false;
     public enum VerboseErrors { OFF, CONSOLE, FILE, BOTH }
     private final VerboseErrors verboseErrors = VerboseErrors.OFF;
+    private Boolean trackTime = true;
 
     private final String KEY_GENERAL_SIZE_LIMIT = "generalSizeLimit";
     private final String KEY_KEEP_INPUTS = "keepInputs";
@@ -35,6 +37,7 @@ public class GlobalConfig {
     private final String KEY_SKIP_UNSUPPORTED = "skipUnsupported";
     private final String KEY_SKIP_CRASHED = "skipCrashed";
     private final String KEY_VERBOSE_ERRORS = "verboseErrors";
+    private final String KEY_TRACK_TIME = "trackTime";
 
 
     private final Map<String, Object> globalConfigStorage = new HashMap<>() {{
@@ -51,6 +54,7 @@ public class GlobalConfig {
         put(KEY_SKIP_UNSUPPORTED, skipUnsupported);
         put(KEY_SKIP_CRASHED, skipCrashed);
         put(KEY_VERBOSE_ERRORS, verboseErrors);
+        put(KEY_TRACK_TIME, trackTime);
     }};
 
     public void put(String key, Object value) {
@@ -62,6 +66,12 @@ public class GlobalConfig {
 
     public <$ValueType> $ValueType get(String key, Class<$ValueType> type) {
         return type.cast(globalConfigStorage.get(key));
+    }
+
+    public boolean getTrackTime() {
+        return Objects.requireNonNullElse(
+                get(KEY_TRACK_TIME, Boolean.class),
+                trackTime);
     }
 
     public VerboseErrors getVerboseErrors() {
@@ -146,6 +156,10 @@ public class GlobalConfig {
                 get(KEY_GENERAL_SIZE_LIMIT, Integer.class),
                 generalSizeLimit
         );
+    }
+
+    public void setTrackTime(boolean newTrackTime) {
+        put(KEY_TRACK_TIME, newTrackTime);
     }
 
     public void setVerboseErrors(VerboseErrors newVerboseErrors) {

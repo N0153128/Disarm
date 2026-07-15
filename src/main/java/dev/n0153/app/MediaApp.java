@@ -35,14 +35,28 @@ public class MediaApp {
     }
 
     public void dumpErrorReport(Path osTargetPath, DisarmException exception) {
+        // file info
         String filename = osTargetPath.getFileName().toString();
         String mime = Utils.getMimeType(osTargetPath);
         String fileType = Utils.getFileType(osTargetPath);
         String pluginResolved = getPlugin(mime).echo();
+
+        // failure info
         String stage = processingContext.getStage();
         String exceptionName = exception.getClass().getSimpleName();
         String exceptionMessage = exception.getMessage();
 
+        // configs
+
+        String outputPath = globalConfig.getGeneralOutputPath().toString();
+        int sizeLimit = globalConfig.getGeneralSizeLimit();
+        boolean skipUnsupported = globalConfig.getSkipUnsupported();
+        boolean skipCrashed = globalConfig.getSkipCrashed();
+        boolean benchmarking = globalConfig.getBenchmarking();
+        boolean keepOriginal = globalConfig.isKeepOriginal();
+        GlobalConfig.VerboseErrors isVerbose = globalConfig.getVerboseErrors();
+
+        // timing
 
     }
 
