@@ -39,7 +39,7 @@ public class MediaApp {
 
     private void createReportFile(String report) {
         try {
-            Path toFile = globalConfig.getGeneralOutputPath().
+            Path toFile = globalConfig.getReportsOutputPath().
                     resolve(Utils.getTitle("ERROR_REPORT", "txt"));
             Files.writeString(toFile, report, StandardCharsets.UTF_8);
         } catch (IOException e) {
