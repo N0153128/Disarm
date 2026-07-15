@@ -48,6 +48,9 @@ public class DisarmCLI implements Runnable{
     @CommandLine.Option(names = {"-tt", "--track-time"})
     private boolean trackTime;
 
+    @CommandLine.Option(names = {"-ro", "--reports-output"}, description = "Reports output path")
+    private Path reportsPath;
+
     @CommandLine.Option(names = {"-b", "--benchmark"}, description = "Enable benchmarking to see how much time file" +
             "processing took")
     private boolean benchmark;
@@ -101,6 +104,9 @@ public class DisarmCLI implements Runnable{
             }
             if(trackTime) {
                 globalConfig.setTrackTime(false);
+            }
+            if (reportsPath != null) {
+                globalConfig.setReportsOutputPath(reportsPath);
             }
             // finalise parameters
             MediaApp app = new MediaApp(registry, globalConfig);
