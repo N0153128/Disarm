@@ -4,6 +4,9 @@ import dev.n0153.app.exceptions.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.time.Instant;
@@ -34,6 +37,16 @@ public class MediaApp {
         return registry.resolve(format);
     }
 
+    private void createReportFile(String report) {
+        try {
+            Path toFile = globalConfig.getGeneralOutputPath().
+                    resolve(Utils.getTitle("ERROR_REPORT", "txt"));
+            Files.writeString(toFile, report, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void dumpErrorReport(Path osTargetPath, DisarmException exception) {
         // file info
         String filename = osTargetPath.getFileName().toString();
@@ -47,7 +60,6 @@ public class MediaApp {
         String exceptionMessage = exception.getMessage();
 
         // configs
-
         String outputPath = globalConfig.getGeneralOutputPath().toString();
         int sizeLimit = globalConfig.getGeneralSizeLimit();
         boolean skipUnsupported = globalConfig.getSkipUnsupported();
@@ -57,7 +69,52 @@ public class MediaApp {
         GlobalConfig.VerboseErrors isVerbose = globalConfig.getVerboseErrors();
 
         // timing
+        String bootTime = "" + globalConfig.getBootTime();
+        String failTime = "" + Instant.now();
 
+        String report = """
+                === DISARM ERROR REPORT ===
+                # File info
+                File name:           %s
+                Mime type:           %s
+                File type:           %s
+                Plugin resolved:     %s
+                
+                # Failure info
+                Stage:               %s
+                Exception name:      %s
+                Exception message:   %s
+                
+                # Configs
+                Output path:         %s
+                Size limit:          %s
+                Skip unsupported:    %s
+                Skip crashed:        %s
+                Benchmarking:        %s
+                Keep original:       %s
+                Verbosity:           %s
+                
+                # Timing
+                Boot time:           %s
+                Failure time:        %s
+                
+                === END OF REPORT ===
+                """.formatted(filename, mime, fileType,
+                pluginResolved, stage, exceptionName,
+                exceptionMessage, outputPath, sizeLimit,
+                skipUnsupported, skipCrashed, benchmarking,
+                keepOriginal, isVerbose, bootTime,
+                failTime);
+        if (isVerbose == GlobalConfig.VerboseErrors.CONSOLE) {
+            System.out.println(report);
+        }
+        if (isVerbose == GlobalConfig.VerboseErrors.FILE) {
+            createReportFile(report);
+        }
+        if (isVerbose == GlobalConfig.VerboseErrors.BOTH) {
+            System.out.println(report);
+            createReportFile(report);
+        }
     }
 
     private void processFile(Path osTargetPath) {
@@ -98,12 +155,17 @@ public class MediaApp {
                         osTargetPath.getFileName(),
                         e.getClass().getSimpleName(),
                         e.getMessage());
+                if (globalConfig.getVerboseErrors() != GlobalConfig.VerboseErrors.OFF) {
+                    dumpErrorReport(osTargetPath, e);
+                }
             } else if (!isUnsupported && globalConfig.getSkipCrashed()){
                 logger.warn("Skipped crashed [{}] - {}: {}",
                         osTargetPath.getFileName(),
                         e.getClass().getSimpleName(),
                         e.getMessage());
-            } else {
+                if (globalConfig.getVerboseErrors() != GlobalConfig.VerboseErrors.OFF) {
+                    dumpErrorReport(osTargetPath, e);
+                }            } else {
                 throw new RuntimeException(e);
             }
         }
