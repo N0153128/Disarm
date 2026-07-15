@@ -22,7 +22,8 @@ public class GlobalConfig {
     private final boolean skipCrashed = false;
     public enum VerboseErrors { OFF, CONSOLE, FILE, BOTH }
     private final VerboseErrors verboseErrors = VerboseErrors.OFF;
-    private Boolean trackTime = true;
+    private final Boolean trackTime = true;
+    private final Instant bootTime = Instant.now();
 
     private final String KEY_GENERAL_SIZE_LIMIT = "generalSizeLimit";
     private final String KEY_KEEP_INPUTS = "keepInputs";
@@ -38,6 +39,7 @@ public class GlobalConfig {
     private final String KEY_SKIP_CRASHED = "skipCrashed";
     private final String KEY_VERBOSE_ERRORS = "verboseErrors";
     private final String KEY_TRACK_TIME = "trackTime";
+    private final String KEY_BOOT_TIME = "bootTime";
 
 
     private final Map<String, Object> globalConfigStorage = new HashMap<>() {{
@@ -55,6 +57,7 @@ public class GlobalConfig {
         put(KEY_SKIP_CRASHED, skipCrashed);
         put(KEY_VERBOSE_ERRORS, verboseErrors);
         put(KEY_TRACK_TIME, trackTime);
+        put(KEY_BOOT_TIME, bootTime);
     }};
 
     public void put(String key, Object value) {
@@ -66,6 +69,12 @@ public class GlobalConfig {
 
     public <$ValueType> $ValueType get(String key, Class<$ValueType> type) {
         return type.cast(globalConfigStorage.get(key));
+    }
+
+    public Instant getBootTime() {
+        return Objects.requireNonNullElse(
+                get(KEY_BOOT_TIME, Instant.class),
+                bootTime);
     }
 
     public boolean getTrackTime() {
@@ -156,6 +165,10 @@ public class GlobalConfig {
                 get(KEY_GENERAL_SIZE_LIMIT, Integer.class),
                 generalSizeLimit
         );
+    }
+
+    public void setBootTime(Instant newBootTime) {
+        put(KEY_BOOT_TIME, newBootTime);
     }
 
     public void setTrackTime(boolean newTrackTime) {
