@@ -24,6 +24,7 @@ public class GlobalConfig {
     private final VerboseErrors verboseErrors = VerboseErrors.OFF;
     private final Boolean trackTime = true;
     private final Instant bootTime = Instant.now();
+    private final Path reportsOutputPath = Paths.get("resources/output/reports");
 
     private final String KEY_GENERAL_SIZE_LIMIT = "generalSizeLimit";
     private final String KEY_KEEP_INPUTS = "keepInputs";
@@ -40,7 +41,7 @@ public class GlobalConfig {
     private final String KEY_VERBOSE_ERRORS = "verboseErrors";
     private final String KEY_TRACK_TIME = "trackTime";
     private final String KEY_BOOT_TIME = "bootTime";
-
+    private final String KEY_REPORTS_OUTPUT_PATH = "reportsOutputPath";
 
     private final Map<String, Object> globalConfigStorage = new HashMap<>() {{
         put(KEY_GENERAL_SIZE_LIMIT, generalSizeLimit);
@@ -58,6 +59,7 @@ public class GlobalConfig {
         put(KEY_VERBOSE_ERRORS, verboseErrors);
         put(KEY_TRACK_TIME, trackTime);
         put(KEY_BOOT_TIME, bootTime);
+        put(KEY_REPORTS_OUTPUT_PATH, reportsOutputPath);
     }};
 
     public void put(String key, Object value) {
@@ -69,6 +71,12 @@ public class GlobalConfig {
 
     public <$ValueType> $ValueType get(String key, Class<$ValueType> type) {
         return type.cast(globalConfigStorage.get(key));
+    }
+
+    public Path getReportsOutputPath() {
+        return Objects.requireNonNullElse(
+                get(KEY_REPORTS_OUTPUT_PATH, Path.class),
+                reportsOutputPath);
     }
 
     public Instant getBootTime() {
@@ -165,6 +173,13 @@ public class GlobalConfig {
                 get(KEY_GENERAL_SIZE_LIMIT, Integer.class),
                 generalSizeLimit
         );
+    }
+
+    public void setReportsOutputPath(Path newReportsOutputPath) {
+        if (newReportsOutputPath == null) {
+            throw new IllegalArgumentException("General output path cannot be empty");
+        }
+        put(KEY_REPORTS_OUTPUT_PATH, newReportsOutputPath);
     }
 
     public void setBootTime(Instant newBootTime) {
