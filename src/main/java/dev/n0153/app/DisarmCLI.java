@@ -45,6 +45,9 @@ public class DisarmCLI implements Runnable{
     @CommandLine.Option(names = {"-ve", "--verbose-errors"})
     private GlobalConfig.VerboseErrors verboseErrors;
 
+    @CommandLine.Option(names = {"-tt", "--track-time"})
+    private boolean trackTime;
+
     @CommandLine.Option(names = {"-b", "--benchmark"}, description = "Enable benchmarking to see how much time file" +
             "processing took")
     private boolean benchmark;
@@ -95,6 +98,9 @@ public class DisarmCLI implements Runnable{
             }
             if (verboseErrors != null) {
                 globalConfig.setVerboseErrors(verboseErrors);
+            }
+            if(trackTime) {
+                globalConfig.setTrackTime(false);
             }
             // finalise parameters
             MediaApp app = new MediaApp(registry, globalConfig);
