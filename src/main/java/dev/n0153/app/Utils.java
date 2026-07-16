@@ -226,6 +226,14 @@ public class Utils {
         }
     }
 
+    public static void createDirectory(Path dirToCreate) {
+        try {
+            Files.createDirectories(dirToCreate);
+        } catch (IOException e) {
+            throw new DisarmException("Failed to create missing directory: ", e);
+        }
+    }
+
     /**
      * Returns the size, in bytes of the specified file.
      * @param osFilePath Path to file.
