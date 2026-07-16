@@ -3,12 +3,15 @@ package dev.n0153.app;
 import dev.n0153.app.exceptions.InvalidPathException;
 import dev.n0153.app.exceptions.UnsafePathException;
 import dev.n0153.app.exceptions.ValidationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class GlobalValidator {
+    private static final Logger logger = LogManager.getLogger(GlobalValidator.class);
 
     /**
      * Path validation method, ensures that the user cannot get out of bounds and reach sensitive files.
@@ -81,6 +84,10 @@ public class GlobalValidator {
         }
         if (!isInputReadable(osTargetPath)) {
             throw new InvalidPathException("Path is not readable", osTargetPath);
+        }
+        if (!outputExist(osTargetPath)) {
+            logger.warn("Output directory doesn't exist, creating one...");
+            Utils.createDirectory(osTargetPath);
         }
         if (!isOutputPathWritable(config.getGeneralOutputPath())) {
             throw new java.nio.file.InvalidPathException("Output path is not writeable: " + config.getGeneralOutputPath(),

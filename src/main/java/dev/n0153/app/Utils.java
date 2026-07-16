@@ -229,6 +229,7 @@ public class Utils {
     public static void createDirectory(Path dirToCreate) {
         try {
             Files.createDirectories(dirToCreate);
+            logger.info("Directory created successfully: {}", dirToCreate);
         } catch (IOException e) {
             throw new DisarmException("Failed to create missing directory: ", e);
         }
