@@ -38,6 +38,9 @@ public class MediaApp {
     }
 
     private void createReportFile(String report) {
+        if (!GlobalValidator.outputExist(globalConfig.getReportsOutputPath())) {
+            Utils.createDirectory(globalConfig.getReportsOutputPath());
+        }
         try {
             Path toFile = globalConfig.getReportsOutputPath().
                     resolve(Utils.getTitle("ERROR_REPORT", "txt"));
