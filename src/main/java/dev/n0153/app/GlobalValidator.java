@@ -48,6 +48,9 @@ public class GlobalValidator {
         return Files.isReadable(osTargetPath);
     }
 
+    public static boolean outputExist(Path osTargetPath) {
+        return Files.exists(osTargetPath);
+    }
 
     /**
      * Checks if configured output path is writeable.
