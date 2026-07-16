@@ -85,9 +85,9 @@ public class GlobalValidator {
         if (!isInputReadable(osTargetPath)) {
             throw new InvalidPathException("Path is not readable", osTargetPath);
         }
-        if (!outputExist(osTargetPath)) {
+        if (!outputExist(config.getGeneralOutputPath())) {
             logger.warn("Output directory doesn't exist, creating one...");
-            Utils.createDirectory(osTargetPath);
+            Utils.createDirectory(config.getGeneralOutputPath());
         }
         if (!isOutputPathWritable(config.getGeneralOutputPath())) {
             throw new java.nio.file.InvalidPathException("Output path is not writeable: " + config.getGeneralOutputPath(),

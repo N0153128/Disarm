@@ -39,6 +39,7 @@ public class MediaApp {
 
     private void createReportFile(String report) {
         if (!GlobalValidator.outputExist(globalConfig.getReportsOutputPath())) {
+            logger.warn("Output directory for reports doesn't exist, attempting to create one...");
             Utils.createDirectory(globalConfig.getReportsOutputPath());
         }
         try {
