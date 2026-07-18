@@ -48,6 +48,9 @@ public class DisarmCLI implements Runnable{
     @CommandLine.Option(names = {"-tt", "--track-time"})
     private boolean trackTime;
 
+    @CommandLine.Option(names = {"-dm", "--detect-mime"})
+    private boolean detectMime;
+
     @CommandLine.Option(names = {"-ro", "--reports-output"}, description = "Reports output path")
     private Path reportsPath;
 
@@ -107,6 +110,10 @@ public class DisarmCLI implements Runnable{
             }
             if (reportsPath != null) {
                 globalConfig.setReportsOutputPath(reportsPath);
+            }
+            if (detectMime) {
+                System.out.println(Utils.getMimeFromSignature(input));
+                continue;
             }
             // finalise parameters
             MediaApp app = new MediaApp(registry, globalConfig);
