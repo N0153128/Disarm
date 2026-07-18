@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -122,6 +123,21 @@ public class Utils {
         ));
     }};
 
+    public static String checkWebmOrMkvOverDocType(Path osTargetPath) {
+        String result = null;
+        byte[] docType = new byte[64];
+        try (FileInputStream stream = new FileInputStream(osTargetPath.toFile())) {
+            stream.read(docType);
+        } catch (IOException e) {
+            throw new DisarmException("Failed to read magic bytes");
+        }
+        String bufferString = new String(docType, StandardCharsets.US_ASCII);
+        logger.info("buffer: {}", bufferString);
+        if (bufferString.contains("webm")) result = "webm";
+        if (bufferString.contains("matroska")) result = "x-matroska";
+        return result;
+    }
+
     public static String getMimeFromSignature(Path osTargetPath) {
         byte[] header = new byte[16];
         String result = "";
@@ -142,7 +158,10 @@ public class Utils {
                 }
             }
             if (match) {
-                if (entry.getKey().contains("-")) {
+                if (Objects.equals(entry.getKey(), "webm") || Objects.equals(entry.getKey(), "x-matroska")) {
+                    return checkWebmOrMkvOverDocType(osTargetPath);
+                }
+                if (entry.getKey().contains("/")) {
                     result = entry.getKey().split("-")[0];
                 } else {
                     result = entry.getKey();
