@@ -10,6 +10,8 @@ import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -18,6 +20,106 @@ import java.util.Objects;
  */
 public class Utils {
     private static final Logger logger = LogManager.getLogger(Utils.class);
+
+    record MimeSignature(byte[] byteSignature, boolean[] mask) {}
+    private static final Map<String, MimeSignature> mimeSignatures = new HashMap<>() {{
+        put("jpeg", new MimeSignature(
+                new byte[]{ (byte)0xFF, (byte)0xD8, (byte)0xFF},
+                new boolean[]{true, true, true}
+        ));
+        put("png", new MimeSignature(
+                new byte[]{ (byte)0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A},
+                new boolean[]{true, true, true, true, true, true, true, true}
+        ));
+        put("webp", new MimeSignature(
+                new byte[]{0x52, 0x49, 0x46, 0x46, 0x00, 0x00, 0x00, 0x00, 0x57, 0x45, 0x42, 0x50},
+                new boolean[]{true, true, true, true, false, false, false, false, true, true, true, true}
+        ));
+        put("mp3(ID3)", new MimeSignature(
+                new byte[]{0x49, 0x44, 0x33},
+                new boolean[]{true, true, true}
+        ));put("mp3(sync)", new MimeSignature(
+                new byte[]{(byte)0xFF, (byte)0xFB},
+                new boolean[]{true, true}
+        ));
+        put("mp3(syncv2)", new MimeSignature(
+                new byte[]{ (byte)0xFF, (byte)0xF3},
+                new boolean[]{true, true}
+        ));
+        put("mp3(syncv3)", new MimeSignature(
+                new byte[]{(byte)0xFF, (byte)0xF2},
+                new boolean[]{true, true}
+        ));
+        put("wav", new MimeSignature(
+                new byte[]{ 0x52, 0x49, 0x46, 0x46, 0x00, 0x00, 0x00, 0x00, 0x57, 0x41, 0x56, 0x45},
+                new boolean[]{true, true, true, true, false, false, false, false, true, true, true, true}
+        ));
+        put("ogg", new MimeSignature(
+                new byte[]{ 0x4F, 0x67, 0x67, 0x53},
+                new boolean[]{true, true, true, true}
+        ));
+        put("flac", new MimeSignature(
+                new byte[]{0x66, 0x4C, 0x61, 0x43},
+                new boolean[]{true, true, true, true}
+        ));
+        put("aiff", new MimeSignature(
+                new byte[]{0x46, 0x4F, 0x52, 0x4D, 0x00, 0x00, 0x00, 0x00, 0x41, 0x49, 0x46, 0x46},
+                new boolean[]{true, true, true, true, false, false, false, false, true, true, true, true}
+        ));
+        put("au", new MimeSignature(
+                new byte[]{0x2E, 0x73, 0x6E, 0x64},
+                new boolean[]{true, true, true, true}
+        ));
+        put("mp4", new MimeSignature(
+                new byte[]{0x00, 0x00, 0x00, 0x00, 0x66, 0x74, 0x79, 0x70, 0x69, 0x73, 0x6F, 0x6D},
+                new boolean[]{false, false, false, false, true, true, true, true, true, true, true, true}
+        ));
+        put("mov", new MimeSignature(
+                new byte[]{0x00, 0x00, 0x00, 0x00, 0x66, 0x74, 0x79, 0x70, 0x71, 0x74, 0x20, 0x20},
+                new boolean[]{false, false, false, false, true, true, true, true, true, true, true, true}
+        ));
+        put("webm", new MimeSignature(
+                new byte[]{0x1A, 0x45, (byte)0xDF, (byte)0xA3},
+                new boolean[]{true, true, true, true}
+        ));
+        put("x-matroska", new MimeSignature(
+                new byte[]{0x1A, 0x45, (byte)0xDF, (byte)0xA3},
+                new boolean[]{true, true, true, true}
+        ));
+        put("zip", new MimeSignature(
+                new byte[]{0x50, 0x4B, 0x03, 0x04},
+                new boolean[]{true, true, true, true}
+        ));
+        put("rar", new MimeSignature(
+                new byte[]{0x52, 0x61, 0x72, 0x21, 0x1A, 0x07},
+                new boolean[]{true, true, true, true, true, true}
+        ));
+        put("gz", new MimeSignature(
+                new byte[]{0x1F, (byte)0x8B},
+                new boolean[]{true, true}
+        ));
+        put("pdf", new MimeSignature(
+                new byte[]{0x25, 0x50, 0x44, 0x46},
+                new boolean[]{true, true, true, true}
+        ));
+        put("doc", new MimeSignature(
+                new byte[]{(byte)0xD0, (byte)0xCF, 0x11, (byte)0xE0, (byte)0xA1, (byte)0xB1, 0x1A, (byte)0xE1},
+                new boolean[]{true, true, true, true, true, true, true, true}
+        ));
+        put("class", new MimeSignature(
+                new byte[]{(byte)0xCA, (byte)0xFE, (byte)0xBA, (byte)0xBE},
+                new boolean[]{true, true, true, true}
+        ));
+        put("elf", new MimeSignature(
+                new byte[]{ 0x7F, 0x45, 0x4C, 0x46},
+                new boolean[]{true, true, true, true}
+        ));
+        put("sqlite", new MimeSignature(
+                new byte[]{0x53, 0x51, 0x4C, 0x69, 0x74, 0x65, 0x20, 0x66, 0x6F, 0x72, 0x6D, 0x61, 0x74, 0x20, 0x33, 0x00},
+                new boolean[]{true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true}
+        ));
+    }};
+
 
     /**
      * Shortcut method, generates title for a file that is currently in processing.
