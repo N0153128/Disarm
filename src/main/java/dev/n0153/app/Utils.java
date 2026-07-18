@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.FileSystemException;
 import java.nio.file.Files;
@@ -121,6 +122,29 @@ public class Utils {
         ));
     }};
 
+    public static String getMimeFromSignature(Path osTargetPath) {
+        byte[] header = new byte[16];
+        String result = "";
+        try (FileInputStream stream = new FileInputStream(osTargetPath.toFile())) {
+            stream.read(header);
+        } catch (IOException e) {
+            throw new DisarmException("Failed to read magic bytes");
+        }
+        for(Map.Entry<String, MimeSignature> entry : mimeSignatures.entrySet()) {
+            byte[] signature = entry.getValue().byteSignature();
+            boolean[] mask = entry.getValue().mask();
+            boolean match = true;
+            for (int i = 0; i < signature.length; i++) {
+                if (!mask[i]) continue;
+                if (header[i] != signature[i]) {
+                    match = false;
+                    break;
+                }
+            }
+            if (match) result = entry.getKey();
+        }
+        return result;
+    }
 
     /**
      * Shortcut method, generates title for a file that is currently in processing.
