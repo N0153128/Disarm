@@ -35,18 +35,19 @@ public class Utils {
                 new byte[]{0x52, 0x49, 0x46, 0x46, 0x00, 0x00, 0x00, 0x00, 0x57, 0x45, 0x42, 0x50},
                 new boolean[]{true, true, true, true, false, false, false, false, true, true, true, true}
         ));
-        put("mp3(ID3)", new MimeSignature(
+        put("mp3-id3", new MimeSignature(
                 new byte[]{0x49, 0x44, 0x33},
                 new boolean[]{true, true, true}
-        ));put("mp3(sync)", new MimeSignature(
+        ));
+        put("mp3-sync", new MimeSignature(
                 new byte[]{(byte)0xFF, (byte)0xFB},
                 new boolean[]{true, true}
         ));
-        put("mp3(syncv2)", new MimeSignature(
+        put("mp3-sync-v2", new MimeSignature(
                 new byte[]{ (byte)0xFF, (byte)0xF3},
                 new boolean[]{true, true}
         ));
-        put("mp3(syncv3)", new MimeSignature(
+        put("mp3-sync-v3", new MimeSignature(
                 new byte[]{(byte)0xFF, (byte)0xF2},
                 new boolean[]{true, true}
         ));
