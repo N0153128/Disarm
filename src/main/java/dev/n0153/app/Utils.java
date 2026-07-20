@@ -121,6 +121,22 @@ public class Utils {
                 new byte[]{0x53, 0x51, 0x4C, 0x69, 0x74, 0x65, 0x20, 0x66, 0x6F, 0x72, 0x6D, 0x61, 0x74, 0x20, 0x33, 0x00},
                 new boolean[]{true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true}
         ));
+        put("gif/87a", new MimeSignature(
+                new byte[]{0x47, 0x49, 0x46, 0x38, 0x37, 0x61},
+                new boolean[]{true, true, true, true, true, true}
+        ));
+        put("gif/89a", new MimeSignature(
+                new byte[]{0x47, 0x49, 0x46, 0x38, 0x39, 0x61},
+                new boolean[]{true, true, true, true, true, true}
+        ));
+        put("tiff/le", new MimeSignature(
+                new byte[]{0x49, 0x49, 0x2A, 0x00},
+                new boolean[]{true, true, true, true}
+        ));
+        put("tiff/be", new MimeSignature(
+                new byte[]{0x4D, 0x4D, 0x00, 0x2A},
+                new boolean[]{true, true, true, true}
+        ));
     }};
 
     public static String checkWebmOrMkvOverDocType(Path osTargetPath) {
@@ -162,7 +178,7 @@ public class Utils {
                     return checkWebmOrMkvOverDocType(osTargetPath);
                 }
                 if (entry.getKey().contains("/")) {
-                    result = entry.getKey().split("-")[0];
+                    result = entry.getKey().split("/")[0];
                 } else {
                     result = entry.getKey();
                 }
