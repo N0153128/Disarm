@@ -179,6 +179,16 @@ public class VideoConfig implements MediaConfig {
     }
 
     @Override
+    public String toDebugString() {
+        StringBuilder output = new StringBuilder("\n\n=== VIDEO PLUGIN CONFIG === \n");
+        for (Map.Entry<String, Object> entry : configStorage.entrySet()) {
+            output.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
+        }
+        output.append("\n=== END OF SNAPSHOT ===\n");
+        return output.toString();
+    }
+
+    @Override
     public double getVersion() {
         return 1;
     }

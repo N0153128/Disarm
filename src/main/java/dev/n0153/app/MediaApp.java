@@ -71,6 +71,7 @@ public class MediaApp {
         boolean benchmarking = globalConfig.getBenchmarking();
         boolean keepOriginal = globalConfig.isKeepOriginal();
         GlobalConfig.VerboseErrors isVerbose = globalConfig.getVerboseErrors();
+        String configSnapshot = processingContext.getConfigSnapshot().toDebugString();
 
         // timing
         String bootTime = "" + globalConfig.getBootTime();
@@ -98,6 +99,7 @@ public class MediaApp {
                 Benchmarking:        %s
                 Keep original:       %s
                 Verbosity:           %s
+                Config snapshot:     %s
                 
                 # Timing
                 Boot time:           %s
@@ -108,7 +110,7 @@ public class MediaApp {
                 pluginResolved, stage, exceptionName,
                 exceptionMessage, outputPath, sizeLimit,
                 skipUnsupported, skipCrashed, benchmarking,
-                keepOriginal, isVerbose, bootTime,
+                keepOriginal, isVerbose, configSnapshot, bootTime,
                 failTime);
         if (isVerbose == GlobalConfig.VerboseErrors.CONSOLE) {
             logger.info(report);
@@ -133,6 +135,7 @@ public class MediaApp {
             logger.info("detected plugin: {}", plugin.echo());
             MediaConfig mediaConfig = registry.resolveConfig(fileType);
             processingContext.populateContext(osTargetPath, plugin.echo(), mediaConfig);
+            processingContext.setConfigSnapshot(plugin.getConfig());
             logger.info("general context populated");
             plugin.registerGlobalConfig(globalConfig);
             processingContext.setStage("context populated");
