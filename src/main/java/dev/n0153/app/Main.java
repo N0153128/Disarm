@@ -45,7 +45,7 @@ public class Main {
             System.exit(exitCode);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Something went wrong: %s".formatted(e));
         }
     }
 }
