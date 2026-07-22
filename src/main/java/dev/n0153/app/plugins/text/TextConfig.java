@@ -72,7 +72,7 @@ public class TextConfig implements MediaConfig {
 
     @Override
     public Set<String> supports() {
-        return Set.of("text", "plain", "log", "json");
+        return Set.of("text", "plain", "log", "json", "txt");
     }
 
     @Override
