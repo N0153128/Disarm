@@ -35,4 +35,6 @@ public interface MediaConfig {
      */
     int maxFileSizeInBytes(String mime);
 
+    String toDebugString();
+
 }
