@@ -56,7 +56,12 @@ public class MediaApp {
         String filename = osTargetPath.getFileName().toString();
         String mime = processingContext.getMimeType();
         String fileType = processingContext.getFileType();
-        String pluginResolved = getPlugin(mime).echo();
+        String pluginResolved;
+        try {
+             pluginResolved = getPlugin(mime).echo();
+        } catch (UnsupportedFileTypeException e) {
+            pluginResolved = "unsupported";
+        }
 
         // failure info
         String stage = processingContext.getStage();
@@ -71,7 +76,12 @@ public class MediaApp {
         boolean benchmarking = globalConfig.getBenchmarking();
         boolean keepOriginal = globalConfig.isKeepOriginal();
         GlobalConfig.VerboseErrors isVerbose = globalConfig.getVerboseErrors();
-        String configSnapshot = processingContext.getConfigSnapshot().toDebugString();
+        String configSnapshot;
+        try {
+            configSnapshot = processingContext.getConfigSnapshot().toDebugString();
+        } catch (NullPointerException e) {
+            configSnapshot = "unsupported";
+        }
 
         // timing
         String bootTime = "" + globalConfig.getBootTime();
