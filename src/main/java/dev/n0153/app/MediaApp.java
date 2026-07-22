@@ -77,6 +77,7 @@ public class MediaApp {
         String failTime = "" + Instant.now();
 
         String report = """
+                \n
                 === DISARM ERROR REPORT ===
                 # File info
                 File name:           %s
@@ -110,13 +111,13 @@ public class MediaApp {
                 keepOriginal, isVerbose, bootTime,
                 failTime);
         if (isVerbose == GlobalConfig.VerboseErrors.CONSOLE) {
-            System.out.println(report);
+            logger.info(report);
         }
         if (isVerbose == GlobalConfig.VerboseErrors.FILE) {
             createReportFile(report);
         }
         if (isVerbose == GlobalConfig.VerboseErrors.BOTH) {
-            System.out.println(report);
+            logger.info(report);
             createReportFile(report);
         }
     }

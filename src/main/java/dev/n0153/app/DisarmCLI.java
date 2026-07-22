@@ -112,7 +112,7 @@ public class DisarmCLI implements Runnable{
                 globalConfig.setReportsOutputPath(reportsPath);
             }
             if (detectMime) {
-                System.out.println(Utils.getMimeFromSignature(input));
+                logger.info(Utils.getMimeFromSignature(input));
                 continue;
             }
             // finalise parameters
