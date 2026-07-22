@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -139,6 +140,8 @@ public class Utils {
         ));
     }};
 
+    private static final List<String> textFormats = List.of("txt", "log", "json");
+
     public static String checkWebmOrMkvOverDocType(Path osTargetPath) {
         String result = null;
         byte[] docType = new byte[64];
@@ -154,9 +157,14 @@ public class Utils {
         return result;
     }
 
+    public static String getFileExtension(Path osTargetPath) {
+        String filename = osTargetPath.getFileName().toString();
+        int dotIndex = filename.lastIndexOf('.');
+        return dotIndex >= 0 ? filename.substring(dotIndex + 1) : "";
+    }
+
     public static String getMimeFromSignature(Path osTargetPath) {
         byte[] header = new byte[16];
-        String result = "";
         try (FileInputStream stream = new FileInputStream(osTargetPath.toFile())) {
             stream.read(header);
         } catch (IOException e) {
@@ -178,13 +186,18 @@ public class Utils {
                     return checkWebmOrMkvOverDocType(osTargetPath);
                 }
                 if (entry.getKey().contains("/")) {
-                    result = entry.getKey().split("/")[0];
+                    return entry.getKey().split("/")[0];
                 } else {
-                    result = entry.getKey();
+                    return entry.getKey();
                 }
             }
         }
-        return result;
+        String extension = getFileExtension(osTargetPath);
+        if (textFormats.contains(extension)) {
+            return extension;
+        } else {
+            throw new DisarmException("Provided file's mime type cannot be verified or is not supported");
+        }
     }
 
     /**
