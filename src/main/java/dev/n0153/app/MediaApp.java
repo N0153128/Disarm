@@ -54,8 +54,8 @@ public class MediaApp {
     public void dumpErrorReport(Path osTargetPath, DisarmException exception) {
         // file info
         String filename = osTargetPath.getFileName().toString();
-        String mime = Utils.getMimeType(osTargetPath);
-        String fileType = Utils.getFileType(osTargetPath);
+        String mime = processingContext.getMimeType();
+        String fileType = processingContext.getFileType();
         String pluginResolved = getPlugin(mime).echo();
 
         // failure info
