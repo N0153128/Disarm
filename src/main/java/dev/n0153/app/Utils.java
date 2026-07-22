@@ -78,6 +78,18 @@ public class Utils {
                 new byte[]{0x00, 0x00, 0x00, 0x00, 0x66, 0x74, 0x79, 0x70, 0x69, 0x73, 0x6F, 0x6D},
                 new boolean[]{false, false, false, false, true, true, true, true, true, true, true, true}
         ));
+        put("mov/m4v", new MimeSignature(
+                new byte[]{0x00, 0x00, 0x00, 0x00, 0x66, 0x74, 0x79, 0x70, 0x4D, 0x34, 0x56, 0x20},
+                new boolean[]{false, false, false, false, true, true, true, true, true, true, true, true}
+        ));
+        put("mov/mp41", new MimeSignature(
+                new byte[]{0x00, 0x00, 0x00, 0x00, 0x66, 0x74, 0x79, 0x70, 0x6D, 0x70, 0x34, 0x31},
+                new boolean[]{false, false, false, false, true, true, true, true, true, true, true, true}
+        ));
+        put("mov/mp42", new MimeSignature(
+                new byte[]{0x00, 0x00, 0x00, 0x00, 0x66, 0x74, 0x79, 0x70, 0x6D, 0x70, 0x34, 0x32},
+                new boolean[]{false, false, false, false, true, true, true, true, true, true, true, true}
+        ));
         put("mov", new MimeSignature(
                 new byte[]{0x00, 0x00, 0x00, 0x00, 0x66, 0x74, 0x79, 0x70, 0x71, 0x74, 0x20, 0x20},
                 new boolean[]{false, false, false, false, true, true, true, true, true, true, true, true}
@@ -315,10 +327,7 @@ public class Utils {
      */
     public static String getMimeType(Path osTargetFilePath) throws MimeTypeDetectionException {
         try {
-            String mime = Files.probeContentType(osTargetFilePath);
-            return mime.split("/")[1];
-        } catch (IOException e) {
-            throw new MimeTypeDetectionException("failed to detect mime type", osTargetFilePath, e);
+            return getMimeFromSignature(osTargetFilePath);
         } catch (NullPointerException e) {
             throw new MimeTypeDetectionException("specified mime type isn't whitelisted", osTargetFilePath, e);
         }
