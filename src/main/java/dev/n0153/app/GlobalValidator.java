@@ -21,20 +21,12 @@ public class GlobalValidator {
      * @return True if path is valid, throws UnsafePathException if validation checks fail.
      * @since 0.1
      */
-    public static boolean validatePath(Path osTargetPath) {
-        boolean singleDot = osTargetPath.toString().contains("./");
-        boolean doubleDot = osTargetPath.toString().contains("../");
-//        boolean absolute = osTargetPath.toString().startsWith("/");
-        if (singleDot) {
-            return false;
+    public static boolean validatePath(Path osTargetPath, GlobalConfig config) {
+        if (config.getRestrictInputFromRoot()) {
+            if (osTargetPath.normalize().startsWith("/")) {
+                return false;
+            }
         }
-        if (doubleDot) {
-            return false;
-        }
-        // disabled absolute path checking util networking features implemented
-//        if (absolute) {
-//            throw new UnsafePathException("potentially dangerous absolute pathing", osTargetPath);
-//        }
         if (Files.isSymbolicLink(osTargetPath)) {
             return false;
         }
@@ -79,7 +71,7 @@ public class GlobalValidator {
     }
 
     public static boolean validate(Path osTargetPath, GlobalConfig config) {
-        if (!validatePath(osTargetPath)) {
+        if (!validatePath(osTargetPath, config)) {
             throw new UnsafePathException("Potentially unsafe path", osTargetPath);
         }
         if (!isInputReadable(osTargetPath)) {
