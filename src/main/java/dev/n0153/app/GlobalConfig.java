@@ -26,6 +26,8 @@ public class GlobalConfig {
     private final Instant bootTime = Instant.now();
     private final Path reportsOutputPath = Paths.get("resources/output/reports");
     private final boolean restrictInputFromRoot = false;
+    private final Path inputRootPath = Paths.get("resources");
+
 
     private final String KEY_GENERAL_SIZE_LIMIT = "generalSizeLimit";
     private final String KEY_KEEP_INPUTS = "keepInputs";
@@ -44,7 +46,7 @@ public class GlobalConfig {
     private final String KEY_BOOT_TIME = "bootTime";
     private final String KEY_REPORTS_OUTPUT_PATH = "reportsOutputPath";
     private final String KEY_RESTRICT_INPUT_FROM_ROOT = "restrictInputFromRoot";
-
+    private final String KEY_INPUT_ROOT_PATH = "inputRootPath";
 
     private final Map<String, Object> globalConfigStorage = new HashMap<>() {{
         put(KEY_GENERAL_SIZE_LIMIT, generalSizeLimit);
@@ -64,6 +66,7 @@ public class GlobalConfig {
         put(KEY_BOOT_TIME, bootTime);
         put(KEY_REPORTS_OUTPUT_PATH, reportsOutputPath);
         put(KEY_RESTRICT_INPUT_FROM_ROOT, restrictInputFromRoot);
+        put(KEY_INPUT_ROOT_PATH, inputRootPath);
     }};
 
     public void put(String key, Object value) {
@@ -81,6 +84,12 @@ public class GlobalConfig {
         return Objects.requireNonNullElse(
                 get(KEY_RESTRICT_INPUT_FROM_ROOT, Boolean.class),
                 restrictInputFromRoot);
+    }
+
+    public Path getInputRootPath() {
+        return Objects.requireNonNullElse(
+                get(KEY_INPUT_ROOT_PATH, Path.class),
+                inputRootPath);
     }
 
     public Path getReportsOutputPath() {
@@ -183,6 +192,13 @@ public class GlobalConfig {
                 get(KEY_GENERAL_SIZE_LIMIT, Integer.class),
                 generalSizeLimit
         );
+    }
+
+    public void setInputRootPath(Path newInputRootPath) {
+        if (newInputRootPath == null) {
+            throw new IllegalArgumentException("Input root path cannot be empty");
+        }
+        put(KEY_INPUT_ROOT_PATH, newInputRootPath);
     }
 
     public void setReportsOutputPath(Path newReportsOutputPath) {
