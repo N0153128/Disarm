@@ -118,7 +118,7 @@ public class DisarmCLI implements Runnable{
                 logger.info(Utils.getMimeFromSignature(input));
                 continue;
             }
-            if(restrictInputFromRoot) {
+            if(allowInputFromRoot) {
                 globalConfig.setRestrictInputFromRoot(true);
             }
             // finalise parameters
