@@ -76,6 +76,15 @@ public class GlobalConfig {
         globalConfigStorage.replace(key, value);
     }
 
+    public String toDebugString() {
+        StringBuilder output = new StringBuilder("\n\n=== GLOBAL CONFIG === \n");
+        for (Map.Entry<String, Object> entry : globalConfigStorage.entrySet()) {
+            output.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
+        }
+        output.append("\n=== END OF SNAPSHOT ===\n");
+        return output.toString();
+    }
+
     public <$ValueType> $ValueType get(String key, Class<$ValueType> type) {
         return type.cast(globalConfigStorage.get(key));
     }
