@@ -82,6 +82,7 @@ public class MediaApp {
         } catch (NullPointerException e) {
             configSnapshot = "unsupported";
         }
+        String globalConfigSnapshot = globalConfig.toDebugString();
 
         // timing
         String bootTime = "" + globalConfig.getBootTime();
@@ -91,37 +92,38 @@ public class MediaApp {
                 \n
                 === DISARM ERROR REPORT ===
                 # File info
-                File name:           %s
-                Mime type:           %s
-                File type:           %s
-                Plugin resolved:     %s
+                File name:             %s
+                Mime type:             %s
+                File type:             %s
+                Plugin resolved:       %s
                 
                 # Failure info
-                Stage:               %s
-                Exception name:      %s
-                Exception message:   %s
+                Stage:                 %s
+                Exception name:        %s
+                Exception message:     %s
                 
                 # Configs
-                Output path:         %s
-                Size limit:          %s
-                Skip unsupported:    %s
-                Skip crashed:        %s
-                Benchmarking:        %s
-                Keep original:       %s
-                Verbosity:           %s
-                Config snapshot:     %s
+                Output path:           %s
+                Size limit:            %s
+                Skip unsupported:      %s
+                Skip crashed:          %s
+                Benchmarking:          %s
+                Keep original:         %s
+                Verbosity:             %s
+                Config snapshot:       %s
+                Global Config Snapshot %s
                 
                 # Timing
-                Boot time:           %s
-                Failure time:        %s
+                Boot time:             %s
+                Failure time:          %s
                 
                 === END OF REPORT ===
                 """.formatted(filename, mime, fileType,
                 pluginResolved, stage, exceptionName,
                 exceptionMessage, outputPath, sizeLimit,
                 skipUnsupported, skipCrashed, benchmarking,
-                keepOriginal, isVerbose, configSnapshot, bootTime,
-                failTime);
+                keepOriginal, isVerbose, configSnapshot,
+                globalConfigSnapshot, bootTime, failTime);
         if (isVerbose == GlobalConfig.VerboseErrors.CONSOLE) {
             logger.info(report);
         }
