@@ -25,6 +25,7 @@ public class GlobalConfig {
     private final Boolean trackTime = true;
     private final Instant bootTime = Instant.now();
     private final Path reportsOutputPath = Paths.get("resources/output/reports");
+    private final boolean restrictInputFromRoot = false;
 
     private final String KEY_GENERAL_SIZE_LIMIT = "generalSizeLimit";
     private final String KEY_KEEP_INPUTS = "keepInputs";
@@ -42,6 +43,8 @@ public class GlobalConfig {
     private final String KEY_TRACK_TIME = "trackTime";
     private final String KEY_BOOT_TIME = "bootTime";
     private final String KEY_REPORTS_OUTPUT_PATH = "reportsOutputPath";
+    private final String KEY_RESTRICT_INPUT_FROM_ROOT = "restrictInputFromRoot";
+
 
     private final Map<String, Object> globalConfigStorage = new HashMap<>() {{
         put(KEY_GENERAL_SIZE_LIMIT, generalSizeLimit);
@@ -60,6 +63,7 @@ public class GlobalConfig {
         put(KEY_TRACK_TIME, trackTime);
         put(KEY_BOOT_TIME, bootTime);
         put(KEY_REPORTS_OUTPUT_PATH, reportsOutputPath);
+        put(KEY_RESTRICT_INPUT_FROM_ROOT, restrictInputFromRoot);
     }};
 
     public void put(String key, Object value) {
@@ -71,6 +75,12 @@ public class GlobalConfig {
 
     public <$ValueType> $ValueType get(String key, Class<$ValueType> type) {
         return type.cast(globalConfigStorage.get(key));
+    }
+
+    public boolean getRestrictInputFromRoot() {
+        return Objects.requireNonNullElse(
+                get(KEY_RESTRICT_INPUT_FROM_ROOT, Boolean.class),
+                restrictInputFromRoot);
     }
 
     public Path getReportsOutputPath() {
@@ -180,6 +190,10 @@ public class GlobalConfig {
             throw new IllegalArgumentException("General output path cannot be empty");
         }
         put(KEY_REPORTS_OUTPUT_PATH, newReportsOutputPath);
+    }
+
+    public void setRestrictInputFromRoot(boolean newRestrictInputFromRoot) {
+        put(KEY_RESTRICT_INPUT_FROM_ROOT, newRestrictInputFromRoot);
     }
 
     public void setBootTime(Instant newBootTime) {
