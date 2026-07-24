@@ -48,6 +48,9 @@ public class DisarmCLI implements Runnable{
     @CommandLine.Option(names = {"-tt", "--track-time"})
     private boolean trackTime;
 
+    @CommandLine.Option(names = {"-aifr", "--allow-input-from-root"})
+    private boolean allowInputFromRoot;
+
     @CommandLine.Option(names = {"-dm", "--detect-mime"})
     private boolean detectMime;
 
@@ -114,6 +117,9 @@ public class DisarmCLI implements Runnable{
             if (detectMime) {
                 logger.info(Utils.getMimeFromSignature(input));
                 continue;
+            }
+            if(restrictInputFromRoot) {
+                globalConfig.setRestrictInputFromRoot(true);
             }
             // finalise parameters
             MediaApp app = new MediaApp(registry, globalConfig);
