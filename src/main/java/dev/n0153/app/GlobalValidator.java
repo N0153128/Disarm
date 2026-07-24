@@ -23,7 +23,9 @@ public class GlobalValidator {
      */
     public static boolean validatePath(Path osTargetPath, GlobalConfig config) {
         if (config.getRestrictInputFromRoot()) {
-            if (osTargetPath.normalize().startsWith("/")) {
+            Path allowedRoot = config.getInputRootPath().toAbsolutePath();
+            Path resolved = osTargetPath.toAbsolutePath().normalize();
+            if (!resolved.startsWith(allowedRoot)) {
                 return false;
             }
         }
