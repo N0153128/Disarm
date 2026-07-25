@@ -47,7 +47,7 @@ public class MediaApp {
                     resolve(Utils.getTitle("ERROR_REPORT", "txt"));
             Files.writeString(toFile, report, StandardCharsets.UTF_8);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new DisarmException(e);
         }
     }
 
@@ -185,7 +185,7 @@ public class MediaApp {
                 if (globalConfig.getVerboseErrors() != GlobalConfig.VerboseErrors.OFF) {
                     dumpErrorReport(osTargetPath, e);
                 }            } else {
-                throw new RuntimeException(e);
+                throw e;
             }
         }
     }
