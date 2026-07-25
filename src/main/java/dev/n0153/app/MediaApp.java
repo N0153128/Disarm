@@ -37,18 +37,14 @@ public class MediaApp {
         return registry.resolve(format);
     }
 
-    private void createReportFile(String report) {
+    private void createReportFile(String report) throws IOException {
         if (!GlobalValidator.outputExist(globalConfig.getReportsOutputPath())) {
             logger.warn("Output directory for reports doesn't exist, attempting to create one...");
             Utils.createDirectory(globalConfig.getReportsOutputPath());
         }
-        try {
-            Path toFile = globalConfig.getReportsOutputPath().
-                    resolve(Utils.getTitle("ERROR_REPORT", "txt"));
-            Files.writeString(toFile, report, StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            throw new DisarmException(e);
-        }
+        Path toFile = globalConfig.getReportsOutputPath().
+                resolve(Utils.getTitle("ERROR_REPORT", "txt"));
+        Files.writeString(toFile, report, StandardCharsets.UTF_8);
     }
 
     public void dumpErrorReport(Path osTargetPath, DisarmException exception) {
@@ -128,12 +124,19 @@ public class MediaApp {
             logger.info(report);
         }
         if (isVerbose == GlobalConfig.VerboseErrors.FILE) {
-            createReportFile(report);
+            try {
+                createReportFile(report);
+            } catch (IOException e) {
+                logger.error("Failed to create report file");
+            }
         }
         if (isVerbose == GlobalConfig.VerboseErrors.BOTH) {
             logger.info(report);
-            createReportFile(report);
-        }
+            try {
+                createReportFile(report);
+            } catch (IOException e) {
+                logger.error("Failed to create report file");
+            }        }
     }
 
     private void processFile(Path osTargetPath) {
