@@ -151,7 +151,7 @@ public class AudioProcessor implements MediaProcessor<AudioConfig> {
     }
 
     @Override
-    public void process(Path osTargetPath) throws DisarmException {
+    public void process(Path osTargetPath) throws AudioProcessingException {
         String format;
         try {
             format = config.getFormatFromMime(Utils.getMimeType(osTargetPath));
