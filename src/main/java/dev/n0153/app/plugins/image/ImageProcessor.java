@@ -1,7 +1,6 @@
 package dev.n0153.app.plugins.image;
 
 import dev.n0153.app.*;
-import dev.n0153.app.exceptions.DisarmException;
 import dev.n0153.app.exceptions.ImageProcessingException;
 import dev.n0153.app.exceptions.MimeTypeDetectionException;
 import dev.n0153.app.exceptions.ValidationException;
@@ -290,7 +289,7 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
     }
 
     @Override
-    public void process(Path osTargetPath) throws DisarmException {
+    public void process(Path osTargetPath) throws ImageProcessingException {
         logger.info("current config width: {}, height: {}", config.getImgMaxWidth(), config.getImgMaxHeight());
         try {
             context.setImage(Imgcodecs.imread(osTargetPath.toString(), Imgcodecs.IMREAD_UNCHANGED));
@@ -302,7 +301,7 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
                 applyWatermarkAtRandomPosition();
             }
         } catch (MimeTypeDetectionException e) {
-            throw new DisarmException(e);
+            throw new ImageProcessingException("Failed to process image", osTargetPath);
         }
     }
 
