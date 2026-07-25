@@ -5,7 +5,6 @@ import dev.n0153.app.MediaContext;
 import dev.n0153.app.MediaProcessor;
 import dev.n0153.app.Utils;
 import dev.n0153.app.exceptions.AudioProcessingException;
-import dev.n0153.app.exceptions.DisarmException;
 import dev.n0153.app.exceptions.MimeTypeDetectionException;
 import dev.n0153.app.plugins.MediaUtils;
 import org.apache.logging.log4j.LogManager;
