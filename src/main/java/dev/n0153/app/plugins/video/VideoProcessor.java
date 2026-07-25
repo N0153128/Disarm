@@ -4,7 +4,6 @@ import dev.n0153.app.GlobalConfig;
 import dev.n0153.app.MediaContext;
 import dev.n0153.app.MediaProcessor;
 import dev.n0153.app.Utils;
-import dev.n0153.app.exceptions.DisarmException;
 import dev.n0153.app.exceptions.VideoProcessingException;
 import dev.n0153.app.plugins.MediaUtils;
 import org.apache.logging.log4j.LogManager;
@@ -96,7 +95,7 @@ public class VideoProcessor implements MediaProcessor<VideoConfig> {
     }
 
     @Override
-    public void process(Path osTargetPath) throws DisarmException {
+    public void process(Path osTargetPath) throws VideoProcessingException {
         String mime;
         String format;
         try {
@@ -118,7 +117,7 @@ public class VideoProcessor implements MediaProcessor<VideoConfig> {
 
             reEncodeVideo(osTargetPath, format);
         } catch (IOException | EncoderException e) {
-            throw new DisarmException("Video Processor: failed to detect mime");
+            throw new VideoProcessingException("Video Processor: failed to detect mime", osTargetPath);
         }
     }
 
