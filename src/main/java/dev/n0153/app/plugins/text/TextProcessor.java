@@ -4,12 +4,11 @@ import dev.n0153.app.GlobalConfig;
 import dev.n0153.app.MediaContext;
 import dev.n0153.app.MediaProcessor;
 import dev.n0153.app.Utils;
-import dev.n0153.app.exceptions.DisarmException;
+import dev.n0153.app.exceptions.TextProcessingException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.Normalizer;
@@ -79,7 +78,7 @@ public class TextProcessor implements MediaProcessor<TextConfig> {
     }
 
     @Override
-    public void process(Path osTargetPath) throws DisarmException {
+    public void process(Path osTargetPath) throws TextProcessingException {
         try {
             logger.info("Processing text file: {}", osTargetPath.toString());
             byte[] text = context.getRawBytes();
@@ -93,7 +92,7 @@ public class TextProcessor implements MediaProcessor<TextConfig> {
                 saveTextData();
             }
         } catch (IOException e) {
-            throw new DisarmException("Failed to save text file");
+            throw new TextProcessingException("Failed to save text file", osTargetPath);
         }
     }
 
