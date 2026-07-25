@@ -168,8 +168,7 @@ public class MediaApp {
             // process input
             getProcessor(plugin, mediaConfig).process(osTargetPath);
         } catch (DisarmException e) {
-            boolean isUnsupported = e instanceof UnsupportedFileTypeException
-                    || e instanceof UnsupportedFormatException;
+            boolean isUnsupported = e instanceof UnsupportedFileTypeException;
             if (isUnsupported && globalConfig.getSkipUnsupported()) {
                 logger.warn("Skipped unsupported [{}] - {}: {}",
                         osTargetPath.getFileName(),
