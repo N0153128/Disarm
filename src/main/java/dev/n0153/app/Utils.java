@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystemException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -278,15 +279,11 @@ public class Utils {
      * Renames specified file.
      * @param osTargetFile Path to file.
      * @param newTitle New title.
-     * @throws FileRenameException If file isn't supported.
+     * @throws IOException If file isn't supported.
      * @since 0.1
      */
-    public static void renameFile(Path osTargetFile, String newTitle) throws FileRenameException {
-        try {
-            Files.move(osTargetFile, osTargetFile.getParent().resolve(newTitle));
-        } catch (IOException e) {
-            throw new FileRenameException("failed to rename file",  osTargetFile, e);
-        }
+    public static void renameFile(Path osTargetFile, String newTitle) throws IOException {
+        Files.move(osTargetFile, osTargetFile.getParent().resolve(newTitle));
     }
 
     /**
@@ -398,21 +395,17 @@ public class Utils {
     /**
      * Shortcut method, delete any specified file.
      * @param osTargetFilePath Path to file.
-     * @throws FileDeletionException If file doesn't exist or unable to delete.
+     * @throws IOException If file doesn't exist or unable to delete.
      * @since 0.1
      */
-    public static void fileDispose(Path osTargetFilePath) throws FileDeletionException {
-        try {
-            if (!Files.exists(osTargetFilePath)) {
-                throw new FileDeletionException("Specified file doesn't exist", osTargetFilePath);
-            }
-            File file = osTargetFilePath.toFile();
-            boolean deleted = Files.deleteIfExists(file.toPath());
-            if (!deleted) {
-                throw new FileSystemException(osTargetFilePath.toString());
-            }
-        } catch (IOException e) {
-            throw new FileDeletionException("failed to delete file", osTargetFilePath, e);
+    public static void fileDispose(Path osTargetFilePath) throws IOException {
+        if (!Files.exists(osTargetFilePath)) {
+            throw new NoSuchFileException("Specified file doesn't exist");
+        }
+        File file = osTargetFilePath.toFile();
+        boolean deleted = Files.deleteIfExists(file.toPath());
+        if (!deleted) {
+            throw new FileSystemException(osTargetFilePath.toString());
         }
     }
 
