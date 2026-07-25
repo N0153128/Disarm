@@ -27,7 +27,7 @@ public class MediaApp {
         if (!globalConfig.isKeepOriginal()) {
             try{
                 Utils.fileDispose(osTargetPath);
-            } catch (FileDeletionException e) {
+            } catch (IOException e) {
                 logger.info("Failed to delete specified file");
             }
         }

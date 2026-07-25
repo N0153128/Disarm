@@ -125,7 +125,7 @@ class UtilsTest {
 
     @Test
     void renameFileNonExisting() {
-        assertThrows(FileRenameException.class, () ->
+        assertThrows(IOException.class, () ->
                 Utils.renameFile(tempDir.resolve("none.test"), "new_title.text"));
     }
 
@@ -430,7 +430,7 @@ class UtilsTest {
 
     @Test
     void fileDispose_nonExistent() {
-        assertThrows(FileDeletionException.class, () -> Utils.fileDispose(tempDir.resolve("none.txt")));
+        assertThrows(IOException.class, () -> Utils.fileDispose(tempDir.resolve("none.txt")));
     }
 
     @Test
