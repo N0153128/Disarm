@@ -1,6 +1,7 @@
 package dev.n0153.app;
 
 import dev.n0153.app.exceptions.*;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -160,7 +161,7 @@ public class Utils {
         try (FileInputStream stream = new FileInputStream(osTargetPath.toFile())) {
             stream.read(docType);
         } catch (IOException e) {
-            throw new DisarmException("Failed to read magic bytes");
+            throw new MimeTypeDetectionException("Failed to read magic bytes", osTargetPath);
         }
         String bufferString = new String(docType, StandardCharsets.US_ASCII);
         logger.info("buffer: {}", bufferString);
@@ -180,7 +181,7 @@ public class Utils {
         try (FileInputStream stream = new FileInputStream(osTargetPath.toFile())) {
             stream.read(header);
         } catch (IOException e) {
-            throw new DisarmException("Failed to read magic bytes");
+            throw new MimeTypeDetectionException("Failed to read magic bytes", osTargetPath);
         }
         for(Map.Entry<String, MimeSignature> entry : mimeSignatures.entrySet()) {
             byte[] signature = entry.getValue().byteSignature();
@@ -208,7 +209,10 @@ public class Utils {
         if (textFormats.contains(extension)) {
             return extension;
         } else {
-            throw new DisarmException("Provided file's mime type cannot be verified or is not supported");
+            throw new MimeTypeDetectionException(
+                    "Provided file's mime type cannot be verified or is not supported",
+                    osTargetPath
+            );
         }
     }
 
@@ -421,7 +425,7 @@ public class Utils {
             Files.createDirectories(dirToCreate);
             logger.info("Directory created successfully: {}", dirToCreate);
         } catch (IOException e) {
-            throw new DisarmException("Failed to create missing directory: ", e);
+            throw new InvalidPathException("Failed to create missing directory: ", dirToCreate);
         }
     }
 
