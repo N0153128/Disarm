@@ -140,12 +140,12 @@ public class AudioProcessor implements MediaProcessor<AudioConfig> {
                 reEncodeDefault(osTargetPath, config.getDefaultOutputTo());
             }
         } catch (MimeTypeDetectionException e) {
-            throw new DisarmException("Audio Processor: Failed to detect mime");
+            throw new AudioProcessingException("Audio Processor: Failed to detect mime", osTargetPath);
         } catch (AudioProcessingException e) {
             try {
                 reEncodeAudioNative(osTargetPath);
             } catch (UnsupportedAudioFileException ex) {
-                throw new DisarmException("Audio Processor: native fallback failed");
+                throw new AudioProcessingException("Audio Processor: native fallback failed", osTargetPath);
             }
         }
     }
@@ -165,7 +165,7 @@ public class AudioProcessor implements MediaProcessor<AudioConfig> {
             context.setAudioChannels(MediaUtils.getAudioChannels(osTargetPath));
             reEncode(osTargetPath);
         } catch (IOException | EncoderException e) {
-            throw new DisarmException("failed to process audio");
+            throw new AudioProcessingException("failed to process audio", osTargetPath);
         }
         logger.info("audio re-encoded successfully");
     }
