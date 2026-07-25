@@ -2,7 +2,7 @@ package dev.n0153.app;
 
 import dev.n0153.app.exceptions.CodecDetectionException;
 import dev.n0153.app.exceptions.DisarmException;
-import dev.n0153.app.exceptions.DurationFormattingException;
+import dev.n0153.app.exceptions.InvalidDurationException;
 import dev.n0153.app.exceptions.ValidationException;
 import dev.n0153.app.plugins.MediaUtils;
 import dev.n0153.app.plugins.audio.AudioUtils;
@@ -293,7 +293,7 @@ public class AudioUtilsTest {
 
     @Test
     void getTrackLengthFormatted_negativeParameter() {
-        assertThrows(DurationFormattingException.class, () ->MediaUtils.getTrackLengthFormatted(-1).matches(
+        assertThrows(InvalidDurationException.class, () ->MediaUtils.getTrackLengthFormatted(-1).matches(
                 "\\d{2}:\\d{2}:\\d{2}"
         ));
     }

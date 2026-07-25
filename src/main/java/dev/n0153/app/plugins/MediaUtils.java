@@ -1,7 +1,7 @@
 package dev.n0153.app.plugins;
 
 import dev.n0153.app.exceptions.CodecDetectionException;
-import dev.n0153.app.exceptions.DurationFormattingException;
+import dev.n0153.app.exceptions.InvalidDurationException;
 import dev.n0153.app.exceptions.ValidationException;
 import ws.schild.jave.EncoderException;
 import ws.schild.jave.MultimediaObject;
@@ -139,9 +139,9 @@ public class MediaUtils {
      * @return Audio/Video track length, nicely formatted
      * @since 0.1
      */
-    public static String getTrackLengthFormatted(long duration) throws DurationFormattingException {
+    public static String getTrackLengthFormatted(long duration) throws InvalidDurationException {
         if (duration <= -1 || duration == 0) {
-            throw new DurationFormattingException("Invalid track length", ""+duration);
+            throw new InvalidDurationException("Invalid track length", ""+duration);
         }
         int durationSeconds = (int) duration/1000;
         int hours = (durationSeconds/3600);
@@ -150,7 +150,7 @@ public class MediaUtils {
         try {
             return String.format("%02d:%02d:%02d", hours, minutes, seconds);
         } catch (Exception e) {
-            throw new DurationFormattingException("failed to return formatted duration",
+            throw new InvalidDurationException("failed to return formatted duration",
                     "\""+hours+":"+minutes+":"+seconds+ "\"", e);
         }
     }

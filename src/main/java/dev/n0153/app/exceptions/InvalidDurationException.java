@@ -1,15 +1,15 @@
 package dev.n0153.app.exceptions;
 
-public class DurationFormattingException extends DisarmException {
+public class InvalidDurationException extends DisarmException {
 
     private final String detectedString;
 
-    public DurationFormattingException(String message, String string) {
+    public InvalidDurationException(String message, String string) {
         super(message);
         this.detectedString = string;
     }
 
-    public DurationFormattingException(String message, String string, Throwable cause) {
+    public InvalidDurationException(String message, String string, Throwable cause) {
         super(message, cause);
         this.detectedString = string;
     }
