@@ -1,6 +1,5 @@
 package dev.n0153.app;
 
-import dev.n0153.app.exceptions.DisarmException;
 import dev.n0153.app.exceptions.MimeTypeDetectionException;
 
 import java.nio.file.Path;
@@ -57,15 +56,11 @@ public class ProcessingContext {
         return type.cast(processingContextStorage.get(key));
     }
 
-    public void populateContext(Path osTargetPath, String plugin, MediaConfig config) {
-        try {
-            put(KEY_FILENAME, osTargetPath.getFileName().toString());
-            put(KEY_MIME_TYPE, Utils.getMimeType(osTargetPath));
-            put(KEY_STAGE, "init");
-            put(KEY_RESOLVED_PLUGIN, plugin);
-        } catch (MimeTypeDetectionException e) {
-            throw new DisarmException(e);
-        }
+    public void populateContext(Path osTargetPath, String plugin, MediaConfig config) throws MimeTypeDetectionException {
+        put(KEY_FILENAME, osTargetPath.getFileName().toString());
+        put(KEY_MIME_TYPE, Utils.getMimeType(osTargetPath));
+        put(KEY_STAGE, "init");
+        put(KEY_RESOLVED_PLUGIN, plugin);
     }
 
     // getters
