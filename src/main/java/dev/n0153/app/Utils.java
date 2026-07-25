@@ -236,11 +236,7 @@ public class Utils {
         if (logo) {
             type = "logo";
         } else {
-            try {
-                type = Utils.getFileType(osTargetPath);
-            } catch (FileTypeDetectionException e) {
-                throw new RuntimeException(e);
-            }
+            type = Utils.getFileType(osTargetPath);
         }
         String objectName = null;
         objectName = type+"_"+year+"_"+month+"_"+day+
