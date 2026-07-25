@@ -1,6 +1,5 @@
 package dev.n0153.app;
 
-import dev.n0153.app.exceptions.FileTypeDetectionException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine;
@@ -73,20 +72,16 @@ public class DisarmCLI implements Runnable{
         logger.warn("WARNING: using experimental app orchestrator");
         for (Path input : inputPath) {
             // related plugin auto-detection
-            try {
-                if (!Files.isRegularFile(input)) {
-                    logger.info("Skipping non-file path: {}", input);
-                    continue;
-                }
-                String fileType = Utils.getFileType(input);
-                Runnable handler = registry.resolveCli(fileType);
-                if (handler != null) {
-                    handler.run();
-                } else {
-                    logger.info("no CLI handler found for {}", input.getFileName());
-                }
-            } catch (FileTypeDetectionException e) {
-                throw new RuntimeException(e);
+            if (!Files.isRegularFile(input)) {
+                logger.info("Skipping non-file path: {}", input);
+                continue;
+            }
+            String fileType = Utils.getFileType(input);
+            Runnable handler = registry.resolveCli(fileType);
+            if (handler != null) {
+                handler.run();
+            } else {
+                logger.info("no CLI handler found for {}", input.getFileName());
             }
             // getters and setters
             logger.info("Specified path: {}", input);
