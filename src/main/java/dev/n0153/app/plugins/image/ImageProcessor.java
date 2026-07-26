@@ -289,6 +289,9 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
 
     @Override
     public void process(Path osTargetPath) {
+        if (!checkMeta()) {
+            throw new ImageProcessingException("Image Processor: meta is empty");
+        }
         logger.info("current config width: {}, height: {}", config.getImgMaxWidth(), config.getImgMaxHeight());
         try {
             context.setImage(Imgcodecs.imread(osTargetPath.toString(), Imgcodecs.IMREAD_UNCHANGED));
