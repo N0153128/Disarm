@@ -129,7 +129,7 @@ public class MediaUtils {
             return mediaInfo.getDuration();
 
         } catch (EncoderException e) {
-            throw new ValidationException("Incorrect input format for track length");
+            throw new CodecDetectionException("Incorrect input format for track length", osTargetPath);
         }
     }
 
