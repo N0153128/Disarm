@@ -132,26 +132,4 @@ public class MediaUtils {
             throw new CodecDetectionException("Incorrect input format for track length", osTargetPath);
         }
     }
-
-    /**
-     * Returns track length for audio and video files, nicely formatted.
-     * @param duration Output of Utils.getTrackLength().
-     * @return Audio/Video track length, nicely formatted
-     * @since 0.1
-     */
-    public static String getTrackLengthFormatted(long duration) throws InvalidDurationException {
-        if (duration <= -1 || duration == 0) {
-            throw new InvalidDurationException("Invalid track length", ""+duration);
-        }
-        int durationSeconds = (int) duration/1000;
-        int hours = (durationSeconds/3600);
-        int minutes = (durationSeconds%3600/60);
-        int seconds = (durationSeconds%60);
-        try {
-            return String.format("%02d:%02d:%02d", hours, minutes, seconds);
-        } catch (Exception e) {
-            throw new InvalidDurationException("failed to return formatted duration",
-                    "\""+hours+":"+minutes+":"+seconds+ "\"", e);
-        }
-    }
 }

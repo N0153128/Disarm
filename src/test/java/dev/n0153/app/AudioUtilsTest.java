@@ -283,18 +283,4 @@ public class AudioUtilsTest {
     void getTrackLength_nonExistent() {
         assertThrows(ValidationException.class, () -> MediaUtils.getTrackLength(tempDir.resolve("none.test")));
     }
-
-    @Test
-    void getTrackLengthFormatted() {
-        assertTrue(MediaUtils.getTrackLengthFormatted(MediaUtils.getTrackLength(DebugPaths.audioTestInputMp3)).matches(
-                "\\d{2}:\\d{2}:\\d{2}"
-        ));
-    }
-
-    @Test
-    void getTrackLengthFormatted_negativeParameter() {
-        assertThrows(InvalidDurationException.class, () ->MediaUtils.getTrackLengthFormatted(-1).matches(
-                "\\d{2}:\\d{2}:\\d{2}"
-        ));
-    }
 }
