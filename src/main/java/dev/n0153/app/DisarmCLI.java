@@ -53,6 +53,10 @@ public class DisarmCLI implements Runnable{
     @CommandLine.Option(names = {"-dm", "--detect-mime"})
     private boolean detectMime;
 
+    @CommandLine.Option(names = {"-dr", "--delete-result"})
+    private boolean deleteResult;
+
+
     @CommandLine.Option(names = {"-ro", "--reports-output"}, description = "Reports output path")
     private Path reportsPath;
 
@@ -115,6 +119,9 @@ public class DisarmCLI implements Runnable{
             }
             if(allowInputFromRoot) {
                 globalConfig.setRestrictInputFromRoot(true);
+            }
+            if (deleteResult) {
+                globalConfig.setDeleteResult(true);
             }
             // finalise parameters
             MediaApp app = new MediaApp(registry, globalConfig);

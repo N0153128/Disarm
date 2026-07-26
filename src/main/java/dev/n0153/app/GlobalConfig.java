@@ -10,7 +10,7 @@ import java.util.Objects;
 public class GlobalConfig {
     private final int generalSizeLimit = 5_000_000; // 5MB
     private final boolean keepInputs = false;
-    private final boolean keepResult = true;
+    private final boolean deleteResult = false;
     private final boolean keepOriginal = true;
     private final int generalFileSizeUpperBoundLimit = 10_000_000;
     private final Path generalOutputPath = Paths.get("resources/output");
@@ -31,7 +31,6 @@ public class GlobalConfig {
 
     private final String KEY_GENERAL_SIZE_LIMIT = "generalSizeLimit";
     private final String KEY_KEEP_INPUTS = "keepInputs";
-    private final String KEY_KEEP_RESULT = "keepResult";
     private final String KEY_KEEP_ORIGINAL = "keepOriginal";
     private final String KEY_GENERAL_FILE_SIZE_UPPER_BOUND = "generalFileSizeUpperBoundLimit";
     private final String KEY_GENERAL_OUTPUT_PATH = "generalOutputPath";
@@ -47,11 +46,12 @@ public class GlobalConfig {
     private final String KEY_REPORTS_OUTPUT_PATH = "reportsOutputPath";
     private final String KEY_RESTRICT_INPUT_FROM_ROOT = "restrictInputFromRoot";
     private final String KEY_INPUT_ROOT_PATH = "inputRootPath";
+    private final String KEY_DELETE_RESULT = "deleteResult";
 
     private final Map<String, Object> globalConfigStorage = new HashMap<>() {{
         put(KEY_GENERAL_SIZE_LIMIT, generalSizeLimit);
         put(KEY_KEEP_INPUTS, keepInputs);
-        put(KEY_KEEP_RESULT, keepResult);
+        put(KEY_DELETE_RESULT, deleteResult);
         put(KEY_KEEP_ORIGINAL, keepOriginal);
         put(KEY_GENERAL_FILE_SIZE_UPPER_BOUND, generalFileSizeUpperBoundLimit);
         put(KEY_GENERAL_OUTPUT_PATH, generalOutputPath);
@@ -168,10 +168,10 @@ public class GlobalConfig {
         );
     }
 
-    public boolean getKeepResult() {
+    public boolean getDeleteResult() {
         return Objects.requireNonNullElse(
-                get(KEY_KEEP_RESULT, Boolean.class),
-                keepResult
+                get(KEY_DELETE_RESULT, Boolean.class),
+                deleteResult
         );
     }
 
@@ -252,8 +252,8 @@ public class GlobalConfig {
         put(KEY_KEEP_INPUTS, newKeepInputs);
     }
 
-    public void setKeepResults(boolean newKeepResult) {
-        put(KEY_KEEP_RESULT, newKeepResult);
+    public void setDeleteResult(boolean newDeleteResult) {
+        put(KEY_DELETE_RESULT, newDeleteResult);
     }
 
     public void setKeepOriginal(boolean newKeepOriginal) {
