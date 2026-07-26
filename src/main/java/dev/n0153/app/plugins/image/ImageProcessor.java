@@ -296,7 +296,13 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
         try {
             context.setImage(Imgcodecs.imread(osTargetPath.toString(), Imgcodecs.IMREAD_UNCHANGED));
             context.setImageTitle(Utils.getTitle(osTargetPath, Utils.getMimeType(osTargetPath), false));
-            scaleImageToScaleFactor(context.getImage());
+            if (config.getFixedValueScaling() != null) {
+                int fixedWidth = Integer.parseInt(config.getFixedValueScaling().split("x")[0]);
+                int fixedHeight = Integer.parseInt(config.getFixedValueScaling().split("x")[1]);
+                scaleImageToFixedValue(context.getImage(), fixedWidth, fixedHeight);
+            } else {
+                scaleImageToScaleFactor(context.getImage());
+            }
             if (context.getLogo() != null) {
                 logger.info("logo present");
                 scaleLogo();
