@@ -18,7 +18,7 @@ public class ImageConfig implements MediaConfig {
     private final int logoMaxWidth = 50;
     private final int logoMaxHeight = 50;
     private final double transparency = 0.5;
-    private final String fixedValueScaling = null;
+    private final String fixedValueScaling = "";
 
     private final String KEY_LOGO_SIZE_LIMIT = "logoSizeLimit";
     private final String KEY_KEEP_LOGO = "keepLogo";
