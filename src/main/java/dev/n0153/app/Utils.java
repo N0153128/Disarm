@@ -331,50 +331,6 @@ public class Utils {
     }
 
     /**
-     * Check if specified file is an image file.
-     * @param osTargetFilePath Path to file.
-     * @return True if file is an image file, false otherwise.
-     * @since 0.1
-     */
-    public static boolean isImage(Path osTargetFilePath) {
-        String fileType = getFileType(osTargetFilePath);
-        return Objects.equals(fileType, "image");
-    }
-
-    /**
-     * Check if specified file is an audio file.
-     * @param osTargetFilePath Path to file.
-     * @return True if file is an audio file, false otherwise.
-     * @since 0.1
-     */
-    public static boolean isAudio(Path osTargetFilePath) {
-        String fileType = getFileType(osTargetFilePath);
-        return Objects.equals(fileType, "audio");
-    }
-
-    /**
-     * Check if specified file is a video file.
-     * @param osTargetFilePath Path to file.
-     * @return True if file is a video file, false otherwise.
-     * @since 0.1
-     */
-    public static boolean isVideo(Path osTargetFilePath) {
-        String fileType = getFileType(osTargetFilePath);
-        return Objects.equals(fileType, "video");
-    }
-
-    /**
-     * Check if specified file is a text file.
-     * @param osTargetFilePath Path to file.
-     * @return True if file is a text file, false otherwise.
-     * @since 0.1
-     */
-    public static boolean isText(Path osTargetFilePath) {
-        String fileType = getFileType(osTargetFilePath);
-        return Objects.equals(fileType, "text");
-    }
-
-    /**
      * Shortcut method, delete any specified file.
      * @param osTargetFilePath Path to file.
      * @throws IOException If file doesn't exist or unable to delete.
