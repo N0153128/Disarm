@@ -292,7 +292,11 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
         if (!checkMeta()) {
             throw new ImageProcessingException("Image Processor: meta is empty");
         }
-        logger.info("current config width: {}, height: {}", config.getImgMaxWidth(), config.getImgMaxHeight());
+        if (config.getFixedValueScaling().isEmpty()) {
+            logger.info("current config width: {}, height: {}", config.getImgMaxWidth(), config.getImgMaxHeight());
+        } else {
+            logger.info("current config width and height overruled by fixed value scaling.") ;
+        }
         try {
             context.setImage(Imgcodecs.imread(osTargetPath.toString(), Imgcodecs.IMREAD_UNCHANGED));
             context.setImageTitle(Utils.getTitle(osTargetPath, Utils.getMimeType(osTargetPath), false));
