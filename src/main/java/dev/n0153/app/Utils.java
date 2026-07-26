@@ -337,13 +337,8 @@ public class Utils {
      * @since 0.1
      */
     public static boolean isImage(Path osTargetFilePath) {
-        try {
-            String fileType = getFileType(osTargetFilePath);
-            return Objects.equals(fileType, "image");
-
-        } catch (FileTypeDetectionException e) {
-            throw new ValidationException("Specified file is not an image");
-        }
+        String fileType = getFileType(osTargetFilePath);
+        return Objects.equals(fileType, "image");
     }
 
     /**
@@ -353,12 +348,8 @@ public class Utils {
      * @since 0.1
      */
     public static boolean isAudio(Path osTargetFilePath) {
-        try {
-            String fileType = getFileType(osTargetFilePath);
-            return Objects.equals(fileType, "audio");
-        } catch (FileTypeDetectionException e) {
-            throw new ValidationException("Specified file is not an audio");
-        }
+        String fileType = getFileType(osTargetFilePath);
+        return Objects.equals(fileType, "audio");
     }
 
     /**
@@ -368,13 +359,8 @@ public class Utils {
      * @since 0.1
      */
     public static boolean isVideo(Path osTargetFilePath) {
-        try {
-            String fileType = getFileType(osTargetFilePath);
-            return Objects.equals(fileType, "video");
-
-        } catch (FileTypeDetectionException e) {
-            throw new ValidationException("Specified file is not a video");
-        }
+        String fileType = getFileType(osTargetFilePath);
+        return Objects.equals(fileType, "video");
     }
 
     /**
@@ -384,12 +370,8 @@ public class Utils {
      * @since 0.1
      */
     public static boolean isText(Path osTargetFilePath) {
-        try {
-            String fileType = getFileType(osTargetFilePath);
-            return Objects.equals(fileType, "text");
-        } catch (FileTypeDetectionException e) {
-            throw new ValidationException("Specified file is not a text");
-        }
+        String fileType = getFileType(osTargetFilePath);
+        return Objects.equals(fileType, "text");
     }
 
     /**
