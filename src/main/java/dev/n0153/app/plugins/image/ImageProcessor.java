@@ -3,7 +3,6 @@ package dev.n0153.app.plugins.image;
 import dev.n0153.app.*;
 import dev.n0153.app.exceptions.ImageProcessingException;
 import dev.n0153.app.exceptions.MimeTypeDetectionException;
-import dev.n0153.app.exceptions.ValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.opencv.core.*;
@@ -31,7 +30,7 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
 //    }
 
     public boolean checkMeta() {
-        return this.config != null && this.context != null;
+        return this.config != null || this.context != null;
     }
 
     /**
@@ -61,13 +60,13 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
      * @throws ImageProcessingException If fails to process logo image.
      * @since 0.1
      */
-    public Mat alterLogoTransparency(Mat image, double transparency) throws ImageProcessingException {
+    public Mat alterLogoTransparency(Mat image, double transparency) {
         if (image == null) {
-            throw new ValidationException("Empty image was provided");
+            throw new ImageProcessingException("Empty image was provided");
         }
 
         if (image.getClass() != Mat.class) {
-            throw new ValidationException("Invalid class was provided");
+            throw new ImageProcessingException("Invalid class was provided");
         }
         logger.info("Changing logo transparency to {}", transparency);
         List<Mat> channels = new ArrayList<>();
@@ -155,7 +154,7 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
         if (context.getLogo().empty() || context.getImage().empty()){
             logger.error("Empty file passed. Is Image empty - {}, is logo empty - {}",
                     context.getImage().empty(), context.getLogo().empty());
-            throw new IllegalArgumentException("Empty file passed");
+            throw new ImageProcessingException("Empty file passed");
         }
 //        check - if logo has 4 channels. if not - add alpha channel and set to 255, if yes - clone logo
         Mat logoBGRA = new Mat();
@@ -289,7 +288,7 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
     }
 
     @Override
-    public void process(Path osTargetPath) throws ImageProcessingException {
+    public void process(Path osTargetPath) {
         logger.info("current config width: {}, height: {}", config.getImgMaxWidth(), config.getImgMaxHeight());
         try {
             context.setImage(Imgcodecs.imread(osTargetPath.toString(), Imgcodecs.IMREAD_UNCHANGED));
@@ -301,7 +300,7 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
                 applyWatermarkAtRandomPosition();
             }
         } catch (MimeTypeDetectionException e) {
-            throw new ImageProcessingException("Failed to process image", osTargetPath);
+            throw new ImageProcessingException("Failed to process image", osTargetPath, e);
         }
     }
 
