@@ -31,7 +31,7 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
 //    }
 
     public boolean checkMeta() {
-        return this.config != null || this.context != null;
+        return this.config != null && this.context != null;
     }
 
     /**
