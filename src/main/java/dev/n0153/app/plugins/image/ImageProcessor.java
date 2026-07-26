@@ -22,12 +22,6 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
         this.context = context;
         this.globalConfig = globalConfig;
     }
-//    @Override
-//    public void createMeta(Object... args) {
-//        this.config = Utils.requireArgs(args, 0, ImageConfig.class);
-//        this.context = Utils.requireArgs(args, 1, ImageContext.class);
-//        this.globalConfig = Utils.requireArgs(args, 2, GlobalConfig.class);
-//    }
 
     public boolean checkMeta() {
         return this.config != null || this.context != null;
