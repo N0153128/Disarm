@@ -172,7 +172,7 @@ public class ImageConfig implements MediaConfig {
         if (height > getImgMaxHeight()) {
             throw new IllegalArgumentException("Height cannot exceed maximum image height value");
         }
-        put(newFixedValueScaling, newFixedValueScaling);
+        put(KEY_FIXED_VALUE_SCALING, newFixedValueScaling);
     }
 
     public void setKeepLogo(boolean keepLogo) {
