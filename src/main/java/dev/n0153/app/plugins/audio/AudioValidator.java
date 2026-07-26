@@ -42,10 +42,10 @@ public class AudioValidator implements MediaValidator {
      */
     public boolean checkAudioCodecWhiteList(String mimeType, String codec) {
         if (mimeType == null) {
-            throw new ValidationException("Audio Validator: Mime is null");
+            return false;
         }
         if (codec == null) {
-            throw new ValidationException("Audio Validator: Codec is null");
+            return false;
         }
         return config.isCodecAllowed(mimeType, codec);
     }
@@ -70,10 +70,10 @@ public class AudioValidator implements MediaValidator {
      */
     public boolean checkAudioBitrate(String mimeType, int bitrate) {
         if (bitrate < -1) {
-            throw new ValidationException("Audio Validator: corrupt bitrate detected");
+            return false;
         }
         if (mimeType == null) {
-            throw new ValidationException("Audio Validator: mime is null");
+            return false;
         }
         return bitrate <= config.getMaxBitrates(mimeType);
     }
