@@ -2,6 +2,7 @@ package dev.n0153.app.plugins.image;
 
 import dev.n0153.app.MediaConfig;
 
+import javax.swing.plaf.PanelUI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -17,6 +18,7 @@ public class ImageConfig implements MediaConfig {
     private final int logoMaxWidth = 50;
     private final int logoMaxHeight = 50;
     private final double transparency = 0.5;
+    private final String fixedValueScaling = null;
 
     private final String KEY_LOGO_SIZE_LIMIT = "logoSizeLimit";
     private final String KEY_KEEP_LOGO = "keepLogo";
@@ -26,6 +28,7 @@ public class ImageConfig implements MediaConfig {
     private final String KEY_LOGO_MAX_WIDTH = "logoMaxWidth";
     private final String KEY_LOGO_MAX_HEIGHT = "logoMaxHeight";
     private final String KEY_TRANSPARENCY = "transparency";
+    private final String KEY_FIXED_VALUE_SCALING = "fixedValueScaling";
 
 
     private final Map<String, Object> configStorage = new HashMap<>() {{
@@ -37,6 +40,7 @@ public class ImageConfig implements MediaConfig {
         put(KEY_LOGO_MAX_WIDTH, logoMaxWidth);
         put(KEY_LOGO_MAX_HEIGHT, logoMaxHeight);
         put(KEY_TRANSPARENCY, transparency);
+        put(KEY_FIXED_VALUE_SCALING, fixedValueScaling);
     }};
 
     @Override
@@ -94,6 +98,12 @@ public class ImageConfig implements MediaConfig {
                 logoSizeLimit);
     }
 
+    public String getFixedValueScaling() {
+        return Objects.requireNonNullElse(
+                get(KEY_FIXED_VALUE_SCALING, String.class),
+                fixedValueScaling);
+    }
+
     public boolean isKeepLogo() {
         return Objects.requireNonNullElse(
                 get(KEY_KEEP_LOGO, Boolean.class),
@@ -142,6 +152,27 @@ public class ImageConfig implements MediaConfig {
             throw new IllegalArgumentException("Logo size limit cannot be less than zero");
         }
         put(KEY_LOGO_SIZE_LIMIT, newLogoSizeLimit);
+    }
+
+    public void setFixedValueScaling(String newFixedValueScaling) {
+        if (newFixedValueScaling == null) {
+            throw new IllegalArgumentException("Fixed value scaling cannot be null");
+        }
+        int width = Integer.parseInt(newFixedValueScaling.split("x")[0]);
+        int height = Integer.parseInt(newFixedValueScaling.split("x")[1]);
+        if (width < 0) {
+            throw new IllegalArgumentException("Width cannot be less than zero");
+        }
+        if (height < 0) {
+            throw new IllegalArgumentException("Height cannot be less than zero");
+        }
+        if (width > getImgMaxWidth()) {
+            throw new IllegalArgumentException("Width cannot exceed maximum image width value");
+        }
+        if (height > getImgMaxHeight()) {
+            throw new IllegalArgumentException("Height cannot exceed maximum image height value");
+        }
+        put(newFixedValueScaling, newFixedValueScaling);
     }
 
     public void setKeepLogo(boolean keepLogo) {

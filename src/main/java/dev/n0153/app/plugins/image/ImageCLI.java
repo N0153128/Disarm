@@ -52,6 +52,10 @@ public class ImageCLI implements Runnable {
     @CommandLine.Option(names = {"-lmh", "--logo-max-height"}, description = "Change maximum allowed logo height")
     private int logoMaxHeight;
 
+    @CommandLine.Option(names = {"-fvs", "--fixed-value-scaling"}, description =
+            "Specify fixed value scaling parameters in the following format: WidthxHeight. Example: 1920x1080")
+    private String fixedValueScaling;
+
     @Override
     public void run() {
         if (logoSizeLimit > 0) {
@@ -78,6 +82,9 @@ public class ImageCLI implements Runnable {
         if (logo != null) {
             this.context.setLogo(Imgcodecs.imread(logo.toString(), Imgcodecs.IMREAD_UNCHANGED));
             this.context.setLogoTitle(Utils.getTitle(logo, "png", true)); //REFACTOR THIS: logo img may not always be png
+        }
+        if (fixedValueScaling != null) {
+            config.setFixedValueScaling(fixedValueScaling);
         }
         registry.updateConfig("image", config);
     }
