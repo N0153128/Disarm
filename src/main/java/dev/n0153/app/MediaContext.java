@@ -21,4 +21,5 @@ public interface MediaContext extends AutoCloseable {
      * A method used by plugin caller to free up resources once the file has been processed
      */
     void release();
+    String getOutputTitle();
 }

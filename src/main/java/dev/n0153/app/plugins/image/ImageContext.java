@@ -34,6 +34,11 @@ public class ImageContext implements MediaContext {
     }
 
     @Override
+    public String getOutputTitle() {
+        return getImageTitle();
+    }
+
+    @Override
     public void close() throws Exception {}
 
     public final String KEY_IMAGE = "image";

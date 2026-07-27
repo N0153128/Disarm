@@ -170,6 +170,19 @@ public class MediaApp {
 
             // process input
             getProcessor(plugin, mediaConfig).process(osTargetPath);
+
+            // delete optionally
+            if (globalConfig.getDeleteResult()) {
+                try {
+                    Utils.fileDispose(globalConfig.getGeneralOutputPath()
+                            .resolve(plugin.getProcessor(mediaConfig)
+                                    .getContext().
+                                    getOutputTitle()));
+                } catch (IOException e) {
+                    logger.error("Failed to delete resul file: {}",
+                            globalConfig.getGeneralOutputPath().resolve(processingContext.getFilename()));
+                }
+            }
         } catch (DisarmException e) {
             boolean isUnsupported = e instanceof UnsupportedFileTypeException;
             if (isUnsupported && globalConfig.getSkipUnsupported()) {

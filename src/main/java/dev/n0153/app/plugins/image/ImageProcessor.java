@@ -200,10 +200,7 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
             List<Mat> bgrChannels = logoChannels.subList(0, 3);
             Core.merge(bgrChannels, logoBGR);
             logoBGR.copyTo(imageROI, alphaMask);
-
-            if (globalConfig.getKeepResult()) {
-                Imgcodecs.imwrite(globalConfig.getGeneralOutputPath().resolve(context.getImageTitle()).toString(), context.getImage());
-            }
+            Imgcodecs.imwrite(globalConfig.getGeneralOutputPath().resolve(context.getImageTitle()).toString(), context.getImage());
         }
 
         logoBGRA.release();

@@ -46,6 +46,11 @@ public class AudioContext implements MediaContext {
 
     }
 
+    @Override
+    public String getOutputTitle() {
+        return getAudioTitle();
+    }
+
     //getters
     public String getAudioTitle() {
         return get(KEY_AUDIO_TITLE, String.class);

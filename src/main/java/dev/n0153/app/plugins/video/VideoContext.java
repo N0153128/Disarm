@@ -52,6 +52,11 @@ public class VideoContext implements MediaContext {
     public void close() throws Exception {
     }
 
+    @Override
+    public String getOutputTitle() {
+        return getVideoTitle();
+    }
+
     //getters
     public String getVideoTitle() {
         return get(KEY_VIDEO_TITLE, String.class);

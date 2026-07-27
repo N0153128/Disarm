@@ -40,6 +40,11 @@ public class TextContext implements MediaContext {
     @Override
     public void close() throws Exception {}
 
+    @Override
+    public String getOutputTitle() {
+        return getTextTitle();
+    }
+
     public String getTextContent() {
         return get(KEY_TEXT_CONTENT, String.class);
     }
