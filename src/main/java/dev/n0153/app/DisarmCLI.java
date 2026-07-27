@@ -26,42 +26,71 @@ public class DisarmCLI implements Runnable{
         return new ArrayList<>(this.registry.listCLI());
     }
 
-    @CommandLine.Parameters(arity = "1..*", description = "input file")
+    @CommandLine.Parameters(arity = "1..*", description =
+            "Input file. Multiple files can be specified in a row, without a comma. Example: test.png test.jpeg")
     public Path[] inputPath;
 
-    @CommandLine.Option(names = {"-o", "--output"}, description = "output file path")
+    @CommandLine.Option(names = {"-o", "--output"}, description =
+            "Output file path, where disarmed file will be saved. Example: path/to/folder")
     private Path outputPath;
 
-    @CommandLine.Option(names = {"-do", "--delete-original"}, negatable = true, description = "delete the original file after disarming")
+    @CommandLine.Option(names = {"-do", "--delete-original"}, negatable = true, description =
+            "Delete the original input file after disarming")
     private boolean deleteOriginal;
 
-    @CommandLine.Option(names = {"-su", "--skip-unsupported"}, description = "Skip unsupported files")
+    @CommandLine.Option(names = {"-su", "--skip-unsupported"}, description =
+            "If specified file is not supported by either of the installed plugins," +
+                    " the file will be skipped with an appropriate warning message.")
     private boolean skipUnsupported;
 
-    @CommandLine.Option(names = {"-sc", "--skip-crashed"}, description = "Skip files, crashed in processing")
+    @CommandLine.Option(names = {"-sc", "--skip-crashed"}, description =
+            "If specified file's processing failed, the file will be skipped with" +
+                    " an appropriate warning message")
     private boolean skipCrashed;
 
-    @CommandLine.Option(names = {"-ve", "--verbose-errors"})
+    @CommandLine.Option(names = {"-ve", "--verbose-errors"}, description =
+            "If execution fails, Disarm will throw a detailed report" +
+                    " with all vital information, config snapshots and execution timing." +
+                    " \nAccepted values: \n" +
+                    "OFF - default value, feature disabled,\n" +
+                    "CONSOLE - error report is printed in the console,\n" +
+                    "FILE - error report is saved in the default error reports output path located at resources/output/reports,\n" +
+                    "BOTH - error report is saved in the default error reports output path and is printed in the console.\n" +
+                    "Example: -ve BOTH")
     private GlobalConfig.VerboseErrors verboseErrors;
 
-    @CommandLine.Option(names = {"-tt", "--track-time"})
+    @CommandLine.Option(names = {"-tt", "--track-time"}, description =
+            "Track when the program was booted, used for error reports, enabled by default, " +
+                    "specifying this param will disable boot time tracking.")
     private boolean trackTime;
 
-    @CommandLine.Option(names = {"-aifr", "--allow-input-from-root"})
+    @CommandLine.Option(names = {"-aifr", "--allow-input-from-root"}, description =
+            "SECURITY SENSITIVE: Lifts a limitation, which prevents users from " +
+                    "passing files from anywhere on the disk. Disabled by default " +
+                    "due to security concerns, so that remote users cannot access files outside of " +
+                    "the default input root")
     private boolean allowInputFromRoot;
 
-    @CommandLine.Option(names = {"-dm", "--detect-mime"})
+    @CommandLine.Option(names = {"-dm", "--detect-mime"}, description =
+            "DEBUG: Prints detected mime type for specified file. " +
+                    "This mode does not perform any disarming and is used for debug purposes." +
+                    " Disabled by default.")
     private boolean detectMime;
 
-    @CommandLine.Option(names = {"-dr", "--delete-result"})
+    @CommandLine.Option(names = {"-dr", "--delete-result"}, description =
+            "Executes an entire file disarming cycle for benchmarking purposes." +
+                    " Resulting file is deleted from the disk once execution finishes.")
     private boolean deleteResult;
 
 
-    @CommandLine.Option(names = {"-ro", "--reports-output"}, description = "Reports output path")
+    @CommandLine.Option(names = {"-ro", "--reports-output"}, description =
+            "Error reports output path used to save verbose error (-ve) reports." +
+                    " Defaults to resources/output/reports.")
     private Path reportsPath;
 
-    @CommandLine.Option(names = {"-b", "--benchmark"}, description = "Enable benchmarking to see how much time file" +
-            "processing took")
+    @CommandLine.Option(names = {"-b", "--benchmark"}, description =
+            "Enable benchmarking to see how much time file" +
+            " processing took")
     private boolean benchmark;
 
 
