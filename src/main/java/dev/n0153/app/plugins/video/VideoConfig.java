@@ -110,6 +110,7 @@ public class VideoConfig implements MediaConfig {
     private final int outputFrameRate = 30;
     private final String defaultOutputTo = "default";
     private final String swapAV1 = "vp8";
+    private final Boolean dontSaveVideo = false;
 
     private final String KEY_MAX_VIDEO_DURATION = "maxVideoDuration";
     private final String KEY_MAX_FILE_SIZE = "maxFileSize";
@@ -131,6 +132,7 @@ public class VideoConfig implements MediaConfig {
     private final String KEY_OUTPUT_FRAME_RATE = "outputFrameRate";
     private final String KEY_DEFAULT_OUTPUT_TO = "defaultOutputTo";
     private final String KEY_SWAP_AV1 = "swapAV1";
+    private final String KEY_DONT_SAVE_VIDEO= "dontSaveVideo";
 
     private final Map<String, Object> configStorage = new HashMap<>() {{
         put(KEY_MAX_VIDEO_DURATION, maxVideoDuration);
@@ -153,6 +155,7 @@ public class VideoConfig implements MediaConfig {
         put(KEY_OUTPUT_FRAME_RATE, outputFrameRate);
         put(KEY_DEFAULT_OUTPUT_TO, defaultOutputTo);
         put(KEY_SWAP_AV1, swapAV1);
+        put(KEY_DONT_SAVE_VIDEO, dontSaveVideo);
     }};
 
     @Override
@@ -204,6 +207,12 @@ public class VideoConfig implements MediaConfig {
     }
 
     // getters
+
+    public boolean getDontSaveVideo() {
+        return Objects.requireNonNullElse(
+                get(KEY_DONT_SAVE_VIDEO, Boolean.class),
+                dontSaveVideo);
+    }
 
     public String getSwapAV1() {
         return get(KEY_SWAP_AV1, String.class);
@@ -334,6 +343,10 @@ public class VideoConfig implements MediaConfig {
     }
 
     //setters
+
+    public void setDontSaveVideo(boolean newDontSaveVideo) {
+        put(KEY_DONT_SAVE_VIDEO, newDontSaveVideo);
+    }
 
     public void setSwapAV1(String newSwapAV1) {
         List<String> allowedCodecs = List.of("av1", "vp8", "vp9");
