@@ -27,13 +27,21 @@ public class TextCLI  implements Runnable {
     @CommandLine.ParentCommand
     DisarmCLI inputPath;
 
-    @CommandLine.Option(names = {"-mts", "--max-text-size"}, description = "Change text size limit (ms)")
+    @CommandLine.Option(names = {"-mts", "--max-text-size"}, description =
+            "Changes text file size limit. " +
+                    "Accepts bytes as integers. Example for 10MB: -mts 10000000")
     private int textSize;
 
-    @CommandLine.Option(names = {"-oe", "--output-encoding"}, description = "Change output encoding, defaults to UTF-8")
+    @CommandLine.Option(names = {"-oe", "--output-encoding"}, description =
+            "Changes output encoding, defaults to UTF-8. " +
+                    "Accepts one of the supported values: UTF-8, US_ASCII, UTF-16BE, UTF-16LE and ISO_8859_1." +
+                    " Example: -oe UTF-16BE")
     private String outputEncoding;
 
-    @CommandLine.Option(names = {"-nf", "--normalize-form"}, description = "Change normalization form, defaults to NFKC")
+    @CommandLine.Option(names = {"-nf", "--normalize-form"}, description =
+            "Changes text normalization form, defaults to NFKC. " +
+                    "Accepts one of the supported values: NFKC, NFC, NFD, NFKD. " +
+                    "Example: -nf NFD")
     private String normalizeForm;
 
     @Override
