@@ -103,7 +103,7 @@ public class ImageCLI implements Runnable {
             this.context.setLogoTitle(Utils.getTitle(logo, "png", true)); //REFACTOR THIS: logo img may not always be png
         }
         if (fixedValueScaling != null) {
-            config.setFixedValueScaling(fixedValueScaling);
+            this.config.setFixedValueScaling(fixedValueScaling);
         }
         registry.updateConfig("image", config);
     }
