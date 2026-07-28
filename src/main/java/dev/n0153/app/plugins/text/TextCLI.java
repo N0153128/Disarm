@@ -12,7 +12,7 @@ import java.text.Normalizer;
 import java.util.Objects;
 
 
-@Command(name = "text", description = "Text processing plugin ")
+@Command(name = "text", description = "Text Processing Plugin.", mixinStandardHelpOptions = true)
 public class TextCLI  implements Runnable {
     private static final Logger logger = LogManager.getLogger(TextCLI.class);
 

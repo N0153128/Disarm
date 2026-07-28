@@ -11,7 +11,7 @@ import picocli.CommandLine.Command;
 
 import java.nio.file.Path;
 
-@Command(name = "image", description = "Image Processing Plugin")
+@Command(name = "image", description = "Image Processing Plugin.", mixinStandardHelpOptions = true)
 public class ImageCLI implements Runnable {
     private static final Logger logger = LogManager.getLogger(ImageCLI.class);
 

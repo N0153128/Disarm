@@ -6,7 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine;
 
-@CommandLine.Command(name = "video", description = "Video Processing Plugin")
+@CommandLine.Command(name = "video", description = "Video Processing Plugin.", mixinStandardHelpOptions = true)
 public class VideoCLI implements Runnable {
     private static final Logger logger = LogManager.getLogger(VideoCLI.class);
 
