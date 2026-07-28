@@ -102,7 +102,7 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
         } else {
             source.copyTo(destination);
         }
-        if (config.isKeepImage()) {
+        if (!config.isDeleteImageResult()) {
             Imgcodecs.imwrite(globalConfig.getGeneralOutputPath().resolve(context.getImageTitle()).toString(), destination);
         }
         context.setImage(destination);
@@ -131,7 +131,7 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
         } else {
             context.setImage(source.clone());
         }
-        if (config.isKeepImage()) {
+        if (!config.isDeleteImageResult()) {
             Imgcodecs.imwrite(globalConfig.getGeneralOutputPath().resolve(context.getImageTitle()).toString(), context.getImage());
         }
         destination.release();
