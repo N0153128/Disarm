@@ -44,6 +44,12 @@ public class TextCLI  implements Runnable {
                     "Example: -nf NFD")
     private String normalizeForm;
 
+    @CommandLine.Option(names = {"-dst", "--dont-save-text"}, description =
+            "Executes an entire text disarming cycle for benchmarking purposes." +
+                    " Resulting file will not be saved to disk. " +
+                    "Similar to -dr, but text-specific and skips the write entirely. Example: -dst")
+    private boolean dontSaveText;
+
     @Override
     public void run() {
         if (textSize > 0) {
@@ -75,6 +81,9 @@ public class TextCLI  implements Runnable {
         }
         if (Objects.equals(normalizeForm, "NFKD")) {
             this.config.setNormalizeForm(Normalizer.Form.NFKD);
+        }
+        if (dontSaveText) {
+            this.config.setDontSaveText(true);
         }
 
         registry.updateConfig("text", config);
