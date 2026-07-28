@@ -153,7 +153,14 @@ public class AudioProcessor implements MediaProcessor<AudioConfig> {
             } catch (UnsupportedAudioFileException ex) {
                 throw new AudioProcessingException("Audio Processor: native fallback failed", osTargetPath);
             }
+        }            if (config.getDontSaveAudio()) {
+            try {
+                Utils.fileDispose(globalConfig.getGeneralOutputPath().resolve(context.getAudioTitle()));
+            } catch (IOException e) {
+                logger.error("failed to delete audio file");
+            }
         }
+
     }
 
     @Override
