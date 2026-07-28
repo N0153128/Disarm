@@ -51,6 +51,12 @@ public class VideoCLI implements Runnable {
                     "Defaults to vp8. Example: -sav1 vp9")
     private String swapAV1;
 
+    @CommandLine.Option(names = {"-dsv", "--dont-save-video"}, description =
+            "Executes an entire video disarming cycle for benchmarking purposes. " +
+                    "Resulting file will be deleted immediately after processing. " +
+                    "Similar to -dr, but video-specific. Example: -dsv")
+    private boolean dontSaveVideo;
+
     @Override
     public void run() {
         if (maxVideoDuration > 0) {
@@ -70,6 +76,9 @@ public class VideoCLI implements Runnable {
         }
         if (swapAV1 != null) {
             this.config.setSwapAV1(swapAV1);
+        }
+        if (dontSaveVideo) {
+            this.config.setDontSaveVideo(true);
         }
 
         registry.updateConfig("video", config);
