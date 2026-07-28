@@ -43,8 +43,8 @@ public class AudioCLI implements Runnable {
 
     @CommandLine.Option(names = {"-dsa", "--dont-save-audio"}, description =
             "Executes an entire audio disarming cycle for benchmarking purposes. " +
-                    "Resulting file will not be saved to disk. " +
-                    "Similar to -dr, but audio-specific and skips the write entirely. Example: -dsa")
+                    "Resulting file will be deleted immediately after processing. " +
+                    "Similar to -dr, but audio-specific. Example: -dsa")
     private boolean dontSaveAudio;
 
     @Override
