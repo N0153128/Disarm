@@ -84,7 +84,7 @@ public class ImageCLI implements Runnable {
             this.config.setKeepLogo(true);
         }
         if (dontSaveImage) {
-            this.config.setDeleteImageResult(true);
+            this.config.setDontSaveImage(true);
         }
         if (imageMaxWidth > 0) {
             this.config.setImgMaxWidth(imageMaxWidth);
