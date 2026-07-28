@@ -72,6 +72,13 @@ public class VideoProcessor implements MediaProcessor<VideoConfig> {
                     context.getAudioSamplingRate(), context.getVideoCodec());
             Encoder encoder = new Encoder();
             encoder.encode(input, outputPath.toFile(), attrs);
+            if (config.getDontSaveVideo()) {
+                try {
+                    Utils.fileDispose(globalConfig.getGeneralOutputPath().resolve(context.getVideoTitle()));
+                } catch (IOException e) {
+                    logger.error("failed to delete video file");
+                }
+            }
             logger.info("re-encoded successfully");
 
         } catch (EncoderException e) {
