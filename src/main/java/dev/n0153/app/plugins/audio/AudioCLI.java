@@ -41,6 +41,12 @@ public class AudioCLI implements Runnable {
                     "Example: -tc 1")
     private int outputChannels;
 
+    @CommandLine.Option(names = {"-dsa", "--dont-save-audio"}, description =
+            "Executes an entire audio disarming cycle for benchmarking purposes. " +
+                    "Resulting file will not be saved to disk. " +
+                    "Similar to -dr, but audio-specific and skips the write entirely. Example: -dsa")
+    private boolean dontSaveAudio;
+
     @Override
     public void run() {
         if (maxAudioDuration > 0) {
@@ -54,6 +60,9 @@ public class AudioCLI implements Runnable {
         }
         if (outputChannels > 0) {
             this.config.setOutputChannels(outputChannels);
+        }
+        if (dontSaveAudio) {
+            this.config.setDontSaveAudio(true);
         }
 
         registry.updateConfig("audio", config);
