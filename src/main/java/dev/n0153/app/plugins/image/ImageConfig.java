@@ -12,7 +12,7 @@ public class ImageConfig implements MediaConfig {
 
     private final int logoSizeLimit = 5_000_000; //5MB
     private final boolean keepLogo = true;
-    private final boolean deleteImageResult = false;
+    private final boolean dontSaveImage = false;
     private final int imgMaxWidth = 512;
     private final int imgMaxHeight = 512;
     private final int logoMaxWidth = 50;
@@ -22,7 +22,7 @@ public class ImageConfig implements MediaConfig {
 
     private final String KEY_LOGO_SIZE_LIMIT = "logoSizeLimit";
     private final String KEY_KEEP_LOGO = "keepLogo";
-    private final String KEY_DELETE_IMAGE_RESULT = "deleteImageResult";
+    private final String KEY_DONT_SAVE_IMAGE = "dontSaveImage";
     private final String KEY_IMG_MAX_WIDTH = "imgMaxWidth";
     private final String KEY_IMG_MAX_HEIGHT = "imgMaxHeight";
     private final String KEY_LOGO_MAX_WIDTH = "logoMaxWidth";
@@ -34,7 +34,7 @@ public class ImageConfig implements MediaConfig {
     private final Map<String, Object> configStorage = new HashMap<>() {{
         put(KEY_LOGO_SIZE_LIMIT, logoSizeLimit);
         put(KEY_KEEP_LOGO, keepLogo);
-        put(KEY_DELETE_IMAGE_RESULT, deleteImageResult);
+        put(KEY_DONT_SAVE_IMAGE, dontSaveImage);
         put(KEY_IMG_MAX_WIDTH, imgMaxWidth);
         put(KEY_IMG_MAX_HEIGHT, imgMaxHeight);
         put(KEY_LOGO_MAX_WIDTH, logoMaxWidth);
@@ -110,10 +110,10 @@ public class ImageConfig implements MediaConfig {
                 keepLogo);
     }
 
-    public boolean isDeleteImageResult() {
+    public boolean getDontSaveImage() {
         return Objects.requireNonNullElse(
-                get(KEY_DELETE_IMAGE_RESULT, Boolean.class),
-                deleteImageResult);
+                get(KEY_DONT_SAVE_IMAGE, Boolean.class),
+                dontSaveImage);
     }
 
     public int getImgMaxWidth() {
@@ -179,8 +179,8 @@ public class ImageConfig implements MediaConfig {
         put(KEY_KEEP_LOGO, keepLogo);
     }
 
-    public void setDeleteImageResult(boolean keepImage) {
-        put(KEY_DELETE_IMAGE_RESULT, keepImage);
+    public void setDontSaveImage(boolean newDontSaveImage) {
+        put(KEY_DONT_SAVE_IMAGE, newDontSaveImage);
     }
 
     public void setImgMaxWidth(int newImgMaxWidth) {
