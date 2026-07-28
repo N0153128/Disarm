@@ -21,16 +21,24 @@ public class AudioCLI implements Runnable {
     @CommandLine.ParentCommand
     DisarmCLI inputPath;
 
-    @CommandLine.Option(names = {"-mad", "--max-audio-duration"}, description = "Change audio duration limit")
+    @CommandLine.Option(names = {"-mad", "--max-audio-duration"}, description =
+            "Changes maximum audio duration limit in milliseconds. " +
+                    "Default limit is set to 5 minutes (300,000). Example: -mad 600000")
     private int maxAudioDuration;
 
-    @CommandLine.Option(names = {"-tb", "--target-bitrate"}, description = "Change output bitrate")
+    @CommandLine.Option(names = {"-tb", "--target-bitrate"}, description =
+            "Changes output bitrate, accepts an integer. " +
+                    "Default output bitrate is set to 128000. Example: -tb 64000")
     private int outputBitrate;
 
-    @CommandLine.Option(names = {"-tsr", "--target-sample-rate"}, description = "Change output sample rate")
+    @CommandLine.Option(names = {"-tsr", "--target-sample-rate"}, description =
+            "Changes output sample rate, accepts an integer. " +
+                    "Default output sample rate is set to 44100. Example: -tsr 42100")
     private int outputSampleRate;
 
-    @CommandLine.Option(names = {"-tc", "--target-channels"}, description = "Change output channels. Defaults to 2 (Stereo)")
+    @CommandLine.Option(names = {"-tc", "--target-channels"}, description =
+            "Changes the amount of output channels. Accepts an integer, defaults to 2 (Stereo). " +
+                    "Example: -tc 1")
     private int outputChannels;
 
     @Override
