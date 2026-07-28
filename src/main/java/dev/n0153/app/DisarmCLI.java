@@ -26,7 +26,7 @@ public class DisarmCLI implements Runnable{
         return new ArrayList<>(this.registry.listCLI());
     }
 
-    @CommandLine.Parameters(arity = "1..*", description =
+    @CommandLine.Parameters(arity = "0..*", description =
             "Input file. Multiple files can be specified in a row, without a comma. Example: test.png test.jpeg")
     public Path[] inputPath;
 
