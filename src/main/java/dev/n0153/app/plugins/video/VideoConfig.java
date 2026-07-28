@@ -215,11 +215,15 @@ public class VideoConfig implements MediaConfig {
     }
 
     public String getSwapAV1() {
-        return get(KEY_SWAP_AV1, String.class);
+        return Objects.requireNonNullElse(
+                get(KEY_SWAP_AV1, String.class),
+                swapAV1);
     }
 
     public String getDefaultOutputTo() {
-        return get(KEY_DEFAULT_OUTPUT_TO, String.class);
+        return Objects.requireNonNullElse(
+                get(KEY_DEFAULT_OUTPUT_TO, String.class),
+                defaultOutputTo);
     }
 
     public int getMaxVideoDuration() {
