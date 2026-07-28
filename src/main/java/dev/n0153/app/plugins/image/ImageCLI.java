@@ -35,7 +35,7 @@ public class ImageCLI implements Runnable {
 
     @CommandLine.Option(names = {"-lsz", "--logo-size-limit"}, description =
             "Changes file size limit for logo image file. " +
-                    "This is a separate file size limit to the other image files. " +
+                    "This is a separate file size limit from the other image files. " +
                     "Accepts bytes as integers. Example for 10MB limit: -lsz 10000000")
     private int logoSizeLimit;
 
@@ -44,28 +44,35 @@ public class ImageCLI implements Runnable {
                     "Defaults to false. Example: -kl")
     private boolean keepLogo;
 
-    @CommandLine.Option(names = {"-ki", "--keep-image"}, description =
-            "Saves image as a file after processing")
-    private boolean keepImage;
+    @CommandLine.Option(names = {"-dsi", "--dont-save-image"}, description =
+            "Executes an entire image disarming cycle for benchmarking purposes." +
+                    " Resulting file will not be saved to disk. " +
+                    "Similar to -dr, but image-specific and skips the write entirely. Example: -dsi")
+    private boolean dontSaveImage;
 
     @CommandLine.Option(names = {"-imw", "--image-max-width"}, description =
-            "Change maximum allowed image width")
+            "Changes maximum allowed image width. " +
+                    "Accepts pixels as integers, defaults to 512. Example: -imw 1920")
     private int imageMaxWidth;
 
     @CommandLine.Option(names = {"-imh", "--image-max-height"}, description =
-            "Change maximum allowed image height")
+            "Changes maximum allowed image height. " +
+                    "Accepts pixels as integers, defaults to 512. Example: -imh 1080")
     private int imageMaxHeight;
 
     @CommandLine.Option(names = {"-lmw", "--logo-max-width"}, description =
-            "Change maximum allowed logo width")
+            "Changes maximum allowed logo width. " +
+                    "Accepts pixels as integers, defaults to 50. Example: -lmw 100")
     private int logoMaxWidth;
 
     @CommandLine.Option(names = {"-lmh", "--logo-max-height"}, description =
-            "Change maximum allowed logo height")
+            "Changes maximum allowed logo height. " +
+                    "Accepts pixels as integers, defaults to 50. Example: -lmh 100")
     private int logoMaxHeight;
 
     @CommandLine.Option(names = {"-fvs", "--fixed-value-scaling"}, description =
-            "Specify fixed value scaling parameters in the following format: WidthxHeight. Example: 1920x1080")
+            "Specify fixed value scaling parameters in the following format: WidthxHeight." +
+                    " Example: 1920x1080")
     private String fixedValueScaling;
 
     @Override
@@ -76,7 +83,7 @@ public class ImageCLI implements Runnable {
         if (keepLogo) {
             this.config.setKeepLogo(true);
         }
-        if (keepImage) {
+        if (dontSaveImage) {
             this.config.setDeleteImageResult(true);
         }
         if (imageMaxWidth > 0) {
