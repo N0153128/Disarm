@@ -88,7 +88,9 @@ public class TextProcessor implements MediaProcessor<TextConfig> {
             normalizeUnicode();
             stripPatterns();
             escapeHTML();
-            saveTextData();
+            if (!config.getDontSaveText()) {
+                saveTextData();
+            }
         } catch (IOException e) {
             throw new TextProcessingException("Failed to save text file", osTargetPath);
         }
