@@ -182,7 +182,10 @@ public class AudioConfig implements MediaConfig {
     }
 
     public String getDefaultOutputTo() {
-        return get(KEY_DEFAULT_OUTPUT_TO, String.class);
+        return Objects.requireNonNullElse(
+                get(KEY_DEFAULT_OUTPUT_TO, String.class),
+                defaultOutputTo
+        );
     }
 
     public int getMaxFileSize() {
