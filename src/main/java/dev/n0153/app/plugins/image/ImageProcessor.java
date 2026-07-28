@@ -131,7 +131,7 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
         } else {
             context.setImage(source.clone());
         }
-        if (!config.isDeleteImageResult()) {
+        if (!config.getDontSaveImage()) {
             Imgcodecs.imwrite(globalConfig.getGeneralOutputPath().resolve(context.getImageTitle()).toString(), context.getImage());
         }
         destination.release();
