@@ -16,12 +16,14 @@ public class TextConfig implements MediaConfig {
     ));
     private final Normalizer.Form normalizeForm = Normalizer.Form.NFKC;
     private final Charset outputEncoding = StandardCharsets.UTF_8;
+    private final boolean dontSaveText = false;
 
     private final String KEY_MAX_TEXT_SIZE = "maxTextSize";
     private final String KEY_URL_SCHEMES = "urlSchemes";
     private final String KEY_ZERO_LENGTH_CHARS = "zeroLengthChars";
     private final String KEY_NORMALIZE_FORM = "normalizeForm";
     private final String KEY_OUTPUT_ENCODING = "outputEncoding";
+    private final String KEY_DONT_SAVE_TEXT = "dontSaveText";
 
     private final Map<String, Object> configStorage = new HashMap<>() {{
         put(KEY_MAX_TEXT_SIZE, maxTextSize);
@@ -80,6 +82,13 @@ public class TextConfig implements MediaConfig {
         return 5_000_000;
     }
 
+    public boolean getDontSaveText() {
+        return Objects.requireNonNullElse(
+                get(KEY_DONT_SAVE_TEXT, Boolean.class),
+                dontSaveText
+        );
+    }
+
     public int getMaxTextSize() {
         return Objects.requireNonNullElse(
                 get(KEY_MAX_TEXT_SIZE, Integer.class),
@@ -114,6 +123,10 @@ public class TextConfig implements MediaConfig {
                 get(KEY_OUTPUT_ENCODING, Charset.class),
                 outputEncoding
         );
+    }
+
+    public void setDontSaveText(boolean newDontSaveText) {
+        put(KEY_DONT_SAVE_TEXT, newDontSaveText);
     }
 
     public void setMaxTextSize(int newMaxTextSize) {
