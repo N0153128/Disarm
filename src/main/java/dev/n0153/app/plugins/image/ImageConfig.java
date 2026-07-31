@@ -162,6 +162,9 @@ public class ImageConfig implements MediaConfig {
         if (newImageOutputTo.isEmpty()) {
             throw new IllegalArgumentException("Image output container cannot be empty");
         }
+        if (supports().contains(newImageOutputTo)) {
+            throw new IllegalArgumentException("Provided image output container is not supported");
+        }
         put(KEY_IMAGE_DEFAULT_OUTPUT_TO, newImageOutputTo);
     }
 
