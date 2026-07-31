@@ -155,7 +155,7 @@ public class ImageConfig implements MediaConfig {
 
     //setters
 
-    public void setLogoSizeLimit(String newImageOutputTo) {
+    public void setImageOutputTo(String newImageOutputTo) {
         if (newImageOutputTo == null) {
             throw new IllegalArgumentException("Image output container cannot be null");
         }
