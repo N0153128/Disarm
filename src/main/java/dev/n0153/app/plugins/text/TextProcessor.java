@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.Normalizer;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class TextProcessor implements MediaProcessor<TextConfig> {
@@ -74,7 +75,13 @@ public class TextProcessor implements MediaProcessor<TextConfig> {
      */
     public void saveTextData() throws IOException {
         Path toFile = globalConfig.getGeneralOutputPath().resolve(context.getTextTitle()+".txt");
-        Files.writeString(toFile, context.getTextContent(), config.getOutputEncoding());
+        if (Objects.equals(config.getTextDefaultOutputTo(), "default")) {
+            Files.writeString(toFile, context.getTextContent(), config.getOutputEncoding());
+        } else {
+            String baseTitle = context.getTextTitle().split("\\.")[0];
+            toFile = globalConfig.getGeneralOutputPath().resolve(baseTitle+config.getTextDefaultOutputTo());
+            Files.writeString(toFile, context.getTextContent(), config.getOutputEncoding());
+        }
     }
 
     @Override
