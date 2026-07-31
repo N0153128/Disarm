@@ -50,6 +50,12 @@ public class TextCLI  implements Runnable {
                     "Similar to -dr, but text-specific and skips the write entirely. Example: -dst")
     private boolean dontSaveText;
 
+    @CommandLine.Option(names = {"-tof", "--text-output-format"}, description =
+            "Changes output file's format, accepts one of supported formats: json, log, txt. " +
+                    "WARNING: certain format combinations will fail to save. " +
+                    "Example: -tof json")
+    private String textOutputFormat;
+
     @Override
     public void run() {
         if (textSize > 0) {
@@ -84,6 +90,9 @@ public class TextCLI  implements Runnable {
         }
         if (dontSaveText) {
             this.config.setDontSaveText(true);
+        }
+        if (textOutputFormat != null) {
+            this.config.setTextDefaultOutputTo(textOutputFormat);
         }
 
         registry.updateConfig("text", config);
