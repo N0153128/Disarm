@@ -42,6 +42,7 @@ public class ImageConfig implements MediaConfig {
         put(KEY_LOGO_MAX_HEIGHT, logoMaxHeight);
         put(KEY_TRANSPARENCY, transparency);
         put(KEY_FIXED_VALUE_SCALING, fixedValueScaling);
+        put(KEY_IMAGE_DEFAULT_OUTPUT_TO, imageDefaultOutputTo);
     }};
 
     @Override
@@ -157,13 +158,13 @@ public class ImageConfig implements MediaConfig {
 
     public void setImageOutputTo(String newImageOutputTo) {
         if (newImageOutputTo == null) {
-            throw new IllegalArgumentException("Image output container cannot be null");
+            throw new IllegalArgumentException("Image output format cannot be null");
         }
         if (newImageOutputTo.isEmpty()) {
-            throw new IllegalArgumentException("Image output container cannot be empty");
+            throw new IllegalArgumentException("Image output format cannot be empty");
         }
-        if (supports().contains(newImageOutputTo)) {
-            throw new IllegalArgumentException("Provided image output container is not supported");
+        if (!supports().contains(newImageOutputTo)) {
+            throw new IllegalArgumentException("Provided image output format is not supported");
         }
         put(KEY_IMAGE_DEFAULT_OUTPUT_TO, newImageOutputTo);
     }

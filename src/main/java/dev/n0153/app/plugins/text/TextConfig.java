@@ -15,22 +15,25 @@ public class TextConfig implements MediaConfig {
             '\u200B', '\u200D', '\uFEFF'
     ));
     private final Normalizer.Form normalizeForm = Normalizer.Form.NFKC;
-    private final Charset textOutputTo = StandardCharsets.UTF_8;
+    private final Charset outputEncoding = StandardCharsets.UTF_8;
     private final boolean dontSaveText = false;
+    private final String textDefaultOutputTo = "default";
 
     private final String KEY_MAX_TEXT_SIZE = "maxTextSize";
     private final String KEY_URL_SCHEMES = "urlSchemes";
     private final String KEY_ZERO_LENGTH_CHARS = "zeroLengthChars";
     private final String KEY_NORMALIZE_FORM = "normalizeForm";
-    private final String KEY_TEXT_OUTPUT_TO = "outputEncoding";
+    private final String KEY_OUTPUT_ENCODING = "outputEncoding";
     private final String KEY_DONT_SAVE_TEXT = "dontSaveText";
+    private final String KEY_TEXT_DEFAULT_OUTPUT_TO = "textDefaultOutputTo";
 
     private final Map<String, Object> configStorage = new HashMap<>() {{
         put(KEY_MAX_TEXT_SIZE, maxTextSize);
         put(KEY_URL_SCHEMES, urlSchemes);
         put(KEY_ZERO_LENGTH_CHARS, zeroLengthChars);
         put(KEY_NORMALIZE_FORM, normalizeForm);
-        put(KEY_TEXT_OUTPUT_TO, textOutputTo);
+        put(KEY_OUTPUT_ENCODING, outputEncoding);
+        put(KEY_TEXT_DEFAULT_OUTPUT_TO, textDefaultOutputTo);
     }};
 
 
@@ -82,6 +85,13 @@ public class TextConfig implements MediaConfig {
         return 5_000_000;
     }
 
+    public String getTextDefaultOutputTo() {
+        return Objects.requireNonNullElse(
+                get(KEY_TEXT_DEFAULT_OUTPUT_TO, String.class),
+                textDefaultOutputTo
+        );
+    }
+
     public boolean getDontSaveText() {
         return Objects.requireNonNullElse(
                 get(KEY_DONT_SAVE_TEXT, Boolean.class),
@@ -118,10 +128,10 @@ public class TextConfig implements MediaConfig {
         );
     }
 
-    public Charset getTextOutputTo() {
+    public Charset getOutputEncoding() {
         return Objects.requireNonNullElse(
-                get(KEY_TEXT_OUTPUT_TO, Charset.class),
-                textOutputTo
+                get(KEY_OUTPUT_ENCODING, Charset.class),
+                outputEncoding
         );
     }
 
@@ -166,10 +176,24 @@ public class TextConfig implements MediaConfig {
         put(KEY_NORMALIZE_FORM, newNormalizeForm);
     }
 
-    public void setTextOutputTo(Charset newTextOutputTo) {
-        if (newTextOutputTo == null) {
+    public void setOutputEncoding(Charset newOutputEncoding) {
+        if (newOutputEncoding == null) {
             throw new IllegalArgumentException("Output encoding cannot be null");
         }
-        put(KEY_TEXT_OUTPUT_TO, newTextOutputTo);
+        put(KEY_OUTPUT_ENCODING, newOutputEncoding);
+    }
+
+    public void setTextDefaultOutputTo(String newTextDefaultOutputTo) {
+        if (newTextDefaultOutputTo == null) {
+            throw new IllegalArgumentException("Text output format cannot be null");
+        }
+        if (newTextDefaultOutputTo.isEmpty()) {
+            throw new IllegalArgumentException("Text output format cannot be empty");
+
+        }
+        if (!supports().contains(newTextDefaultOutputTo)) {
+            throw new IllegalArgumentException("Provided text output format is not supported");
+        }
+        put(KEY_TEXT_DEFAULT_OUTPUT_TO, newTextDefaultOutputTo);
     }
 }
