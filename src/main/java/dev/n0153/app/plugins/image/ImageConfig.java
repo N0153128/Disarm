@@ -19,6 +19,7 @@ public class ImageConfig implements MediaConfig {
     private final int logoMaxHeight = 50;
     private final double transparency = 0.5;
     private final String fixedValueScaling = "";
+    private final String imageDefaultOutputTo = "default";
 
     private final String KEY_LOGO_SIZE_LIMIT = "logoSizeLimit";
     private final String KEY_KEEP_LOGO = "keepLogo";
@@ -29,7 +30,7 @@ public class ImageConfig implements MediaConfig {
     private final String KEY_LOGO_MAX_HEIGHT = "logoMaxHeight";
     private final String KEY_TRANSPARENCY = "transparency";
     private final String KEY_FIXED_VALUE_SCALING = "fixedValueScaling";
-
+    private final String KEY_IMAGE_DEFAULT_OUTPUT_TO = "imageDefaultOutputTo";
 
     private final Map<String, Object> configStorage = new HashMap<>() {{
         put(KEY_LOGO_SIZE_LIMIT, logoSizeLimit);
@@ -98,6 +99,12 @@ public class ImageConfig implements MediaConfig {
                 logoSizeLimit);
     }
 
+    public String getImageDefaultOutputTo() {
+        return Objects.requireNonNullElse(
+                get(KEY_IMAGE_DEFAULT_OUTPUT_TO, String.class),
+                imageDefaultOutputTo);
+    }
+
     public String getFixedValueScaling() {
         return Objects.requireNonNullElse(
                 get(KEY_FIXED_VALUE_SCALING, String.class),
@@ -147,6 +154,17 @@ public class ImageConfig implements MediaConfig {
     }
 
     //setters
+
+    public void setLogoSizeLimit(String newImageOutputTo) {
+        if (newImageOutputTo == null) {
+            throw new IllegalArgumentException("Image output container cannot be null");
+        }
+        if (newImageOutputTo.isEmpty()) {
+            throw new IllegalArgumentException("Image output container cannot be empty");
+        }
+        put(KEY_IMAGE_DEFAULT_OUTPUT_TO, newImageOutputTo);
+    }
+
     public void setLogoSizeLimit(int newLogoSizeLimit) {
         if (newLogoSizeLimit < 0) {
             throw new IllegalArgumentException("Logo size limit cannot be less than zero");
