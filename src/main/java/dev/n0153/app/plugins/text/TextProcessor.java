@@ -79,7 +79,7 @@ public class TextProcessor implements MediaProcessor<TextConfig> {
             Files.writeString(toFile, context.getTextContent(), config.getOutputEncoding());
         } else {
             String baseTitle = context.getTextTitle().split("\\.")[0];
-            toFile = globalConfig.getGeneralOutputPath().resolve(baseTitle+config.getTextDefaultOutputTo());
+            toFile = globalConfig.getGeneralOutputPath().resolve(baseTitle+"."+config.getTextDefaultOutputTo());
             Files.writeString(toFile, context.getTextContent(), config.getOutputEncoding());
         }
     }
