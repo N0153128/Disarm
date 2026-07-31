@@ -87,7 +87,7 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
                 Imgcodecs.imwrite(globalConfig.getGeneralOutputPath().resolve(context.getImageTitle()).toString(), destination);
             } else {
                 String baseTitle = context.getImageTitle().split("\\.")[0];
-                context.setImageTitle(baseTitle+config.getImageDefaultOutputTo());
+                context.setImageTitle(baseTitle+"."+config.getImageDefaultOutputTo());
                 Imgcodecs.imwrite(globalConfig.getGeneralOutputPath().resolve(context.getImageTitle()).toString(), destination);
             }
         }
