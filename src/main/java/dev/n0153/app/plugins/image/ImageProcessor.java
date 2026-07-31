@@ -81,6 +81,18 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
         }
     }
 
+    public void saveImage(Mat destination) {
+        if (!config.getDontSaveImage()) {
+            if (Objects.equals(config.getImageDefaultOutputTo(), "default")) {
+                Imgcodecs.imwrite(globalConfig.getGeneralOutputPath().resolve(context.getImageTitle()).toString(), destination);
+            } else {
+                String baseTitle = context.getImageTitle().split("\\.")[0];
+                context.setImageTitle(baseTitle+config.getImageDefaultOutputTo());
+                Imgcodecs.imwrite(globalConfig.getGeneralOutputPath().resolve(context.getImageTitle()).toString(), destination);
+            }
+        }
+    }
+
     /**
      * Scales given image Mat object to any specified dimensions.
      * @param source OpenCV's image object.
@@ -102,9 +114,7 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
         } else {
             source.copyTo(destination);
         }
-        if (!config.getDontSaveImage()) {
-            Imgcodecs.imwrite(globalConfig.getGeneralOutputPath().resolve(context.getImageTitle()).toString(), destination);
-        }
+        saveImage(destination);
         context.setImage(destination);
         destination.release();
     }
@@ -131,9 +141,7 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
         } else {
             context.setImage(source.clone());
         }
-        if (!config.getDontSaveImage()) {
-            Imgcodecs.imwrite(globalConfig.getGeneralOutputPath().resolve(context.getImageTitle()).toString(), context.getImage());
-        }
+        saveImage(destination);
         destination.release();
     }
 
@@ -200,7 +208,7 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
             List<Mat> bgrChannels = logoChannels.subList(0, 3);
             Core.merge(bgrChannels, logoBGR);
             logoBGR.copyTo(imageROI, alphaMask);
-            Imgcodecs.imwrite(globalConfig.getGeneralOutputPath().resolve(context.getImageTitle()).toString(), context.getImage());
+            saveImage(context.getImage());
         }
 
         logoBGRA.release();
