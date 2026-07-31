@@ -75,6 +75,13 @@ public class ImageCLI implements Runnable {
                     " Example: 1920x1080")
     private String fixedValueScaling;
 
+    @CommandLine.Option(names = {"-iof", "--image-output-format"}, description =
+            "Changes output file's format, accepts one of supported formats: jpeg (jpg), png, webp. " +
+                    "WARNING: certain format combinations will fail to save. " +
+                    "Example: -iof jpeg")
+    private String imageOutputFormat;
+
+
     @Override
     public void run() {
         if (logoSizeLimit > 0) {
@@ -104,6 +111,9 @@ public class ImageCLI implements Runnable {
         }
         if (fixedValueScaling != null) {
             this.config.setFixedValueScaling(fixedValueScaling);
+        }
+        if (imageOutputFormat != null) {
+            this.config.setImageOutputTo(imageOutputFormat);
         }
         registry.updateConfig("image", config);
     }
