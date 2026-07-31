@@ -15,14 +15,14 @@ public class TextConfig implements MediaConfig {
             '\u200B', '\u200D', '\uFEFF'
     ));
     private final Normalizer.Form normalizeForm = Normalizer.Form.NFKC;
-    private final Charset outputEncoding = StandardCharsets.UTF_8;
+    private final Charset textOutputTo = StandardCharsets.UTF_8;
     private final boolean dontSaveText = false;
 
     private final String KEY_MAX_TEXT_SIZE = "maxTextSize";
     private final String KEY_URL_SCHEMES = "urlSchemes";
     private final String KEY_ZERO_LENGTH_CHARS = "zeroLengthChars";
     private final String KEY_NORMALIZE_FORM = "normalizeForm";
-    private final String KEY_OUTPUT_ENCODING = "outputEncoding";
+    private final String KEY_TEXT_OUTPUT_TO = "outputEncoding";
     private final String KEY_DONT_SAVE_TEXT = "dontSaveText";
 
     private final Map<String, Object> configStorage = new HashMap<>() {{
@@ -30,7 +30,7 @@ public class TextConfig implements MediaConfig {
         put(KEY_URL_SCHEMES, urlSchemes);
         put(KEY_ZERO_LENGTH_CHARS, zeroLengthChars);
         put(KEY_NORMALIZE_FORM, normalizeForm);
-        put(KEY_OUTPUT_ENCODING, outputEncoding);
+        put(KEY_TEXT_OUTPUT_TO, textOutputTo);
     }};
 
 
@@ -118,10 +118,10 @@ public class TextConfig implements MediaConfig {
         );
     }
 
-    public Charset getOutputEncoding() {
+    public Charset getTextOutputTo() {
         return Objects.requireNonNullElse(
-                get(KEY_OUTPUT_ENCODING, Charset.class),
-                outputEncoding
+                get(KEY_TEXT_OUTPUT_TO, Charset.class),
+                textOutputTo
         );
     }
 
@@ -166,10 +166,10 @@ public class TextConfig implements MediaConfig {
         put(KEY_NORMALIZE_FORM, newNormalizeForm);
     }
 
-    public void setOutputEncoding(Charset newOutputEncoding) {
-        if (newOutputEncoding == null) {
+    public void setTextOutputTo(Charset newTextOutputTo) {
+        if (newTextOutputTo == null) {
             throw new IllegalArgumentException("Output encoding cannot be null");
         }
-        put(KEY_OUTPUT_ENCODING, newOutputEncoding);
+        put(KEY_TEXT_OUTPUT_TO, newTextOutputTo);
     }
 }
