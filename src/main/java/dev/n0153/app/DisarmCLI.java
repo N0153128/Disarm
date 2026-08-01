@@ -94,9 +94,16 @@ public class DisarmCLI implements Runnable{
     private boolean benchmark;
 
     @CommandLine.Option(names = {"-tfl", "--target-file-length"}, description =
-            "Changes input file's maximum acceptable length. Defaults to 150, accepts an amount of characters as int." +
+            "Changes input file's maximum acceptable length. Defaults to 150," +
+                    " accepts an amount of characters as integer." +
                     " Example: -tfl 200")
     private int targetFileLength;
+
+    @CommandLine.Option(names = {"-idl", "--id-length"}, description =
+            "Changes acceptable length of plugin IDs. Defaults to 150 characters," +
+                    " accepts an amount of characters as integer. " +
+                    "Example: -idl 10")
+    private int idLength;
 
     @CommandLine.Spec
     CommandLine.Model.CommandSpec spec;
@@ -158,6 +165,9 @@ public class DisarmCLI implements Runnable{
             }
             if (targetFileLength > 0) {
                 globalConfig.setTargetFileLength(targetFileLength);
+            }
+            if (idLength > 0) {
+                globalConfig.setIDLength(idLength);
             }
             // finalise parameters
             MediaApp app = new MediaApp(registry, globalConfig);
