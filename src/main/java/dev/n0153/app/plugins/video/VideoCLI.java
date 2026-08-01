@@ -57,6 +57,12 @@ public class VideoCLI implements Runnable {
                     "Similar to -dr, but video-specific. Example: -dsv")
     private boolean dontSaveVideo;
 
+    @CommandLine.Option(names = {"-vof", "--video-output-format"}, description =
+            "Changes output file's format, accepts one of supported formats: mp4, mov, mkv (matroska), webm" +
+                    "WARNING: certain container combinations will fail to save. " +
+                    "Example: -vof wav")
+    private String videoOutputFormat;
+
     @Override
     public void run() {
         if (maxVideoDuration > 0) {
@@ -79,6 +85,9 @@ public class VideoCLI implements Runnable {
         }
         if (dontSaveVideo) {
             this.config.setDontSaveVideo(true);
+        }
+        if (videoOutputFormat != null) {
+            this.config.setDefaultOutputTo(videoOutputFormat);
         }
 
         registry.updateConfig("video", config);
