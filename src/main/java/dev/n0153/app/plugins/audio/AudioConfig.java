@@ -130,6 +130,9 @@ public class AudioConfig implements MediaConfig {
         put(KEY_OUTPUT_CHANNELS, outputChannels);
         put(KEY_MAX_FILE_SIZE, maxFileSize);
         put(KEY_DONT_SAVE_AUDIO, dontSaveAudio);
+        put(KEY_DEFAULT_OUTPUT_TO, defaultOutputTo);
+        put(KEY_ALLOWED_AUDIO_CODECS, allowedAudioCodecs);
+        put(KEY_MIME_TO_FORMAT, mimeToFormat);
     }};
 
     @Override
@@ -189,7 +192,10 @@ public class AudioConfig implements MediaConfig {
     }
 
     public int getMaxFileSize() {
-        return get(KEY_MAX_FILE_SIZE, Integer.class);
+        return Objects.requireNonNullElse(
+                get(KEY_MAX_FILE_SIZE, Integer.class),
+                maxFileSize
+        );
     }
 
     public boolean isCodecAllowed(String format, String codec) {
