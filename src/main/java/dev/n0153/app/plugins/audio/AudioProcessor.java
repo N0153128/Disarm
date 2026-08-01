@@ -171,9 +171,15 @@ public class AudioProcessor implements MediaProcessor<AudioConfig> {
             if (!Objects.equals(format, "flac")) {
                 context.setAudioBitrate(MediaUtils.getBitrate(osTargetPath, "audio"));
             }
-            context.setAudioTitle(Utils.getTitle(osTargetPath,
-                    config.getFormatFromMime(Utils.getMimeType(osTargetPath)),
-                    false));
+            if (Objects.equals(config.getDefaultOutputTo(), "default")) {
+                context.setAudioTitle(Utils.getTitle(osTargetPath,
+                        config.getFormatFromMime(Utils.getMimeType(osTargetPath)),
+                        false));
+            } else {
+                context.setAudioTitle(Utils.getTitle(osTargetPath, config.getDefaultOutputTo(),
+                        false));
+            }
+
             context.setAudioSamplingRate(MediaUtils.getSamplingRate(osTargetPath));
             context.setAudioChannels(MediaUtils.getAudioChannels(osTargetPath));
             reEncode(osTargetPath);
