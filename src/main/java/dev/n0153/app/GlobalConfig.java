@@ -9,7 +9,6 @@ import java.util.Objects;
 
 public class GlobalConfig {
     private final int generalSizeLimit = 5_000_000; // 5MB
-    private final boolean keepInputs = false;
     private final boolean deleteResult = false;
     private final boolean keepOriginal = true;
     private final int generalFileSizeUpperBoundLimit = 10_000_000;
@@ -30,7 +29,6 @@ public class GlobalConfig {
 
 
     private final String KEY_GENERAL_SIZE_LIMIT = "generalSizeLimit";
-    private final String KEY_KEEP_INPUTS = "keepInputs";
     private final String KEY_KEEP_ORIGINAL = "keepOriginal";
     private final String KEY_GENERAL_FILE_SIZE_UPPER_BOUND = "generalFileSizeUpperBoundLimit";
     private final String KEY_GENERAL_OUTPUT_PATH = "generalOutputPath";
@@ -50,7 +48,6 @@ public class GlobalConfig {
 
     private final Map<String, Object> globalConfigStorage = new HashMap<>() {{
         put(KEY_GENERAL_SIZE_LIMIT, generalSizeLimit);
-        put(KEY_KEEP_INPUTS, keepInputs);
         put(KEY_DELETE_RESULT, deleteResult);
         put(KEY_KEEP_ORIGINAL, keepOriginal);
         put(KEY_GENERAL_FILE_SIZE_UPPER_BOUND, generalFileSizeUpperBoundLimit);
@@ -161,13 +158,6 @@ public class GlobalConfig {
                 generalFileSizeUpperBoundLimit);
     }
 
-    public boolean getKeepInputs() {
-        return Objects.requireNonNullElse(
-                get(KEY_KEEP_INPUTS, Boolean.class),
-                keepInputs
-        );
-    }
-
     public boolean getDeleteResult() {
         return Objects.requireNonNullElse(
                 get(KEY_DELETE_RESULT, Boolean.class),
@@ -246,10 +236,6 @@ public class GlobalConfig {
 
     public void setBenchmarking(boolean newBenchmarking) {
         put(KEY_BENCHMARKING, newBenchmarking);
-    }
-
-    public void setKeepInputs(boolean newKeepInputs) {
-        put(KEY_KEEP_INPUTS, newKeepInputs);
     }
 
     public void setDeleteResult(boolean newDeleteResult) {
