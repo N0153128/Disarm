@@ -93,6 +93,10 @@ public class DisarmCLI implements Runnable{
             " processing took")
     private boolean benchmark;
 
+    @CommandLine.Option(names = {"-tfl", "--target-file-length"}, description =
+            "Changes input file's maximum acceptable length. Defaults to 150, accepts an amount of characters as int." +
+                    " Example: -tfl 200")
+    private int targetFileLength;
 
     @CommandLine.Spec
     CommandLine.Model.CommandSpec spec;
@@ -151,6 +155,9 @@ public class DisarmCLI implements Runnable{
             }
             if (deleteResult) {
                 globalConfig.setDeleteResult(true);
+            }
+            if (targetFileLength > 0) {
+                globalConfig.setTargetFileLength(targetFileLength);
             }
             // finalise parameters
             MediaApp app = new MediaApp(registry, globalConfig);

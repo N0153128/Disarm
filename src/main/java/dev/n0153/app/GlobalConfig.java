@@ -263,7 +263,7 @@ public class GlobalConfig {
         put(KEY_GENERAL_OUTPUT_PATH, newGeneralOutputPath);
     }
 
-    private void setTargetFileLength(int newTargetFileLength) {
+    public void setTargetFileLength(int newTargetFileLength) {
         if (newTargetFileLength < 0) {
             throw new IllegalArgumentException("Target file length cannot be less than zero");
         }
