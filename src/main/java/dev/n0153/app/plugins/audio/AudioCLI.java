@@ -47,6 +47,13 @@ public class AudioCLI implements Runnable {
                     "Similar to -dr, but audio-specific. Example: -dsa")
     private boolean dontSaveAudio;
 
+    @CommandLine.Option(names = {"-aof", "--audio-output-format"}, description =
+            "Changes output file's format, accepts one of supported formats: mp3, ogg, au, " +
+                    "flac, wav, aif (aiff, aifc). " +
+                    "WARNING: certain container combinations will fail to save. " +
+                    "Example: -aof wav")
+    private String audioOutputFormat;
+
     @Override
     public void run() {
         if (maxAudioDuration > 0) {
@@ -64,7 +71,9 @@ public class AudioCLI implements Runnable {
         if (dontSaveAudio) {
             this.config.setDontSaveAudio(true);
         }
-
+        if (audioOutputFormat != null) {
+            this.config.setDefaultOutputTo(audioOutputFormat);
+        }
         registry.updateConfig("audio", config);
     }
 }
