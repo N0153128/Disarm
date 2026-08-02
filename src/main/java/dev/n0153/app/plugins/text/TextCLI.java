@@ -61,7 +61,7 @@ public class TextCLI  implements Runnable {
         if (textSize > 0) {
             this.config.setMaxTextSize(textSize);
         }
-        if (Objects.equals(outputEncoding, "UTF-8")) {
+        if (Objects.equals(outputEncoding, "UTF-16")) {
             this.config.setOutputEncoding(StandardCharsets.UTF_16);
         }
         if (Objects.equals(outputEncoding, "US_ASCII")) {
