@@ -87,9 +87,9 @@ public class AudioConfig implements MediaConfig {
     private final int maxChannels = 2;
     private final int bitrateFallback = 320_000;
     private final int samplingRateFallback = 48_000;
-    private final int outputBitrate = 128_000;
-    private final int outputSampleRate = 44_100;
-    private final int outputChannels = 2;
+    private final int outputBitrate = 0;
+    private final int outputSampleRate = 0;
+    private final int outputChannels = 0;
     private final int maxFileSize = 5_000_000; //5MB
     private final String defaultOutputTo = "default";
     private final boolean dontSaveAudio = false;
