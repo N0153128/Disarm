@@ -114,6 +114,7 @@ public class AudioProcessor implements MediaProcessor<AudioConfig> {
         } else {
             samplingRate = context.getAudioBitrate();
         }
+        audioAttrs.setSamplingRate(samplingRate); //mp3 sampling rate
 
         EncodingAttributes attrs = new EncodingAttributes();
         attrs.setAudioAttributes(audioAttrs);
