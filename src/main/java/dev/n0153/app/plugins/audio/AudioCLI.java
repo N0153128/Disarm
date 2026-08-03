@@ -54,6 +54,14 @@ public class AudioCLI implements Runnable {
                     "Example: -aof wav")
     private String audioOutputFormat;
 
+    @CommandLine.Option(names = {"-mafs", "--max-audio-file-size"}, description =
+            "Changes maximum allowed file size for an audio file, " +
+                    "accepts bytes as integer, defaults to 5000000 (5MB). " +
+                    "!WARNING: this value is sensitive and is used for validation." +
+                    " Example: -mafs 10000000")
+    private int maxAudioFileSize;
+
+
     @Override
     public void run() {
         if (maxAudioDuration > 0) {
@@ -73,6 +81,9 @@ public class AudioCLI implements Runnable {
         }
         if (audioOutputFormat != null) {
             this.config.setDefaultOutputTo(audioOutputFormat);
+        }
+        if (maxAudioFileSize > 0) {
+            this.config.setMaxFileSize(maxAudioFileSize);
         }
         registry.updateConfig("audio", config);
     }
