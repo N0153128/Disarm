@@ -224,7 +224,7 @@ public class Utils {
     }
 
     public static void setDisarmLogging(Level level) {
-        Configurator.setLevel("ws.schild.jave", level);
+        Configurator.setLevel("dev.n0153.app", level);
     }
 
     /**

@@ -1,5 +1,6 @@
 package dev.n0153.app;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine;
@@ -114,6 +115,21 @@ public class DisarmCLI implements Runnable{
                     " Example: -mll 20")
     private int mimeLength;
 
+    @CommandLine.Option(names = {"-ll", "--log-level"}, description =
+            "Changes log level from default to any Log4j supported level, " +
+                    "affect the amount of information shown during execution. \n" +
+                    "Defaults to DEBUG. Accepted values: \n" +
+                    "OFF - no logging output at all.\n" +
+                    "FATAL - only unrecoverable errors that stop execution.\n" +
+                    "ERROR - failures in a specific operation that don't necessarily halt the program.\n" +
+                    "WARN - potential problems and degraded behaviour that isn't fatal.\n" +
+                    "INFO - high-level lifecycle events (file processed, plugin resolved, config applied).\n" +
+                    "DEBUG - default level. Detailed internal state, useful for diagnosing incorrect behaviour.\n" +
+                    "TRACE - maximum verbosity, includes low-level step-by-step execution detail.\n" +
+                    "ALL - everything, including third party internals.\n" +
+                    "Example: -ll OFF")
+    private GlobalConfig.LoggingLevels logLevel;
+
     @CommandLine.Spec
     CommandLine.Model.CommandSpec spec;
 
@@ -180,6 +196,40 @@ public class DisarmCLI implements Runnable{
             }
             if (mimeLength > 0) {
                 globalConfig.setMimeLength(mimeLength);
+            }
+            if (logLevel != null) {
+                if (logLevel.equals(GlobalConfig.LoggingLevels.OFF)) {
+                    Utils.setDisarmLogging(Level.OFF);
+                    Utils.setJaveLogging(Level.OFF);
+                }
+                if (logLevel.equals(GlobalConfig.LoggingLevels.FATAL)) {
+                    Utils.setDisarmLogging(Level.FATAL);
+                    Utils.setJaveLogging(Level.FATAL);
+                }
+                if (logLevel.equals(GlobalConfig.LoggingLevels.ERROR)) {
+                    Utils.setDisarmLogging(Level.ERROR);
+                    Utils.setJaveLogging(Level.ERROR);
+                }
+                if (logLevel.equals(GlobalConfig.LoggingLevels.WARN)) {
+                    Utils.setDisarmLogging(Level.WARN);
+                    Utils.setJaveLogging(Level.WARN);
+                }
+                if (logLevel.equals(GlobalConfig.LoggingLevels.INFO)) {
+                    Utils.setDisarmLogging(Level.INFO);
+                    Utils.setJaveLogging(Level.INFO);
+                }
+                if (logLevel.equals(GlobalConfig.LoggingLevels.DEBUG)) {
+                    Utils.setDisarmLogging(Level.DEBUG);
+                    Utils.setJaveLogging(Level.DEBUG);
+                }
+                if (logLevel.equals(GlobalConfig.LoggingLevels.TRACE)) {
+                    Utils.setDisarmLogging(Level.TRACE);
+                    Utils.setJaveLogging(Level.TRACE);
+                }
+                if (logLevel.equals(GlobalConfig.LoggingLevels.ALL)) {
+                    Utils.setDisarmLogging(Level.ALL);
+                    Utils.setJaveLogging(Level.ALL);
+                }
             }
             // finalise parameters
             MediaApp app = new MediaApp(registry, globalConfig);

@@ -209,7 +209,7 @@ public class GlobalConfig {
         if (newLogLevel == null) {
             throw new IllegalArgumentException("Log level cannot be null");
         }
-        put(KEY_LOG_LEVEL, logLevel);
+        put(KEY_LOG_LEVEL, newLogLevel);
     }
 
     public void setInputRootPath(Path newInputRootPath) {
