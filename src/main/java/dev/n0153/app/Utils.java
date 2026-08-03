@@ -4,6 +4,8 @@ import dev.n0153.app.exceptions.*;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.config.Configurator;
+import org.apache.logging.log4j.Level;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -215,6 +217,14 @@ public class Utils {
                     osTargetPath
             );
         }
+    }
+
+    public static void setJaveLogging(Level level) {
+        Configurator.setLevel("ws.schild.jave", level);
+    }
+
+    public static void setDisarmLogging(Level level) {
+        Configurator.setLevel("ws.schild.jave", level);
     }
 
     /**
