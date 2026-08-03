@@ -26,6 +26,7 @@ public class GlobalConfig {
     private final Path reportsOutputPath = Paths.get("resources/output/reports");
     private final boolean restrictInputFromRoot = false;
     private final Path inputRootPath = Paths.get("resources");
+    private final boolean enableVerboseLogging = false;
 
 
     private final String KEY_GENERAL_SIZE_LIMIT = "generalSizeLimit";
@@ -45,6 +46,7 @@ public class GlobalConfig {
     private final String KEY_RESTRICT_INPUT_FROM_ROOT = "restrictInputFromRoot";
     private final String KEY_INPUT_ROOT_PATH = "inputRootPath";
     private final String KEY_DELETE_RESULT = "deleteResult";
+    private final String KEY_ENABLE_VERBOSE_LOGGING = "enableVerboseLogging";
 
     private final Map<String, Object> globalConfigStorage = new HashMap<>() {{
         put(KEY_GENERAL_SIZE_LIMIT, generalSizeLimit);
@@ -64,6 +66,7 @@ public class GlobalConfig {
         put(KEY_REPORTS_OUTPUT_PATH, reportsOutputPath);
         put(KEY_RESTRICT_INPUT_FROM_ROOT, restrictInputFromRoot);
         put(KEY_INPUT_ROOT_PATH, inputRootPath);
+        put(KEY_ENABLE_VERBOSE_LOGGING, enableVerboseLogging);
     }};
 
     public void put(String key, Object value) {
@@ -84,6 +87,12 @@ public class GlobalConfig {
 
     public <$ValueType> $ValueType get(String key, Class<$ValueType> type) {
         return type.cast(globalConfigStorage.get(key));
+    }
+
+    public boolean getEnableVerboseLogging() {
+        return Objects.requireNonNullElse(
+                get(KEY_ENABLE_VERBOSE_LOGGING, Boolean.class),
+                enableVerboseLogging);
     }
 
     public boolean getRestrictInputFromRoot() {
@@ -191,6 +200,10 @@ public class GlobalConfig {
                 get(KEY_GENERAL_SIZE_LIMIT, Integer.class),
                 generalSizeLimit
         );
+    }
+
+    public void setEnableVerboseLogging(boolean newEnableVerboseLogging) {
+        put(KEY_ENABLE_VERBOSE_LOGGING, newEnableVerboseLogging);
     }
 
     public void setInputRootPath(Path newInputRootPath) {
