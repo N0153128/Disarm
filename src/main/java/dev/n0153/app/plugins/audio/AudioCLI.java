@@ -61,6 +61,14 @@ public class AudioCLI implements Runnable {
                     " Example: -mafs 10000000")
     private int maxAudioFileSize;
 
+    @CommandLine.Option(names = {"-smbf", "--set-max-bitrate-for"}, description =
+            "Changes bitrate ceiling for specified format. " +
+                    "Accepts pair of format:bitrate, where format is a string containing one of the supported formats " +
+                    "and bitrate represented as integer." +
+                    "!WARNING: this value is sensitive and is used for validation. " +
+                    "Example: -smbf mp3:128000")
+    private String maxBitrateFor;
+
 
     @Override
     public void run() {
@@ -84,6 +92,11 @@ public class AudioCLI implements Runnable {
         }
         if (maxAudioFileSize > 0) {
             this.config.setMaxFileSize(maxAudioFileSize);
+        }
+        if (maxBitrateFor != null) {
+            String format = maxBitrateFor.split(":")[0];
+            int bitrate = Integer.parseInt(maxBitrateFor.split(":")[1]);
+            this.config.setMaxBitrates(format, bitrate);
         }
         registry.updateConfig("audio", config);
     }
