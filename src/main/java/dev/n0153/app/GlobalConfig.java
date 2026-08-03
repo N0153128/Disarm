@@ -6,6 +6,8 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.apache.logging.log4j.core.config.Configurator;
+import org.apache.logging.log4j.Level;
 
 public class GlobalConfig {
     private final int generalSizeLimit = 5_000_000; // 5MB
@@ -26,7 +28,8 @@ public class GlobalConfig {
     private final Path reportsOutputPath = Paths.get("resources/output/reports");
     private final boolean restrictInputFromRoot = false;
     private final Path inputRootPath = Paths.get("resources");
-    private final boolean enableVerboseLogging = false;
+    public enum LoggingLevels { OFF, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, ALL }
+    private final LoggingLevels logLevel = LoggingLevels.DEBUG;
 
 
     private final String KEY_GENERAL_SIZE_LIMIT = "generalSizeLimit";
@@ -46,7 +49,7 @@ public class GlobalConfig {
     private final String KEY_RESTRICT_INPUT_FROM_ROOT = "restrictInputFromRoot";
     private final String KEY_INPUT_ROOT_PATH = "inputRootPath";
     private final String KEY_DELETE_RESULT = "deleteResult";
-    private final String KEY_ENABLE_VERBOSE_LOGGING = "enableVerboseLogging";
+    private final String KEY_LOG_LEVEL = "logLevel";
 
     private final Map<String, Object> globalConfigStorage = new HashMap<>() {{
         put(KEY_GENERAL_SIZE_LIMIT, generalSizeLimit);
@@ -66,7 +69,7 @@ public class GlobalConfig {
         put(KEY_REPORTS_OUTPUT_PATH, reportsOutputPath);
         put(KEY_RESTRICT_INPUT_FROM_ROOT, restrictInputFromRoot);
         put(KEY_INPUT_ROOT_PATH, inputRootPath);
-        put(KEY_ENABLE_VERBOSE_LOGGING, enableVerboseLogging);
+        put(KEY_LOG_LEVEL, logLevel);
     }};
 
     public void put(String key, Object value) {
@@ -89,10 +92,10 @@ public class GlobalConfig {
         return type.cast(globalConfigStorage.get(key));
     }
 
-    public boolean getEnableVerboseLogging() {
+    public LoggingLevels getLogLevel() {
         return Objects.requireNonNullElse(
-                get(KEY_ENABLE_VERBOSE_LOGGING, Boolean.class),
-                enableVerboseLogging);
+                get(KEY_LOG_LEVEL, LoggingLevels.class),
+                logLevel);
     }
 
     public boolean getRestrictInputFromRoot() {
@@ -202,8 +205,8 @@ public class GlobalConfig {
         );
     }
 
-    public void setEnableVerboseLogging(boolean newEnableVerboseLogging) {
-        put(KEY_ENABLE_VERBOSE_LOGGING, newEnableVerboseLogging);
+    public void setLogLevel(LoggingLevels newLogLevel) {
+        put(KEY_LOG_LEVEL, logLevel);
     }
 
     public void setInputRootPath(Path newInputRootPath) {
