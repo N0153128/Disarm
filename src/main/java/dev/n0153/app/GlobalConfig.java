@@ -206,6 +206,9 @@ public class GlobalConfig {
     }
 
     public void setLogLevel(LoggingLevels newLogLevel) {
+        if (newLogLevel == null) {
+            throw new IllegalArgumentException("Log level cannot be null");
+        }
         put(KEY_LOG_LEVEL, logLevel);
     }
 
