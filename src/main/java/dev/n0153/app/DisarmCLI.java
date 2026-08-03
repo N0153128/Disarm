@@ -198,6 +198,7 @@ public class DisarmCLI implements Runnable{
                 globalConfig.setMimeLength(mimeLength);
             }
             if (logLevel != null) {
+                this.globalConfig.setLogLevel(logLevel);
                 if (logLevel.equals(GlobalConfig.LoggingLevels.OFF)) {
                     Utils.setDisarmLogging(Level.OFF);
                     Utils.setJaveLogging(Level.OFF);
