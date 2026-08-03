@@ -93,14 +93,27 @@ public class AudioProcessor implements MediaProcessor<AudioConfig> {
 
     private EncodingAttributes setAttributes(String mime, AudioAttributes audioAttrs) {
         if (!"flac".equals(mime)) {
-            int bitrate = config.getOutputBitrate() > 0 ? config.getOutputBitrate() : context.getAudioBitrate();
+            int bitrate;
+            if (config.getOutputBitrate() > 0) {
+                bitrate = config.getOutputBitrate();
+            } else if (context.getAudioBitrate() <= 0){
+                bitrate = config.getBitrateFallback();
+            } else {
+                bitrate = context.getAudioBitrate();
+            }
             audioAttrs.setBitRate(bitrate);
         }
         int channels = config.getOutputChannels() > 0 ? config.getOutputChannels() : context.getAudioChannels();
         audioAttrs.setChannels(channels);
 
-        int samplingRate = config.getOutputSampleRate() > 0 ? config.getOutputSampleRate() : context.getSamplingRate();
-        audioAttrs.setSamplingRate(samplingRate); //mp3 sampling rate
+        int samplingRate;
+        if (config.getOutputSampleRate() > 0) {
+            samplingRate = config.getOutputSampleRate();
+        } else if (context.getSamplingRate() <= 0) {
+            samplingRate = config.getSamplingRateFallback();
+        } else {
+            samplingRate = context.getAudioBitrate();
+        }
 
         EncodingAttributes attrs = new EncodingAttributes();
         attrs.setAudioAttributes(audioAttrs);
