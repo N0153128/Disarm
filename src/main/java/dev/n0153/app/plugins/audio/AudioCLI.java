@@ -77,11 +77,11 @@ public class AudioCLI implements Runnable {
                     "Example: -smsrf mp3:44000")
     private String maxSamplingRateFor;
 
-    @CommandLine.Option(names = {"-mc", "--max-channels"}, description =
+    @CommandLine.Option(names = {"-mac", "--max-audio-channels"}, description =
             "Changes ceiling for audio channels, accepts amount of channels as integers, defaults to 2." +
                     " !WARNING: this value is sensitive and is used for validation." +
-                    " Example: -mc 1")
-    private int maxChannels;
+                    " Example: -mac 1")
+    private int maxAudioChannels;
 
 
     @Override
@@ -117,8 +117,8 @@ public class AudioCLI implements Runnable {
             int samplingRate = Integer.parseInt(maxSamplingRateFor.split(":")[1]);
             this.config.setMaxSampleRates(format, samplingRate);
         }
-        if (maxChannels > 0) {
-            this.config.setMaxChannels(maxChannels);
+        if (maxAudioChannels > 0) {
+            this.config.setMaxChannels(maxAudioChannels);
         }
         registry.updateConfig("audio", config);
     }
