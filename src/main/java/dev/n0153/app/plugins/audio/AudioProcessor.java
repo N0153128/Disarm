@@ -112,7 +112,7 @@ public class AudioProcessor implements MediaProcessor<AudioConfig> {
         } else if (context.getSamplingRate() <= 0) {
             samplingRate = config.getSamplingRateFallback();
         } else {
-            samplingRate = context.getAudioBitrate();
+            samplingRate = context.getSamplingRate();
         }
         audioAttrs.setSamplingRate(samplingRate); //mp3 sampling rate
 
