@@ -3,6 +3,7 @@ package dev.n0153.app.plugins.image;
 import dev.n0153.app.MediaConfig;
 
 import javax.swing.plaf.PanelUI;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -20,6 +21,7 @@ public class ImageConfig implements MediaConfig {
     private final double transparency = 0.5;
     private final String fixedValueScaling = "";
     private final String imageDefaultOutputTo = "default";
+    private final Path pathToLogo = null;
 
     private final String KEY_LOGO_SIZE_LIMIT = "logoSizeLimit";
     private final String KEY_KEEP_LOGO = "keepLogo";
@@ -31,6 +33,7 @@ public class ImageConfig implements MediaConfig {
     private final String KEY_TRANSPARENCY = "transparency";
     private final String KEY_FIXED_VALUE_SCALING = "fixedValueScaling";
     private final String KEY_IMAGE_DEFAULT_OUTPUT_TO = "imageDefaultOutputTo";
+    private final String KEY_PATH_TO_LOGO = "pathToLogo";
 
     private final Map<String, Object> configStorage = new HashMap<>() {{
         put(KEY_LOGO_SIZE_LIMIT, logoSizeLimit);
@@ -43,6 +46,7 @@ public class ImageConfig implements MediaConfig {
         put(KEY_TRANSPARENCY, transparency);
         put(KEY_FIXED_VALUE_SCALING, fixedValueScaling);
         put(KEY_IMAGE_DEFAULT_OUTPUT_TO, imageDefaultOutputTo);
+        put(KEY_PATH_TO_LOGO, pathToLogo);
     }};
 
     @Override
@@ -94,6 +98,12 @@ public class ImageConfig implements MediaConfig {
     }
 
     //getters
+    public Path getPathToLogo() {
+        return Objects.requireNonNullElse(
+                get(KEY_PATH_TO_LOGO, Path.class),
+                pathToLogo);
+    }
+
     public int getLogoSizeLimit() {
         return Objects.requireNonNullElse(
                 get(KEY_LOGO_SIZE_LIMIT, Integer.class),
@@ -155,6 +165,13 @@ public class ImageConfig implements MediaConfig {
     }
 
     //setters
+
+    public void setPathToLogo(Path newPathToLogo) {
+        if (newPathToLogo == null) {
+            throw new IllegalArgumentException("Path to logo cannot be null");
+        }
+        put(KEY_PATH_TO_LOGO, newPathToLogo);
+    }
 
     public void setTransparency(double newTransparency) {
         if (newTransparency < 0.0) {
