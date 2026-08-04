@@ -306,10 +306,21 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
             } else {
                 scaleImageToScaleFactor(context.getImage());
             }
-            if (context.getLogo() != null) {
+            if (config.getPathToLogo() != null) {
                 logger.info("logo present");
-                scaleLogo();
-                applyWatermarkAtRandomPosition();
+                ImageValidator validator = new ImageValidator();
+                if (validator.validateLogo(osTargetPath)) {
+                    context.setLogo(Imgcodecs.imread(config.getPathToLogo().toString(), Imgcodecs.IMREAD_UNCHANGED));
+                    context.setLogoTitle(Utils.getTitle(
+                            config.getPathToLogo(),
+                            Utils.getMimeFromSignature(osTargetPath),
+                            true));
+                    scaleLogo();
+                    applyWatermarkAtRandomPosition();
+                } else {
+                    throw new ImageProcessingException("Failed to process logo");
+                }
+
             }
         } catch (MimeTypeDetectionException e) {
             throw new ImageProcessingException("Failed to process image", osTargetPath, e);
