@@ -83,6 +83,13 @@ public class AudioCLI implements Runnable {
                     " Example: -mac 1")
     private int maxAudioChannels;
 
+    @CommandLine.Option(names = {"-abf", "--audio-bitrate-fallback"}, description =
+            "Changes bitrate fallback value for audio tracks, accepts new bitrate as integer, defaults to 0 " +
+                    "for passthrough." +
+                    " !WARNING: this value is sensitive and is used for validation." +
+                    " Example: -abf 128000")
+    private int audioBitrateFallback;
+
 
     @Override
     public void run() {
@@ -119,6 +126,9 @@ public class AudioCLI implements Runnable {
         }
         if (maxAudioChannels > 0) {
             this.config.setMaxChannels(maxAudioChannels);
+        }
+        if (audioBitrateFallback > 0) {
+            this.config.setBitrateFallback(audioBitrateFallback);
         }
         registry.updateConfig("audio", config);
     }
