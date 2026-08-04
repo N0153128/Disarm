@@ -111,8 +111,7 @@ public class ImageCLI implements Runnable {
             this.config.setLogoMaxHeight(logoMaxHeight);
         }
         if (logo != null) {
-            this.context.setLogo(Imgcodecs.imread(logo.toString(), Imgcodecs.IMREAD_UNCHANGED));
-            this.context.setLogoTitle(Utils.getTitle(logo, "png", true)); //REFACTOR THIS: logo img may not always be png
+            this.config.setPathToLogo(logo);
         }
         if (fixedValueScaling != null) {
             this.config.setFixedValueScaling(fixedValueScaling);
