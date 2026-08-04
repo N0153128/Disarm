@@ -116,7 +116,7 @@ public class AudioValidator implements MediaValidator {
                 throw new ValidationException("Audio Validator: Sampling rate validation failed");
             }
         } catch (EncoderException | IOException e) {
-            throw new ValidationException("Audio Validator: failed to detect bitrate");
+            throw new ValidationException("Audio Validator: failed to detect bitrate or sampling rate");
         }
         return true;
     }
