@@ -24,7 +24,7 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
     }
 
     public boolean checkMeta() {
-        return this.config != null || this.context != null;
+        return this.config != null && this.context != null;
     }
 
     /**
@@ -309,11 +309,11 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
             if (config.getPathToLogo() != null) {
                 logger.info("logo present");
                 ImageValidator validator = new ImageValidator();
-                if (validator.validateLogo(osTargetPath)) {
+                if (validator.validateLogo(config.getPathToLogo())) {
                     context.setLogo(Imgcodecs.imread(config.getPathToLogo().toString(), Imgcodecs.IMREAD_UNCHANGED));
                     context.setLogoTitle(Utils.getTitle(
                             config.getPathToLogo(),
-                            Utils.getMimeFromSignature(osTargetPath),
+                            Utils.getMimeFromSignature(config.getPathToLogo()),
                             true));
                     scaleLogo();
                     applyWatermarkAtRandomPosition();
