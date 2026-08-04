@@ -81,6 +81,11 @@ public class ImageCLI implements Runnable {
                     "Example: -iof jpeg")
     private String imageOutputFormat;
 
+    @CommandLine.Option(names = {"-lt", "--logo-transparency"}, description =
+            "Changes transparency value for logo images, accepts values from 0.1 to 1.0, " +
+                    "defaults to 0.5." +
+                    " Example: -lt 0.3")
+    private double logoTransparency;
 
     @Override
     public void run() {
@@ -114,6 +119,9 @@ public class ImageCLI implements Runnable {
         }
         if (imageOutputFormat != null) {
             this.config.setImageOutputTo(imageOutputFormat);
+        }
+        if (logoTransparency > 0.0) {
+            this.config.setTransparency(logoTransparency);
         }
         registry.updateConfig("image", config);
     }
