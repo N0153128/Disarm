@@ -69,6 +69,14 @@ public class AudioCLI implements Runnable {
                     "Example: -smbf mp3:128000")
     private String maxBitrateFor;
 
+    @CommandLine.Option(names = {"-smsrf", "--set-max-sampling-rate-for"}, description =
+            "Changes sampling rate ceiling for specified format. " +
+                    "Accepts pair of format:sampling rate, where format is a string containing one of the supported formats " +
+                    "and bitrate represented as integer." +
+                    "!WARNING: this value is sensitive and is used for validation. " +
+                    "Example: -smsrf mp3:44000")
+    private String maxSamplingRateFor;
+
 
     @Override
     public void run() {
@@ -97,6 +105,11 @@ public class AudioCLI implements Runnable {
             String format = maxBitrateFor.split(":")[0];
             int bitrate = Integer.parseInt(maxBitrateFor.split(":")[1]);
             this.config.setMaxBitrates(format, bitrate);
+        }
+        if (maxSamplingRateFor != null) {
+            String format = maxSamplingRateFor.split(":")[0];
+            int samplingRate = Integer.parseInt(maxSamplingRateFor.split(":")[1]);
+            this.config.setMaxSampleRates(format, samplingRate);
         }
         registry.updateConfig("audio", config);
     }
