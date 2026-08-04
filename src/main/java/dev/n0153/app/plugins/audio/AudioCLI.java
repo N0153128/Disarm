@@ -84,12 +84,19 @@ public class AudioCLI implements Runnable {
     private int maxAudioChannels;
 
     @CommandLine.Option(names = {"-abf", "--audio-bitrate-fallback"}, description =
-            "Changes bitrate fallback value for audio tracks, accepts new bitrate as integer, defaults to 0 " +
+            "Changes bitrate fallback value for audio tracks, accepts new bitrate as integer," +
+                    " defaults to 320000 and is applied to an output file if an input file had bad/unknown bitrate" +
                     "for passthrough." +
                     " !WARNING: this value is sensitive and is used for validation." +
                     " Example: -abf 128000")
     private int audioBitrateFallback;
 
+    @CommandLine.Option(names = {"-asrf", "--audio-sampling-rate-fallback"}, description =
+            "Changes sampling rate fallback value for audio tracks, accepts new sampling rate as integer," +
+                    " defaults to 48000 and is applied to an output file if an input file had bad/unknown sampling rate" +
+                    " !WARNING: this value is sensitive and is used for validation." +
+                    " Example: -asrf 44_000")
+    private int audioSamplingRateFallback;
 
     @Override
     public void run() {
@@ -129,6 +136,9 @@ public class AudioCLI implements Runnable {
         }
         if (audioBitrateFallback > 0) {
             this.config.setBitrateFallback(audioBitrateFallback);
+        }
+        if (audioSamplingRateFallback > 0) {
+            this.config.setSamplingRateFallback(audioSamplingRateFallback);
         }
         registry.updateConfig("audio", config);
     }
