@@ -156,6 +156,16 @@ public class ImageConfig implements MediaConfig {
 
     //setters
 
+    public void setTransparency(double newTransparency) {
+        if (newTransparency < 0.0) {
+            throw new IllegalArgumentException("Transparency cannot be less than zero");
+        }
+        if (newTransparency > 1.0) {
+            throw new IllegalArgumentException("Transparency cannot be greater than one");
+        }
+        put(KEY_TRANSPARENCY, newTransparency);
+    }
+
     public void setImageOutputTo(String newImageOutputTo) {
         if (newImageOutputTo == null) {
             throw new IllegalArgumentException("Image output format cannot be null");
