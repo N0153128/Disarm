@@ -78,6 +78,16 @@ public class AudioValidator implements MediaValidator {
         return bitrate <= config.getMaxBitrates(mimeType);
     }
 
+    public boolean checkAudioSamplingRate(String mimeType, int samplingRate) {
+        if (samplingRate < -1) {
+            return false;
+        }
+        if (mimeType == null) {
+            return false;
+        }
+        return samplingRate <= config.getMaxSampleRates(mimeType);
+    }
+
     @Override
     public boolean validate(Path osTargetPath) {
         if (!checkMeta()) {
@@ -101,6 +111,9 @@ public class AudioValidator implements MediaValidator {
         try {
             if (!checkAudioBitrate(mime, MediaUtils.getBitrate(osTargetPath, "audio"))) {
                 throw new ValidationException("Audio Validator: Bitrate validation failed");
+            }
+            if (!checkAudioSamplingRate(mime, MediaUtils.getSamplingRate(osTargetPath))) {
+                throw new ValidationException("Audio Validator: Sampling rate validation failed");
             }
         } catch (EncoderException | IOException e) {
             throw new ValidationException("Audio Validator: failed to detect bitrate");
