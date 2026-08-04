@@ -142,14 +142,6 @@ public class AudioProcessor implements MediaProcessor<AudioConfig> {
             attrs.setOutputFormat(format);
             Encoder encoder = new Encoder();
             encoder.encode(input, outputPath.toFile(), attrs);
-            if (config.getDontSaveAudio()) {
-                try {
-                    Utils.fileDispose(globalConfig.getGeneralOutputPath().resolve(context.getAudioTitle()));
-                } catch (IOException e) {
-                    logger.error("failed to delete audio file");
-                }
-            }
-
         } catch (EncoderException | MimeTypeDetectionException e) {
             throw new AudioProcessingException("encoding failed", osTargetPath, e);
         }
@@ -171,7 +163,8 @@ public class AudioProcessor implements MediaProcessor<AudioConfig> {
             } catch (UnsupportedAudioFileException ex) {
                 throw new AudioProcessingException("Audio Processor: native fallback failed", osTargetPath);
             }
-        }            if (config.getDontSaveAudio()) {
+        }
+        if (config.getDontSaveAudio()) {
             try {
                 Utils.fileDispose(globalConfig.getGeneralOutputPath().resolve(context.getAudioTitle()));
             } catch (IOException e) {
