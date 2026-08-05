@@ -42,7 +42,7 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
         if (config.isKeepLogo()) {
             Imgcodecs.imwrite(globalConfig.getGeneralOutputPath().resolve(context.getLogoTitle()).toString(), context.getLogo());
         }
-        destination.release();
+//        destination.release();
         logger.info("Logo scaled successfully");
     }
 
@@ -158,8 +158,9 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
                     context.getImage().empty(), context.getLogo().empty());
             throw new ImageProcessingException("Empty file passed");
         }
+        logger.info("image channels: {}, logo channels: {}", context.getImage().channels(), context.getLogo().channels());
 //        check - if logo has 4 channels. if not - add alpha channel and set to 255, if yes - clone logo
-        Mat logoBGRA = new Mat();
+        Mat logoBGRA;
         if (context.getLogo().channels() == 3) {
             List<Mat> logoChannels = new ArrayList<>();
             Core.split(context.getLogo(), logoChannels);
@@ -168,7 +169,11 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
             alpha.setTo(new Scalar(255)); // Full opacity
             logoChannels.add(alpha);
 
+            logoBGRA = new Mat();
             Core.merge(logoChannels, logoBGRA);
+            for (Mat channel : logoChannels) {
+                channel.release();
+            }
         } else {
             logoBGRA = context.getLogo().clone();
         }
@@ -180,7 +185,7 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
         int startY = Math.max(context.getImgY(), 0);
 
         if (startX >= endX || startY >= endY) {
-
+            logoBGRA.release();
             return;
         }
 
@@ -200,15 +205,43 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
         if (logoChannels.size() >= 4) {
             Mat alpha = logoChannels.get(3);
 
-            Mat alphaMask = Mat.ones(alpha.size(), CvType.CV_8UC1);
-            alphaMask.setTo(new Scalar(128));
-            Core.compare(alpha, new Scalar(0), alphaMask, Core.CMP_GT);
+            Mat alphaFloat = new Mat();
+            alpha.convertTo(alphaFloat, CvType.CV_32F, 1.0 / 255.0);
 
-            Mat logoBGR = new Mat();
+            Mat invAlphaFloat = new Mat();
+            Core.subtract(Mat.ones(alphaFloat.size(), alphaFloat.type()), alphaFloat, invAlphaFloat);
+
+            Mat alpha3 = new Mat();
+            Core.merge(Arrays.asList(alphaFloat, alphaFloat, alphaFloat), alpha3);
+            Mat invAlpha3 = new Mat();
+            Core.merge(Arrays.asList(invAlphaFloat, invAlphaFloat, invAlphaFloat), invAlpha3);
+
+            Mat logoGBR = new Mat();
             List<Mat> bgrChannels = logoChannels.subList(0, 3);
-            Core.merge(bgrChannels, logoBGR);
-            logoBGR.copyTo(imageROI, alphaMask);
+            Core.merge(bgrChannels, logoGBR);
+
+            Mat logoGBRFloat = new Mat();
+            logoGBR.convertTo(logoGBRFloat, CvType.CV_32F);
+            Mat roiFloat = new Mat();
+            imageROI.convertTo(roiFloat, CvType.CV_32F);
+
+            Mat blended = new Mat();
+            Core.multiply(logoGBRFloat, alpha3, logoGBRFloat);
+            Core.multiply(roiFloat, invAlpha3, roiFloat);
+            Core.add(logoGBRFloat, roiFloat, blended);
+
+            blended.convertTo(blended, imageROI.type());
+            blended.copyTo(imageROI);
             saveImage(context.getImage());
+
+            alphaFloat.release();
+            invAlphaFloat.release();
+            alpha3.release();
+            invAlphaFloat.release();
+            invAlpha3.release();
+            roiFloat.release();
+            blended.release();
+            logoGBR.release();
         }
 
         logoBGRA.release();
