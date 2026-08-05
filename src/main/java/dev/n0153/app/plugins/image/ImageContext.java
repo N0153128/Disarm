@@ -30,6 +30,12 @@ public class ImageContext implements MediaContext {
 
     @Override
     public void release() {
+        if (getImage() != null) {
+            getImage().release();
+        }
+        if (getLogo() != null) {
+            getLogo().release();
+        }
         contextStorage.clear();
     }
 
