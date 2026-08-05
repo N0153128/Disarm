@@ -200,7 +200,7 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
         if (logoChannels.size() >= 4) {
             Mat alpha = logoChannels.get(3);
 
-            Mat alphaMask = Mat.ones(context.getLogo().size(), CvType.CV_8UC1);
+            Mat alphaMask = Mat.ones(alpha.size(), CvType.CV_8UC1);
             alphaMask.setTo(new Scalar(128));
             Core.compare(alpha, new Scalar(0), alphaMask, Core.CMP_GT);
 
@@ -309,6 +309,7 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
             if (config.getPathToLogo() != null) {
                 logger.info("logo present");
                 ImageValidator validator = new ImageValidator();
+                validator.createMeta(config, context);
                 if (validator.validateLogo(config.getPathToLogo())) {
                     context.setLogo(Imgcodecs.imread(config.getPathToLogo().toString(), Imgcodecs.IMREAD_UNCHANGED));
                     context.setLogoTitle(Utils.getTitle(

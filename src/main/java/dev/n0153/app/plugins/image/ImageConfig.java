@@ -99,9 +99,7 @@ public class ImageConfig implements MediaConfig {
 
     //getters
     public Path getPathToLogo() {
-        return Objects.requireNonNullElse(
-                get(KEY_PATH_TO_LOGO, Path.class),
-                pathToLogo);
+        return get(KEY_PATH_TO_LOGO, Path.class);
     }
 
     public int getLogoSizeLimit() {
