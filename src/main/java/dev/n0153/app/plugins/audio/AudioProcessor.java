@@ -159,7 +159,13 @@ public class AudioProcessor implements MediaProcessor<AudioConfig> {
             throw new AudioProcessingException("Audio Processor: Failed to detect mime", osTargetPath);
         } catch (AudioProcessingException e) {
             try {
-                reEncodeAudioNative(osTargetPath);
+                if (config.getDisableNativeProcessingFallback()) {
+                    throw new AudioProcessingException(
+                            "Audio Processor: failed to process audio file. Native fallback processing is disabled.",
+                            osTargetPath);
+                } else {
+                    reEncodeAudioNative(osTargetPath);
+                }
             } catch (UnsupportedAudioFileException ex) {
                 throw new AudioProcessingException("Audio Processor: native fallback failed", osTargetPath);
             }
