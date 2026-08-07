@@ -6,6 +6,7 @@ import dev.n0153.app.exceptions.MimeTypeDetectionException;
 import dev.n0153.app.exceptions.ValidationException;
 import dev.n0153.app.plugins.MediaUtils;
 import ws.schild.jave.EncoderException;
+import ws.schild.jave.info.VideoSize;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -144,6 +145,19 @@ public class VideoValidator implements MediaValidator {
         return frameRate <= config.getMaxVideoFrameRate();
     }
 
+    public boolean checkVideoDimensions(VideoSize size) {
+        if (size.getWidth() <= 0) {
+            return false;
+        }
+        if (size.getHeight() <= 0) {
+            return false;
+        }
+        if (size.getWidth() > config.getMaxVideoWidth()) {
+            return false;
+        }
+        return size.getHeight() <= config.getMaxVideoHeight();
+    }
+
     @Override
     public boolean validate(Path osTargetPath) {
         String mime;
@@ -169,6 +183,9 @@ public class VideoValidator implements MediaValidator {
             }
             if (!checkFrameRate(VideoUtils.getVideoFrameRate(osTargetPath))) {
                 throw new ValidationException("Video Validator: Video frame rate validation failed");
+            }
+            if (!checkVideoDimensions(VideoUtils.getVideoDimensions(osTargetPath))) {
+                throw new ValidationException("Video Validator: Video dimensions validation failed");
             }
         } catch (EncoderException | IOException e) {
             throw new ValidationException("Failed to detect bitrate");
