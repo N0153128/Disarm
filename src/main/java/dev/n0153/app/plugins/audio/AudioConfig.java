@@ -182,7 +182,9 @@ public class AudioConfig implements MediaConfig {
     //getters
 
     public boolean getDisableNativeProcessingFallback() {
-        return get(KEY_DISABLE_NATIVE_PROCESSING_FALLBACK, Boolean.class);
+        return Objects.requireNonNullElse(
+                get(KEY_DISABLE_NATIVE_PROCESSING_FALLBACK, Boolean.class),
+                disableNativeProcessingFallback);
     }
 
     public boolean getDontSaveAudio() {
