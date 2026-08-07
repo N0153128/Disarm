@@ -138,7 +138,7 @@ public class AudioProcessor implements MediaProcessor<AudioConfig> {
 
             // re-encode
             audioAttrs.setCodec("vorbis".equals(context.getAudioCodec()) ? "libvorbis" : context.getAudioCodec());
-            EncodingAttributes attrs = setAttributes(context.getDetectedMime(), audioAttrs);
+            EncodingAttributes attrs = setAttributes(audioAttrs);
             attrs.setOutputFormat(format);
             Encoder encoder = new Encoder();
             encoder.encode(input, outputPath.toFile(), attrs);
