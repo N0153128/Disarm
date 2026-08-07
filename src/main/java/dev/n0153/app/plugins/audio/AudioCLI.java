@@ -98,6 +98,11 @@ public class AudioCLI implements Runnable {
                     " Example: -asrf 44_000")
     private int audioSamplingRateFallback;
 
+    @CommandLine.Option(names = {"-dnpf", "--disable-native-processing-fallback"}, description =
+            "Disables native processing fallback if FFMpeg processing fails. Defaults to false." +
+                    "Example: -dnpf")
+    private boolean disableNativeProcessingFallback;
+
     @Override
     public void run() {
         if (maxAudioDuration > 0) {
@@ -139,6 +144,9 @@ public class AudioCLI implements Runnable {
         }
         if (audioSamplingRateFallback > 0) {
             this.config.setSamplingRateFallback(audioSamplingRateFallback);
+        }
+        if (disableNativeProcessingFallback) {
+            this.config.setDisableNativeProcessingFallback(true);
         }
         registry.updateConfig("audio", config);
     }
