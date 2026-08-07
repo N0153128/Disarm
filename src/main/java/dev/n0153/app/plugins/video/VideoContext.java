@@ -17,7 +17,6 @@ public class VideoContext implements MediaContext {
     private final String KEY_AUDIO_CHANNELS = "audioChannels";
     private final String KEY_VIDEO_SIZE = "videoSize";
     private final String KEY_DETECTED_MIME = "detectedMime";
-    private final String KEY_TRACK_LENGTH = "trackLength";
 
     private final Map<String, Object> contextStorage = new HashMap<>() {{
         put(KEY_VIDEO_TITLE, null);
@@ -30,7 +29,6 @@ public class VideoContext implements MediaContext {
         put(KEY_AUDIO_CHANNELS, null);
         put(KEY_VIDEO_SIZE, null);
         put(KEY_DETECTED_MIME, null);
-        put(KEY_TRACK_LENGTH, null);
     }};
 
     @Override
@@ -96,10 +94,6 @@ public class VideoContext implements MediaContext {
 
     public String getDetectedMime() {
         return get(KEY_DETECTED_MIME, String.class);
-    }
-
-    public int getTrackLength() {
-        return get(KEY_TRACK_LENGTH, Integer.class);
     }
 
     //setters
@@ -210,15 +204,5 @@ public class VideoContext implements MediaContext {
             throw new IllegalArgumentException("Mime type cannot be empty");
         }
         put(KEY_DETECTED_MIME, newDetectedMime);
-    }
-
-    public void setTrackLength(int newTrackLength) {
-        if (newTrackLength < 0) {
-            throw new IllegalArgumentException("Track length cannot be less than zero");
-        }
-        if (newTrackLength == 0) {
-            throw new IllegalArgumentException("Track length cannot be zero");
-        }
-        put(KEY_TRACK_LENGTH, newTrackLength);
     }
 }
