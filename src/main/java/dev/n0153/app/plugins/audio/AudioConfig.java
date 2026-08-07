@@ -93,6 +93,7 @@ public class AudioConfig implements MediaConfig {
     private final int maxFileSize = 5_000_000; //5MB
     private final String defaultOutputTo = "default";
     private final boolean dontSaveAudio = false;
+    private final boolean disableNativeProcessingFallback = false;
 
     private final String KEY_MAX_AUDIO_DURATION = "maxAudioDuration";
     private final String KEY_MAX_BITRATES = "maxBitrates";
@@ -108,6 +109,8 @@ public class AudioConfig implements MediaConfig {
     private final String KEY_MAX_FILE_SIZE = "maxFileSize";
     private final String KEY_DEFAULT_OUTPUT_TO = "defaultOutputTo";
     private final String KEY_DONT_SAVE_AUDIO = "dontSaveAudio";
+    private final String KEY_DISABLE_NATIVE_PROCESSING_FALLBACK = "disableNativeProcessingFallback";
+
 
 
     @Override
@@ -133,6 +136,7 @@ public class AudioConfig implements MediaConfig {
         put(KEY_DEFAULT_OUTPUT_TO, defaultOutputTo);
         put(KEY_ALLOWED_AUDIO_CODECS, allowedAudioCodecs);
         put(KEY_MIME_TO_FORMAT, mimeToFormat);
+        put(KEY_DISABLE_NATIVE_PROCESSING_FALLBACK, disableNativeProcessingFallback);
     }};
 
     @Override
@@ -176,6 +180,10 @@ public class AudioConfig implements MediaConfig {
     }
 
     //getters
+
+    public boolean getDisableNativeProcessingFallback() {
+        return get(KEY_DISABLE_NATIVE_PROCESSING_FALLBACK, Boolean.class);
+    }
 
     public boolean getDontSaveAudio() {
         return Objects.requireNonNullElse(
@@ -274,6 +282,10 @@ public class AudioConfig implements MediaConfig {
         );
     }
     //setters
+
+    public void setDisableNativeProcessingFallback(boolean newDisableNativeProcessingFallback) {
+        put(KEY_DISABLE_NATIVE_PROCESSING_FALLBACK, newDisableNativeProcessingFallback);
+    }
 
     public void setDontSaveAudio(boolean newDontSaveAudio) {
         put(KEY_DONT_SAVE_AUDIO, newDontSaveAudio);
