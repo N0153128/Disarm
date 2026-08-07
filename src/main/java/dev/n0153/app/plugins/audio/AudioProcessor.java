@@ -91,8 +91,8 @@ public class AudioProcessor implements MediaProcessor<AudioConfig> {
         }
     }
 
-    private EncodingAttributes setAttributes(String mime, AudioAttributes audioAttrs) {
-        if (!"flac".equals(mime)) {
+    private EncodingAttributes setAttributes(AudioAttributes audioAttrs) {
+        if (!"flac".equals(context.getDetectedMime())) {
             int bitrate;
             if (config.getOutputBitrate() > 0) {
                 bitrate = config.getOutputBitrate();
@@ -138,7 +138,7 @@ public class AudioProcessor implements MediaProcessor<AudioConfig> {
 
             // re-encode
             audioAttrs.setCodec("vorbis".equals(context.getAudioCodec()) ? "libvorbis" : context.getAudioCodec());
-            EncodingAttributes attrs = setAttributes(Utils.getMimeType(osTargetPath), audioAttrs);
+            EncodingAttributes attrs = setAttributes(context.getDetectedMime(), audioAttrs);
             attrs.setOutputFormat(format);
             Encoder encoder = new Encoder();
             encoder.encode(input, outputPath.toFile(), attrs);
@@ -150,7 +150,7 @@ public class AudioProcessor implements MediaProcessor<AudioConfig> {
     public void reEncode(Path osTargetPath) {
         try {
             if (Objects.equals(config.getDefaultOutputTo(), "default")) {
-                String targetFormat = config.getFormatFromMime(Utils.getMimeType(osTargetPath));
+                String targetFormat = config.getFormatFromMime(context.getDetectedMime());
                 reEncodeDefault(osTargetPath, targetFormat);
             } else {
                 reEncodeDefault(osTargetPath, config.getDefaultOutputTo());
@@ -183,14 +183,15 @@ public class AudioProcessor implements MediaProcessor<AudioConfig> {
     @Override
     public void process(Path osTargetPath) throws AudioProcessingException {
         String format;
+        context.setDetectedMime(Utils.getMimeType(osTargetPath));
         try {
-            format = config.getFormatFromMime(Utils.getMimeType(osTargetPath));
+            format = config.getFormatFromMime(context.getDetectedMime());
             if (!Objects.equals(format, "flac")) {
                 context.setAudioBitrate(MediaUtils.getBitrate(osTargetPath, "audio"));
             }
             if (Objects.equals(config.getDefaultOutputTo(), "default")) {
                 context.setAudioTitle(Utils.getTitle(osTargetPath,
-                        config.getFormatFromMime(Utils.getMimeType(osTargetPath)),
+                        config.getFormatFromMime(context.getDetectedMime()),
                         false));
             } else {
                 context.setAudioTitle(Utils.getTitle(osTargetPath, config.getDefaultOutputTo(),
