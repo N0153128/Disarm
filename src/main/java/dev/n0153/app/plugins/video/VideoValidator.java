@@ -137,6 +137,13 @@ public class VideoValidator implements MediaValidator {
         }
     }
 
+    public boolean checkFrameRate(int frameRate) {
+        if (frameRate <= 0) {
+            return false;
+        }
+        return frameRate <= config.getMaxVideoFrameRate();
+    }
+
     @Override
     public boolean validate(Path osTargetPath) {
         String mime;
@@ -159,6 +166,9 @@ public class VideoValidator implements MediaValidator {
             }
             if (!checkAudioSampleRateForVideo(format, MediaUtils.getSamplingRate(osTargetPath))) {
                 throw new ValidationException("Video Validator: Audio sampling rate validation failed");
+            }
+            if (!checkFrameRate(VideoUtils.getVideoFrameRate(osTargetPath))) {
+                throw new ValidationException("Video Validator: Video frame rate validation failed");
             }
         } catch (EncoderException | IOException e) {
             throw new ValidationException("Failed to detect bitrate");
