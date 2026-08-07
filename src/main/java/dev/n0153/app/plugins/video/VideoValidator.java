@@ -37,6 +37,9 @@ public class VideoValidator implements MediaValidator {
         if (format == null) {
             return false;
         }
+        if (bitrate > config.getMaxVideoBitrate(format)) {
+            return false;
+        }
         return bitrate <= config.getMaxVideoBitrate(format);
     }
 
@@ -150,6 +153,9 @@ public class VideoValidator implements MediaValidator {
         try {
             if (!checkAudioBitrateForVideo(format, MediaUtils.getBitrate(osTargetPath, "audio"))) {
                 throw new ValidationException("Video Validator: Audio bitrate validation failed");
+            }
+            if (!checkVideoBitrate(format, MediaUtils.getBitrate(osTargetPath, "video"))) {
+                throw new ValidationException("Video Validator: Video bitrate validation failed");
             }
             if (!checkAudioSampleRateForVideo(format, MediaUtils.getSamplingRate(osTargetPath))) {
                 throw new ValidationException("Video Validator: Audio sampling rate validation failed");
