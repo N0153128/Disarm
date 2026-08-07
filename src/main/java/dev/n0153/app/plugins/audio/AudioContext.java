@@ -13,7 +13,6 @@ public class AudioContext implements MediaContext {
     private final String KEY_AUDIO_CHANNELS = "audioChannels";
     private final String KEY_DETECTED_MIME = "detectedMime";
     private final String KEY_TRACK_LENGTH = "trackLength";
-    private final String KEY_USE_NATIVE_FALLBACK = "useNativeFallback";
 
     private final Map<String, Object> contextStorage = new HashMap<>() {{
         put(KEY_AUDIO_TITLE, null);
@@ -23,7 +22,6 @@ public class AudioContext implements MediaContext {
         put(KEY_AUDIO_CHANNELS, null);
         put(KEY_DETECTED_MIME, null);
         put(KEY_TRACK_LENGTH, null);
-        put(KEY_USE_NATIVE_FALLBACK, null);
     }};
 
     @Override
@@ -78,10 +76,6 @@ public class AudioContext implements MediaContext {
 
     public int getTrackLength() {
         return get(KEY_TRACK_LENGTH, Integer.class);
-    }
-
-    public boolean getUseNativeFallback() {
-        return get(KEY_USE_NATIVE_FALLBACK, Boolean.class);
     }
 
     //setters
@@ -153,9 +147,5 @@ public class AudioContext implements MediaContext {
             throw new IllegalArgumentException("Audio track length cannot be zero");
         }
         put(KEY_TRACK_LENGTH, newTrackLength);
-    }
-
-    public void setUseNativeFallback(boolean newUseNativeFallback) {
-        put(KEY_USE_NATIVE_FALLBACK, newUseNativeFallback);
     }
 }
