@@ -49,7 +49,6 @@ public class TextValidator implements MediaValidator {
         if (text.length >= 4 &&
                 text[0] == 0x00 && text[1] == 0x00 &&
                 text[2] == (byte) 0xFE && text[3] == (byte) 0xFF) {
-            Charset.forName("UTF-32BE");
             return true;
         }
         // needs valid UTF-32 LE BOM: FF FE 00 00 check
