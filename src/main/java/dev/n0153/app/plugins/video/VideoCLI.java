@@ -70,6 +70,13 @@ public class VideoCLI implements Runnable {
                     " Example: -mvsff mp4:5000000")
     private String maxVideoSizeForFormat;
 
+    @CommandLine.Option(names = {"-mvbr", "--max-video-bitrate"}, description =
+            "Changes video bitrate ceiling for specified supported video format. " +
+                    "Accepts the following format: format:bitrate, " +
+                    "where bitrate is expressed as integer. " +
+                    "Example: -mvbr mp4:10000000")
+    private String maxVideoBitrate;
+
     @Override
     public void run() {
         if (maxVideoDuration > 0) {
@@ -100,6 +107,11 @@ public class VideoCLI implements Runnable {
             String format = maxVideoSizeForFormat.toLowerCase().split(":")[0];
             int size = Integer.parseInt(maxVideoSizeForFormat.toLowerCase().split(":")[1]);
             this.config.setMaxFileSize(format, size);
+        }
+        if (maxVideoBitrate != null) {
+            String format = maxVideoBitrate.toLowerCase().split(":")[0];
+            int bitrate = Integer.parseInt(maxVideoBitrate.toLowerCase().split(":")[1]);
+            this.config.setMaxVideoBitrate(format, bitrate);
         }
         registry.updateConfig("video", config);
     }
