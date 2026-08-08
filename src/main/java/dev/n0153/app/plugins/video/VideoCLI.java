@@ -46,6 +46,11 @@ public class VideoCLI implements Runnable {
                     "Defaults to an input video file's audio codec. Example: -tacv ac3")
     private String targetAudioCodec;
 
+    @CommandLine.Option(names = {"-tabrv", "--target-audio-codec-video"}, description =
+            "Changes output audio bitrate for video, accepts an integer. " +
+                    "Defaults to an input video file's audio bitrate. Example: -tabrv 44800")
+    private int targetAudioBitrate;
+
     @CommandLine.Option(names = {"-sav1", "--swap-av1"}, description =
             "Swaps AV1 codec with a more performant VP8. Accepted values: vp8, vp9, av1. " +
                     "Defaults to vp8. Example: -sav1 vp9")
@@ -163,6 +168,9 @@ public class VideoCLI implements Runnable {
         }
         if (maxVideoFrameRate > 0) {
             this.config.setMaxVideoFrameRate(maxVideoFrameRate);
+        }
+        if (targetAudioBitrate > 0) {
+            this.config.setOutputAudioBitrate(targetAudioBitrate);
         }
         registry.updateConfig("video", config);
     }
