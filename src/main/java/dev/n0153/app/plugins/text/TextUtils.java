@@ -4,11 +4,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 public class TextUtils {
-    /**
-     * Checks if specified text data contains a BOM.
-     * @return True if BOM is detected.
-     * @since 0.1
-     */
+
     public static Charset detectEncoding(byte[] text) {
         if (text.length < 2) {
             throw new IllegalArgumentException("Provided byte array is too short");
