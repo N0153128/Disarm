@@ -97,6 +97,12 @@ public class VideoCLI implements Runnable {
                     "Example: -mvw 1200")
     private int maxVideoWidth;
 
+    @CommandLine.Option(names = {"-mvh", "--max-video-height"}, description =
+            "Changes maximum height limit for all video files. " +
+                    "Defaults to 1080, accepts the amount of pixels as integer. " +
+                    "Example: -mvh 800")
+    private int maxVideoHeight;
+
     @Override
     public void run() {
         if (maxVideoDuration > 0) {
@@ -145,6 +151,9 @@ public class VideoCLI implements Runnable {
         }
         if (maxVideoWidth > 0) {
             this.config.setMaxVideoWidth(maxVideoWidth);
+        }
+        if (maxVideoHeight > 0) {
+            this.config.setMaxVideoHeight(maxVideoHeight);
         }
         registry.updateConfig("video", config);
     }
