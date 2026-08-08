@@ -88,8 +88,14 @@ public class VideoCLI implements Runnable {
             "Changes audio sampling rate ceiling for specified supported video format. " +
                     "Accepts the following format: format:sampling rate, " +
                     "where bitrate is expressed as integer. " +
-                    "Example: -mabrfv mp4:10000000")
+                    "Example: -masr mp4:10000000")
     private String maxAudioSamplingRate;
+
+    @CommandLine.Option(names = {"-mvw", "--max-video-width"}, description =
+            "Changes maximum width limit for all video files. " +
+                    "Defaults to 1920, accepts the amount of pixels as integer. " +
+                    "Example: -mvw 1200")
+    private int maxVideoWidth;
 
     @Override
     public void run() {
@@ -136,6 +142,9 @@ public class VideoCLI implements Runnable {
             String format = maxAudioSamplingRate.toLowerCase().split(":")[0];
             int samplingRate = Integer.parseInt(maxAudioSamplingRate.toLowerCase().split(":")[1]);
             this.config.setMaxSampleRate(format, samplingRate);
+        }
+        if (maxVideoWidth > 0) {
+            this.config.setMaxVideoWidth(maxVideoWidth);
         }
         registry.updateConfig("video", config);
     }
