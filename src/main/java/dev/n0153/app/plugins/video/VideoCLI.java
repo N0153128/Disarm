@@ -103,6 +103,12 @@ public class VideoCLI implements Runnable {
                     "Example: -mvh 800")
     private int maxVideoHeight;
 
+    @CommandLine.Option(names = {"-mvfr", "--max-video-frame-rate"}, description =
+            "Changes maximum frame rate limit for all video files. " +
+                    "Defaults to 60, accepts an integer. " +
+                    "Example: -mvfr 90")
+    private int maxVideoFrameRate;
+
     @Override
     public void run() {
         if (maxVideoDuration > 0) {
@@ -154,6 +160,9 @@ public class VideoCLI implements Runnable {
         }
         if (maxVideoHeight > 0) {
             this.config.setMaxVideoHeight(maxVideoHeight);
+        }
+        if (maxVideoFrameRate > 0) {
+            this.config.setMaxVideoFrameRate(maxVideoFrameRate);
         }
         registry.updateConfig("video", config);
     }
