@@ -63,6 +63,13 @@ public class VideoCLI implements Runnable {
                     "Example: -vof wav")
     private String videoOutputFormat;
 
+    @CommandLine.Option(names = {"-mvsff", "--max-video-size-for-format"}, description =
+            "Changes video file size ceiling for specified supported video format. " +
+                    "Accepts the following format: format:size, " +
+                    "where size is the amount of bytes expressed as integer." +
+                    " Example: -mvsff mp4:5000000")
+    private String maxVideoSizeForFormat;
+
     @Override
     public void run() {
         if (maxVideoDuration > 0) {
@@ -89,7 +96,11 @@ public class VideoCLI implements Runnable {
         if (videoOutputFormat != null) {
             this.config.setDefaultOutputTo(videoOutputFormat);
         }
-
+        if (maxVideoSizeForFormat != null) {
+            String format = maxVideoSizeForFormat.toLowerCase().split(":")[0];
+            int size = Integer.parseInt(maxVideoSizeForFormat.toLowerCase().split(":")[1]);
+            this.config.setMaxFileSize(format, size);
+        }
         registry.updateConfig("video", config);
     }
 }
