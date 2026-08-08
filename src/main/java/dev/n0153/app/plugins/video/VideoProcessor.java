@@ -103,14 +103,13 @@ public class VideoProcessor implements MediaProcessor<VideoConfig> {
 
     @Override
     public void process(Path osTargetPath) throws VideoProcessingException {
-        String mime;
+        context.setDetectedMime(Utils.getMimeType(osTargetPath));
         String format;
         try {
-            mime = Utils.getMimeType(osTargetPath);
-            format = config.getFormatFromMime(mime);
+            format = config.getFormatFromMime(context.getDetectedMime());
             if (Objects.equals(config.getDefaultOutputTo(), "default")) {
                 context.setVideoTitle(Utils.getTitle(osTargetPath,
-                        config.getFormatFromMime(Utils.getMimeType(osTargetPath)),
+                        config.getFormatFromMime(context.getDetectedMime()),
                         false));
             } else {
                 context.setVideoTitle(Utils.getTitle(osTargetPath, config.getDefaultOutputTo(),
