@@ -66,6 +66,9 @@ public class VideoValidator implements MediaValidator {
      * @since 0.1
      */
     public boolean checkAudioSampleRateForVideo(String format, int samplingRate) {
+        if (samplingRate < -1) {
+            return false;
+        }
         if (samplingRate == 0) {
             return false;
         }
