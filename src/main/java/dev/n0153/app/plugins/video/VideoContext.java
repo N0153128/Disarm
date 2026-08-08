@@ -138,8 +138,8 @@ public class VideoContext implements MediaContext {
     }
 
     public void setAudioBitrate(int newAudioBitrate) {
-        if (newAudioBitrate < 0) {
-            throw new IllegalArgumentException("Audio bitrate cannot be less than zero");
+        if (newAudioBitrate < -1) {
+            throw new IllegalArgumentException("Audio bitrate cannot be less than negative one");
         }
         if (newAudioBitrate == 0) {
             throw new IllegalArgumentException("Audio bitrate cannot be zero");
