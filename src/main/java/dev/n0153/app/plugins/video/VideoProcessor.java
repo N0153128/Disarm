@@ -87,13 +87,22 @@ public class VideoProcessor implements MediaProcessor<VideoConfig> {
     }
 
     private EncodingAttributes setAttributes(AudioAttributes audioAttrs, VideoAttributes videoAttrs) {
-        videoAttrs.setBitRate(context.getVideoBitrate());
-        videoAttrs.setFrameRate(context.getVideoFrameRate());
+        int bitrate = config.getOutputVideoBitrate() > 0 ? config.getOutputVideoBitrate() : context.getVideoBitrate();
+        videoAttrs.setBitRate(bitrate);
+
+        int frameRate = config.getOutputFrameRate() > 0 ? config.getOutputFrameRate() : context.getVideoFrameRate();
+        videoAttrs.setFrameRate(frameRate);
+
         videoAttrs.setSize(context.getVideoSize());
 
-        audioAttrs.setBitRate(context.getAudioBitrate());
-        audioAttrs.setChannels(context.getAudioChannels());
-        audioAttrs.setSamplingRate(context.getAudioSamplingRate());
+        int audioBitrate = config.getOutputAudioBitrate() > 0 ? config.getOutputAudioBitrate() : context.getAudioBitrate();
+        audioAttrs.setBitRate(audioBitrate);
+
+        int audioChannels = config.getOutputChannels() > 0 ? config.getOutputChannels() : context.getAudioChannels();
+        audioAttrs.setChannels(audioChannels);
+
+        int samplingRate = config.getOutputSampleRate() > 0 ? config.getOutputSampleRate() : context.getAudioSamplingRate();
+        audioAttrs.setSamplingRate(samplingRate);
 
         EncodingAttributes attrs = new EncodingAttributes();
         attrs.setVideoAttributes(videoAttrs);

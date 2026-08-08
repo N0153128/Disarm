@@ -103,11 +103,11 @@ public class VideoConfig implements MediaConfig {
     private final int maxVideoFrameRate = 60;
     private final String outputVideoCodec = "default";
     private final String outputAudioCodec = "default";
-    private final int outputVideoBitrate = 8_000_000;
-    private final int outputAudioBitrate = 128_000;
-    private final int outputSampleRate = 44_100;
-    private final int outputChannels = 2;
-    private final int outputFrameRate = 30;
+    private final int outputVideoBitrate = 0;
+    private final int outputAudioBitrate = 0;
+    private final int outputSampleRate = 0;
+    private final int outputChannels = 0;
+    private final int outputFrameRate = 0;
     private final String defaultOutputTo = "default";
     private final String swapAV1 = "vp8";
     private final Boolean dontSaveVideo = false;
