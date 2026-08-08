@@ -84,6 +84,13 @@ public class VideoCLI implements Runnable {
                     "Example: -mabrfv mp4:10000000")
     private String maxAudioBitrateForVideo;
 
+    @CommandLine.Option(names = {"-masr", "--max-audio-sampling-rate"}, description =
+            "Changes audio sampling rate ceiling for specified supported video format. " +
+                    "Accepts the following format: format:sampling rate, " +
+                    "where bitrate is expressed as integer. " +
+                    "Example: -mabrfv mp4:10000000")
+    private String maxAudioSamplingRate;
+
     @Override
     public void run() {
         if (maxVideoDuration > 0) {
@@ -124,6 +131,11 @@ public class VideoCLI implements Runnable {
             String format = maxAudioBitrateForVideo.toLowerCase().split(":")[0];
             int bitrate = Integer.parseInt(maxAudioBitrateForVideo.toLowerCase().split(":")[1]);
             this.config.setMaxAudioBitrate(format, bitrate);
+        }
+        if (maxAudioSamplingRate != null) {
+            String format = maxAudioSamplingRate.toLowerCase().split(":")[0];
+            int samplingRate = Integer.parseInt(maxAudioSamplingRate.toLowerCase().split(":")[1]);
+            this.config.setMaxSampleRate(format, samplingRate);
         }
         registry.updateConfig("video", config);
     }
