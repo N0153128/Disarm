@@ -38,9 +38,6 @@ public class VideoValidator implements MediaValidator {
         if (format == null) {
             return false;
         }
-        if (bitrate > config.getMaxVideoBitrate(format)) {
-            return false;
-        }
         return bitrate <= config.getMaxVideoBitrate(format);
     }
 
