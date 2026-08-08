@@ -53,7 +53,7 @@ public class VideoCLI implements Runnable {
 
     @CommandLine.Option(names = {"-tasrv", "--target-audio-sampling-rate-video"}, description =
             "Changes output audio sampling rate for video, accepts an integer. " +
-                    "Defaults to an input video file's audio bitrate. Example: -tasrv 128000")
+                    "Defaults to an input video file's audio sampling rate. Example: -tasrv 44100")
     private int targetAudioSamplingRate;
 
     @CommandLine.Option(names = {"-tac", "--target-audio-channels"}, description =
@@ -73,7 +73,7 @@ public class VideoCLI implements Runnable {
     private boolean dontSaveVideo;
 
     @CommandLine.Option(names = {"-vof", "--video-output-format"}, description =
-            "Changes output file's format, accepts one of supported formats: mp4, mov, mkv (matroska), webm" +
+            "Changes output file's format, accepts one of supported formats: mp4, mov, mkv (matroska), webm. " +
                     "WARNING: certain container combinations will fail to save. " +
                     "Example: -vof wav")
     private String videoOutputFormat;
@@ -102,8 +102,8 @@ public class VideoCLI implements Runnable {
     @CommandLine.Option(names = {"-masr", "--max-audio-sampling-rate"}, description =
             "Changes audio sampling rate ceiling for specified supported video format. " +
                     "Accepts the following format: format:sampling rate, " +
-                    "where bitrate is expressed as integer. " +
-                    "Example: -masr mp4:10000000")
+                    "where sampling rate is expressed as integer. " +
+                    "Example: -masr mp4:48000")
     private String maxAudioSamplingRate;
 
     @CommandLine.Option(names = {"-mvw", "--max-video-width"}, description =
