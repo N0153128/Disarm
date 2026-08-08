@@ -151,24 +151,58 @@ public class VideoCLI implements Runnable {
             this.config.setDefaultOutputTo(videoOutputFormat);
         }
         if (maxVideoSizeForFormat != null) {
-            String format = maxVideoSizeForFormat.toLowerCase().split(":")[0];
-            int size = Integer.parseInt(maxVideoSizeForFormat.toLowerCase().split(":")[1]);
-            this.config.setMaxFileSize(format, size);
+            if (maxVideoSizeForFormat.contains(":")) {
+                try {
+                    String format = maxVideoSizeForFormat.toLowerCase().split(":")[0];
+                    int size = Integer.parseInt(maxVideoSizeForFormat.toLowerCase().split(":")[1]);
+                    this.config.setMaxFileSize(format, size);
+                } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
+                    throw new IllegalArgumentException("Provided param was incorrectly formatted.");
+                }
+
+            } else {
+                throw new IllegalArgumentException("Provided param was incorrectly formatted.");
+            }
         }
         if (maxVideoBitrate != null) {
-            String format = maxVideoBitrate.toLowerCase().split(":")[0];
-            int bitrate = Integer.parseInt(maxVideoBitrate.toLowerCase().split(":")[1]);
-            this.config.setMaxVideoBitrate(format, bitrate);
+            if (maxVideoBitrate.contains(":")) {
+                try {
+                    String format = maxVideoBitrate.toLowerCase().split(":")[0];
+                    int bitrate = Integer.parseInt(maxVideoBitrate.toLowerCase().split(":")[1]);
+                    this.config.setMaxVideoBitrate(format, bitrate);
+                } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
+                    throw new IllegalArgumentException("Provided param was incorrectly formatted.");
+                }
+            } else {
+                throw new IllegalArgumentException("Provided param was incorrectly formatted.");
+            }
+
         }
         if (maxAudioBitrateForVideo != null) {
-            String format = maxAudioBitrateForVideo.toLowerCase().split(":")[0];
-            int bitrate = Integer.parseInt(maxAudioBitrateForVideo.toLowerCase().split(":")[1]);
-            this.config.setMaxAudioBitrate(format, bitrate);
+            if (maxAudioBitrateForVideo.contains(":")) {
+                try {
+                    String format = maxAudioBitrateForVideo.toLowerCase().split(":")[0];
+                    int bitrate = Integer.parseInt(maxAudioBitrateForVideo.toLowerCase().split(":")[1]);
+                    this.config.setMaxAudioBitrate(format, bitrate);
+                } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
+                    throw new IllegalArgumentException("Provided param was incorrectly formatted.");
+                }
+            } else {
+                throw new IllegalArgumentException("Provided param was incorrectly formatted.");
+            }
         }
         if (maxAudioSamplingRate != null) {
-            String format = maxAudioSamplingRate.toLowerCase().split(":")[0];
-            int samplingRate = Integer.parseInt(maxAudioSamplingRate.toLowerCase().split(":")[1]);
-            this.config.setMaxSampleRate(format, samplingRate);
+            if (maxAudioSamplingRate.contains(":")) {
+                try {
+                    String format = maxAudioSamplingRate.toLowerCase().split(":")[0];
+                    int samplingRate = Integer.parseInt(maxAudioSamplingRate.toLowerCase().split(":")[1]);
+                    this.config.setMaxSampleRate(format, samplingRate);
+                } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
+                    throw new IllegalArgumentException("Provided param was incorrectly formatted.");
+                }
+            } else {
+                throw new IllegalArgumentException("Provided param was incorrectly formatted.");
+            }
         }
         if (maxVideoWidth > 0) {
             this.config.setMaxVideoWidth(maxVideoWidth);
