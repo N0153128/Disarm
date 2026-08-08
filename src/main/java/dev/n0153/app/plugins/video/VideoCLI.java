@@ -56,6 +56,11 @@ public class VideoCLI implements Runnable {
                     "Defaults to an input video file's audio bitrate. Example: -tasrv 128000")
     private int targetAudioSamplingRate;
 
+    @CommandLine.Option(names = {"-tac", "--target-audio-channels"}, description =
+            "Changes output audio channels for video, accepts an integer. " +
+                    "Defaults to an input video file's audio channels. Example: -tac 2")
+    private int targetAudioChannels;
+
     @CommandLine.Option(names = {"-sav1", "--swap-av1"}, description =
             "Swaps AV1 codec with a more performant VP8. Accepted values: vp8, vp9, av1. " +
                     "Defaults to vp8. Example: -sav1 vp9")
@@ -179,6 +184,9 @@ public class VideoCLI implements Runnable {
         }
         if (targetAudioSamplingRate > 0) {
             this.config.setOutputSampleRate(targetAudioSamplingRate);
+        }
+        if (targetAudioChannels > 0) {
+            this.config.setOutputChannels(targetAudioChannels);
         }
         registry.updateConfig("video", config);
     }
