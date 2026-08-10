@@ -26,8 +26,7 @@ public class TextValidator implements MediaValidator {
     public boolean isBom() {
         byte[] text = context.getRawBytes();
         try {
-            String encoding = TextUtils.detectEncoding(text).name();
-            context.setDetectedEncoding(encoding);
+            TextUtils.detectEncoding(text);
             return true;
         } catch (IllegalArgumentException e) {
             return false;
@@ -106,18 +105,21 @@ public class TextValidator implements MediaValidator {
      * @since 0.1
      */
     public boolean validateEncoding() {
-        if (isBom()) {
+        try {
+            Charset detected = TextUtils.detectEncoding(context.getRawBytes());
             context.setBom(true);
+            context.setDetectedEncoding(detected.name());
             return true;
-        } else if (isUTF8()) {
-            context.setDetectedEncoding("UTF-8");
-            return true;
-        } else if (isASCII()) {
-            context.setDetectedEncoding("ASCII");
-            return true;
+        } catch (IllegalArgumentException e) {
+            if (isUTF8()) {
+                context.setDetectedEncoding("UTF-8");
+                return true;
+            } else if (isASCII()) {
+                context.setDetectedEncoding("ASCII");
+                return true;
+            } else {
+                return false;
             }
-        else {
-            return false;
         }
     }
 
