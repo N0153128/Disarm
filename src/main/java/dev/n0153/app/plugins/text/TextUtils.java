@@ -23,6 +23,16 @@ public class TextUtils {
             return StandardCharsets.UTF_16BE;
         }
 
+        // UTF-32 LE BOM FF FE 00 00 (comes before UTF-16 LE - shares the same first 2 bytes)
+
+        if (text.length >= 4 &&
+                text[0] == (byte) 0xFF &&
+                text[1] == (byte) 0xFE &&
+                text[2] == 0x00 &&
+                text[3] == 0x00) {
+            return StandardCharsets.UTF_32LE;
+        }
+
         // UTF-16 LE BOM: FF FE
         if (text[0] == (byte) 0xFF && text[1] == (byte) 0xFE) {
             return StandardCharsets.UTF_16LE;
