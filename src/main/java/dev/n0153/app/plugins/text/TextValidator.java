@@ -23,36 +23,15 @@ public class TextValidator implements MediaValidator {
      * @return True if BOM is detected.
      * @since 0.1
      */
-    public Boolean isBom() {
+    public boolean isBom() {
         byte[] text = context.getRawBytes();
-        if (text.length < 2) return false;
-
-        // UTF-8 BOM: EF BB BF
-        if (text.length >= 3 &&
-                text[0] == (byte) 0xEF &&
-                text[1] == (byte) 0xBB &&
-                text[2] == (byte) 0xBF) {
+        try {
+            String encoding = TextUtils.detectEncoding(text).name();
+            context.setDetectedEncoding(encoding);
             return true;
+        } catch (IllegalArgumentException e) {
+            return false;
         }
-
-        // UTF-16 BE BOM: FE FF
-        if (text[0] == (byte) 0xFE && text[1] == (byte) 0xFF) {
-            return true;
-        }
-
-        // UTF-16 LE BOM: FF FE
-        if (text[0] == (byte) 0xFF && text[1] == (byte) 0xFE) {
-            return true;
-        }
-
-        // UTF-32 BE BOM: 00 00 FE FF
-        if (text.length >= 4 &&
-                text[0] == 0x00 && text[1] == 0x00 &&
-                text[2] == (byte) 0xFE && text[3] == (byte) 0xFF) {
-            return true;
-        }
-        // needs valid UTF-32 LE BOM: FF FE 00 00 check
-        return false;
     }
 
 
@@ -61,7 +40,7 @@ public class TextValidator implements MediaValidator {
      * @return True if specified file's encoding is ASCII.
      * @since 0.1
      */
-    public Boolean isASCII() {
+    public boolean isASCII() {
         byte[] text = context.getRawBytes();
         for (byte b : text) {
             if ((b & 0x80) != 0) {
@@ -76,7 +55,7 @@ public class TextValidator implements MediaValidator {
      * @return True if specified file's encoding is UTF-8.
      * @since 0.1
      */
-    public Boolean isUTF8() {
+    public boolean isUTF8() {
         byte[] text = context.getRawBytes();
         int i = 0;
         while (i < text.length) {
