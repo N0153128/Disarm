@@ -9,6 +9,23 @@ import java.util.*;
 
 public class TextConfig implements MediaConfig {
 
+    public record ControlCharactersRange(int rangeStart, int rangeEnd) {
+        public ControlCharactersRange {
+            if (rangeStart < 0) {
+                throw new IllegalArgumentException("Control character range start cannot be less than zero");
+            }
+            if (rangeEnd < 0) {
+                throw new IllegalArgumentException("Control character end start cannot be less than zero");
+            }
+            if (rangeStart > rangeEnd) {
+                throw new IllegalArgumentException("Control character range start cannot be greater than range end");
+            }
+            if (rangeEnd > 0xFFFF) {
+                throw new IllegalArgumentException("Control character range start cannot exceed 0xFFFF");
+            }
+        }
+    }
+
     private final int maxTextSize = 5_000_000; //5MB
     private final String[] urlSchemes = {"javascript:", "data:", "vbscript:"};
     private final Set<Character> zeroLengthChars = new HashSet<>(Set.of(
@@ -18,6 +35,10 @@ public class TextConfig implements MediaConfig {
     private final Charset outputEncoding = StandardCharsets.UTF_8;
     private final boolean dontSaveText = false;
     private final String textDefaultOutputTo = "default";
+    private final List<ControlCharactersRange> controlCharactersRanges = List.of(
+            new ControlCharactersRange(0x0000, 0x001F),
+            new ControlCharactersRange(0x007F, 0x009F)
+    );
 
     private final String KEY_MAX_TEXT_SIZE = "maxTextSize";
     private final String KEY_URL_SCHEMES = "urlSchemes";
@@ -26,6 +47,7 @@ public class TextConfig implements MediaConfig {
     private final String KEY_OUTPUT_ENCODING = "outputEncoding";
     private final String KEY_DONT_SAVE_TEXT = "dontSaveText";
     private final String KEY_TEXT_DEFAULT_OUTPUT_TO = "textDefaultOutputTo";
+    private final String KEY_CONTROL_CHARACTERS_RANGES = "controlCharactersRanges";
 
     private final Map<String, Object> configStorage = new HashMap<>() {{
         put(KEY_MAX_TEXT_SIZE, maxTextSize);
@@ -34,8 +56,24 @@ public class TextConfig implements MediaConfig {
         put(KEY_NORMALIZE_FORM, normalizeForm);
         put(KEY_OUTPUT_ENCODING, outputEncoding);
         put(KEY_TEXT_DEFAULT_OUTPUT_TO, textDefaultOutputTo);
+        put(KEY_CONTROL_CHARACTERS_RANGES, controlCharactersRanges);
     }};
 
+    private boolean[] buildControlCharactersStripTable(List<ControlCharactersRange> ranges) {
+        boolean[] stripTable = new boolean[65536];
+        for (ControlCharactersRange range : ranges) {
+            for (int codePoint = range.rangeStart(); codePoint <= range.rangeEnd(); codePoint++) {
+                stripTable[codePoint] = true;
+            }
+        }
+        return stripTable;
+    }
+
+    private boolean[] controlCharactersStripTable = buildControlCharactersStripTable(controlCharactersRanges);
+
+    public boolean shouldStripControlCharacter(char character) {
+        return controlCharactersStripTable[character];
+    }
 
     @Override
     public void put(String key, Object value) {
@@ -83,6 +121,14 @@ public class TextConfig implements MediaConfig {
     @Override
     public int maxFileSizeInBytes(String mime) {
         return 5_000_000;
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<ControlCharactersRange> getControlCharactersRanges() {
+        return Objects.requireNonNullElse(
+                get(KEY_CONTROL_CHARACTERS_RANGES, List.class),
+                controlCharactersRanges
+        );
     }
 
     public String getTextDefaultOutputTo() {
@@ -133,6 +179,17 @@ public class TextConfig implements MediaConfig {
                 get(KEY_OUTPUT_ENCODING, Charset.class),
                 outputEncoding
         );
+    }
+
+    public void setControlCharactersRanges(List<ControlCharactersRange> newControlCharactersRanges) {
+        if (newControlCharactersRanges == null) {
+            throw new IllegalArgumentException("Control character ranges list cannot be null");
+        }
+        if (newControlCharactersRanges.isEmpty()) {
+            throw new IllegalArgumentException("Control character ranges list cannot be empty");
+        }
+        controlCharactersStripTable = buildControlCharactersStripTable(newControlCharactersRanges);
+        put(KEY_CONTROL_CHARACTERS_RANGES, newControlCharactersRanges);
     }
 
     public void setDontSaveText(boolean newDontSaveText) {
