@@ -65,7 +65,7 @@ public class TextProcessor implements MediaProcessor<TextConfig> {
 
         text = text.replaceAll("<script.*?>.*?</script>", "");
         StringBuilder strippedText = new StringBuilder(text.length());
-        for (int i = 0; i <= text.length(); i++) {
+        for (int i = 0; i < text.length(); i++) {
             char currentCharacter = text.charAt(i);
             if (!config.shouldStripControlCharacter(currentCharacter)) {
                 strippedText.append(currentCharacter);
