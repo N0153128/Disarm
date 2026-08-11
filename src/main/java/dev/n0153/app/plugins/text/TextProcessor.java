@@ -57,13 +57,19 @@ public class TextProcessor implements MediaProcessor<TextConfig> {
      * Removes control characters, strips dangerous patterns: Script tags, control characters and dangerous URL schemes.
      * @since 0.1
      */
-    public void stripPatterns() {
+    public void stripPatterns(Path osTargetPath) {
         String text = context.getTextContent();
         for(String scheme : config.getUrlSchemes()) {
             text = text.replaceAll(Pattern.quote(scheme), "");
         }
 
-        text = text.replaceAll("<script.*?>.*?</script>", "");
+        if (config.getSkipScriptStripFor().equals("default")) {
+            text = text.replaceAll("<script.*?>.*?</script>", "");
+        } else if (config.getSkipScriptStripFor().equals(Utils.getMimeType(osTargetPath))) {
+            text = text.replaceAll("<script.*?>.*?</script>", "");
+        } else {
+            logger.warn("Skipping script stripping");
+        }
         StringBuilder strippedText = new StringBuilder(text.length());
         for (int i = 0; i < text.length(); i++) {
             char currentCharacter = text.charAt(i);
@@ -100,7 +106,7 @@ public class TextProcessor implements MediaProcessor<TextConfig> {
             context.setTextTitle(Utils.getTitle(osTargetPath, Utils.getMimeType(osTargetPath), false));
 
             normalizeUnicode();
-            stripPatterns();
+            stripPatterns(osTargetPath);
             escapeHTML();
             if (!config.getDontSaveText()) {
                 saveTextData();
