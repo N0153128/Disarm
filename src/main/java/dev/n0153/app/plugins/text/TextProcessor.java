@@ -63,8 +63,15 @@ public class TextProcessor implements MediaProcessor<TextConfig> {
             text = text.replaceAll(Pattern.quote(scheme), "");
         }
 
-        text = text.replaceAll("<script.*?>.*?</script>", "")
-                .replaceAll("[\\u0000-\\u001F\\u007F-\\u009F]", "");
+        text = text.replaceAll("<script.*?>.*?</script>", "");
+        StringBuilder strippedText = new StringBuilder(text.length());
+        for (int i = 0; i <= text.length(); i++) {
+            char currentCharacter = text.charAt(i);
+            if (!config.shouldStripControlCharacter(currentCharacter)) {
+                strippedText.append(currentCharacter);
+            }
+        }
+        text = strippedText.toString();
         context.setTextContent(text);
     }
 
