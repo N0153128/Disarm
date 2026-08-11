@@ -39,6 +39,7 @@ public class TextConfig implements MediaConfig {
             new ControlCharactersRange(0x0000, 0x001F),
             new ControlCharactersRange(0x007F, 0x009F)
     );
+    private final String skipScriptStripFor = "default";
 
     private final String KEY_MAX_TEXT_SIZE = "maxTextSize";
     private final String KEY_URL_SCHEMES = "urlSchemes";
@@ -48,6 +49,7 @@ public class TextConfig implements MediaConfig {
     private final String KEY_DONT_SAVE_TEXT = "dontSaveText";
     private final String KEY_TEXT_DEFAULT_OUTPUT_TO = "textDefaultOutputTo";
     private final String KEY_CONTROL_CHARACTERS_RANGES = "controlCharactersRanges";
+    private final String KEY_SKIP_SCRIPT_STRIP_FOR = "skipScriptStripFor";
 
     private final Map<String, Object> configStorage = new HashMap<>() {{
         put(KEY_MAX_TEXT_SIZE, maxTextSize);
@@ -57,6 +59,7 @@ public class TextConfig implements MediaConfig {
         put(KEY_OUTPUT_ENCODING, outputEncoding);
         put(KEY_TEXT_DEFAULT_OUTPUT_TO, textDefaultOutputTo);
         put(KEY_CONTROL_CHARACTERS_RANGES, controlCharactersRanges);
+        put(KEY_SKIP_SCRIPT_STRIP_FOR, skipScriptStripFor);
     }};
 
     private boolean[] buildControlCharactersStripTable(List<ControlCharactersRange> ranges) {
@@ -131,6 +134,13 @@ public class TextConfig implements MediaConfig {
         );
     }
 
+    public String getSkipScriptStripFor() {
+        return Objects.requireNonNullElse(
+                get(KEY_SKIP_SCRIPT_STRIP_FOR, String.class),
+                skipScriptStripFor
+        );
+    }
+
     public String getTextDefaultOutputTo() {
         return Objects.requireNonNullElse(
                 get(KEY_TEXT_DEFAULT_OUTPUT_TO, String.class),
@@ -179,6 +189,21 @@ public class TextConfig implements MediaConfig {
                 get(KEY_OUTPUT_ENCODING, Charset.class),
                 outputEncoding
         );
+    }
+
+    public void setSkipScriptStripFor(String newSkipScriptStripFor) {
+        if (newSkipScriptStripFor == null) {
+            throw new IllegalArgumentException("Skip script strip for format cannot be null");
+        }
+        if (newSkipScriptStripFor.isEmpty()) {
+            throw new IllegalArgumentException("Skip script strip for format cannot be empty");
+        }
+        if (newSkipScriptStripFor.equals("default")) {
+            throw new IllegalArgumentException("Skip script strip for format cannot be default");
+        }
+        if (!supports().contains(newSkipScriptStripFor)) {
+            throw new IllegalArgumentException("Unsupported format specified");
+        }
     }
 
     public void setControlCharactersRanges(List<ControlCharactersRange> newControlCharactersRanges) {
