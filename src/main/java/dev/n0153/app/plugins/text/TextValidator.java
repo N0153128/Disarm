@@ -139,11 +139,11 @@ public class TextValidator implements MediaValidator {
     @Override
     public boolean validate(Path osTargetPath) {
         try {
-            byte[] text = Files.readAllBytes(osTargetPath);
-            context.setRawBytes(text);
             if (!checkMeta()) {
                 throw new ValidationException("Text Validator: meta is empty");
             }
+            byte[] text = Files.readAllBytes(osTargetPath);
+            context.setRawBytes(text);
             if (!checkSizeLimit(osTargetPath, config)) {
                 throw new ValidationException("Text File size limit exceeded");
             }
