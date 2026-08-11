@@ -44,7 +44,6 @@ public class TextUtils {
                 text[2] == (byte) 0xFE && text[3] == (byte) 0xFF) {
             return StandardCharsets.UTF_32BE;
         }
-        // needs valid UTF-32 LE BOM: FF FE 00 00 check
         throw new IllegalArgumentException("Failed to detect encoding");
     }
 }
