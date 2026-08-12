@@ -9,6 +9,8 @@ import picocli.CommandLine.Command;
 
 import java.nio.charset.StandardCharsets;
 import java.text.Normalizer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -64,6 +66,14 @@ public class TextCLI  implements Runnable {
                     "Example: -sssf json")
     private String skipScriptStripFor;
 
+    @CommandLine.Option(names = {"-ccr", "--control-characters-range"}, description =
+            "Add an additional range of characters to trim whiles disarming text. " +
+                    "Default ranges are: 0x0000 to 0x001F and 0x007F to 0x009F. " +
+                    "Accepts the following format: rangeStart:rangeEnd, where rangeStart and rangeEnd are " +
+                    "hexadecimal integer literals." +
+                    "Example: -ccr 0x0000:0x001F")
+    private String controlCharactersRanges;
+
     @Override
     public void run() {
         if (textSize > 0) {
@@ -105,7 +115,18 @@ public class TextCLI  implements Runnable {
         if (skipScriptStripFor != null) {
             this.config.setSkipScriptStripFor(skipScriptStripFor);
         }
-
+        if (controlCharactersRanges != null) {
+            if (controlCharactersRanges.contains(":")) {
+                int rangeStart = Integer.decode(controlCharactersRanges.split(":")[0]);
+                int rangeEnd= Integer.decode(controlCharactersRanges.split(":")[1]);
+                List<TextConfig.ControlCharactersRange> ranges =
+                        new ArrayList<>(this.config.getControlCharactersRanges());
+                ranges.add(new TextConfig.ControlCharactersRange(rangeStart, rangeEnd));
+                this.config.setControlCharactersRanges(ranges);
+            } else {
+                throw new IllegalArgumentException("An incorrectly formatted string was provided");
+            }
+        }
         registry.updateConfig("text", config);
     }
 }
