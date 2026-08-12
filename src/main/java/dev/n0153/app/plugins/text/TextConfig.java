@@ -204,6 +204,7 @@ public class TextConfig implements MediaConfig {
         if (!supports().contains(newSkipScriptStripFor)) {
             throw new IllegalArgumentException("Unsupported format specified");
         }
+        put(KEY_SKIP_SCRIPT_STRIP_FOR, newSkipScriptStripFor);
     }
 
     public void setControlCharactersRanges(List<ControlCharactersRange> newControlCharactersRanges) {
