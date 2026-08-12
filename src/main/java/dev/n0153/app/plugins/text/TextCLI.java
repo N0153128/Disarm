@@ -56,6 +56,14 @@ public class TextCLI  implements Runnable {
                     "Example: -tof json")
     private String textOutputFormat;
 
+    @CommandLine.Option(names = {"-sssf", "--skip-script-strip-for"}, description =
+            "Disable script tag stripping from one of the supported text formats." +
+                    " WARNING! using this flag may pose a security risk. It should be used only for legitimate " +
+                    "source code files that contain script tags. " +
+                    "Script stripping is enabled by default and advised to lease as is." +
+                    "Example: -sssf json")
+    private String skipScriptStripFor;
+
     @Override
     public void run() {
         if (textSize > 0) {
@@ -93,6 +101,9 @@ public class TextCLI  implements Runnable {
         }
         if (textOutputFormat != null) {
             this.config.setTextDefaultOutputTo(textOutputFormat);
+        }
+        if (skipScriptStripFor != null) {
+            this.config.setSkipScriptStripFor(skipScriptStripFor);
         }
 
         registry.updateConfig("text", config);
