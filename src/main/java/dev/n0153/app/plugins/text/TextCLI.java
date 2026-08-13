@@ -10,6 +10,7 @@ import picocli.CommandLine.Command;
 import java.nio.charset.StandardCharsets;
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -74,6 +75,13 @@ public class TextCLI  implements Runnable {
                     "Example: -ccr 0x0000:0x001F")
     private String controlCharactersRanges;
 
+    @CommandLine.Option(names = {"-us", "--url-schemes"}, description =
+            "Add an additional keyword to trim whiles disarming text file. " +
+                    "Default schemes to trim: \"javascript:\", \"vbscript:\", \"data:\"" +
+                    "Accepts the following format: scheme,scheme,scheme." +
+                    "Example: -us vbscript:,livescript:,mocha:")
+    private String urlSchemes;
+
     @Override
     public void run() {
         if (textSize > 0) {
@@ -124,7 +132,20 @@ public class TextCLI  implements Runnable {
                 ranges.add(new TextConfig.ControlCharactersRange(rangeStart, rangeEnd));
                 this.config.setControlCharactersRanges(ranges);
             } else {
-                throw new IllegalArgumentException("An incorrectly formatted string was provided");
+                throw new IllegalArgumentException(
+                        "An incorrectly formatted string was provided for control characters range"
+                );
+            }
+        }
+        if (urlSchemes != null) {
+            if (urlSchemes.contains(",")) {
+                List<String> schemes = new ArrayList<>(Arrays.asList(this.config.getUrlSchemes()));
+                schemes.addAll(Arrays.asList(urlSchemes.split(",")));
+                this.config.setUrlSchemes(schemes.toArray(new String[0]));
+            } else {
+                throw new IllegalArgumentException(
+                        "An incorrectly formatted string was provided for url schemes"
+                );
             }
         }
         registry.updateConfig("text", config);
