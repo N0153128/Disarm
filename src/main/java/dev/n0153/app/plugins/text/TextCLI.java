@@ -9,10 +9,8 @@ import picocli.CommandLine.Command;
 
 import java.nio.charset.StandardCharsets;
 import java.text.Normalizer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Command(name = "text", description = "Text Processing Plugin.", mixinStandardHelpOptions = true)
@@ -82,6 +80,13 @@ public class TextCLI  implements Runnable {
                     "Example: -us vbscript:,livescript:,mocha:")
     private String urlSchemes;
 
+    @CommandLine.Option(names = {"-zlc", "--zero-length-chars"}, description =
+            "Add an additional zero-length-char to trim whiles disarming text file. " +
+                    "Defaults to U+200B, U+200D, U+FEFF. " +
+                    "Accepts comma-separated hexadecimal code points. " +
+                    "Example: -zlc 0x200C,0x2060")
+    private String zeroLengthChars;
+
     @Override
     public void run() {
         if (textSize > 0) {
@@ -147,6 +152,19 @@ public class TextCLI  implements Runnable {
                         "An incorrectly formatted string was provided for url schemes"
                 );
             }
+        }
+        if (zeroLengthChars != null) {
+            if (zeroLengthChars.contains(",")) {
+                Set<Character> chars = new HashSet<>(this.config.getZeroLengthChars());
+                chars.addAll(Arrays.stream(zeroLengthChars.split(","))
+                        .map(hex -> (char) Integer.decode(hex).intValue())
+                        .collect(Collectors.toSet()));
+                this.config.setZeroLengthChars(chars);
+            }
+        } else {
+            throw new IllegalArgumentException(
+                    "An incorrectly formatted string was provided for zero length characters"
+            );
         }
         registry.updateConfig("text", config);
     }
