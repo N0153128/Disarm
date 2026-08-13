@@ -160,11 +160,11 @@ public class TextCLI  implements Runnable {
                         .map(hex -> (char) Integer.decode(hex).intValue())
                         .collect(Collectors.toSet()));
                 this.config.setZeroLengthChars(chars);
+            } else {
+                throw new IllegalArgumentException(
+                        "An incorrectly formatted string was provided for zero length characters"
+                );
             }
-        } else {
-            throw new IllegalArgumentException(
-                    "An incorrectly formatted string was provided for zero length characters"
-            );
         }
         registry.updateConfig("text", config);
     }
