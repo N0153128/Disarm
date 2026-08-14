@@ -319,6 +319,16 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
         positionList.get(rand).run();
     }
 
+    private void watermarkPositionHandler(String position) {
+        switch (position) {
+            case "random" -> applyWatermarkAtRandomPosition();
+            case "top-left" -> applyWatermarkTopLeft();
+            case "top-right" -> applyWatermarkTopRight();
+            case "bottom-left" -> applyWatermarkBottomLeft();
+            case "bottom-right" -> applyWatermarkBottomRight();
+        }
+    }
+
     @Override
     public void process(Path osTargetPath) {
         if (!checkMeta()) {
@@ -350,7 +360,7 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
                             Utils.getMimeFromSignature(config.getPathToLogo()),
                             true));
                     scaleLogo();
-                    applyWatermarkAtRandomPosition();
+                    watermarkPositionHandler(config.getLogoPosition());
                 } else {
                     throw new ImageProcessingException("Failed to process logo");
                 }
