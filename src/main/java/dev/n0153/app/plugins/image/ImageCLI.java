@@ -87,6 +87,13 @@ public class ImageCLI implements Runnable {
                     " Example: -lt 0.3")
     private double logoTransparency;
 
+    @CommandLine.Option(names = {"-lp", "--logo-position"}, description =
+            "Specify exactly at which corner of the screen the logo will be displayed. " +
+                    "Defaults to random position. Accepts one of four positions: " +
+                    "top-left, top-right, bottom-left and bottom-right. " +
+                    "Example: -lp bottom-left")
+    private String logoPosition;
+
     @Override
     public void run() {
         if (logoSizeLimit > 0) {
@@ -121,6 +128,9 @@ public class ImageCLI implements Runnable {
         }
         if (logoTransparency > 0.0) {
             this.config.setTransparency(logoTransparency);
+        }
+        if (logoPosition != null) {
+            this.config.setLogoPosition(logoPosition);
         }
         registry.updateConfig("image", config);
     }
