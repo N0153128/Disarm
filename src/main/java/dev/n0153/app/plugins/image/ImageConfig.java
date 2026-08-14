@@ -12,7 +12,7 @@ import java.util.Set;
 public class ImageConfig implements MediaConfig {
 
     private final int logoSizeLimit = 5_000_000; //5MB
-    private final boolean keepLogo = true;
+    private final boolean keepLogo = false;
     private final boolean dontSaveImage = false;
     private final int imgMaxWidth = 512;
     private final int imgMaxHeight = 512;
