@@ -53,10 +53,13 @@ public class MediaApp {
         String mime = processingContext.getMimeType();
         String fileType = processingContext.getFileType();
         String pluginResolved;
+        double pluginVersion;
         try {
              pluginResolved = getPlugin(mime).echo();
+             pluginVersion = getPlugin(mime).getConfig().getVersion();
         } catch (UnsupportedFileTypeException e) {
             pluginResolved = "unsupported";
+            pluginVersion = 0.0;
         }
 
         // failure info
@@ -92,6 +95,7 @@ public class MediaApp {
                 Mime type:             %s
                 File type:             %s
                 Plugin resolved:       %s
+                Plugin version:        %s
                 
                 # Failure info
                 Stage:                 %s
@@ -115,7 +119,7 @@ public class MediaApp {
                 
                 === END OF REPORT ===
                 """.formatted(filename, mime, fileType,
-                pluginResolved, stage, exceptionName,
+                pluginResolved, pluginVersion, stage, exceptionName,
                 exceptionMessage, outputPath, sizeLimit,
                 skipUnsupported, skipCrashed, benchmarking,
                 keepOriginal, isVerbose, configSnapshot,
