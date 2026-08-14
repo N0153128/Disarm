@@ -22,6 +22,7 @@ public class ImageConfig implements MediaConfig {
     private final String fixedValueScaling = "";
     private final String imageDefaultOutputTo = "default";
     private final Path pathToLogo = null;
+    private final String logoPosition = "random";
 
     private final String KEY_LOGO_SIZE_LIMIT = "logoSizeLimit";
     private final String KEY_KEEP_LOGO = "keepLogo";
@@ -34,6 +35,7 @@ public class ImageConfig implements MediaConfig {
     private final String KEY_FIXED_VALUE_SCALING = "fixedValueScaling";
     private final String KEY_IMAGE_DEFAULT_OUTPUT_TO = "imageDefaultOutputTo";
     private final String KEY_PATH_TO_LOGO = "pathToLogo";
+    private final String KEY_LOGO_POSITION = "logoPosition";
 
     private final Map<String, Object> configStorage = new HashMap<>() {{
         put(KEY_LOGO_SIZE_LIMIT, logoSizeLimit);
@@ -47,6 +49,7 @@ public class ImageConfig implements MediaConfig {
         put(KEY_FIXED_VALUE_SCALING, fixedValueScaling);
         put(KEY_IMAGE_DEFAULT_OUTPUT_TO, imageDefaultOutputTo);
         put(KEY_PATH_TO_LOGO, pathToLogo);
+        put(KEY_LOGO_POSITION, logoPosition);
     }};
 
     @Override
@@ -98,6 +101,14 @@ public class ImageConfig implements MediaConfig {
     }
 
     //getters
+
+    public String getLogoPosition() {
+        return Objects.requireNonNullElse(
+                get(KEY_LOGO_POSITION, String.class),
+                logoPosition
+        );
+    }
+
     public Path getPathToLogo() {
         return get(KEY_PATH_TO_LOGO, Path.class);
     }
@@ -163,6 +174,20 @@ public class ImageConfig implements MediaConfig {
     }
 
     //setters
+
+    public void setLogoPosition(String newLogoPosition) {
+        if (newLogoPosition == null) {
+            throw new IllegalArgumentException("Logo position cannot be null");
+        }
+        if (newLogoPosition.isEmpty()) {
+            throw new IllegalArgumentException("Logo position cannot be empty");
+        }
+        Set<String> validPositions = Set.of("top-right", "top-left", "bottom-right", "bottom-left");
+        if (!validPositions.contains(newLogoPosition.toLowerCase())) {
+            throw new IllegalArgumentException("Invalid logo position was provided");
+        }
+        put(KEY_LOGO_POSITION, newLogoPosition);
+    }
 
     public void setPathToLogo(Path newPathToLogo) {
         if (newPathToLogo == null) {
