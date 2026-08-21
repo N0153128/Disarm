@@ -106,7 +106,12 @@ public class ImageConfig implements MediaConfig {
 
     @Override
     public int maxFileSizeInBytes(String mime) {
-        return 5_000_000;
+        return switch (mime) {
+            case "png" -> getPngSizeLimit();
+            case "jpeg", "jpg" -> getJpgSizeLimit();
+            case "webp" -> getWebpSizeLimit();
+            default -> throw new IllegalStateException("Unsupported value: " + mime);
+        };
     }
 
     //getters
