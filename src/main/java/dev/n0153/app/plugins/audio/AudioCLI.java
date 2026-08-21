@@ -103,6 +103,42 @@ public class AudioCLI implements Runnable {
                     "Example: -dnpf")
     private boolean disableNativeProcessingFallback;
 
+    @CommandLine.Option(names = {"-mp3fs", "--mp3-file-size"}, description =
+            "Changes file size ceiling specifically for mp3 audio. " +
+                    "Accepts bytes as integers. " +
+                    "Example for 3MB ceiling: -mp3fs 3000000")
+    private int mp3FileSize;
+
+    @CommandLine.Option(names = {"-oggfs", "--ogg-file-size"}, description =
+            "Changes file size ceiling specifically for ogg audio. " +
+                    "Accepts bytes as integers. " +
+                    "Example for 3MB ceiling: -oggfs 3000000")
+    private int oggFileSize;
+
+    @CommandLine.Option(names = {"-flacfs", "--flac-file-size"}, description =
+            "Changes file size ceiling specifically for flac audio. " +
+                    "Accepts bytes as integers. " +
+                    "Example for 3MB ceiling: -flacfs 3000000")
+    private int flacFileSize;
+
+    @CommandLine.Option(names = {"-wavfs", "--wav-file-size"}, description =
+            "Changes file size ceiling specifically for wav audio. " +
+                    "Accepts bytes as integers. " +
+                    "Example for 3MB ceiling: -wavfs 3000000")
+    private int wavFileSize;
+
+    @CommandLine.Option(names = {"-aufs", "--au-file-size"}, description =
+            "Changes file size ceiling specifically for au audio. " +
+                    "Accepts bytes as integers. " +
+                    "Example for 3MB ceiling: -aufs 3000000")
+    private int auFileSize;
+
+    @CommandLine.Option(names = {"-aiffs", "--aif-file-size"}, description =
+            "Changes file size ceiling specifically for aif/aiff/aifc audio. " +
+                    "Accepts bytes as integers. " +
+                    "Example for 3MB ceiling: -aiffs 3000000")
+    private int aifFileSize;
+
     @Override
     public void run() {
         if (maxAudioDuration > 0) {
@@ -147,6 +183,24 @@ public class AudioCLI implements Runnable {
         }
         if (disableNativeProcessingFallback) {
             this.config.setDisableNativeProcessingFallback(true);
+        }
+        if (mp3FileSize > 0) {
+            this.config.setMp3SizeLimit(mp3FileSize);
+        }
+        if (oggFileSize > 0) {
+            this.config.setOggSizeLimit(oggFileSize);
+        }
+        if (flacFileSize > 0) {
+            this.config.setFlacSizeLimit(flacFileSize);
+        }
+        if (wavFileSize > 0) {
+            this.config.setWavSizeLimit(wavFileSize);
+        }
+        if (auFileSize > 0) {
+            this.config.setAuSizeLimit(auFileSize);
+        }
+        if (aifFileSize > 0) {
+            this.config.setAifSizeLimit(aifFileSize);
         }
         registry.updateConfig("audio", config);
     }
