@@ -1,6 +1,7 @@
 package dev.n0153.app.plugins.text;
 
 import dev.n0153.app.MediaValidator;
+import dev.n0153.app.Utils;
 import dev.n0153.app.exceptions.ValidationException;
 
 import java.io.IOException;
@@ -137,6 +138,13 @@ public class TextValidator implements MediaValidator {
     }
 
     @Override
+    public boolean validateFileSize(Path osTargetPath) {
+        String mime = Utils.getMimeType(osTargetPath);
+        int size = (int) Utils.getSize(osTargetPath);
+        return size <= config.maxFileSizeInBytes(mime);
+    }
+
+    @Override
     public boolean validate(Path osTargetPath) {
         try {
             if (!checkMeta()) {
@@ -146,6 +154,9 @@ public class TextValidator implements MediaValidator {
             context.setRawBytes(text);
             if (!checkSizeLimit(osTargetPath, config)) {
                 throw new ValidationException("Text File size limit exceeded");
+            }
+            if (!validateFileSize(osTargetPath)) {
+                throw new ValidationException("Text Validator: Text file size validation failed");
             }
             return validateEncoding();
         } catch (IOException e) {
