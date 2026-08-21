@@ -96,6 +96,13 @@ public class AudioValidator implements MediaValidator {
     }
 
     @Override
+    public boolean validateFileSize(Path osTargetPath) {
+        String mime = config.getFormatFromMime(Utils.getMimeType(osTargetPath));
+        int size = (int) Utils.getSize(osTargetPath);
+        return size <= config.maxFileSizeInBytes(mime);
+    }
+
+    @Override
     public boolean validate(Path osTargetPath) {
         if (!checkMeta()) {
             throw new ValidationException("Audio Validator: meta is empty");
@@ -105,6 +112,9 @@ public class AudioValidator implements MediaValidator {
             mime = config.getFormatFromMime(Utils.getMimeType(osTargetPath));
         } catch (MimeTypeDetectionException e) {
             throw new ValidationException("Audio Validator: failed to detect mime type");
+        }
+        if (!validateFileSize(osTargetPath)) {
+            throw new ValidationException("Audio Validator: Audio file size validation failed");
         }
         if (!validateAudioDuration(osTargetPath)) {
             throw new ValidationException("Audio Validator: Audio duration validation failed");
