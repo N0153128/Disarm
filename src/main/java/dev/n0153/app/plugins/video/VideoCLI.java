@@ -124,6 +124,30 @@ public class VideoCLI implements Runnable {
                     "Example: -mvfr 90")
     private int maxVideoFrameRate;
 
+    @CommandLine.Option(names = {"-mp4fs", "--mp4-file-size"}, description =
+            "Changes file size ceiling specifically for mp4 video " +
+                    "Accepts bytes as integers. " +
+                    "Example for 3MB ceiling: -mp4pfs 3000000")
+    private int mp4FileSize;
+
+    @CommandLine.Option(names = {"-matroskafs", "--matroska-file-size"}, description =
+            "Changes file size ceiling specifically for matroska video " +
+                    "Accepts bytes as integers. " +
+                    "Example for 3MB ceiling: -matroskapfs 3000000")
+    private int matroskaFileSize;
+
+    @CommandLine.Option(names = {"-webmfs", "--webm-file-size"}, description =
+            "Changes file size ceiling specifically for webm video " +
+                    "Accepts bytes as integers. " +
+                    "Example for 3MB ceiling: -webmfs 3000000")
+    private int webmFileSize;
+
+    @CommandLine.Option(names = {"-movfs", "--mov-file-size"}, description =
+            "Changes file size ceiling specifically for mov video " +
+                    "Accepts bytes as integers. " +
+                    "Example for 3MB ceiling: -movfs 3000000")
+    private int movFileSize;
+
     @Override
     public void run() {
         if (maxVideoDuration > 0) {
@@ -221,6 +245,18 @@ public class VideoCLI implements Runnable {
         }
         if (targetAudioChannels > 0) {
             this.config.setOutputChannels(targetAudioChannels);
+        }
+        if (mp4FileSize > 0) {
+            this.config.setMp4SizeLimit(mp4FileSize);
+        }
+        if (matroskaFileSize > 0) {
+            this.config.setMatroskaSizeLimit(matroskaFileSize);
+        }
+        if (webmFileSize > 0) {
+            this.config.setWebmSizeLimit(webmFileSize);
+        }
+        if (movFileSize > 0) {
+            this.config.setMovSizeLimit(movFileSize);
         }
         registry.updateConfig("video", config);
     }
