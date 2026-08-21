@@ -132,7 +132,12 @@ public class TextConfig implements MediaConfig {
 
     @Override
     public int maxFileSizeInBytes(String mime) {
-        return 5_000_000;
+        return switch (mime) {
+            case "txt", "plain", "text" -> getTxtSizeLimit();
+            case "log" -> getLogSizeLimit();
+            case "json" -> getJsonSizeLimit();
+            default -> throw new IllegalArgumentException("Unsupported mime: " + mime);
+        };
     }
 
     public int getTxtSizeLimit() {
