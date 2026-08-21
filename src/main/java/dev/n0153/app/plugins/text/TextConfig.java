@@ -40,6 +40,9 @@ public class TextConfig implements MediaConfig {
             new ControlCharactersRange(0x007F, 0x009F)
     );
     private final String skipScriptStripFor = "default";
+    private final int txtSizeLimit = 5_000_000; //5MB
+    private final int logSizeLimit = 5_000_000; //5MB
+    private final int jsonSizeLimit = 5_000_000; //5MB
 
     private final String KEY_MAX_TEXT_SIZE = "maxTextSize";
     private final String KEY_URL_SCHEMES = "urlSchemes";
@@ -50,6 +53,9 @@ public class TextConfig implements MediaConfig {
     private final String KEY_TEXT_DEFAULT_OUTPUT_TO = "textDefaultOutputTo";
     private final String KEY_CONTROL_CHARACTERS_RANGES = "controlCharactersRanges";
     private final String KEY_SKIP_SCRIPT_STRIP_FOR = "skipScriptStripFor";
+    private final String KEY_TXT_SIZE_LIMIT = "txtSizeLimit";
+    private final String KEY_JSON_SIZE_LIMIT = "jsonSizeLimit";
+    private final String KEY_LOG_SIZE_LIMIT = "logSizeLimit";
 
     private final Map<String, Object> configStorage = new HashMap<>() {{
         put(KEY_MAX_TEXT_SIZE, maxTextSize);
@@ -60,6 +66,9 @@ public class TextConfig implements MediaConfig {
         put(KEY_TEXT_DEFAULT_OUTPUT_TO, textDefaultOutputTo);
         put(KEY_CONTROL_CHARACTERS_RANGES, controlCharactersRanges);
         put(KEY_SKIP_SCRIPT_STRIP_FOR, skipScriptStripFor);
+        put(KEY_TXT_SIZE_LIMIT, txtSizeLimit);
+        put(KEY_LOG_SIZE_LIMIT, logSizeLimit);
+        put(KEY_JSON_SIZE_LIMIT, jsonSizeLimit);
     }};
 
     private boolean[] buildControlCharactersStripTable(List<ControlCharactersRange> ranges) {
@@ -126,6 +135,27 @@ public class TextConfig implements MediaConfig {
         return 5_000_000;
     }
 
+    public int getTxtSizeLimit() {
+        return Objects.requireNonNullElse(
+                get(KEY_TXT_SIZE_LIMIT, Integer.class),
+                txtSizeLimit
+        );
+    }
+
+    public int getLogSizeLimit() {
+        return Objects.requireNonNullElse(
+                get(KEY_LOG_SIZE_LIMIT, Integer.class),
+                logSizeLimit
+        );
+    }
+
+    public int getJsonSizeLimit() {
+        return Objects.requireNonNullElse(
+                get(KEY_JSON_SIZE_LIMIT, Integer.class),
+                jsonSizeLimit
+        );
+    }
+
     @SuppressWarnings("unchecked")
     public List<ControlCharactersRange> getControlCharactersRanges() {
         return Objects.requireNonNullElse(
@@ -189,6 +219,36 @@ public class TextConfig implements MediaConfig {
                 get(KEY_OUTPUT_ENCODING, Charset.class),
                 outputEncoding
         );
+    }
+
+    public void setTxtSizeLimit(int newTxtSizeLimit) {
+        if (newTxtSizeLimit == 0) {
+            throw new IllegalArgumentException("Txt size limit cannot be zero");
+        }
+        if (newTxtSizeLimit < 0) {
+            throw new IllegalArgumentException("Txt size limit cannot be less than zero");
+        }
+        put(KEY_TXT_SIZE_LIMIT, newTxtSizeLimit);
+    }
+
+    public void setLogSizeLimit(int newLogSizeLimit) {
+        if (newLogSizeLimit == 0) {
+            throw new IllegalArgumentException("Log size limit cannot be zero");
+        }
+        if (newLogSizeLimit < 0) {
+            throw new IllegalArgumentException("Log size limit cannot be less than zero");
+        }
+        put(KEY_LOG_SIZE_LIMIT, newLogSizeLimit);
+    }
+
+    public void setJsonSizeLimit(int newJsonSizeLimit) {
+        if (newJsonSizeLimit == 0) {
+            throw new IllegalArgumentException("Log size limit cannot be zero");
+        }
+        if (newJsonSizeLimit < 0) {
+            throw new IllegalArgumentException("Log size limit cannot be less than zero");
+        }
+        put(KEY_JSON_SIZE_LIMIT, newJsonSizeLimit);
     }
 
     public void setSkipScriptStripFor(String newSkipScriptStripFor) {
