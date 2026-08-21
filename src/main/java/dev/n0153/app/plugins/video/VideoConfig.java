@@ -215,7 +215,13 @@ public class VideoConfig implements MediaConfig {
 
     @Override
     public int maxFileSizeInBytes(String mime) {
-        return 5_000_000;
+        return switch(mime) {
+            case "mp4", "mpeg-4", "x-m4v" -> getMp4SizeLimit();
+            case "matroska", "x-matroska", "mkv" -> getMatroskaSizeLimit();
+            case "webm" -> getWebmSizeLimit();
+            case "mov" -> getMovSizeLimit();
+            default -> throw new IllegalArgumentException("Unsupported mime: " + mime);
+        };
     }
 
     // getters
