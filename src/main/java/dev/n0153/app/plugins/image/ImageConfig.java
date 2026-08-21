@@ -110,7 +110,7 @@ public class ImageConfig implements MediaConfig {
             case "png" -> getPngSizeLimit();
             case "jpeg", "jpg" -> getJpgSizeLimit();
             case "webp" -> getWebpSizeLimit();
-            default -> throw new IllegalStateException("Unsupported value: " + mime);
+            default -> throw new IllegalArgumentException("Unsupported mime: " + mime);
         };
     }
 
