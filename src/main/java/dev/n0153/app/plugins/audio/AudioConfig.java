@@ -147,6 +147,12 @@ public class AudioConfig implements MediaConfig {
         put(KEY_ALLOWED_AUDIO_CODECS, allowedAudioCodecs);
         put(KEY_MIME_TO_FORMAT, mimeToFormat);
         put(KEY_DISABLE_NATIVE_PROCESSING_FALLBACK, disableNativeProcessingFallback);
+        put(KEY_MP3_SIZE_LIMIT, mp3SizeLimit);
+        put(KEY_OGG_SIZE_LIMIT, oggSizeLimit);
+        put(KEY_FLAC_SIZE_LIMIT, flacSizeLimit);
+        put(KEY_WAV_SIZE_LIMIT, wavSizeLimit);
+        put(KEY_AU_SIZE_LIMIT, auSizeLimit);
+        put(KEY_AIF_SIZE_LIMIT, aifSizeLimit);
     }};
 
     @Override
@@ -356,7 +362,7 @@ public class AudioConfig implements MediaConfig {
         if (newOggSizeLimit < 0) {
             throw new IllegalArgumentException("Ogg size limit cannot be less than zero");
         }
-        put(KEY_MP3_SIZE_LIMIT, newOggSizeLimit);
+        put(KEY_OGG_SIZE_LIMIT, newOggSizeLimit);
     }
 
     public void setFlacSizeLimit(int newFlacSizeLimit) {
@@ -366,7 +372,7 @@ public class AudioConfig implements MediaConfig {
         if (newFlacSizeLimit < 0) {
             throw new IllegalArgumentException("Flac size limit cannot be less than zero");
         }
-        put(KEY_MP3_SIZE_LIMIT, newFlacSizeLimit);
+        put(KEY_FLAC_SIZE_LIMIT, newFlacSizeLimit);
     }
 
     public void setWavSizeLimit(int newWavSizeLimit) {
@@ -376,7 +382,7 @@ public class AudioConfig implements MediaConfig {
         if (newWavSizeLimit < 0) {
             throw new IllegalArgumentException("Wav size limit cannot be less than zero");
         }
-        put(KEY_MP3_SIZE_LIMIT, newWavSizeLimit);
+        put(KEY_WAV_SIZE_LIMIT, newWavSizeLimit);
     }
 
     public void setAuSizeLimit(int newAuSizeLimit) {
@@ -386,7 +392,7 @@ public class AudioConfig implements MediaConfig {
         if (newAuSizeLimit < 0) {
             throw new IllegalArgumentException("Au size limit cannot be less than zero");
         }
-        put(KEY_MP3_SIZE_LIMIT, newAuSizeLimit);
+        put(KEY_AU_SIZE_LIMIT, newAuSizeLimit);
     }
 
     public void setAifSizeLimit(int newAifSizeLimit) {
@@ -396,7 +402,7 @@ public class AudioConfig implements MediaConfig {
         if (newAifSizeLimit < 0) {
             throw new IllegalArgumentException("Aif size limit cannot be less than zero");
         }
-        put(KEY_MP3_SIZE_LIMIT, newAifSizeLimit);
+        put(KEY_AIF_SIZE_LIMIT, newAifSizeLimit);
     }
 
     public void setDisableNativeProcessingFallback(boolean newDisableNativeProcessingFallback) {
