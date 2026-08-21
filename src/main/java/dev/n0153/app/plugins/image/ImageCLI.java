@@ -94,6 +94,24 @@ public class ImageCLI implements Runnable {
                     "Example: -lp bottom-left")
     private String logoPosition;
 
+    @CommandLine.Option(names = {"-pngfs", "--png-file-size"}, description =
+            "Changes file size ceiling specifically for png images. " +
+                    "Accepts bytes as integers. " +
+                    "Example for 3MB ceiling: -pngfs 3000000")
+    private int pngFileSize;
+
+    @CommandLine.Option(names = {"-jpgfs", "--jpg-file-size"}, description =
+            "Changes file size ceiling specifically for jpg/jpeg images. " +
+                    "Accepts bytes as integers. " +
+                    "Example for 3MB ceiling: -jpgfs 3000000")
+    private int jpgFileSize;
+
+    @CommandLine.Option(names = {"-webpfs", "--webp-file-size"}, description =
+            "Changes file size ceiling specifically for webp images. " +
+                    "Accepts bytes as integers. " +
+                    "Example for 3MB ceiling: -webpfs 3000000")
+    private int webpFileSize;
+
     @Override
     public void run() {
         if (logoSizeLimit > 0) {
@@ -131,6 +149,15 @@ public class ImageCLI implements Runnable {
         }
         if (logoPosition != null) {
             this.config.setLogoPosition(logoPosition);
+        }
+        if (pngFileSize > 0) {
+            this.config.setPngSizeLimit(pngFileSize);
+        }
+        if (jpgFileSize > 0) {
+            this.config.setJpgSizeLimit(jpgFileSize);
+        }
+        if (webpFileSize > 0) {
+            this.config.setWebpSizeLimit(webpFileSize);
         }
         registry.updateConfig("image", config);
     }
