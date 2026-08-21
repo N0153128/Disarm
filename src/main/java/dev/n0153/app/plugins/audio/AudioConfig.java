@@ -94,6 +94,12 @@ public class AudioConfig implements MediaConfig {
     private final String defaultOutputTo = "default";
     private final boolean dontSaveAudio = false;
     private final boolean disableNativeProcessingFallback = false;
+    private final int mp3SizeLimit = 5_000_000; //5MB
+    private final int oggSizeLimit = 5_000_000; //5MB
+    private final int flacSizeLimit = 5_000_000; //5MB
+    private final int wavSizeLimit = 5_000_000; //5MB
+    private final int auSizeLimit = 5_000_000; //5MB
+    private final int aifSizeLimit = 5_000_000; //5MB
 
     private final String KEY_MAX_AUDIO_DURATION = "maxAudioDuration";
     private final String KEY_MAX_BITRATES = "maxBitrates";
@@ -110,8 +116,12 @@ public class AudioConfig implements MediaConfig {
     private final String KEY_DEFAULT_OUTPUT_TO = "defaultOutputTo";
     private final String KEY_DONT_SAVE_AUDIO = "dontSaveAudio";
     private final String KEY_DISABLE_NATIVE_PROCESSING_FALLBACK = "disableNativeProcessingFallback";
-
-
+    private final String KEY_MP3_SIZE_LIMIT = "mp3SizeLimit";
+    private final String KEY_OGG_SIZE_LIMIT = "oggSizeLimit";
+    private final String KEY_FLAC_SIZE_LIMIT = "flacSizeLimit";
+    private final String KEY_WAV_SIZE_LIMIT = "wavSizeLimit";
+    private final String KEY_AU_SIZE_LIMIT = "auSizeLimit";
+    private final String KEY_AIF_SIZE_LIMIT = "aifSizeLimit";
 
     @Override
     public void put(String key, Object value) {
@@ -180,6 +190,42 @@ public class AudioConfig implements MediaConfig {
     }
 
     //getters
+
+    public int getMp3SizeLimit() {
+        return Objects.requireNonNullElse(
+                get(KEY_MP3_SIZE_LIMIT, Integer.class),
+                mp3SizeLimit);
+    }
+
+    public int getOggSizeLimit() {
+        return Objects.requireNonNullElse(
+                get(KEY_OGG_SIZE_LIMIT, Integer.class),
+                oggSizeLimit);
+    }
+
+    public int getFlacSizeLimit() {
+        return Objects.requireNonNullElse(
+                get(KEY_FLAC_SIZE_LIMIT, Integer.class),
+                flacSizeLimit);
+    }
+
+    public int getWavSizeLimit() {
+        return Objects.requireNonNullElse(
+                get(KEY_WAV_SIZE_LIMIT, Integer.class),
+                wavSizeLimit);
+    }
+
+    public int getAuSizeLimit() {
+        return Objects.requireNonNullElse(
+                get(KEY_AU_SIZE_LIMIT, Integer.class),
+                auSizeLimit);
+    }
+
+    public int getAifSizeLimit() {
+        return Objects.requireNonNullElse(
+                get(KEY_AIF_SIZE_LIMIT, Integer.class),
+                aifSizeLimit);
+    }
 
     public boolean getDisableNativeProcessingFallback() {
         return Objects.requireNonNullElse(
@@ -284,6 +330,66 @@ public class AudioConfig implements MediaConfig {
         );
     }
     //setters
+
+    public void setMp3SizeLimit(int newMp3SizeLimit) {
+        if (newMp3SizeLimit == 0) {
+            throw new IllegalArgumentException("Mp3 size limit cannot be zero");
+        }
+        if (newMp3SizeLimit < 0) {
+            throw new IllegalArgumentException("Mp3 size limit cannot be less than zero");
+        }
+        put(KEY_MP3_SIZE_LIMIT, newMp3SizeLimit);
+    }
+
+    public void setOggSizeLimit(int newOggSizeLimit) {
+        if (newOggSizeLimit == 0) {
+            throw new IllegalArgumentException("Ogg size limit cannot be zero");
+        }
+        if (newOggSizeLimit < 0) {
+            throw new IllegalArgumentException("Ogg size limit cannot be less than zero");
+        }
+        put(KEY_MP3_SIZE_LIMIT, newOggSizeLimit);
+    }
+
+    public void setFlacSizeLimit(int newFlacSizeLimit) {
+        if (newFlacSizeLimit == 0) {
+            throw new IllegalArgumentException("Flac size limit cannot be zero");
+        }
+        if (newFlacSizeLimit < 0) {
+            throw new IllegalArgumentException("Flac size limit cannot be less than zero");
+        }
+        put(KEY_MP3_SIZE_LIMIT, newFlacSizeLimit);
+    }
+
+    public void setWavSizeLimit(int newWavSizeLimit) {
+        if (newWavSizeLimit == 0) {
+            throw new IllegalArgumentException("Wav size limit cannot be zero");
+        }
+        if (newWavSizeLimit < 0) {
+            throw new IllegalArgumentException("Wav size limit cannot be less than zero");
+        }
+        put(KEY_MP3_SIZE_LIMIT, newWavSizeLimit);
+    }
+
+    public void setAuSizeLimit(int newAuSizeLimit) {
+        if (newAuSizeLimit == 0) {
+            throw new IllegalArgumentException("Au size limit cannot be zero");
+        }
+        if (newAuSizeLimit < 0) {
+            throw new IllegalArgumentException("Au size limit cannot be less than zero");
+        }
+        put(KEY_MP3_SIZE_LIMIT, newAuSizeLimit);
+    }
+
+    public void setAifSizeLimit(int newAifSizeLimit) {
+        if (newAifSizeLimit == 0) {
+            throw new IllegalArgumentException("Aif size limit cannot be zero");
+        }
+        if (newAifSizeLimit < 0) {
+            throw new IllegalArgumentException("Aif size limit cannot be less than zero");
+        }
+        put(KEY_MP3_SIZE_LIMIT, newAifSizeLimit);
+    }
 
     public void setDisableNativeProcessingFallback(boolean newDisableNativeProcessingFallback) {
         put(KEY_DISABLE_NATIVE_PROCESSING_FALLBACK, newDisableNativeProcessingFallback);
