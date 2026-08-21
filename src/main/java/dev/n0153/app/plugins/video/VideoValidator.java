@@ -159,6 +159,13 @@ public class VideoValidator implements MediaValidator {
     }
 
     @Override
+    public boolean validateFileSize(Path osTargetPath) {
+        String mime = Utils.getMimeType(osTargetPath);
+        int size = (int) Utils.getSize(osTargetPath);
+        return size <= config.maxFileSizeInBytes(mime);
+    }
+
+    @Override
     public boolean validate(Path osTargetPath) {
         String mime;
         String format;
@@ -201,6 +208,9 @@ public class VideoValidator implements MediaValidator {
         }
         if (!ensureSizeLimit(osTargetPath)) {
             throw new ValidationException("Video Validator: format size validation failed");
+        }
+        if (!validateFileSize(osTargetPath)) {
+            throw new ValidationException("Video Validator: Video file size validation failed");
         }
         return true;
     }
