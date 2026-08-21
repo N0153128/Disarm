@@ -187,13 +187,13 @@ public class AudioConfig implements MediaConfig {
     @Override
     public int maxFileSizeInBytes(String mime) {
         return switch (mime) {
-            case "mp3" -> getMp3SizeLimit();
-            case "ogg" -> getOggSizeLimit();
-            case "flac" -> getFlacSizeLimit();
-            case "wav" -> getWavSizeLimit();
-            case "au" -> getAuSizeLimit();
-            case "aif" -> getAifSizeLimit();
-            default -> throw new IllegalArgumentException("Unsupported mime: "+{});
+            case "mp3", "mpeg", "mpeg-3" -> getMp3SizeLimit();
+            case "ogg", "vorbis", "x-ogg" -> getOggSizeLimit();
+            case "flac", "x-flac" -> getFlacSizeLimit();
+            case "wav", "x-wav", "wave", "vnd.wave" -> getWavSizeLimit();
+            case "au", "basic" -> getAuSizeLimit();
+            case "aif", "aiff", "aifc", "x-aiff" -> getAifSizeLimit();
+            default -> throw new IllegalArgumentException("Unsupported mime: " + mime);
         };
     }
 
