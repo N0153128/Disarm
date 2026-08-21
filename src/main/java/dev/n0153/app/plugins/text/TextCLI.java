@@ -87,6 +87,24 @@ public class TextCLI  implements Runnable {
                     "Example: -zlc 0x200C,0x2060")
     private String zeroLengthChars;
 
+    @CommandLine.Option(names = {"-txtpfs", "--txt-file-size"}, description =
+            "Changes file size ceiling specifically for txt text " +
+                    "Accepts bytes as integers. " +
+                    "Example for 3MB ceiling: -txtpfs 3000000")
+    private int txtFileSize;
+
+    @CommandLine.Option(names = {"-logpfs", "--log-file-size"}, description =
+            "Changes file size ceiling specifically for log text " +
+                    "Accepts bytes as integers. " +
+                    "Example for 3MB ceiling: -logpfs 3000000")
+    private int logFileSize;
+
+    @CommandLine.Option(names = {"-jsonpfs", "--json-file-size"}, description =
+            "Changes file size ceiling specifically for json text " +
+                    "Accepts bytes as integers. " +
+                    "Example for 3MB ceiling: -jsonpfs 3000000")
+    private int jsonFileSize;
+
     @Override
     public void run() {
         if (textSize > 0) {
@@ -165,6 +183,15 @@ public class TextCLI  implements Runnable {
                         "An incorrectly formatted string was provided for zero length characters"
                 );
             }
+        }
+        if (txtFileSize > 0) {
+            this.config.setTxtSizeLimit(txtFileSize);
+        }
+        if (logFileSize > 0) {
+            this.config.setLogSizeLimit(logFileSize);
+        }
+        if (jsonFileSize > 0) {
+            this.config.setJsonSizeLimit(jsonFileSize);
         }
         registry.updateConfig("text", config);
     }
