@@ -23,6 +23,9 @@ public class ImageConfig implements MediaConfig {
     private final String imageDefaultOutputTo = "default";
     private final Path pathToLogo = null;
     private final String logoPosition = "random";
+    private final int pngSizeLimit = 5_000_000; //5MB;
+    private final int jpgSizeLimit = 5_000_000; //5MB;
+    private final int webpSizeLimit = 5_000_000; //5MB;
 
     private final String KEY_LOGO_SIZE_LIMIT = "logoSizeLimit";
     private final String KEY_KEEP_LOGO = "keepLogo";
@@ -36,6 +39,9 @@ public class ImageConfig implements MediaConfig {
     private final String KEY_IMAGE_DEFAULT_OUTPUT_TO = "imageDefaultOutputTo";
     private final String KEY_PATH_TO_LOGO = "pathToLogo";
     private final String KEY_LOGO_POSITION = "logoPosition";
+    private final String KEY_PNG_SIZE_LIMIT = "pngSizeLimit";
+    private final String KEY_JPG_SIZE_LIMIT = "jpgSizeLimit";
+    private final String KEY_WEBP_SIZE_LIMIT = "webpSizeLimit";
 
     private final Map<String, Object> configStorage = new HashMap<>() {{
         put(KEY_LOGO_SIZE_LIMIT, logoSizeLimit);
@@ -50,6 +56,9 @@ public class ImageConfig implements MediaConfig {
         put(KEY_IMAGE_DEFAULT_OUTPUT_TO, imageDefaultOutputTo);
         put(KEY_PATH_TO_LOGO, pathToLogo);
         put(KEY_LOGO_POSITION, logoPosition);
+        put(KEY_PNG_SIZE_LIMIT, pngSizeLimit);
+        put(KEY_JPG_SIZE_LIMIT, jpgSizeLimit);
+        put(KEY_WEBP_SIZE_LIMIT, webpSizeLimit);
     }};
 
     @Override
@@ -101,6 +110,27 @@ public class ImageConfig implements MediaConfig {
     }
 
     //getters
+
+    public int getPngSizeLimit() {
+        return Objects.requireNonNullElse(
+                get(KEY_PNG_SIZE_LIMIT, Integer.class),
+                pngSizeLimit
+        );
+    }
+
+    public int getJpgSizeLimit() {
+        return Objects.requireNonNullElse(
+                get(KEY_JPG_SIZE_LIMIT, Integer.class),
+                jpgSizeLimit
+        );
+    }
+
+    public int getWebpSizeLimit() {
+        return Objects.requireNonNullElse(
+                get(KEY_WEBP_SIZE_LIMIT, Integer.class),
+                webpSizeLimit
+        );
+    }
 
     public String getLogoPosition() {
         return Objects.requireNonNullElse(
@@ -174,6 +204,36 @@ public class ImageConfig implements MediaConfig {
     }
 
     //setters
+
+    public void setPngSizeLimit(int newPngSizeLimit) {
+        if (newPngSizeLimit == 0) {
+            throw new IllegalArgumentException("Png size limit cannot be zero");
+        }
+        if (newPngSizeLimit < 0) {
+            throw new IllegalArgumentException("Png size limit cannot be less than zero");
+        }
+        put(KEY_PNG_SIZE_LIMIT, newPngSizeLimit);
+    }
+
+    public void setJpgSizeLimit(int newJpgSizeLimit) {
+        if (newJpgSizeLimit == 0) {
+            throw new IllegalArgumentException("Jpg size limit cannot be zero");
+        }
+        if (newJpgSizeLimit < 0) {
+            throw new IllegalArgumentException("Jpg size limit cannot be less than zero");
+        }
+        put(KEY_PNG_SIZE_LIMIT, newJpgSizeLimit);
+    }
+
+    public void setWebpSizeLimit(int newWebpSizeLimit) {
+        if (newWebpSizeLimit == 0) {
+            throw new IllegalArgumentException("Webp size limit cannot be zero");
+        }
+        if (newWebpSizeLimit < 0) {
+            throw new IllegalArgumentException("Webp size limit cannot be less than zero");
+        }
+        put(KEY_PNG_SIZE_LIMIT, newWebpSizeLimit);
+    }
 
     public void setLogoPosition(String newLogoPosition) {
         if (newLogoPosition == null) {
