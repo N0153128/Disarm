@@ -111,6 +111,10 @@ public class VideoConfig implements MediaConfig {
     private final String defaultOutputTo = "default";
     private final String swapAV1 = "vp8";
     private final Boolean dontSaveVideo = false;
+    private final int mp4SizeLimit = 5_000_000; //5MB
+    private final int matroskaSizeLimit = 5_000_000; //5MB
+    private final int webmSizeLimit = 5_000_000; //5MB
+    private final int movSizeLimit = 5_000_000; //5MB
 
     private final String KEY_MAX_VIDEO_DURATION = "maxVideoDuration";
     private final String KEY_MAX_FILE_SIZE = "maxFileSize";
@@ -133,6 +137,10 @@ public class VideoConfig implements MediaConfig {
     private final String KEY_DEFAULT_OUTPUT_TO = "defaultOutputTo";
     private final String KEY_SWAP_AV1 = "swapAV1";
     private final String KEY_DONT_SAVE_VIDEO= "dontSaveVideo";
+    private final String KEY_MP4_SIZE_LIMIT = "mp4SizeLimit";
+    private final String KEY_MATROSKA_SIZE_LIMIT = "matroskaSizeLimit";
+    private final String KEY_WEBM_SIZE_LIMIT = "webmSizeLimit";
+    private final String KEY_MOV_SIZE_LIMIT = "movSizeLimit";
 
     private final Map<String, Object> configStorage = new HashMap<>() {{
         put(KEY_MAX_VIDEO_DURATION, maxVideoDuration);
@@ -156,6 +164,10 @@ public class VideoConfig implements MediaConfig {
         put(KEY_DEFAULT_OUTPUT_TO, defaultOutputTo);
         put(KEY_SWAP_AV1, swapAV1);
         put(KEY_DONT_SAVE_VIDEO, dontSaveVideo);
+        put(KEY_MP4_SIZE_LIMIT, mp4SizeLimit);
+        put(KEY_MATROSKA_SIZE_LIMIT, matroskaSizeLimit);
+        put(KEY_WEBM_SIZE_LIMIT, webmSizeLimit);
+        put(KEY_MOV_SIZE_LIMIT, movSizeLimit);
     }};
 
     @Override
@@ -207,6 +219,30 @@ public class VideoConfig implements MediaConfig {
     }
 
     // getters
+
+    public int getMp4SizeLimit() {
+        return Objects.requireNonNullElse(
+                get(KEY_MP4_SIZE_LIMIT, Integer.class),
+                mp4SizeLimit);
+    }
+
+    public int getMatroskaSizeLimit() {
+        return Objects.requireNonNullElse(
+                get(KEY_MATROSKA_SIZE_LIMIT, Integer.class),
+                matroskaSizeLimit);
+    }
+
+    public int getWebmSizeLimit() {
+        return Objects.requireNonNullElse(
+                get(KEY_WEBM_SIZE_LIMIT, Integer.class),
+                webmSizeLimit);
+    }
+
+    public int getMovSizeLimit() {
+        return Objects.requireNonNullElse(
+                get(KEY_MOV_SIZE_LIMIT, Integer.class),
+                movSizeLimit);
+    }
 
     public boolean getDontSaveVideo() {
         return Objects.requireNonNullElse(
@@ -347,6 +383,46 @@ public class VideoConfig implements MediaConfig {
     }
 
     //setters
+
+    public void setMp4SizeLimit(int newMp4SizeLimit) {
+        if (newMp4SizeLimit == 0) {
+            throw new IllegalArgumentException("Mp4size limit cannot be zero");
+        }
+        if (newMp4SizeLimit < 0) {
+            throw new IllegalArgumentException("Mp4 size limit cannot be less than zero");
+        }
+        put(KEY_MP4_SIZE_LIMIT, newMp4SizeLimit);
+    }
+
+    public void setMatroskaSizeLimit(int newMatroskaSizeLimit) {
+        if (newMatroskaSizeLimit == 0) {
+            throw new IllegalArgumentException("Matroska size limit cannot be zero");
+        }
+        if (newMatroskaSizeLimit < 0) {
+            throw new IllegalArgumentException("Matroska size limit cannot be less than zero");
+        }
+        put(KEY_MATROSKA_SIZE_LIMIT, newMatroskaSizeLimit);
+    }
+
+    public void setWebmSizeLimit(int newWebmSizeLimit) {
+        if (newWebmSizeLimit == 0) {
+            throw new IllegalArgumentException("Webm size limit cannot be zero");
+        }
+        if (newWebmSizeLimit < 0) {
+            throw new IllegalArgumentException("Webm size limit cannot be less than zero");
+        }
+        put(KEY_WEBM_SIZE_LIMIT, newWebmSizeLimit);
+    }
+
+    public void setMovSizeLimit(int newMovSizeLimit) {
+        if (newMovSizeLimit == 0) {
+            throw new IllegalArgumentException("Mov size limit cannot be zero");
+        }
+        if (newMovSizeLimit < 0) {
+            throw new IllegalArgumentException("Mov size limit cannot be less than zero");
+        }
+        put(KEY_MOV_SIZE_LIMIT, newMovSizeLimit);
+    }
 
     public void setDontSaveVideo(boolean newDontSaveVideo) {
         put(KEY_DONT_SAVE_VIDEO, newDontSaveVideo);
