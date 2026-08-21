@@ -20,7 +20,17 @@ public class ImageValidator implements MediaValidator {
         if (!checkMeta()) {
             throw new ValidationException("Plugin meta data is empty");
         }
+        if (!validateFileSize(osTargetPath)) {
+            throw new ValidationException("Image Validator: Image file size validation failed");
+        }
         return true;
+    }
+
+    @Override
+    public boolean validateFileSize(Path osTargetPath) {
+        String mime = Utils.getMimeType(osTargetPath);
+        int size = (int) Utils.getSize(osTargetPath);
+        return size <= config.maxFileSizeInBytes(mime);
     }
 
     public boolean checkMeta() {
