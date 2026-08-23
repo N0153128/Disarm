@@ -89,6 +89,11 @@ public class PluginRegistry {
         }
     }
 
+    public void wipePlugin(MediaPlugin plugin) {
+        plugin.getConfig().release();
+        plugin.getProcessor(plugin.getConfig()).getContext().release();
+    }
+
     public Collection<Runnable> listCLI() {
         return cliRegistry.values();
     }
