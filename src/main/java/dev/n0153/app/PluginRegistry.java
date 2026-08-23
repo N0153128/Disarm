@@ -94,6 +94,12 @@ public class PluginRegistry {
         plugin.getProcessor(plugin.getConfig()).getContext().release();
     }
 
+    public void removePluginEntry(String mime) {
+        processorRegistry.remove(mime);
+        cliRegistry.remove(mime);
+        configRegistry.remove(mime);
+    }
+
     public Collection<Runnable> listCLI() {
         return cliRegistry.values();
     }
