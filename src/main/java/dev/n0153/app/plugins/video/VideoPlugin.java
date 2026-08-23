@@ -2,12 +2,16 @@ package dev.n0153.app.plugins.video;
 
 import dev.n0153.app.*;
 import dev.n0153.app.exceptions.DisarmException;
+import dev.n0153.app.plugins.text.TextPlugin;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class VideoPlugin implements MediaPlugin {
     private MediaConfig config;
     private final VideoContext context = new VideoContext();
     private final VideoValidator validator = new VideoValidator();
     private GlobalConfig globalConfig;
+    private static final Logger logger = LogManager.getLogger(VideoPlugin.class);
 
     @Override
     public GlobalConfig getGlobalConfig() {
@@ -43,6 +47,7 @@ public class VideoPlugin implements MediaPlugin {
                     config
             );
         }
+        logger.debug("VIDEO PLUGIN OBJECTS WERE CREATED AND REGISTERED");
     }
 
     @Override

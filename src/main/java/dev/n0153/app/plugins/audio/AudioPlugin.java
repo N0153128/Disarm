@@ -2,12 +2,15 @@ package dev.n0153.app.plugins.audio;
 
 import dev.n0153.app.*;
 import dev.n0153.app.exceptions.DisarmException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class AudioPlugin implements MediaPlugin {
     private MediaConfig config;
     private final AudioContext context = new AudioContext();
     private final AudioValidator validator = new AudioValidator();
     private GlobalConfig globalConfig;
+    private static final Logger logger = LogManager.getLogger(AudioPlugin.class);
 
     @Override
     public GlobalConfig getGlobalConfig() {
@@ -43,6 +46,7 @@ public class AudioPlugin implements MediaPlugin {
                     config
             );
         }
+        logger.debug("AUDIO PLUGIN OBJECTS WERE CREATED AND REGISTERED");
     }
 
     @Override

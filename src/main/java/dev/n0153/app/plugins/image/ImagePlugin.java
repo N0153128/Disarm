@@ -3,12 +3,16 @@ package dev.n0153.app.plugins.image;
 import dev.n0153.app.*;
 import dev.n0153.app.exceptions.DisarmException;
 import dev.n0153.app.exceptions.ValidationException;
+import dev.n0153.app.plugins.audio.AudioPlugin;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ImagePlugin implements MediaPlugin {
     private MediaConfig config;
     private final ImageContext context = new ImageContext();;
     private final ImageValidator validator = new ImageValidator();
     private GlobalConfig globalConfig;
+    private static final Logger logger = LogManager.getLogger(ImagePlugin.class);
 
     @Override
     public void registerGlobalConfig(GlobalConfig globalConfig) {
@@ -45,6 +49,7 @@ public class ImagePlugin implements MediaPlugin {
         } else {
             throw new ValidationException("Global config must be provided");
         }
+        logger.debug("IMAGE PLUGIN OBJECTS WERE CREATED AND REGISTERED");
     }
 
     @Override

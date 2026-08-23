@@ -2,12 +2,16 @@ package dev.n0153.app.plugins.text;
 
 import dev.n0153.app.*;
 import dev.n0153.app.exceptions.DisarmException;
+import dev.n0153.app.plugins.image.ImagePlugin;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class TextPlugin implements MediaPlugin {
     private MediaConfig config;
     private final TextContext context = new TextContext();
     private final TextValidator validator = new TextValidator();
     private GlobalConfig globalConfig;
+    private static final Logger logger = LogManager.getLogger(TextPlugin.class);
 
     @Override
     public GlobalConfig getGlobalConfig() {
@@ -43,6 +47,7 @@ public class TextPlugin implements MediaPlugin {
                     config
             );
         }
+        logger.debug("TEXT PLUGIN OBJECTS WERE CREATED AND REGISTERED");
     }
 
     @Override
