@@ -79,6 +79,16 @@ public class PluginRegistry {
         }
     }
 
+    public void wipePluginResources() {
+        for (Map.Entry<String, MediaPlugin> plugin : processorRegistry.entrySet()) {
+            MediaConfig config = plugin.getValue().getConfig();
+            MediaContext context = plugin.getValue().getProcessor(config).getContext();
+            config.release();
+            context.release();
+            logger.debug("Resources freed-up successfully: {}", config.getName());
+        }
+    }
+
     public Collection<Runnable> listCLI() {
         return cliRegistry.values();
     }

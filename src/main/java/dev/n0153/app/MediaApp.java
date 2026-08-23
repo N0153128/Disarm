@@ -187,9 +187,6 @@ public class MediaApp {
                             globalConfig.getGeneralOutputPath().resolve(processingContext.getFilename()));
                 }
             }
-            // free up memory, clear all plugin context and configs
-            plugin.getConfig().release();
-            plugin.getProcessor(mediaConfig).getContext().close();
         } catch (DisarmException e) {
             boolean isUnsupported = e instanceof UnsupportedFileTypeException;
             if (isUnsupported && globalConfig.getSkipUnsupported()) {
@@ -210,8 +207,6 @@ public class MediaApp {
                 }            } else {
                 throw e;
             }
-        } catch (Exception e) {
-            logger.error("Failed to close media context");
         }
     }
 
