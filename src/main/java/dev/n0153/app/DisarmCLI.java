@@ -138,7 +138,6 @@ public class DisarmCLI implements Runnable{
     }
 
     public void run() {
-        logger.warn("WARNING: using experimental app orchestrator");
         for (Path input : inputPath) {
             // related plugin auto-detection
             if (!Files.isRegularFile(input)) {
