@@ -98,6 +98,14 @@ public class PluginRegistry {
         processorRegistry.remove(mime);
         cliRegistry.remove(mime);
         configRegistry.remove(mime);
+        logger.debug("{} plugin was removed from registry", mime);
+    }
+
+    public void clearRegistry() {
+        processorRegistry.clear();
+        cliRegistry.clear();
+        configRegistry.clear();
+        logger.debug("Plugin registry was cleared");
     }
 
     public Collection<Runnable> listCLI() {
