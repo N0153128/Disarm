@@ -45,7 +45,9 @@ public class ImageContext implements MediaContext {
     }
 
     @Override
-    public void close() throws Exception {}
+    public void close() throws Exception {
+        release();
+    }
 
     public final String KEY_IMAGE = "image";
     public final String KEY_LOGO = "logo";

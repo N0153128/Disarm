@@ -39,7 +39,7 @@ public class AudioContext implements MediaContext {
 
     @Override
     public void close() throws Exception {
-
+        release();
     }
 
     @Override

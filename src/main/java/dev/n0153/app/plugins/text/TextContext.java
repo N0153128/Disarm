@@ -38,7 +38,9 @@ public class TextContext implements MediaContext {
     }
 
     @Override
-    public void close() throws Exception {}
+    public void close() throws Exception {
+        release();
+    }
 
     @Override
     public String getOutputTitle() {

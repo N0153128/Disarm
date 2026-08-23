@@ -48,6 +48,7 @@ public class VideoContext implements MediaContext {
 
     @Override
     public void close() throws Exception {
+        release();
     }
 
     @Override
