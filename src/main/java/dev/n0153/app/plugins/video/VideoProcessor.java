@@ -58,7 +58,7 @@ public class VideoProcessor implements MediaProcessor<VideoConfig> {
             } else {
                 audioAttrs.setCodec(config.getOutputAudioCodec());
             }
-            EncodingAttributes attrs = setAttributes(audioAttrs, videoAttrs);
+            EncodingAttributes attrs = setAttributes(audioAttrs, videoAttrs, osTargetPath);
             attrs.setOutputFormat(format);
 
             logger.info("Video bitrate: {},\n " +
@@ -86,8 +86,15 @@ public class VideoProcessor implements MediaProcessor<VideoConfig> {
         }
     }
 
-    private EncodingAttributes setAttributes(AudioAttributes audioAttrs, VideoAttributes videoAttrs) {
-        int bitrate = config.getOutputVideoBitrate() > 0 ? config.getOutputVideoBitrate() : context.getVideoBitrate();
+    private EncodingAttributes setAttributes(AudioAttributes audioAttrs, VideoAttributes videoAttrs, Path osTargetPath) {
+        int bitrate;
+        if (config.getOutputVideoBitrate() > 0) {
+            bitrate = config.getOutputVideoBitrate();
+        } else if (context.getVideoBitrate() > 0) {
+            bitrate = context.getVideoBitrate();
+        } else {
+            bitrate = config.getMaxVideoBitrate(context.getDetectedMime());
+        }
         videoAttrs.setBitRate(bitrate);
 
         int frameRate = config.getOutputFrameRate() > 0 ? config.getOutputFrameRate() : context.getVideoFrameRate();
@@ -95,7 +102,17 @@ public class VideoProcessor implements MediaProcessor<VideoConfig> {
 
         videoAttrs.setSize(context.getVideoSize());
 
-        int audioBitrate = config.getOutputAudioBitrate() > 0 ? config.getOutputAudioBitrate() : context.getAudioBitrate();
+        int audioBitrate;
+        if (config.getOutputAudioBitrate() > 0) {
+            audioBitrate = config.getOutputAudioBitrate();
+        } else if (context.getAudioBitrate() > 0) {
+            audioBitrate = context.getAudioBitrate();
+        } else if (isVorbisCodec()) {
+            audioBitrate = 256_000;
+        }
+        else {
+            audioBitrate = config.getMaxAudioBitrate(context.getDetectedMime());
+        }
         audioAttrs.setBitRate(audioBitrate);
 
         int audioChannels = config.getOutputChannels() > 0 ? config.getOutputChannels() : context.getAudioChannels();
@@ -108,6 +125,10 @@ public class VideoProcessor implements MediaProcessor<VideoConfig> {
         attrs.setVideoAttributes(videoAttrs);
         attrs.setAudioAttributes(audioAttrs);
         return attrs;
+    }
+
+    private boolean isVorbisCodec() {
+        return "libvorbis".equals(context.getAudioCodec()) || "vorbis".equals(context.getAudioCodec());
     }
 
     @Override
