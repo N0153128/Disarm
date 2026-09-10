@@ -242,5 +242,6 @@ public class MediaApp {
             processingContext.setStage("processing finished");
         }
         deleteOriginal(osTargetPath);
+        processingContext.release();
     }
 }
