@@ -6,8 +6,6 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import org.apache.logging.log4j.core.config.Configurator;
-import org.apache.logging.log4j.Level;
 
 public class GlobalConfig {
     private final int generalSizeLimit = 5_000_000; // 5MB
@@ -77,6 +75,10 @@ public class GlobalConfig {
             throw new IllegalArgumentException("Specified key doesn't exist");
         }
         globalConfigStorage.replace(key, value);
+    }
+
+    public void release() {
+        globalConfigStorage.clear();
     }
 
     public String toDebugString() {
