@@ -138,10 +138,11 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
             Size size = new Size(newWidth, newHeight);
             Imgproc.resize(source, destination, size);
             context.setImage(destination.clone());
+            saveImage(destination);
         } else {
             context.setImage(source.clone());
+            saveImage(context.getImage());
         }
-        saveImage(destination);
         destination.release();
     }
 
