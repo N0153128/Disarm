@@ -395,7 +395,7 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
                 validator.createMeta(config, context);
                 if (validator.validateLogo(config.getPathToLogo())) {
                     context.setLogo(Imgcodecs.imread(config.getPathToLogo().toString(), Imgcodecs.IMREAD_UNCHANGED));
-                    context.setLogoTitle(Utils.getTitle(
+                    context.setLogoTitle(Utils.getTitleForcedTagTimeStamp(
                             "logo",
                             Utils.getMimeFromSignature(config.getPathToLogo())));
                     scaleLogo();
