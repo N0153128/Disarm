@@ -381,7 +381,7 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
         }
         try {
             context.setImage(Imgcodecs.imread(osTargetPath.toString(), Imgcodecs.IMREAD_UNCHANGED));
-            context.setImageTitle(Utils.getTitle(osTargetPath, Utils.getMimeType(osTargetPath), false));
+            context.setImageTitle(Utils.getTitle(osTargetPath, Utils.getMimeType(osTargetPath)));
             if (!config.getFixedValueScaling().isEmpty()) {
                 int fixedWidth = Integer.parseInt(config.getFixedValueScaling().split("x")[0]);
                 int fixedHeight = Integer.parseInt(config.getFixedValueScaling().split("x")[1]);
@@ -396,9 +396,8 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
                 if (validator.validateLogo(config.getPathToLogo())) {
                     context.setLogo(Imgcodecs.imread(config.getPathToLogo().toString(), Imgcodecs.IMREAD_UNCHANGED));
                     context.setLogoTitle(Utils.getTitle(
-                            config.getPathToLogo(),
-                            Utils.getMimeFromSignature(config.getPathToLogo()),
-                            true));
+                            "logo",
+                            Utils.getMimeFromSignature(config.getPathToLogo())));
                     scaleLogo();
                     watermarkPositionHandler(config.getLogoPosition());
                 } else {

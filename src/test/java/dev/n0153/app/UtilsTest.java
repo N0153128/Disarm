@@ -82,7 +82,7 @@ class UtilsTest {
         context.setFileType("image");
         context.setMimeType("png");
 
-        String title = Utils.getTitle(createDummyFile(context.getMimeType()), context.getMimeType(), false);
+        String title = Utils.getTitle(createDummyFile(context.getMimeType()), context.getMimeType());
 
         assertNotNull(title);
         assertFalse(title.isEmpty());
@@ -94,8 +94,7 @@ class UtilsTest {
     void getTitle_withEmptyTypeAndMime() {
         assertThrows(NullPointerException.class, () ->
                 Utils.getTitle(createDummyFile(""),
-                        "",
-                        false));
+                        ""));
     }
 
     @Test
@@ -103,8 +102,7 @@ class UtilsTest {
         context.setMimeType("png");
         assertThrows(IllegalStateException.class, () ->
                 Utils.getTitle(createDummyFile(context.getMimeType()),
-                        "",
-                        false));
+                        ""));
     }
 
     @Test
@@ -112,8 +110,7 @@ class UtilsTest {
         context.setFileType("image");
         assertThrows(NullPointerException.class, () ->
                 Utils.getTitle(createDummyFile(""),
-                        context.getFileType(),
-                        false));
+                        context.getFileType()));
     }
 
     @Test
