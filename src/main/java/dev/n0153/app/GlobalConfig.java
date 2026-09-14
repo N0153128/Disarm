@@ -28,6 +28,7 @@ public class GlobalConfig {
     private final Path inputRootPath = Paths.get("resources");
     public enum LoggingLevels { OFF, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, ALL }
     private final LoggingLevels logLevel = LoggingLevels.DEBUG;
+    private final boolean randomCharactersTitle = false;
 
 
     private final String KEY_GENERAL_SIZE_LIMIT = "generalSizeLimit";
@@ -48,6 +49,8 @@ public class GlobalConfig {
     private final String KEY_INPUT_ROOT_PATH = "inputRootPath";
     private final String KEY_DELETE_RESULT = "deleteResult";
     private final String KEY_LOG_LEVEL = "logLevel";
+    private final String RANDOM_CHARACTERS_TITLE = "randomCharactersTitle";
+
 
     private final Map<String, Object> globalConfigStorage = new HashMap<>() {{
         put(KEY_GENERAL_SIZE_LIMIT, generalSizeLimit);
@@ -68,6 +71,7 @@ public class GlobalConfig {
         put(KEY_RESTRICT_INPUT_FROM_ROOT, restrictInputFromRoot);
         put(KEY_INPUT_ROOT_PATH, inputRootPath);
         put(KEY_LOG_LEVEL, logLevel);
+        put(RANDOM_CHARACTERS_TITLE, randomCharactersTitle);
     }};
 
     public void put(String key, Object value) {
@@ -92,6 +96,12 @@ public class GlobalConfig {
 
     public <$ValueType> $ValueType get(String key, Class<$ValueType> type) {
         return type.cast(globalConfigStorage.get(key));
+    }
+
+    public boolean getRandomCharactersTitle() {
+        return Objects.requireNonNullElse(
+                get(RANDOM_CHARACTERS_TITLE, Boolean.class),
+                randomCharactersTitle);
     }
 
     public LoggingLevels getLogLevel() {
@@ -205,6 +215,10 @@ public class GlobalConfig {
                 get(KEY_GENERAL_SIZE_LIMIT, Integer.class),
                 generalSizeLimit
         );
+    }
+
+    public void setRandomCharactersTitle(boolean newRandomCharactersTitle) {
+        put(RANDOM_CHARACTERS_TITLE, newRandomCharactersTitle);
     }
 
     public void setLogLevel(LoggingLevels newLogLevel) {
