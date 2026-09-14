@@ -43,7 +43,7 @@ public class MediaApp {
             Utils.createDirectory(globalConfig.getReportsOutputPath());
         }
         Path toFile = globalConfig.getReportsOutputPath().
-                resolve(Utils.getTitle("ERROR_REPORT", "txt"));
+                resolve(Utils.getTitleForcedTagTimeStamp("ERROR_REPORT", "txt"));
         Files.writeString(toFile, report, StandardCharsets.UTF_8);
     }
 
