@@ -204,7 +204,8 @@ public class MediaApp {
                         e.getMessage());
                 if (globalConfig.getVerboseErrors() != GlobalConfig.VerboseErrors.OFF) {
                     dumpErrorReport(osTargetPath, e);
-                }            } else {
+                }
+            } else {
                 throw e;
             }
         }
