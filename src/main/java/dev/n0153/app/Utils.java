@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.config.Configurator;
 import org.apache.logging.log4j.Level;
+import java.security.SecureRandom;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -233,22 +234,34 @@ public class Utils {
      * @since 0.1
      */
     public static String getTitle(Path osTargetPath, String mime, boolean randomCharactersTitle) {
-        LocalDateTime now = LocalDateTime.now();
-        String day = String.valueOf(now.getDayOfMonth());
-        String month = String.valueOf(now.getMonthValue());
-        String year = String.valueOf(now.getYear());
-        String hour = String.valueOf(now.getHour());
-        String minute = String.valueOf(now.getMinute());
-        String second = String.valueOf(now.getSecond());
-        String nanoSecond = String.valueOf(now.getNano());
-        String milliSecond = String.valueOf(now.getNano() / 1_000_000);
-        String type;
-        type = Utils.getFileType(osTargetPath);
-        String objectName = null;
-        objectName = type+"_"+year+"_"+month+"_"+day+
-                "_"+hour+"_"+minute+"_"+second+
-                "_"+nanoSecond+"_"+milliSecond+"."+ mime;
-        return objectName;
+        if (randomCharactersTitle) {
+            final String CHARACTERS =
+                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            final SecureRandom RANDOM = new SecureRandom();
+            StringBuilder objectName = new StringBuilder(40);
+            for (int i = 0; i < 40; i++) {
+                int index = RANDOM.nextInt(CHARACTERS.length());
+                objectName.append(CHARACTERS.charAt(index));
+            }
+            return objectName.toString()+"."+mime;
+        } else {
+            LocalDateTime now = LocalDateTime.now();
+            String day = String.valueOf(now.getDayOfMonth());
+            String month = String.valueOf(now.getMonthValue());
+            String year = String.valueOf(now.getYear());
+            String hour = String.valueOf(now.getHour());
+            String minute = String.valueOf(now.getMinute());
+            String second = String.valueOf(now.getSecond());
+            String nanoSecond = String.valueOf(now.getNano());
+            String milliSecond = String.valueOf(now.getNano() / 1_000_000);
+            String type;
+            type = Utils.getFileType(osTargetPath);
+            String objectName = null;
+            objectName = type+"_"+year+"_"+month+"_"+day+
+                    "_"+hour+"_"+minute+"_"+second+
+                    "_"+nanoSecond+"_"+milliSecond+"."+ mime;
+            return objectName;
+        }
     }
 
     /**
