@@ -179,6 +179,26 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
             logoBGRA = context.getLogo().clone();
         }
 
+        // normalize the base image to 3-channel BGR for blending, preserving its own alpha if present
+        Mat srcImage = context.getImage();
+        Mat imgBGR;
+        Mat imgAlpha = null;
+        boolean hadAlpha = false;
+
+        if (srcImage.channels() == 4) {
+            List<Mat> imgChannels = new ArrayList<>();
+            Core.split(srcImage, imgChannels);
+            imgAlpha = imgChannels.get(3).clone();
+            imgBGR = new Mat();
+            Core.merge(imgChannels.subList(0, 3), imgBGR);
+            for (Mat channel: imgChannels) channel.release();
+            hadAlpha = true;
+        } else if (srcImage.channels() == 1) {
+            imgBGR = new Mat();
+            Imgproc.cvtColor(srcImage, imgBGR, Imgproc.COLOR_GRAY2BGR);
+        } else {
+            imgBGR = srcImage.clone();
+        }
 
         int endX = Math.min(context.getImgX() + logoBGRA.cols(), context.getImage().cols());
         int endY = Math.min(context.getImgY() + logoBGRA.rows(), context.getImage().rows());
@@ -187,11 +207,13 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
 
         if (startX >= endX || startY >= endY) {
             logoBGRA.release();
+            imgBGR.release();
+            if (imgAlpha != null) imgAlpha.release();
             return;
         }
 
         Rect roi = new Rect(startX, startY, endX - startX, endY - startY);
-        Mat imageROI = new Mat(context.getImage(), roi);
+        Mat imageROI = new Mat(imgBGR, roi);
 
 
         int logoStartX = Math.max(0, -context.getImgX());
@@ -233,18 +255,35 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
 
             blended.convertTo(blended, imageROI.type());
             blended.copyTo(imageROI);
-            saveImage(context.getImage());
 
             alphaFloat.release();
             invAlphaFloat.release();
             alpha3.release();
-            invAlphaFloat.release();
             invAlpha3.release();
             roiFloat.release();
             blended.release();
             logoGBR.release();
+            logoGBRFloat.release();
         }
 
+        Mat finalImage;
+        if (hadAlpha) {
+            List<Mat> outChannels = new ArrayList<>();
+            Core.split(imgBGR, outChannels);
+            outChannels.add(imgAlpha);
+            finalImage = new Mat();
+            Core.merge(outChannels, finalImage);
+            for (Mat channel: outChannels) channel.release();
+        } else {
+            finalImage = imgBGR;
+        }
+
+        context.setImage(finalImage);
+        saveImage(finalImage);
+
+        if (hadAlpha) {
+            imgBGR.release();
+        }
         logoBGRA.release();
         imageROI.release();
         logoROI.release();
