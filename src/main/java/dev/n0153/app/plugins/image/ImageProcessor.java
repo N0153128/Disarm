@@ -381,7 +381,11 @@ public class ImageProcessor implements MediaProcessor<ImageConfig> {
         }
         try {
             context.setImage(Imgcodecs.imread(osTargetPath.toString(), Imgcodecs.IMREAD_UNCHANGED));
-            context.setImageTitle(Utils.getTitle(osTargetPath, Utils.getMimeType(osTargetPath)));
+            context.setImageTitle(Utils.getTitle(
+                    osTargetPath,
+                    Utils.getMimeType(osTargetPath),
+                    globalConfig.getRandomCharactersTitle())
+            );
             if (!config.getFixedValueScaling().isEmpty()) {
                 int fixedWidth = Integer.parseInt(config.getFixedValueScaling().split("x")[0]);
                 int fixedHeight = Integer.parseInt(config.getFixedValueScaling().split("x")[1]);

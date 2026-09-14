@@ -103,7 +103,11 @@ public class TextProcessor implements MediaProcessor<TextConfig> {
             logger.info("Processing text file: {}", osTargetPath.toString());
             byte[] text = context.getRawBytes();
             context.setTextContent(new String(text, config.getOutputEncoding()));
-            context.setTextTitle(Utils.getTitle(osTargetPath, Utils.getMimeType(osTargetPath)));
+            context.setTextTitle(Utils.getTitle(
+                    osTargetPath,
+                    Utils.getMimeType(osTargetPath),
+                    globalConfig.getRandomCharactersTitle())
+            );
 
             normalizeUnicode();
             stripPatterns(osTargetPath);

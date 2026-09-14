@@ -139,9 +139,12 @@ public class VideoProcessor implements MediaProcessor<VideoConfig> {
             format = config.getFormatFromMime(context.getDetectedMime());
             if (Objects.equals(config.getDefaultOutputTo(), "default")) {
                 context.setVideoTitle(Utils.getTitle(osTargetPath,
-                        config.getFormatFromMime(context.getDetectedMime())));
+                        config.getFormatFromMime(context.getDetectedMime()), globalConfig.getRandomCharactersTitle()));
             } else {
-                context.setVideoTitle(Utils.getTitle(osTargetPath, config.getDefaultOutputTo()));
+                context.setVideoTitle(Utils.getTitle(
+                        osTargetPath,
+                        config.getDefaultOutputTo(),
+                        globalConfig.getRandomCharactersTitle()));
             }
 
             context.setVideoBitrate(MediaUtils.getBitrate(osTargetPath, "video"));

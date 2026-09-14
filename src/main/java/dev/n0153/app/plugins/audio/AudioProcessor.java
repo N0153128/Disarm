@@ -191,9 +191,12 @@ public class AudioProcessor implements MediaProcessor<AudioConfig> {
             }
             if (Objects.equals(config.getDefaultOutputTo(), "default")) {
                 context.setAudioTitle(Utils.getTitle(osTargetPath,
-                        config.getFormatFromMime(context.getDetectedMime())));
+                        config.getFormatFromMime(context.getDetectedMime()), globalConfig.getRandomCharactersTitle()));
             } else {
-                context.setAudioTitle(Utils.getTitle(osTargetPath, config.getDefaultOutputTo()));
+                context.setAudioTitle(Utils.getTitle(
+                        osTargetPath,
+                        config.getDefaultOutputTo(),
+                        globalConfig.getRandomCharactersTitle()));
             }
 
             context.setAudioSamplingRate(MediaUtils.getSamplingRate(osTargetPath));

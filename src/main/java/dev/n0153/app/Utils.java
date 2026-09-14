@@ -232,7 +232,7 @@ public class Utils {
      * The title is then saved to state and can be accessed with state.getGeneralFileTitle().
      * @since 0.1
      */
-    public static String getTitle(Path osTargetPath, String mime) {
+    public static String getTitle(Path osTargetPath, String mime, boolean randomCharactersTitle) {
         LocalDateTime now = LocalDateTime.now();
         String day = String.valueOf(now.getDayOfMonth());
         String month = String.valueOf(now.getMonthValue());
