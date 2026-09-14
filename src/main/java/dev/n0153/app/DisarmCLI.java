@@ -130,6 +130,13 @@ public class DisarmCLI implements Runnable{
                     "Example: -ll OFF")
     private GlobalConfig.LoggingLevels logLevel;
 
+    @CommandLine.Option(names = {"-rct", "--random-characters-tile"}, description =
+            "Changes output file title from a timestamp-based to a string of random characters. " +
+                    "Defaults to false, making an output file title use the following format: File_Type_Timestamp. " +
+                    "Using this flag will make an output file look like: IHbvDVoVijIB71094hb. " +
+                    "Example: -rct")
+    private boolean randomCharactersTitle;
+
     @CommandLine.Spec
     CommandLine.Model.CommandSpec spec;
 
@@ -230,6 +237,9 @@ public class DisarmCLI implements Runnable{
                     Utils.setDisarmLogging(Level.ALL);
                     Utils.setJaveLogging(Level.ALL);
                 }
+            }
+            if (randomCharactersTitle) {
+                this.globalConfig.setRandomCharactersTitle(true);
             }
             // finalise parameters
             MediaApp app = new MediaApp(registry, globalConfig);
