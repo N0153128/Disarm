@@ -148,6 +148,12 @@ public class VideoCLI implements Runnable {
                     "Example for 3MB ceiling: -movfs 3000000")
     private int movFileSize;
 
+    @CommandLine.Option(names = {"-vfbbr", "--vorbis-fallback-bitrate"}, description =
+            "Changes output audio bitrate for Vorbis codec if bitrate cannot be determined from the source. " +
+                    "Accepts kbps as integers. " +
+                    "Example for 320kbps: -vfbbr 320000")
+    private int vorbisFallbackBitrate;
+
     @Override
     public void run() {
         if (maxVideoDuration > 0) {
@@ -257,6 +263,9 @@ public class VideoCLI implements Runnable {
         }
         if (movFileSize > 0) {
             this.config.setMovSizeLimit(movFileSize);
+        }
+        if (vorbisFallbackBitrate > 0) {
+            this.config.setVorbisFallbackBitrate(vorbisFallbackBitrate);
         }
         registry.updateConfig("video", config);
     }
