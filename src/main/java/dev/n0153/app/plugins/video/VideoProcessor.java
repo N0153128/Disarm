@@ -108,7 +108,7 @@ public class VideoProcessor implements MediaProcessor<VideoConfig> {
         } else if (context.getAudioBitrate() > 0) {
             audioBitrate = context.getAudioBitrate();
         } else if (isVorbisCodec()) {
-            audioBitrate = 256_000;
+            audioBitrate = config.getVorbisFallbackBitrate();
         }
         else {
             audioBitrate = config.getMaxAudioBitrate(context.getDetectedMime());
