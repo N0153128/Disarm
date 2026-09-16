@@ -115,6 +115,7 @@ public class VideoConfig implements MediaConfig {
     private final int matroskaSizeLimit = 5_000_000; //5MB
     private final int webmSizeLimit = 5_000_000; //5MB
     private final int movSizeLimit = 5_000_000; //5MB
+    private final int vorbisFallbackBitrate = 256_000;
 
     private final String KEY_MAX_VIDEO_DURATION = "maxVideoDuration";
     private final String KEY_MAX_FILE_SIZE = "maxFileSize";
@@ -141,6 +142,7 @@ public class VideoConfig implements MediaConfig {
     private final String KEY_MATROSKA_SIZE_LIMIT = "matroskaSizeLimit";
     private final String KEY_WEBM_SIZE_LIMIT = "webmSizeLimit";
     private final String KEY_MOV_SIZE_LIMIT = "movSizeLimit";
+    private final String KEY_VORBIS_FALLBACK_BITRATE = "vorbisFallbackBitrate";
 
     private final Map<String, Object> configStorage = new HashMap<>() {{
         put(KEY_MAX_VIDEO_DURATION, maxVideoDuration);
@@ -168,6 +170,7 @@ public class VideoConfig implements MediaConfig {
         put(KEY_MATROSKA_SIZE_LIMIT, matroskaSizeLimit);
         put(KEY_WEBM_SIZE_LIMIT, webmSizeLimit);
         put(KEY_MOV_SIZE_LIMIT, movSizeLimit);
+        put(KEY_VORBIS_FALLBACK_BITRATE, vorbisFallbackBitrate);
     }};
 
     @Override
@@ -225,6 +228,12 @@ public class VideoConfig implements MediaConfig {
     }
 
     // getters
+
+    public int getVorbisFallbackBitrate() {
+        return Objects.requireNonNullElse(
+                get(KEY_VORBIS_FALLBACK_BITRATE, Integer.class),
+                vorbisFallbackBitrate);
+    }
 
     public int getMp4SizeLimit() {
         return Objects.requireNonNullElse(
@@ -389,6 +398,19 @@ public class VideoConfig implements MediaConfig {
     }
 
     //setters
+
+    public void setVorbisFallbackBitrate(int newVorbisFallbackBitrate) {
+        if (newVorbisFallbackBitrate == 0) {
+            throw new IllegalArgumentException("Vorbis fallback bitrate cannot be zero");
+        }
+        if (newVorbisFallbackBitrate < 0) {
+            throw new IllegalArgumentException("Vorbis fallback bitrate cannot be less than zero");
+        }
+        if (newVorbisFallbackBitrate > 500_000) {
+            throw new IllegalArgumentException("Vorbis fallback bitrate value is too high");
+        }
+        put(KEY_VORBIS_FALLBACK_BITRATE, newVorbisFallbackBitrate);
+    }
 
     public void setMp4SizeLimit(int newMp4SizeLimit) {
         if (newMp4SizeLimit == 0) {
