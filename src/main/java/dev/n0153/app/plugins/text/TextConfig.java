@@ -328,6 +328,9 @@ public class TextConfig implements MediaConfig {
         if (newOutputEncoding == null) {
             throw new IllegalArgumentException("Output encoding cannot be null");
         }
+        if (!Set.of("UTF-16", "US_ASCII", "UTF-16BE", "UTF-16LE", "ISO_8859_1").contains(newOutputEncoding.toString())) {
+            throw new IllegalArgumentException("Provided output encoding is invalid");
+        }
         put(KEY_OUTPUT_ENCODING, newOutputEncoding);
     }
 

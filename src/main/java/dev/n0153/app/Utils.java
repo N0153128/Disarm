@@ -314,7 +314,13 @@ public class Utils {
             if (fileType == null) {
                 throw new FileTypeDetectionException("failed to detect file type, object is null: ", osTargetFile);
             }
-            return fileType.split("/")[0];
+            // edge case: some text formats report "application" as a filetype.
+            String mime = getMimeType(osTargetFile);
+            if (mime.equals("json") || mime.equals("log") || mime.equals("html") ) {
+                return "text";
+            } else {
+                return fileType.split("/")[0];
+            }
 
         } catch (IOException e) {
             throw new FileTypeDetectionException("failed to detect file type", osTargetFile, e);
