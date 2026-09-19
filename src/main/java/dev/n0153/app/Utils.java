@@ -312,6 +312,10 @@ public class Utils {
             }
             String fileType = Files.probeContentType(osTargetFile);
             if (fileType == null) {
+                String mime = getMimeType(osTargetFile);
+                if (mime.equals("log")) {
+                    return "text";
+                }
                 throw new FileTypeDetectionException("failed to detect file type, object is null: ", osTargetFile);
             }
             // edge case: some text formats report "application" as a filetype.
