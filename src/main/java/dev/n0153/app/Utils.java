@@ -416,7 +416,16 @@ public class Utils {
         }
         String extension = getFileExtension(osTargetPath);
         if (textFormats.contains(extension)) {
-            return extension;
+            try {
+                Charset detectedCharset = detectTextCharset(osTargetPath);
+                if (detectedCharset == null) {
+                    throw new MimeTypeDetectionException("Failed to detect charset", osTargetPath);
+                } else {
+                    return extension;
+                }
+            } catch (IOException e) {
+                throw new MimeTypeDetectionException("Failed to read charset", osTargetPath);
+            }
         } else {
             throw new MimeTypeDetectionException(
                     "Provided file's mime type cannot be verified or is not supported",
