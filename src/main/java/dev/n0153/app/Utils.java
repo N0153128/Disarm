@@ -1,17 +1,23 @@
 package dev.n0153.app;
 
+import com.sun.jdi.CharType;
 import dev.n0153.app.exceptions.*;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.config.Configurator;
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.config.NullConfiguration;
+
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.*;
 import java.security.SecureRandom;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
@@ -158,6 +164,205 @@ public class Utils {
     }};
 
     private static final List<String> textFormats = List.of("txt", "log", "json");
+
+    public static final int SAMPLE_SIZE_IN_BYTES = 8192;
+    private static final double MAX_CONTROL_CHARACTER_RATIO = 0.02;
+    private static final double MIN_UTF16_NUL_RATIO = 0.3;
+
+    private static int toUnsignedValue(byte signedByte) {
+        return signedByte & 0xFF;
+    }
+
+    private static boolean canBeDecoded(
+        Charset charset,
+        byte[] bytes,
+        int length,
+        boolean dataWasTruncated
+    ) {
+        CharsetDecoder decoder = charset.newDecoder();
+        decoder.onMalformedInput(CodingErrorAction.REPORT);
+        decoder.onUnmappableCharacter(CodingErrorAction.REPORT);
+
+        ByteBuffer inputBuffer = ByteBuffer.wrap(bytes, 0, length);
+        CharBuffer outputBuffer = CharBuffer.allocate(4096);
+        boolean isEndOfInput = !dataWasTruncated;
+
+        while (true) {
+            CoderResult decodeResult = decoder.decode(inputBuffer, outputBuffer, isEndOfInput);
+            if (decodeResult.isError()) {
+                return false;
+            }
+            if (decodeResult.isUnderflow()) {
+                return true;
+            }
+            outputBuffer.clear();
+        }
+    }
+
+    private static Charset detectCharsetFromByteOrderMark(byte[] bytes, int length) {
+        if (length >= 3) {
+            int firstByte = toUnsignedValue(bytes[0]);
+            int secondByte = toUnsignedValue(bytes[1]);
+            int thirdByte = toUnsignedValue(bytes[2]);
+
+            if (firstByte == 0xEF && secondByte == 0xBB && thirdByte == 0xBF) {
+                return StandardCharsets.UTF_8;
+            }
+        }
+        if (length >= 2) {
+            int firstByte = toUnsignedValue(bytes[0]);
+            int secondByte = toUnsignedValue(bytes[1]);
+
+            if (firstByte == 0xFF && secondByte == 0xFE) {
+                return StandardCharsets.UTF_16LE;
+            }
+        }
+        return null;
+    }
+
+    private static Charset guessUtf16WithoutByteOrderMark(byte[] bytes, int length) {
+        if (length < 4) {
+            return null;
+        }
+
+        int nulCountAtEvenPositions = 0;
+        int nulCountAtOddPositions = 0;
+
+        for (int position = 0; position < length; position++) {
+            if (bytes[position] == 0) {
+                boolean positionIsEven = (position % 2 == 0);
+                if (positionIsEven) {
+                    nulCountAtEvenPositions ++;
+                } else {
+                    nulCountAtOddPositions ++;
+                }
+            }
+        }
+
+        int expectedNulCount = Math.max(nulCountAtEvenPositions, nulCountAtOddPositions);
+        int strayNulCount = Math.min(nulCountAtEvenPositions, nulCountAtOddPositions);
+
+        int characterCount = length / 2;
+        double minimumExpectedNulCount = characterCount * MIN_UTF16_NUL_RATIO;
+        double maximumStrayNulCount = expectedNulCount * MAX_CONTROL_CHARACTER_RATIO;
+
+        if (expectedNulCount <= minimumExpectedNulCount) {
+            return null;
+        }
+
+        if (strayNulCount > maximumStrayNulCount) {
+            return null;
+        }
+
+        if (nulCountAtEvenPositions > nulCountAtOddPositions) {
+            return StandardCharsets.UTF_16BE;
+        }
+
+        return StandardCharsets.UTF_16LE;
+    }
+
+    private static boolean containsNulByte(byte[] bytes, int length) {
+        for (int position = 0; position < length; position++) {
+            if (bytes[position] == 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean isSuspiciousControlCharacter(int value) {
+        boolean isControlCharacter = (value < 0x20) || (value == 0x7F);
+
+        boolean isAllowedInText = (value == '\t')
+                || (value == '\n')
+                || (value == '\r')
+                || (value == '\f')
+                || (value == 0x1B);
+        return isControlCharacter && !isAllowedInText;
+    }
+
+    private static boolean hasTooManyControlCharacters(byte[] bytes, int length) {
+        int suspiciousCount = 0;
+        for (int position = 0; position < length; position++) {
+            int value = toUnsignedValue(bytes[position]);
+            if (isSuspiciousControlCharacter(value)) {
+                suspiciousCount++;
+            }
+        }
+        double maximumAllowedCount = length * MAX_CONTROL_CHARACTER_RATIO;
+        return suspiciousCount > maximumAllowedCount;
+    }
+
+    private static boolean hasTooManyControlCharactersAfterDecoding(
+            Charset charset, byte[] bytes, int length
+    ) {
+        String decodedText = new String(bytes, 0, length, charset);
+        int suspiciousCount = 0;
+        for (int position = 0; position < decodedText.length(); position++) {
+            char character = decodedText.charAt(position);
+            if (isSuspiciousControlCharacter(character)) {
+                suspiciousCount++;
+            }
+        }
+        double maximumAllowedCount = decodedText.length() * MAX_CONTROL_CHARACTER_RATIO;
+        return suspiciousCount > maximumAllowedCount;
+    }
+
+    private static boolean isPureAscii(byte[] bytes, int length) {
+        for (int position = 0; position < length; position++) {
+            int value = toUnsignedValue(bytes[position]);
+            if (value > 127) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static Charset detectTextCharset(byte[] bytes, int length, boolean dataWasTruncated) {
+        if (length == 0) {
+            return StandardCharsets.UTF_8;
+        }
+
+        Charset charsetFromBom = detectCharsetFromByteOrderMark(bytes, length);
+        if (charsetFromBom != null) {
+            if (canBeDecoded(charsetFromBom, bytes, length, dataWasTruncated)) {
+                return charsetFromBom;
+            }
+            return null;
+        }
+
+        Charset guessedUtf16 = guessUtf16WithoutByteOrderMark(bytes, length);
+        if (guessedUtf16 != null) {
+            boolean decodesCleanly = canBeDecoded(guessedUtf16, bytes, length, dataWasTruncated);
+            boolean looksLikeText =
+                    !hasTooManyControlCharactersAfterDecoding(guessedUtf16, bytes, length);
+            if (decodesCleanly && looksLikeText) {
+                return guessedUtf16;
+            }
+        }
+
+        if (containsNulByte(bytes, length)) {
+            return null;
+        }
+        if (hasTooManyControlCharacters(bytes, length)) {
+            return null;
+        }
+        if (isPureAscii(bytes, length)) {
+            return StandardCharsets.US_ASCII;
+        }
+        if (canBeDecoded(StandardCharsets.UTF_8, bytes, length, dataWasTruncated)) {
+            return StandardCharsets.UTF_8;
+        }
+        return StandardCharsets.ISO_8859_1;
+    }
+
+    public static Charset detectTextCharset(Path osTargetPath) throws IOException {
+        try (InputStream fileStream = Files.newInputStream(osTargetPath)) {
+            byte[] sampleBytes = fileStream.readNBytes(SAMPLE_SIZE_IN_BYTES);
+            boolean fileHasMoreData = fileStream.read() != -1;
+            return detectTextCharset(sampleBytes, sampleBytes.length, fileHasMoreData);
+        }
+    }
 
     public static String checkWebmOrMkvOverDocType(Path osTargetPath) {
         String result = null;
