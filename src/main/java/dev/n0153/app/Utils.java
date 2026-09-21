@@ -9,6 +9,7 @@ import org.apache.logging.log4j.core.config.Configurator;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.config.NullConfiguration;
 
+import javax.swing.plaf.InsetsUIResource;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -168,6 +169,9 @@ public class Utils {
     public static final int SAMPLE_SIZE_IN_BYTES = 8192;
     private static final double MAX_CONTROL_CHARACTER_RATIO = 0.02;
     private static final double MIN_UTF16_NUL_RATIO = 0.3;
+    private static final Charset UTF_32_BIG_ENDIAN = Charset.forName("UTF-32BE");
+    private static final Charset UTF_32_LITTLE_ENDIAN = Charset.forName("UTF-32LE");
+    private static final double MIN_UTF_32_BASIC_PLANE_RATIO = 0.5;
 
     private static int toUnsignedValue(byte signedByte) {
         return signedByte & 0xFF;
@@ -200,6 +204,18 @@ public class Utils {
     }
 
     private static Charset detectCharsetFromByteOrderMark(byte[] bytes, int length) {
+        if (length >= 4) {
+            int firstByte = toUnsignedValue(bytes[0]);
+            int secondByte = toUnsignedValue(bytes[1]);
+            int thirdByte = toUnsignedValue(bytes[2]);
+            int fourthByte = toUnsignedValue(bytes[3]);
+
+            if (firstByte == 0X00 && secondByte == 0x00
+                    && thirdByte == 0xFE && fourthByte == 0xFF) {
+                return UTF_32_BIG_ENDIAN;
+            }
+        }
+
         if (length >= 3) {
             int firstByte = toUnsignedValue(bytes[0]);
             int secondByte = toUnsignedValue(bytes[1]);
@@ -218,6 +234,62 @@ public class Utils {
             }
         }
         return null;
+    }
+
+    private static Charset guessUtf32WithoutByteOrderMark(byte[] bytes, int length) {
+        if (length < 8) {
+            return null;
+        }
+
+        int completeCharacterCount = length / 4;
+        int groupsWithNulAtStart = 0;
+        int groupsWithNulAtSecondByte = 0;
+        int groupsWithNulAtThirdByte = 0;
+        int groupsWithNulAtEnd = 0;
+
+        for (int characterIndex = 0; characterIndex < completeCharacterCount; characterIndex ++) {
+            int groupStart = characterIndex * 4;
+            if (bytes[groupStart] == 0) {
+                groupsWithNulAtStart ++;
+            }
+            if (bytes[groupStart + 1] == 0) {
+                groupsWithNulAtSecondByte ++;
+            }
+            if (bytes[groupStart + 2] == 0) {
+                groupsWithNulAtThirdByte ++;
+            }
+            if (bytes[groupStart + 3] == 0) {
+                groupsWithNulAtEnd ++;
+            }
+        }
+
+        boolean everyGroupStartsWithNul = (groupsWithNulAtStart == completeCharacterCount);
+        boolean everyGroupEndsWithNul = (groupsWithNulAtEnd == completeCharacterCount);
+        double minimumBasicPlaneCount = completeCharacterCount * MIN_UTF_32_BASIC_PLANE_RATIO;
+
+        if (everyGroupStartsWithNul && !everyGroupEndsWithNul) {
+            if (groupsWithNulAtSecondByte >= minimumBasicPlaneCount) {
+                return UTF_32_BIG_ENDIAN;
+            }
+            return null;
+        }
+        if (everyGroupEndsWithNul && !everyGroupStartsWithNul) {
+            if (groupsWithNulAtThirdByte >= minimumBasicPlaneCount) {
+                return UTF_32_LITTLE_ENDIAN;
+            }
+            return null;
+        }
+        return null;
+    }
+
+    private static boolean isConfirmedText(
+            Charset charset, byte[] bytes, int length, boolean dataWasTruncated
+    ) {
+        boolean decodesCleanly = canBeDecoded(charset, bytes, length, dataWasTruncated);
+        if (!decodesCleanly) {
+            return false;
+        }
+        return  !hasTooManyControlCharactersAfterDecoding(charset, bytes, length);
     }
 
     private static Charset guessUtf16WithoutByteOrderMark(byte[] bytes, int length) {
@@ -331,12 +403,16 @@ public class Utils {
             return null;
         }
 
+        Charset guessedUtf32 = guessUtf32WithoutByteOrderMark(bytes, length);
+        if (guessedUtf32 != null) {
+            if (isConfirmedText(guessedUtf32, bytes, length, dataWasTruncated)) {
+                return guessedUtf32;
+            }
+        }
+
         Charset guessedUtf16 = guessUtf16WithoutByteOrderMark(bytes, length);
         if (guessedUtf16 != null) {
-            boolean decodesCleanly = canBeDecoded(guessedUtf16, bytes, length, dataWasTruncated);
-            boolean looksLikeText =
-                    !hasTooManyControlCharactersAfterDecoding(guessedUtf16, bytes, length);
-            if (decodesCleanly && looksLikeText) {
+            if (isConfirmedText(guessedUtf16, bytes, length, dataWasTruncated)) {
                 return guessedUtf16;
             }
         }
