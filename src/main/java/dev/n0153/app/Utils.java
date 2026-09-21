@@ -162,6 +162,74 @@ public class Utils {
                 new byte[]{0x4D, 0x4D, 0x00, 0x2A},
                 new boolean[]{true, true, true, true}
         ));
+        put("html/doctype", new MimeSignature(
+                new byte[]{0x3C, 0x21, 0x44, 0x4F, 0x43, 0x54, 0x59, 0x50, 0x45, 0x20, 0x48, 0x54, 0x4D, 0x4C, 0x00},
+                new boolean[]{true, true, true, true, true, true, true, true, true, true, true, true, true, true, false}
+        ));
+        put("html/html", new MimeSignature(
+                new byte[]{0x3C, 0x48, 0x54, 0x4D, 0x4C, 0x00},
+                new boolean[]{true, true, true, true, true, false}
+        ));
+        put("html/head", new MimeSignature(
+                new byte[]{0x3C, 0x48, 0x45, 0x41, 0x44, 0x00},
+                new boolean[]{true, true, true, true, true, false}
+        ));
+        put("html/script", new MimeSignature(
+                new byte[]{0x3C, 0x53, 0x43, 0x52, 0x49, 0x50, 0x54, 0x00},
+                new boolean[]{true, true, true, true, true, true, true, false}
+        ));
+        put("html/iframe", new MimeSignature(
+                new byte[]{0x3C, 0x49, 0x46, 0x52, 0x41, 0x4D, 0x45, 0x00},
+                new boolean[]{true, true, true, true, true, true, true, false}
+        ));
+        put("html/h1", new MimeSignature(
+                new byte[]{0x3C, 0x48, 0x31, 0x00},
+                new boolean[]{true, true, true, false}
+        ));
+        put("html/div", new MimeSignature(
+                new byte[]{0x3C, 0x44, 0x49, 0x56, 0x00},
+                new boolean[]{true, true, true, true, false}
+        ));
+        put("html/font", new MimeSignature(
+                new byte[]{0x3C, 0x46, 0x4F, 0x4E, 0x54, 0x00},
+                new boolean[]{true, true, true, true, true, false}
+        ));
+        put("html/table", new MimeSignature(
+                new byte[]{0x3C, 0x54, 0x41, 0x42, 0x4C, 0x45, 0x00},
+                new boolean[]{true, true, true, true, true, true, false}
+        ));
+        put("html/a", new MimeSignature(
+                new byte[]{0x3C, 0x41, 0x00},
+                new boolean[]{true, true, false}
+        ));
+        put("html/style", new MimeSignature(
+                new byte[]{0x3C, 0x53, 0x54, 0x59, 0x4C, 0x45, 0x00},
+                new boolean[]{true, true, true, true, true, true, false}
+        ));
+        put("html/title", new MimeSignature(
+                new byte[]{0x3C, 0x54, 0x49, 0x54, 0x4C, 0x45, 0x00},
+                new boolean[]{true, true, true, true, true, true, false}
+        ));
+        put("html/b", new MimeSignature(
+                new byte[]{0x3C, 0x42, 0x00},
+                new boolean[]{true, true, false}
+        ));
+        put("html/body", new MimeSignature(
+                new byte[]{0x3C, 0x42, 0x4F, 0x44, 0x59, 0x00},
+                new boolean[]{true, true, true, true, true, false}
+        ));
+        put("html/br", new MimeSignature(
+                new byte[]{0x3C, 0x42, 0x52, 0x00},
+                new boolean[]{true, true, true, false}
+        ));
+        put("html/p", new MimeSignature(
+                new byte[]{0x3C, 0x50, 0x00},
+                new boolean[]{true, true, false}
+        ));
+        put("html/comment", new MimeSignature(
+                new byte[]{0x3C, 0x21, 0x2D, 0x2D, 0x00},
+                new boolean[]{true, true, true, true, false}
+        ));
     }};
 
     private static final List<String> textFormats = List.of("txt", "log", "json");
