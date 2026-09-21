@@ -1,15 +1,12 @@
 package dev.n0153.app;
 
-import com.sun.jdi.CharType;
 import dev.n0153.app.exceptions.*;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.config.Configurator;
 import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.core.config.NullConfiguration;
 
-import javax.swing.plaf.InsetsUIResource;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -229,6 +226,74 @@ public class Utils {
         put("html/comment", new MimeSignature(
                 new byte[]{0x3C, 0x21, 0x2D, 0x2D, 0x00},
                 new boolean[]{true, true, true, true, false}
+        ));
+        put("html/doctype_mixed", new MimeSignature(
+                new byte[]{0x3C, 0x21, 0x44, 0x4F, 0x43, 0x54, 0x59, 0x50, 0x45, 0x20, 0x68, 0x74, 0x6D, 0x6C, 0x00},
+                new boolean[]{true, true, true, true, true, true, true, true, true, true, true, true, true, true, false}
+        ));
+        put("html/doctype_lower", new MimeSignature(
+                new byte[]{0x3C, 0x21, 0x64, 0x6F, 0x63, 0x74, 0x79, 0x70, 0x65, 0x20, 0x68, 0x74, 0x6D, 0x6C, 0x00},
+                new boolean[]{true, true, true, true, true, true, true, true, true, true, true, true, true, true, false}
+        ));
+        put("html/html_lower", new MimeSignature(
+                new byte[]{0x3C, 0x68, 0x74, 0x6D, 0x6C, 0x00},
+                new boolean[]{true, true, true, true, true, false}
+        ));
+        put("html/head_lower", new MimeSignature(
+                new byte[]{0x3C, 0x68, 0x65, 0x61, 0x64, 0x00},
+                new boolean[]{true, true, true, true, true, false}
+        ));
+        put("html/script_lower", new MimeSignature(
+                new byte[]{0x3C, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x00},
+                new boolean[]{true, true, true, true, true, true, true, false}
+        ));
+        put("html/iframe_lower", new MimeSignature(
+                new byte[]{0x3C, 0x69, 0x66, 0x72, 0x61, 0x6D, 0x65, 0x00},
+                new boolean[]{true, true, true, true, true, true, true, false}
+        ));
+        put("html/h1_lower", new MimeSignature(
+                new byte[]{0x3C, 0x68, 0x31, 0x00},
+                new boolean[]{true, true, true, false}
+        ));
+        put("html/div_lower", new MimeSignature(
+                new byte[]{0x3C, 0x64, 0x69, 0x76, 0x00},
+                new boolean[]{true, true, true, true, false}
+        ));
+        put("html/font_lower", new MimeSignature(
+                new byte[]{0x3C, 0x66, 0x6F, 0x6E, 0x74, 0x00},
+                new boolean[]{true, true, true, true, true, false}
+        ));
+        put("html/table_lower", new MimeSignature(
+                new byte[]{0x3C, 0x74, 0x61, 0x62, 0x6C, 0x65, 0x00},
+                new boolean[]{true, true, true, true, true, true, false}
+        ));
+        put("html/a_lower", new MimeSignature(
+                new byte[]{0x3C, 0x61, 0x00},
+                new boolean[]{true, true, false}
+        ));
+        put("html/style_lower", new MimeSignature(
+                new byte[]{0x3C, 0x73, 0x74, 0x79, 0x6C, 0x65, 0x00},
+                new boolean[]{true, true, true, true, true, true, false}
+        ));
+        put("html/title_lower", new MimeSignature(
+                new byte[]{0x3C, 0x74, 0x69, 0x74, 0x6C, 0x65, 0x00},
+                new boolean[]{true, true, true, true, true, true, false}
+        ));
+        put("html/b_lower", new MimeSignature(
+                new byte[]{0x3C, 0x62, 0x00},
+                new boolean[]{true, true, false}
+        ));
+        put("html/body_lower", new MimeSignature(
+                new byte[]{0x3C, 0x62, 0x6F, 0x64, 0x79, 0x00},
+                new boolean[]{true, true, true, true, true, false}
+        ));
+        put("html/br_lower", new MimeSignature(
+                new byte[]{0x3C, 0x62, 0x72, 0x00},
+                new boolean[]{true, true, true, false}
+        ));
+        put("html/p_lower", new MimeSignature(
+                new byte[]{0x3C, 0x70, 0x00},
+                new boolean[]{true, true, false}
         ));
     }};
 
