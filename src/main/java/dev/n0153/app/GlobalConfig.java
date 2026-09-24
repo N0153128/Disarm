@@ -54,7 +54,7 @@ public class GlobalConfig {
     private final String KEY_INPUT_ROOT_PATH = "inputRootPath";
     private final String KEY_DELETE_RESULT = "deleteResult";
     private final String KEY_LOG_LEVEL = "logLevel";
-    private final String RANDOM_CHARACTERS_TITLE = "randomCharactersTitle";
+    private final String KEY_RANDOM_CHARACTERS_TITLE = "randomCharactersTitle";
     private final String KEY_SAMPLE_SIZE_IN_BYTES = "sampleSizeInBytes";
     private final String KEY_MAX_CONTROL_CHARACTER_RATIO = "maxControlCharacterRatio";
     private final String KEY_MIN_UTF16_NUL_RATIO = "minUtf16NulRatio";
@@ -80,7 +80,7 @@ public class GlobalConfig {
         put(KEY_RESTRICT_INPUT_FROM_ROOT, restrictInputFromRoot);
         put(KEY_INPUT_ROOT_PATH, inputRootPath);
         put(KEY_LOG_LEVEL, logLevel);
-        put(RANDOM_CHARACTERS_TITLE, randomCharactersTitle);
+        put(KEY_RANDOM_CHARACTERS_TITLE, randomCharactersTitle);
         put(KEY_SAMPLE_SIZE_IN_BYTES, sampleSizeInBytes);
         put(KEY_MAX_CONTROL_CHARACTER_RATIO, maxControlCharacterRatio);
         put(KEY_MIN_UTF16_NUL_RATIO, minUtf16NulRatio);
@@ -137,7 +137,7 @@ public class GlobalConfig {
 
     public boolean getRandomCharactersTitle() {
         return Objects.requireNonNullElse(
-                get(RANDOM_CHARACTERS_TITLE, Boolean.class),
+                get(KEY_RANDOM_CHARACTERS_TITLE, Boolean.class),
                 randomCharactersTitle);
     }
 
@@ -301,11 +301,11 @@ public class GlobalConfig {
         if (newMinUtf32BasicPlaneRatio > 1.0) {
             throw new IllegalArgumentException("Min UTF32 basic plane ratio cannot be greater than one");
         }
-        put(KEY_MIN_UTF32_BASIC_PLANE_RATIO, newMinUtf32BasicPlaneRatio)
+        put(KEY_MIN_UTF32_BASIC_PLANE_RATIO, newMinUtf32BasicPlaneRatio);
     }
 
         public void setRandomCharactersTitle(boolean newRandomCharactersTitle) {
-        put(RANDOM_CHARACTERS_TITLE, newRandomCharactersTitle);
+        put(KEY_RANDOM_CHARACTERS_TITLE, newRandomCharactersTitle);
     }
 
     public void setLogLevel(LoggingLevels newLogLevel) {
