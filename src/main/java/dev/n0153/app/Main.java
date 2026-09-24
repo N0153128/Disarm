@@ -16,6 +16,7 @@ public class Main {
         logger.info("Working directory: {}",  System.getProperty("user.dir"));
         PluginRegistry registry = new PluginRegistry();
         GlobalConfig globalConfig = new GlobalConfig();
+        Utils.init(globalConfig);
         DisarmPlugins plugins = new DisarmPlugins(globalConfig);
         plugins.registerAll(registry);
         try {
