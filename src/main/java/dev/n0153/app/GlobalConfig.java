@@ -29,6 +29,11 @@ public class GlobalConfig {
     public enum LoggingLevels { OFF, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, ALL }
     private final LoggingLevels logLevel = LoggingLevels.DEBUG;
     private final boolean randomCharactersTitle = false;
+    public final int sampleSizeInBytes = 8192;
+    private final double maxControlCharacterRatio = 0.02;
+    private final double minUtf16NulRatio = 0.3;
+    private final double minUtf32BasicPlaneRatio = 0.5;
+
 
 
     private final String KEY_GENERAL_SIZE_LIMIT = "generalSizeLimit";
@@ -50,6 +55,10 @@ public class GlobalConfig {
     private final String KEY_DELETE_RESULT = "deleteResult";
     private final String KEY_LOG_LEVEL = "logLevel";
     private final String RANDOM_CHARACTERS_TITLE = "randomCharactersTitle";
+    private final String KEY_SAMPLE_SIZE_IN_BYTES = "sampleSizeInBytes";
+    private final String KEY_MAX_CONTROL_CHARACTER_RATIO = "maxControlCharacterRatio";
+    private final String KEY_MIN_UTF16_NUL_RATIO = "minUtf16NulRatio";
+    private final String KEY_MIN_UTF32_BASIC_PLANE_RATIO = "minUtf32BasicPlaneRatio";
 
 
     private final Map<String, Object> globalConfigStorage = new HashMap<>() {{
@@ -72,6 +81,10 @@ public class GlobalConfig {
         put(KEY_INPUT_ROOT_PATH, inputRootPath);
         put(KEY_LOG_LEVEL, logLevel);
         put(RANDOM_CHARACTERS_TITLE, randomCharactersTitle);
+        put(KEY_SAMPLE_SIZE_IN_BYTES, sampleSizeInBytes)
+        put(KEY_MAX_CONTROL_CHARACTER_RATIO, maxControlCharacterRatio)
+        put(KEY_MIN_UTF16_NUL_RATIO, minUtf16NulRatio)
+        put(KEY_MIN_UTF32_BASIC_PLANE_RATIO, minUtf32BasicPlaneRatio)
     }};
 
     public void put(String key, Object value) {
@@ -96,6 +109,30 @@ public class GlobalConfig {
 
     public <$ValueType> $ValueType get(String key, Class<$ValueType> type) {
         return type.cast(globalConfigStorage.get(key));
+    }
+
+    public int getSampleSizeInBytes() {
+        return Objects.requireNonNullElse(
+                get(KEY_SAMPLE_SIZE_IN_BYTES, Integer.class),
+                sampleSizeInBytes);
+    }
+
+    public double getMaxControlCharacterRatio() {
+        return Objects.requireNonNullElse(
+                get(KEY_MAX_CONTROL_CHARACTER_RATIO, Double.class),
+                maxControlCharacterRatio);
+    }
+
+    public double getMinUtf16NulRatio() {
+        return Objects.requireNonNullElse(
+                get(KEY_MIN_UTF16_NUL_RATIO, Double.class),
+                minUtf16NulRatio);
+    }
+
+    public double getMinUtf32BasicPlaneRatio() {
+        return Objects.requireNonNullElse(
+                get(KEY_MIN_UTF32_BASIC_PLANE_RATIO, Double.class),
+                minUtf32BasicPlaneRatio);
     }
 
     public boolean getRandomCharactersTitle() {
@@ -217,7 +254,54 @@ public class GlobalConfig {
         );
     }
 
-    public void setRandomCharactersTitle(boolean newRandomCharactersTitle) {
+    public void setSampleSizeInBytes(int newSampleSizeInBytes) {
+        if (newSampleSizeInBytes < 0) {
+            throw new IllegalArgumentException("Sample size cannot be less than zero")
+        }
+        if (newSampleSizeInBytes == 0) {
+            throw new IllegalArgumentException("Sample size cannot be zero")
+        }
+        // max check required
+        put(KEY_SAMPLE_SIZE_IN_BYTES, newSampleSizeInBytes)
+    }
+
+    public void setMaxControlCharacterRatio(double newMaxControlCharacterRatio) {
+        if (newMaxControlCharacterRatio < 0.0) {
+            throw new IllegalArgumentException("Max control character ratio cannot be less than zero")
+        }
+        if (newMaxControlCharacterRatio == 0.0) {
+            throw new IllegalArgumentException("Max control character ratio cannot be zero")
+        }
+        if (newMaxControlCharacterRatio > 1.0) {
+            throw new IllegalArgumentException("Max control character ratio cannot be greater than one")
+        }
+    }
+
+    public void setMinUtf16NulRatio(double newMinUtf16NulRatio) {
+        if (newMinUtf16NulRatio < 0.0) {
+            throw new IllegalArgumentException("Min UTF16 nul ratio cannot be less than zero")
+        }
+        if (newMinUtf16NulRatio == 0.0) {
+            throw new IllegalArgumentException("Min UTF16 nul ratio cannot be zero")
+        }
+        if (newMinUtf16NulRatio > 1.0) {
+            throw new IllegalArgumentException("Min UTF16 nul ratio cannot be greater than one")
+        }
+    }
+
+    public void setMinUtf32BasicPlaneRatio(double newMinUtf32BasicPlaneRatio) {
+        if (newMinUtf32BasicPlaneRatio < 0.0) {
+            throw new IllegalArgumentException("Min UTF32 basic plane ratio cannot be less than zero")
+        }
+        if (newMinUtf32BasicPlaneRatio == 0.0) {
+            throw new IllegalArgumentException("Min UTF32 basic plane ratio cannot be zero")
+        }
+        if (newMinUtf32BasicPlaneRatio > 1.0) {
+            throw new IllegalArgumentException("Min UTF32 basic plane ratio cannot be greater than one")
+        }
+    }
+
+        public void setRandomCharactersTitle(boolean newRandomCharactersTitle) {
         put(RANDOM_CHARACTERS_TITLE, newRandomCharactersTitle);
     }
 
@@ -243,7 +327,7 @@ public class GlobalConfig {
     }
 
     public void setRestrictInputFromRoot(boolean newRestrictInputFromRoot) {
-        put(KEY_RESTRICT_INPUT_FROM_ROOT, newRestrictInputFromRoot);
+        put(KEY_RESTRICT_INPUT_FROM_ROOT, new RestrictInputFromRoot);
     }
 
     public void setBootTime(Instant newBootTime) {
