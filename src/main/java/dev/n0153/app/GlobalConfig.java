@@ -81,10 +81,10 @@ public class GlobalConfig {
         put(KEY_INPUT_ROOT_PATH, inputRootPath);
         put(KEY_LOG_LEVEL, logLevel);
         put(RANDOM_CHARACTERS_TITLE, randomCharactersTitle);
-        put(KEY_SAMPLE_SIZE_IN_BYTES, sampleSizeInBytes)
-        put(KEY_MAX_CONTROL_CHARACTER_RATIO, maxControlCharacterRatio)
-        put(KEY_MIN_UTF16_NUL_RATIO, minUtf16NulRatio)
-        put(KEY_MIN_UTF32_BASIC_PLANE_RATIO, minUtf32BasicPlaneRatio)
+        put(KEY_SAMPLE_SIZE_IN_BYTES, sampleSizeInBytes);
+        put(KEY_MAX_CONTROL_CHARACTER_RATIO, maxControlCharacterRatio);
+        put(KEY_MIN_UTF16_NUL_RATIO, minUtf16NulRatio);
+        put(KEY_MIN_UTF32_BASIC_PLANE_RATIO, minUtf32BasicPlaneRatio);
     }};
 
     public void put(String key, Object value) {
@@ -256,49 +256,52 @@ public class GlobalConfig {
 
     public void setSampleSizeInBytes(int newSampleSizeInBytes) {
         if (newSampleSizeInBytes < 0) {
-            throw new IllegalArgumentException("Sample size cannot be less than zero")
+            throw new IllegalArgumentException("Sample size cannot be less than zero");
         }
         if (newSampleSizeInBytes == 0) {
-            throw new IllegalArgumentException("Sample size cannot be zero")
+            throw new IllegalArgumentException("Sample size cannot be zero");
         }
         // max check required
-        put(KEY_SAMPLE_SIZE_IN_BYTES, newSampleSizeInBytes)
+        put(KEY_SAMPLE_SIZE_IN_BYTES, newSampleSizeInBytes);
     }
 
     public void setMaxControlCharacterRatio(double newMaxControlCharacterRatio) {
         if (newMaxControlCharacterRatio < 0.0) {
-            throw new IllegalArgumentException("Max control character ratio cannot be less than zero")
+            throw new IllegalArgumentException("Max control character ratio cannot be less than zero");
         }
         if (newMaxControlCharacterRatio == 0.0) {
-            throw new IllegalArgumentException("Max control character ratio cannot be zero")
+            throw new IllegalArgumentException("Max control character ratio cannot be zero");
         }
         if (newMaxControlCharacterRatio > 1.0) {
-            throw new IllegalArgumentException("Max control character ratio cannot be greater than one")
+            throw new IllegalArgumentException("Max control character ratio cannot be greater than one");
         }
+        put(KEY_MAX_CONTROL_CHARACTER_RATIO, newMaxControlCharacterRatio);
     }
 
     public void setMinUtf16NulRatio(double newMinUtf16NulRatio) {
         if (newMinUtf16NulRatio < 0.0) {
-            throw new IllegalArgumentException("Min UTF16 nul ratio cannot be less than zero")
+            throw new IllegalArgumentException("Min UTF16 nul ratio cannot be less than zero");
         }
         if (newMinUtf16NulRatio == 0.0) {
-            throw new IllegalArgumentException("Min UTF16 nul ratio cannot be zero")
+            throw new IllegalArgumentException("Min UTF16 nul ratio cannot be zero");
         }
         if (newMinUtf16NulRatio > 1.0) {
-            throw new IllegalArgumentException("Min UTF16 nul ratio cannot be greater than one")
+            throw new IllegalArgumentException("Min UTF16 nul ratio cannot be greater than one");
         }
+        put(KEY_MIN_UTF16_NUL_RATIO, newMinUtf16NulRatio);
     }
 
     public void setMinUtf32BasicPlaneRatio(double newMinUtf32BasicPlaneRatio) {
         if (newMinUtf32BasicPlaneRatio < 0.0) {
-            throw new IllegalArgumentException("Min UTF32 basic plane ratio cannot be less than zero")
+            throw new IllegalArgumentException("Min UTF32 basic plane ratio cannot be less than zero");
         }
         if (newMinUtf32BasicPlaneRatio == 0.0) {
-            throw new IllegalArgumentException("Min UTF32 basic plane ratio cannot be zero")
+            throw new IllegalArgumentException("Min UTF32 basic plane ratio cannot be zero");
         }
         if (newMinUtf32BasicPlaneRatio > 1.0) {
-            throw new IllegalArgumentException("Min UTF32 basic plane ratio cannot be greater than one")
+            throw new IllegalArgumentException("Min UTF32 basic plane ratio cannot be greater than one");
         }
+        put(KEY_MIN_UTF32_BASIC_PLANE_RATIO, newMinUtf32BasicPlaneRatio)
     }
 
         public void setRandomCharactersTitle(boolean newRandomCharactersTitle) {
@@ -327,7 +330,7 @@ public class GlobalConfig {
     }
 
     public void setRestrictInputFromRoot(boolean newRestrictInputFromRoot) {
-        put(KEY_RESTRICT_INPUT_FROM_ROOT, new RestrictInputFromRoot);
+        put(KEY_RESTRICT_INPUT_FROM_ROOT, newRestrictInputFromRoot);
     }
 
     public void setBootTime(Instant newBootTime) {
