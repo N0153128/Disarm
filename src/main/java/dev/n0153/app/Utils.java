@@ -302,8 +302,6 @@ public class Utils {
     public static final int SAMPLE_SIZE_IN_BYTES = 8192;
     private static final double MAX_CONTROL_CHARACTER_RATIO = 0.02;
     private static final double MIN_UTF16_NUL_RATIO = 0.3;
-    private static final Charset UTF_32_BIG_ENDIAN = Charset.forName("UTF-32BE");
-    private static final Charset UTF_32_LITTLE_ENDIAN = Charset.forName("UTF-32LE");
     private static final double MIN_UTF_32_BASIC_PLANE_RATIO = 0.5;
 
     private static int toUnsignedValue(byte signedByte) {
@@ -345,7 +343,7 @@ public class Utils {
 
             if (firstByte == 0X00 && secondByte == 0x00
                     && thirdByte == 0xFE && fourthByte == 0xFF) {
-                return UTF_32_BIG_ENDIAN;
+                return Charset.forName("UTF-32BE");
             }
         }
 
@@ -402,13 +400,13 @@ public class Utils {
 
         if (everyGroupStartsWithNul && !everyGroupEndsWithNul) {
             if (groupsWithNulAtSecondByte >= minimumBasicPlaneCount) {
-                return UTF_32_BIG_ENDIAN;
+                return Charset.forName("UTF-32BE");
             }
             return null;
         }
         if (everyGroupEndsWithNul && !everyGroupStartsWithNul) {
             if (groupsWithNulAtThirdByte >= minimumBasicPlaneCount) {
-                return UTF_32_LITTLE_ENDIAN;
+                return Charset.forName("UTF-32LE");
             }
             return null;
         }
