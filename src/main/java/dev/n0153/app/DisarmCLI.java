@@ -137,6 +137,34 @@ public class DisarmCLI implements Runnable{
                     "Example: -rct")
     private boolean randomCharactersTitle;
 
+    @CommandLine.Option(names = {"-ss", "--sample-size"}, description =
+            "Changes number of bytes read from the start of a file for text/encoding detection. " +
+                    "Defaults to 8192 bytes. " +
+                    "Accepts bytes as integer. " +
+                    "Example: -ss 16384")
+    private int sampleSize;
+
+    @CommandLine.Option(names = {"-mccr", "--max-control-character-ratio"}, description =
+            "Changes maximum share of control characters allowed before a file is treated as binary. " +
+                    "Defaults to 0.02. " +
+                    "Accepts decimal value. " +
+                    "Example: -mccr 0.01")
+    private double maxControlCharacterRatio;
+
+    @CommandLine.Option(names = {"-mutf16nr", "--min-utf16-nul-ratio"}, description =
+            "Changes minimum share of NUL bytes required to guess UTF-16 with no BOM. " +
+                    "Defaults to 0.3. " +
+                    "Accepts decimal value. " +
+                    "Example: -mutf16nr 0.2")
+    private double minUtf16NulRatio;
+
+    @CommandLine.Option(names = {"-mutf32bpr", "--min-utf-32-basic-plane-ratio"}, description =
+            "Changes minimum share of basic-plane characters required to guess UTF-32 with no BOM." +
+                    "Defaults to 0.5. " +
+                    "Accepts decimal value. " +
+                    "Example: -mutf32bpr 0.4")
+    private double minUtf32BasicPlaneRatio;
+
     @CommandLine.Spec
     CommandLine.Model.CommandSpec spec;
 
@@ -240,6 +268,18 @@ public class DisarmCLI implements Runnable{
             }
             if (randomCharactersTitle) {
                 this.globalConfig.setRandomCharactersTitle(true);
+            }
+            if (sampleSize > 0) {
+                this.globalConfig.setSampleSizeInBytes(sampleSize);
+            }
+            if (maxControlCharacterRatio > 0) {
+                this.globalConfig.setMaxControlCharacterRatio(maxControlCharacterRatio);
+            }
+            if (minUtf16NulRatio > 0) {
+                this.globalConfig.setMinUtf16NulRatio(minUtf16NulRatio);
+            }
+            if (minUtf32BasicPlaneRatio > 0) {
+                this.globalConfig.setMinUtf32BasicPlaneRatio(minUtf32BasicPlaneRatio);
             }
             // finalise parameters
             MediaApp app = new MediaApp(registry, globalConfig);
