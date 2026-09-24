@@ -32,6 +32,11 @@ import java.util.Objects;
  */
 public class Utils {
     private static final Logger logger = LogManager.getLogger(Utils.class);
+    private static GlobalConfig globalConfig;
+
+    public static void init(GlobalConfig globalConfig) {
+        Utils.globalConfig = globalConfig;
+    }
 
     record MimeSignature(byte[] byteSignature, boolean[] mask) {}
     private static final Map<String, MimeSignature> mimeSignatures = new HashMap<>() {{
@@ -299,11 +304,6 @@ public class Utils {
 
     private static final List<String> textFormats = List.of("txt", "log", "json");
 
-    public static final int SAMPLE_SIZE_IN_BYTES = 8192;
-    private static final double MAX_CONTROL_CHARACTER_RATIO = 0.02;
-    private static final double MIN_UTF16_NUL_RATIO = 0.3;
-    private static final double MIN_UTF_32_BASIC_PLANE_RATIO = 0.5;
-
     private static int toUnsignedValue(byte signedByte) {
         return signedByte & 0xFF;
     }
@@ -396,7 +396,7 @@ public class Utils {
 
         boolean everyGroupStartsWithNul = (groupsWithNulAtStart == completeCharacterCount);
         boolean everyGroupEndsWithNul = (groupsWithNulAtEnd == completeCharacterCount);
-        double minimumBasicPlaneCount = completeCharacterCount * MIN_UTF_32_BASIC_PLANE_RATIO;
+        double minimumBasicPlaneCount = completeCharacterCount * globalConfig.getMinUtf32BasicPlaneRatio();
 
         if (everyGroupStartsWithNul && !everyGroupEndsWithNul) {
             if (groupsWithNulAtSecondByte >= minimumBasicPlaneCount) {
@@ -446,8 +446,8 @@ public class Utils {
         int strayNulCount = Math.min(nulCountAtEvenPositions, nulCountAtOddPositions);
 
         int characterCount = length / 2;
-        double minimumExpectedNulCount = characterCount * MIN_UTF16_NUL_RATIO;
-        double maximumStrayNulCount = expectedNulCount * MAX_CONTROL_CHARACTER_RATIO;
+        double minimumExpectedNulCount = characterCount * globalConfig.getMinUtf16NulRatio();
+        double maximumStrayNulCount = expectedNulCount * globalConfig.getMaxControlCharacterRatio();
 
         if (expectedNulCount <= minimumExpectedNulCount) {
             return null;
@@ -492,7 +492,7 @@ public class Utils {
                 suspiciousCount++;
             }
         }
-        double maximumAllowedCount = length * MAX_CONTROL_CHARACTER_RATIO;
+        double maximumAllowedCount = length * globalConfig.getMaxControlCharacterRatio();
         return suspiciousCount > maximumAllowedCount;
     }
 
@@ -507,7 +507,7 @@ public class Utils {
                 suspiciousCount++;
             }
         }
-        double maximumAllowedCount = decodedText.length() * MAX_CONTROL_CHARACTER_RATIO;
+        double maximumAllowedCount = decodedText.length() * globalConfig.getMaxControlCharacterRatio();
         return suspiciousCount > maximumAllowedCount;
     }
 
@@ -565,7 +565,7 @@ public class Utils {
 
     public static Charset detectTextCharset(Path osTargetPath) throws IOException {
         try (InputStream fileStream = Files.newInputStream(osTargetPath)) {
-            byte[] sampleBytes = fileStream.readNBytes(SAMPLE_SIZE_IN_BYTES);
+            byte[] sampleBytes = fileStream.readNBytes(globalConfig.getSampleSizeInBytes());
             boolean fileHasMoreData = fileStream.read() != -1;
             return detectTextCharset(sampleBytes, sampleBytes.length, fileHasMoreData);
         }
