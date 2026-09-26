@@ -177,7 +177,7 @@ public class AudioConfig implements MediaConfig {
 
     @Override
     public String getName() {
-        return "audio";
+        return "Audio";
     }
 
     @Override

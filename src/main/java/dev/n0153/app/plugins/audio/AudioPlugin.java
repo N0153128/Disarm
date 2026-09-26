@@ -56,6 +56,6 @@ public class AudioPlugin implements MediaPlugin {
 
     @Override
     public String echo() {
-        return "audio";
+        return "Audio";
     }
 }
