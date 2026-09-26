@@ -22,136 +22,169 @@ public class VideoCLI implements Runnable {
     DisarmCLI inputPath;
 
     @CommandLine.Option(names = {"-mvd", "--max-video-duration"}, description =
-            "Changes maximum video duration limit in milliseconds. " +
-                    "Default limit is set to 5 minutes (300,000). Example: -mvd 600000")
+            """
+                    Changes maximum video duration limit in milliseconds.
+                    Default limit is set to 5 minutes (300,000).
+                    Example: -mvd 600000""")
     private int maxVideoDuration;
 
     @CommandLine.Option(names = {"-tvb", "--target-video-bitrate"}, description =
-            "Changes output video bitrate, accepts an integer. " +
-                    "Defaults to 8,000,000. Example: -tvb 10000000")
+            """
+                    Changes output video bitrate, accepts an integer.
+                    Defaults to 8,000,000.
+                    Example: -tvb 10000000""")
     private int targetVideoBitrate;
 
     @CommandLine.Option(names = {"-tfr", "--target-frame-rate"}, description =
-            "Changes output frame rate, accepts an integer. " +
-                    "Defaults to 30. Example: -tfr 60")
+            """
+                    Changes output frame rate, accepts an integer.
+                    Defaults to 30.
+                    Example: -tfr 60""")
     private int targetFrameRate;
 
     @CommandLine.Option(names = {"-tvc", "--target-video-codec"}, description =
-            "Changes output video codec, accepts a string. " +
-                    "Defaults to an input video file's codec. Example: -tvc h.264")
+            """
+                    Changes output video codec, accepts a string.
+                    Defaults to an input video file's codec.
+                    Example: -tvc h.264""")
     private String targetVideoCodec;
 
     @CommandLine.Option(names = {"-tacv", "--target-audio-codec-video"}, description =
-            "Changes output audio codec for video, accepts a string. " +
-                    "Defaults to an input video file's audio codec. Example: -tacv ac3")
+            """
+                    Changes output audio codec for video, accepts a string.
+                    Defaults to an input video file's audio codec.
+                    Example: -tacv ac3""")
     private String targetAudioCodec;
 
     @CommandLine.Option(names = {"-tabrv", "--target-audio-bitrate-video"}, description =
-            "Changes output audio bitrate for video, accepts an integer. " +
-                    "Defaults to an input video file's audio bitrate. Example: -tabrv 44800")
+            """
+                    Changes output audio bitrate for video, accepts an integer.
+                    Defaults to an input video file's audio bitrate.
+                    Example: -tabrv 44800""")
     private int targetAudioBitrate;
 
     @CommandLine.Option(names = {"-tasrv", "--target-audio-sampling-rate-video"}, description =
-            "Changes output audio sampling rate for video, accepts an integer. " +
-                    "Defaults to an input video file's audio sampling rate. Example: -tasrv 44100")
+            """
+                    Changes output audio sampling rate for video, accepts an integer.
+                    Defaults to an input video file's audio sampling rate.
+                    Example: -tasrv 44100""")
     private int targetAudioSamplingRate;
 
     @CommandLine.Option(names = {"-tac", "--target-audio-channels"}, description =
-            "Changes output audio channels for video, accepts an integer. " +
-                    "Defaults to an input video file's audio channels. Example: -tac 2")
+            """
+                    Changes output audio channels for video, accepts an integer.
+                    Defaults to an input video file's audio channels.
+                    Example: -tac 2""")
     private int targetAudioChannels;
 
     @CommandLine.Option(names = {"-sav1", "--swap-av1"}, description =
-            "Swaps AV1 codec with a more performant VP8. Accepted values: vp8, vp9, av1. " +
-                    "Defaults to vp8. Example: -sav1 vp9")
+            """
+                    Swaps AV1 codec with a more performant VP8. Accepted values: vp8, vp9, av1.
+                    Defaults to vp8.
+                    Example: -sav1 vp9""")
     private String swapAV1;
 
     @CommandLine.Option(names = {"-dsv", "--dont-save-video"}, description =
-            "Executes an entire video disarming cycle for benchmarking purposes. " +
-                    "Resulting file will be deleted immediately after processing. " +
-                    "Similar to -dr, but video-specific. Example: -dsv")
+            """
+                    Executes an entire video disarming cycle for benchmarking purposes.
+                    Resulting file will be deleted immediately after processing.
+                    Similar to -dr, but video-specific.
+                    Example: -dsv""")
     private boolean dontSaveVideo;
 
     @CommandLine.Option(names = {"-vof", "--video-output-format"}, description =
-            "Changes output file's format, accepts one of supported formats: mp4, mov, mkv (matroska), webm. " +
-                    "WARNING: certain container combinations will fail to save. " +
-                    "Example: -vof wav")
+            """
+                    Changes output file's format, accepts one of supported formats: mp4, mov, mkv (matroska), webm.
+                    WARNING: certain container combinations will fail to save.
+                    Example: -vof wav""")
     private String videoOutputFormat;
 
     @CommandLine.Option(names = {"-mvsff", "--max-video-size-for-format"}, description =
-            "Changes video file size ceiling for specified supported video format. " +
-                    "Accepts the following format: format:size, " +
-                    "where size is the amount of bytes expressed as integer." +
-                    " Example: -mvsff mp4:5000000")
+            """
+                    Changes video file size ceiling for specified supported video format.
+                    Accepts the following format: format:size,
+                    where size is the amount of bytes expressed as integer.
+                    Example: -mvsff mp4:5000000""")
     private String maxVideoSizeForFormat;
 
     @CommandLine.Option(names = {"-mvbr", "--max-video-bitrate"}, description =
-            "Changes video bitrate ceiling for specified supported video format. " +
-                    "Accepts the following format: format:bitrate, " +
-                    "where bitrate is expressed as integer. " +
-                    "Example: -mvbr mp4:10000000")
+            """
+                    Changes video bitrate ceiling for specified supported video format.
+                    Accepts the following format: format:bitrate,
+                    where bitrate is expressed as integer.
+                    Example: -mvbr mp4:10000000""")
     private String maxVideoBitrate;
 
     @CommandLine.Option(names = {"-mabrfv", "--max-audio-bitrate-for-video"}, description =
-            "Changes audio bitrate ceiling for specified supported video format. " +
-                    "Accepts the following format: format:bitrate, " +
-                    "where bitrate is expressed as integer. " +
-                    "Example: -mabrfv mp4:10000000")
+            """
+                    Changes audio bitrate ceiling for specified supported video format.
+                    Accepts the following format: format:bitrate,
+                    where bitrate is expressed as integer.
+                    Example: -mabrfv mp4:10000000""")
     private String maxAudioBitrateForVideo;
 
     @CommandLine.Option(names = {"-masr", "--max-audio-sampling-rate"}, description =
-            "Changes audio sampling rate ceiling for specified supported video format. " +
-                    "Accepts the following format: format:sampling rate, " +
-                    "where sampling rate is expressed as integer. " +
-                    "Example: -masr mp4:48000")
+            """
+                    Changes audio sampling rate ceiling for specified supported video format.
+                    Accepts the following format: format:sampling rate,
+                    where sampling rate is expressed as integer.
+                    Example: -masr mp4:48000""")
     private String maxAudioSamplingRate;
 
     @CommandLine.Option(names = {"-mvw", "--max-video-width"}, description =
-            "Changes maximum width limit for all video files. " +
-                    "Defaults to 1920, accepts the amount of pixels as integer. " +
-                    "Example: -mvw 1200")
+            """
+                    Changes maximum width limit for all video files.
+                    Defaults to 1920, accepts the amount of pixels as integer.
+                    Example: -mvw 1200""")
     private int maxVideoWidth;
 
     @CommandLine.Option(names = {"-mvh", "--max-video-height"}, description =
-            "Changes maximum height limit for all video files. " +
-                    "Defaults to 1080, accepts the amount of pixels as integer. " +
-                    "Example: -mvh 800")
+            """
+                    Changes maximum height limit for all video files.
+                    Defaults to 1080, accepts the amount of pixels as integer.
+                    Example: -mvh 800""")
     private int maxVideoHeight;
 
     @CommandLine.Option(names = {"-mvfr", "--max-video-frame-rate"}, description =
-            "Changes maximum frame rate limit for all video files. " +
-                    "Defaults to 60, accepts an integer. " +
-                    "Example: -mvfr 90")
+            """
+                    Changes maximum frame rate limit for all video files.
+                    Defaults to 60, accepts an integer.
+                    Example: -mvfr 90""")
     private int maxVideoFrameRate;
 
     @CommandLine.Option(names = {"-mp4fs", "--mp4-file-size"}, description =
-            "Changes file size ceiling specifically for mp4 video " +
-                    "Accepts bytes as integers. " +
-                    "Example for 3MB ceiling: -mp4pfs 3000000")
+            """
+                    Changes file size ceiling specifically for mp4 video.
+                    Accepts bytes as integers.
+                    Example for 3MB ceiling: -mp4pfs 3000000""")
     private int mp4FileSize;
 
     @CommandLine.Option(names = {"-matroskafs", "--matroska-file-size"}, description =
-            "Changes file size ceiling specifically for matroska video " +
-                    "Accepts bytes as integers. " +
-                    "Example for 3MB ceiling: -matroskapfs 3000000")
+            """
+                    Changes file size ceiling specifically for matroska video.
+                    Accepts bytes as integers.
+                    Example for 3MB ceiling: -matroskapfs 3000000""")
     private int matroskaFileSize;
 
     @CommandLine.Option(names = {"-webmfs", "--webm-file-size"}, description =
-            "Changes file size ceiling specifically for webm video " +
-                    "Accepts bytes as integers. " +
-                    "Example for 3MB ceiling: -webmfs 3000000")
+            """
+                    Changes file size ceiling specifically for webm video.
+                    Accepts bytes as integers.
+                    Example for 3MB ceiling: -webmfs 3000000""")
     private int webmFileSize;
 
     @CommandLine.Option(names = {"-movfs", "--mov-file-size"}, description =
-            "Changes file size ceiling specifically for mov video " +
-                    "Accepts bytes as integers. " +
-                    "Example for 3MB ceiling: -movfs 3000000")
+            """
+                    Changes file size ceiling specifically for mov video.
+                    Accepts bytes as integers.
+                    Example for 3MB ceiling: -movfs 3000000""")
     private int movFileSize;
 
     @CommandLine.Option(names = {"-vfbbr", "--vorbis-fallback-bitrate"}, description =
-            "Changes output audio bitrate for Vorbis codec if bitrate cannot be determined from the source. " +
-                    "Accepts kbps as integers. " +
-                    "Example for 320kbps: -vfbbr 320000")
+            """
+                    Changes output audio bitrate for Vorbis codec if bitrate cannot be determined from the source.
+                    Accepts kbps as integers.
+                    Example for 320kbps: -vfbbr 320000""")
     private int vorbisFallbackBitrate;
 
     @Override
