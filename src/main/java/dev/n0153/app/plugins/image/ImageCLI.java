@@ -30,108 +30,108 @@ public class ImageCLI implements Runnable {
 
     @CommandLine.Option(names = {"-l", "--logo"}, description =
             """
-                    Apply watermark to specified image file. \
+                    Apply watermark to specified image file.
                     Accepts path to logo image.
                     Example: resources/logos/logo.png""")
     private Path logo;
 
     @CommandLine.Option(names = {"-lsz", "--logo-size-limit"}, description =
             """
-                    Changes file size limit for logo image file. \
-                    This is a separate file size limit from the other image files. \
+                    Changes file size limit for logo image file.
+                    This is a separate file size limit from the other image files.
                     Accepts bytes as integers.
                     Example for 10MB limit: -lsz 10000000""")
     private int logoSizeLimit;
 
     @CommandLine.Option(names = {"-kl", "--keep-logo"}, description =
             """
-                    Saves logo as a separate, disarmed file after processing. \
+                    Saves logo as a separate, disarmed file after processing.
                     Defaults to false.
                     Example: -kl""")
     private boolean keepLogo;
 
     @CommandLine.Option(names = {"-dsi", "--dont-save-image"}, description =
             """
-                    Executes an entire image disarming cycle for benchmarking purposes.\
-                    Resulting file will not be saved to disk. \
+                    Executes an entire image disarming cycle for benchmarking purposes.
+                    Resulting file will not be saved to disk.
                     Similar to -dr, but image-specific and skips the write entirely.
                     Example: -dsi""")
     private boolean dontSaveImage;
 
     @CommandLine.Option(names = {"-imw", "--image-max-width"}, description =
             """
-                    Changes maximum allowed image width. \
+                    Changes maximum allowed image width.
                     Accepts pixels as integers, defaults to 512.
                     Example: -imw 1920""")
     private int imageMaxWidth;
 
     @CommandLine.Option(names = {"-imh", "--image-max-height"}, description =
             """
-                    Changes maximum allowed image height. \
+                    Changes maximum allowed image height.
                     Accepts pixels as integers, defaults to 512.
                     Example: -imh 1080""")
     private int imageMaxHeight;
 
     @CommandLine.Option(names = {"-lmw", "--logo-max-width"}, description =
             """
-                    Changes maximum allowed logo width. \
+                    Changes maximum allowed logo width.
                     Accepts pixels as integers, defaults to 50.
                     Example: -lmw 100""")
     private int logoMaxWidth;
 
     @CommandLine.Option(names = {"-lmh", "--logo-max-height"}, description =
             """
-                    Changes maximum allowed logo height. \
+                    Changes maximum allowed logo height.
                     Accepts pixels as integers, defaults to 50.
                     Example: -lmh 100""")
     private int logoMaxHeight;
 
     @CommandLine.Option(names = {"-fvs", "--fixed-value-scaling"}, description =
             """
-                    Specify fixed value scaling parameters in the following format: WidthxHeight.\
+                    Specify fixed value scaling parameters in the following format: WidthxHeight.
                     Example: 1920x1080""")
     private String fixedValueScaling;
 
     @CommandLine.Option(names = {"-iof", "--image-output-format"}, description =
             """
-                    Changes output file's format, accepts one of supported formats: jpeg (jpg), png, webp. \
-                    WARNING: certain format combinations will fail to save. \
+                    Changes output file's format, accepts one of supported formats: jpeg (jpg), png, webp.
+                    WARNING: certain format combinations will fail to save.
                     Example: -iof jpeg""")
     private String imageOutputFormat;
 
     @CommandLine.Option(names = {"-lt", "--logo-transparency"}, description =
             """
-                    Changes transparency value for logo images, accepts values from 0.1 to 1.0, \
-                    defaults to 0.5.\
+                    Changes transparency value for logo images, accepts values from 0.1 to 1.0.
+                    Defaults to 0.5.
                     Example: -lt 0.3""")
     private double logoTransparency;
 
     @CommandLine.Option(names = {"-lp", "--logo-position"}, description =
             """
-                    Specify exactly at which corner of the screen the logo will be displayed. \
-                    Defaults to random position. Accepts one of four positions: \
-                    top-left, top-right, bottom-left and bottom-right. \
+                    Specify exactly at which corner of the screen the logo will be displayed.
+                    Defaults to random position. Accepts one of four positions:
+                    top-left, top-right, bottom-left and bottom-right.
                     Example: -lp bottom-left""")
     private String logoPosition;
 
     @CommandLine.Option(names = {"-pngfs", "--png-file-size"}, description =
             """
-                    Changes file size ceiling specifically for png images. \
-                    Accepts bytes as integers. \
+                    Changes file size ceiling specifically for png images.
+                    Accepts bytes as integers.
                     Example for 3MB ceiling: -pngfs 3000000""")
     private int pngFileSize;
 
     @CommandLine.Option(names = {"-jpgfs", "--jpg-file-size"}, description =
             """
-                    Changes file size ceiling specifically for jpg/jpeg images. \
-                    Accepts bytes as integers. \
+                    Changes file size ceiling specifically for jpg/jpeg images.
+                    Accepts bytes as integers.
                     Example for 3MB ceiling: -jpgfs 3000000""")
     private int jpgFileSize;
 
     @CommandLine.Option(names = {"-webpfs", "--webp-file-size"}, description =
             """
-                    Changes file size ceiling specifically for webp images. \
-                    Accepts bytes as integers. \
+                    Changes file size ceiling specifically for webp images.
+                    Accepts bytes as integers.
                     Example for 3MB ceiling: -webpfs 3000000""")
     private int webpFileSize;
 
