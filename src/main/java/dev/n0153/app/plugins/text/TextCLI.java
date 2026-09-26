@@ -29,80 +29,94 @@ public class TextCLI  implements Runnable {
     DisarmCLI inputPath;
 
     @CommandLine.Option(names = {"-mts", "--max-text-size"}, description =
-            "Changes text file size limit. " +
-                    "Accepts bytes as integers. Example for 10MB: -mts 10000000")
+            """
+                    Changes text file size limit.
+                    Accepts bytes as integers.
+                    Example for 10MB: -mts 10000000""")
     private int textSize;
 
     @CommandLine.Option(names = {"-oe", "--output-encoding"}, description =
-            "Changes output encoding, defaults to UTF-8. " +
-                    "Accepts one of the supported values: UTF-16, US_ASCII, UTF-16BE, UTF-16LE and ISO_8859_1." +
-                    " Example: -oe UTF-16BE")
+            """
+                    Changes output encoding, defaults to UTF-8.
+                    Accepts one of the supported values: UTF-16, US_ASCII, UTF-16BE, UTF-16LE and ISO_8859_1.
+                    Example: -oe UTF-16BE""")
     private String outputEncoding;
 
     @CommandLine.Option(names = {"-nf", "--normalize-form"}, description =
-            "Changes text normalization form, defaults to NFKC. " +
-                    "Accepts one of the supported values: NFKC, NFC, NFD, NFKD. " +
-                    "Example: -nf NFD")
+            """
+                    Changes text normalization form, defaults to NFKC.
+                    Accepts one of the supported values: NFKC, NFC, NFD, NFKD.
+                    Example: -nf NFD""")
     private String normalizeForm;
 
     @CommandLine.Option(names = {"-dst", "--dont-save-text"}, description =
-            "Executes an entire text disarming cycle for benchmarking purposes." +
-                    " Resulting file will not be saved to disk. " +
-                    "Similar to -dr, but text-specific and skips the write entirely. Example: -dst")
+            """
+                    Executes an entire text disarming cycle for benchmarking purposes.
+                    Resulting file will not be saved to disk.
+                    Similar to -dr, but text-specific and skips the write entirely.
+                    Example: -dst""")
     private boolean dontSaveText;
 
     @CommandLine.Option(names = {"-tof", "--text-output-format"}, description =
-            "Changes output file's format, accepts one of supported formats: json, log, txt. " +
-                    "WARNING: certain format combinations will fail to save. " +
-                    "Example: -tof json")
+            """
+                    Changes output file's format, accepts one of supported formats: json, log, txt.
+                    WARNING: certain format combinations will fail to save.
+                    Example: -tof json""")
     private String textOutputFormat;
 
     @CommandLine.Option(names = {"-sssf", "--skip-script-strip-for"}, description =
-            "Disable script tag stripping from one of the supported text formats." +
-                    " WARNING! using this flag may pose a security risk. It should be used only for legitimate " +
-                    "source code files that contain script tags. " +
-                    "Script stripping is enabled by default and advised to lease as is." +
-                    "Example: -sssf json")
+            """
+                    Disable script tag stripping from one of the supported text formats.
+                    WARNING! using this flag may pose a security risk. It should be used only for legitimate
+                    source code files that contain script tags.
+                    Script stripping is enabled by default and advised to lease as is.
+                    Example: -sssf json""")
     private String skipScriptStripFor;
 
     @CommandLine.Option(names = {"-ccr", "--control-characters-range"}, description =
-            "Add an additional range of characters to trim whiles disarming text. " +
-                    "Default ranges are: 0x0000 to 0x001F and 0x007F to 0x009F. " +
-                    "Accepts the following format: rangeStart:rangeEnd, where rangeStart and rangeEnd are " +
-                    "hexadecimal integer literals." +
-                    "Example: -ccr 0x0000:0x001F")
+            """
+                    Add an additional range of characters to trim whiles disarming text.
+                    Default ranges are: 0x0000 to 0x001F and 0x007F to 0x009F.
+                    Accepts the following format: rangeStart:rangeEnd, where rangeStart and rangeEnd are
+                    hexadecimal integer literals.
+                    Example: -ccr 0x0000:0x001F""")
     private String controlCharactersRanges;
 
     @CommandLine.Option(names = {"-us", "--url-schemes"}, description =
-            "Add an additional keyword to trim whiles disarming text file. " +
-                    "Default schemes to trim: \"javascript:\", \"vbscript:\", \"data:\"" +
-                    "Accepts the following format: scheme,scheme,scheme." +
-                    "Example: -us vbscript:,livescript:,mocha:")
+            """
+                    Add an additional keyword to trim whiles disarming text file.
+                    Default schemes to trim: "javascript:", "vbscript:", "data:"
+                    Accepts the following format: scheme,scheme,scheme.
+                    Example: -us vbscript:,livescript:,mocha:""")
     private String urlSchemes;
 
     @CommandLine.Option(names = {"-zlc", "--zero-length-chars"}, description =
-            "Add an additional zero-length-char to trim whiles disarming text file. " +
-                    "Defaults to U+200B, U+200D, U+FEFF. " +
-                    "Accepts comma-separated hexadecimal code points. " +
-                    "Example: -zlc 0x200C,0x2060")
+            """
+                    Add an additional zero-length-char to trim whiles disarming text file.
+                    Defaults to U+200B, U+200D, U+FEFF.
+                    Accepts comma-separated hexadecimal code points.
+                    Example: -zlc 0x200C,0x2060""")
     private String zeroLengthChars;
 
     @CommandLine.Option(names = {"-txtpfs", "--txt-file-size"}, description =
-            "Changes file size ceiling specifically for txt text " +
-                    "Accepts bytes as integers. " +
-                    "Example for 3MB ceiling: -txtpfs 3000000")
+            """
+                    Changes file size ceiling specifically for txt text.
+                    Accepts bytes as integers.
+                    Example for 3MB ceiling: -txtpfs 3000000""")
     private int txtFileSize;
 
     @CommandLine.Option(names = {"-logpfs", "--log-file-size"}, description =
-            "Changes file size ceiling specifically for log text " +
-                    "Accepts bytes as integers. " +
-                    "Example for 3MB ceiling: -logpfs 3000000")
+            """
+                    Changes file size ceiling specifically for log text.
+                    Accepts bytes as integers.
+                    Example for 3MB ceiling: -logpfs 3000000""")
     private int logFileSize;
 
     @CommandLine.Option(names = {"-jsonpfs", "--json-file-size"}, description =
-            "Changes file size ceiling specifically for json text " +
-                    "Accepts bytes as integers. " +
-                    "Example for 3MB ceiling: -jsonpfs 3000000")
+            """
+                    Changes file size ceiling specifically for json text.
+                    Accepts bytes as integers.
+                    Example for 3MB ceiling: -jsonpfs 3000000""")
     private int jsonFileSize;
 
     @Override
