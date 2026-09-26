@@ -56,6 +56,6 @@ public class VideoPlugin implements MediaPlugin {
 
     @Override
     public String echo() {
-        return "video";
+        return "Video";
     }
 }

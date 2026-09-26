@@ -193,7 +193,7 @@ public class VideoConfig implements MediaConfig {
 
     @Override
     public String getName() {
-        return "video";
+        return "Video";
     }
 
     @Override
