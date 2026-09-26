@@ -58,6 +58,6 @@ public class ImagePlugin implements MediaPlugin {
 
     @Override
     public String echo() {
-        return "image";
+        return "Image";
     }
 }
