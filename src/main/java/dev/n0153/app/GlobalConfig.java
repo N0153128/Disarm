@@ -33,6 +33,7 @@ public class GlobalConfig {
     private final double maxControlCharacterRatio = 0.02;
     private final double minUtf16NulRatio = 0.3;
     private final double minUtf32BasicPlaneRatio = 0.5;
+    private final boolean watchdog = false;
 
 
 
@@ -59,7 +60,7 @@ public class GlobalConfig {
     private final String KEY_MAX_CONTROL_CHARACTER_RATIO = "maxControlCharacterRatio";
     private final String KEY_MIN_UTF16_NUL_RATIO = "minUtf16NulRatio";
     private final String KEY_MIN_UTF32_BASIC_PLANE_RATIO = "minUtf32BasicPlaneRatio";
-
+    private final String KEY_WATCHDOG = "watchdog";
 
     private final Map<String, Object> globalConfigStorage = new HashMap<>() {{
         put(KEY_GENERAL_SIZE_LIMIT, generalSizeLimit);
@@ -85,6 +86,7 @@ public class GlobalConfig {
         put(KEY_MAX_CONTROL_CHARACTER_RATIO, maxControlCharacterRatio);
         put(KEY_MIN_UTF16_NUL_RATIO, minUtf16NulRatio);
         put(KEY_MIN_UTF32_BASIC_PLANE_RATIO, minUtf32BasicPlaneRatio);
+        put(KEY_WATCHDOG, watchdog);
     }};
 
     public void put(String key, Object value) {
@@ -109,6 +111,12 @@ public class GlobalConfig {
 
     public <$ValueType> $ValueType get(String key, Class<$ValueType> type) {
         return type.cast(globalConfigStorage.get(key));
+    }
+
+    public boolean getWatchdog() {
+        return Objects.requireNonNullElse(
+                get(KEY_WATCHDOG, Boolean.class),
+                watchdog);
     }
 
     public int getSampleSizeInBytes() {
@@ -252,6 +260,10 @@ public class GlobalConfig {
                 get(KEY_GENERAL_SIZE_LIMIT, Integer.class),
                 generalSizeLimit
         );
+    }
+
+    public void setWatchdog(boolean newWatchdog) {
+        put(KEY_WATCHDOG, newWatchdog);
     }
 
     public void setSampleSizeInBytes(int newSampleSizeInBytes) {
