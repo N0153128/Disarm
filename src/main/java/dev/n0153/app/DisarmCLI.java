@@ -165,6 +165,16 @@ public class DisarmCLI implements Runnable{
                     "Example: -mutf32bpr 0.4")
     private double minUtf32BasicPlaneRatio;
 
+    @CommandLine.Option(names = {"-wd", "--watchdog"}, description =
+            """
+                    Enables watchdog mode - specified input directory will be monitored for new files. New files will be
+                    automatically disarmed and placed in default output path, unless specific output path is specified.
+                    Disabled by default.
+                    Example: -wd
+                    """)
+    private boolean watchdog;
+
+
     @CommandLine.Spec
     CommandLine.Model.CommandSpec spec;
 
@@ -280,6 +290,9 @@ public class DisarmCLI implements Runnable{
             }
             if (minUtf32BasicPlaneRatio > 0) {
                 this.globalConfig.setMinUtf32BasicPlaneRatio(minUtf32BasicPlaneRatio);
+            }
+            if (watchdog) {
+                this.globalConfig.setWatchdog(true);
             }
             // finalise parameters
             MediaApp app = new MediaApp(registry, globalConfig);
