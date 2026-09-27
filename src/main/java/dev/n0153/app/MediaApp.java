@@ -6,8 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.*;
 import java.time.Duration;
 import java.time.Instant;
 
@@ -227,12 +226,31 @@ public class MediaApp {
         return plugin.getValidator().validate(osTargetPath);
     }
 
+    private void watchLoop(WatchService watcher) throws InterruptedException {
+
+    }
+
+    private void watchdog(Path osTargetPath) {
+        Path dir = osTargetPath.toAbsolutePath().getParent();
+        try (WatchService watcher = FileSystems.getDefault().newWatchService()) {
+            dir.register(watcher, StandardWatchEventKinds.ENTRY_CREATE);
+            watchLoop(watcher);
+        } catch (IOException | InterruptedException e) {
+            throw new DisarmException("File disarming failed");
+        }
+    }
+
     public void fileDisarm(Path osTargetPath) {
         if (globalConfig.getBenchmarking()) {
             processingContext.setStartedAt(Instant.now());
         }
         processingContext.setStage("processing started");
-        processFile(osTargetPath);
+        if (globalConfig.getWatchdog()) {
+            logger.info("Watchdog mode enabled.");
+            watchdog(osTargetPath);
+        } else {
+            processFile(osTargetPath);
+        }
         if (globalConfig.getBenchmarking()) {
             processingContext.setCompletedAt(Instant.now());
             long duration = Duration.between(
