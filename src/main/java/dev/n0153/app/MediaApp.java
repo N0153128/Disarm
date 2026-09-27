@@ -227,13 +227,20 @@ public class MediaApp {
     }
 
     private void watchLoop(WatchService watcher) throws InterruptedException {
+        while (true) {
+            WatchKey key = watcher.take();
+            for (WatchEvent<?> event : key.pollEvents()) {
 
+            }
+        }
     }
 
     private void watchdog(Path osTargetPath) {
         Path dir = osTargetPath.toAbsolutePath().getParent();
         try (WatchService watcher = FileSystems.getDefault().newWatchService()) {
             dir.register(watcher, StandardWatchEventKinds.ENTRY_CREATE);
+            logger.info("Directory {} was registered by watchdog, starting the loop...", dir);
+            logger.info("Press Ctrl+c to stop Disarm");
             watchLoop(watcher);
         } catch (IOException | InterruptedException e) {
             throw new DisarmException("File disarming failed");
