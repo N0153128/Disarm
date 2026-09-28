@@ -174,6 +174,34 @@ public class DisarmCLI implements Runnable{
                     """)
     private boolean watchdog;
 
+    @CommandLine.Option(names = {"-wdpi", "--watchdog-poll-interval"}, description =
+            """
+                    Changes how long the program pauses between file size checks, used in watchdog mode to define when
+                    an input file was fully created and is ready for processing.
+                    Defaults to 500ms.
+                    Accepts milliseconds as long.
+                    Example: -wdpi 1_000
+                    """)
+    private long watchdogPollIntervalMs;
+
+    @CommandLine.Option(names = {"-wdsc", "--watchdog-stable-checks"}, description =
+            """
+                    Changes how many consecutive unchanged size readings are required before a file counts as finished.
+                    Defaults to 3.
+                    Accepts an integer.
+                    Example: -wdsc 2
+                    """)
+    private int watchdogRequiredStableChecks;
+
+    @CommandLine.Option(names = {"-wdto", "--watchdog-timeout"}, description =
+            """
+                    Changes how long the program waits on a single file before giving up on it.
+                    Defaults to 600000 (10 minutes).
+                    Accepts milliseconds as long.
+                    Example for 20 minutes: -wdto 1200000
+                    """)
+    private long watchdogTimeoutMs;
+
 
     @CommandLine.Spec
     CommandLine.Model.CommandSpec spec;
@@ -293,6 +321,15 @@ public class DisarmCLI implements Runnable{
             }
             if (watchdog) {
                 this.globalConfig.setWatchdog(true);
+            }
+            if (watchdogPollIntervalMs > 0) {
+                this.globalConfig.setWatchdogPollIntervalMs(watchdogPollIntervalMs);
+            }
+            if (watchdogRequiredStableChecks > 0) {
+                this.globalConfig.setWatchdogRequiredStableChecks(watchdogRequiredStableChecks);
+            }
+            if (watchdogTimeoutMs > 0) {
+                this.globalConfig.setWatchdogTimeoutMs(watchdogTimeoutMs);
             }
             // finalise parameters
             MediaApp app = new MediaApp(registry, globalConfig);
