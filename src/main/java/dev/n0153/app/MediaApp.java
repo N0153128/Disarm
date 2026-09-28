@@ -226,6 +226,39 @@ public class MediaApp {
         return plugin.getValidator().validate(osTargetPath);
     }
 
+    private static final long POLL_INTERVAL_MS = 500;
+    private static final int REQUIRED_STABLE_CHECKS = 3;
+    private static final long TIMEOUT_MS = 10 * 60_000;
+
+    private boolean waitUntilStable(Path osTargetPath) throws InterruptedException {
+        long startedAt = System.currentTimeMillis();
+        long lastSize = -1;
+        int stableChecks = 0;
+
+        while (System.currentTimeMillis() - startedAt < TIMEOUT_MS) {
+            try {
+                if (!Files.exists(osTargetPath) || Files.isDirectory(osTargetPath)) {
+                    return false;
+                }
+                long size = Files.size(osTargetPath);
+                if (size == lastSize) {
+                    stableChecks ++;
+                } else {
+                    stableChecks = 0;
+                    lastSize = size;
+                }
+                if (stableChecks >= REQUIRED_STABLE_CHECKS) {
+                    return true;
+                }
+            } catch (IOException e) {
+                return false;
+            }
+            Thread.sleep(POLL_INTERVAL_MS);
+        }
+        logger.error("Timed out whiles waiting for: {}", osTargetPath);
+        return false;
+    }
+
     private void watchLoop(WatchService watcher, Path osTargetPath) throws InterruptedException {
         while (true) {
             WatchKey key = watcher.take();
@@ -238,7 +271,10 @@ public class MediaApp {
                 WatchEvent<Path> ev = (WatchEvent<Path>) event;
                 Path filename = ev.context();
                 logger.info("Kind: {}, filename: {}", kind.name(), filename);
-                processFile(osTargetPath.resolve(filename));
+                Path fullPath = osTargetPath.resolve(filename);
+                if (waitUntilStable(fullPath)) {
+                    processFile(fullPath);
+                }
             }
             boolean valid = key.reset();
             if (!valid) {
