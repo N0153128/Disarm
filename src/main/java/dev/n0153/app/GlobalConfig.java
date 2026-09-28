@@ -34,6 +34,9 @@ public class GlobalConfig {
     private final double minUtf16NulRatio = 0.3;
     private final double minUtf32BasicPlaneRatio = 0.5;
     private final boolean watchdog = false;
+    private final long watchdogPollIntervalMs = 500;
+    private final int watchdogRequiredStableChecks = 3;
+    private final long watchdogTimeoutMs = 10 * 60_000;
 
 
 
@@ -61,6 +64,9 @@ public class GlobalConfig {
     private final String KEY_MIN_UTF16_NUL_RATIO = "minUtf16NulRatio";
     private final String KEY_MIN_UTF32_BASIC_PLANE_RATIO = "minUtf32BasicPlaneRatio";
     private final String KEY_WATCHDOG = "watchdog";
+    private final String KEY_WATCHDOG_POLL_INTERVAL_MS = "watchdogPollIntervalMs";
+    private final String KEY_WATCHDOG_REQUIRED_STABLE_CHECKS = "watchdogRequiredStableChecks";
+    private final String KEY_WATCHDOG_TIMEOUT_MS = "watchdogTimeoutMs";
 
     private final Map<String, Object> globalConfigStorage = new HashMap<>() {{
         put(KEY_GENERAL_SIZE_LIMIT, generalSizeLimit);
@@ -87,6 +93,9 @@ public class GlobalConfig {
         put(KEY_MIN_UTF16_NUL_RATIO, minUtf16NulRatio);
         put(KEY_MIN_UTF32_BASIC_PLANE_RATIO, minUtf32BasicPlaneRatio);
         put(KEY_WATCHDOG, watchdog);
+        put(KEY_WATCHDOG_POLL_INTERVAL_MS, watchdogPollIntervalMs);
+        put(KEY_WATCHDOG_REQUIRED_STABLE_CHECKS, watchdogRequiredStableChecks);
+        put(KEY_WATCHDOG_TIMEOUT_MS, watchdogTimeoutMs);
     }};
 
     public void put(String key, Object value) {
@@ -111,6 +120,24 @@ public class GlobalConfig {
 
     public <$ValueType> $ValueType get(String key, Class<$ValueType> type) {
         return type.cast(globalConfigStorage.get(key));
+    }
+
+    public long getWatchdogTimeoutMs() {
+        return Objects.requireNonNullElse(
+                get(KEY_WATCHDOG_TIMEOUT_MS, Long.class),
+                watchdogTimeoutMs);
+    }
+
+    public int getWatchdogRequiredStableChecks() {
+        return Objects.requireNonNullElse(
+                get(KEY_WATCHDOG_REQUIRED_STABLE_CHECKS, Integer.class),
+                watchdogRequiredStableChecks);
+    }
+
+    public long getWatchdogPollIntervalMs() {
+        return Objects.requireNonNullElse(
+                get(KEY_WATCHDOG_POLL_INTERVAL_MS, Long.class),
+                watchdogPollIntervalMs);
     }
 
     public boolean getWatchdog() {
@@ -260,6 +287,36 @@ public class GlobalConfig {
                 get(KEY_GENERAL_SIZE_LIMIT, Integer.class),
                 generalSizeLimit
         );
+    }
+
+    public void setWatchdogTimeoutMs(long newWatchdogTimeoutMs) {
+        if (newWatchdogTimeoutMs < 0) {
+            throw new IllegalArgumentException("Watchdog timeout cannot be less than zero");
+        }
+        if (newWatchdogTimeoutMs == 0) {
+            throw new IllegalArgumentException("Watchdog timeout cannot be zero");
+        }
+        put(KEY_WATCHDOG_TIMEOUT_MS, newWatchdogTimeoutMs);
+    }
+
+    public void setWatchdogRequiredStableChecks(int newWatchdogRequiredStableChecks) {
+        if (newWatchdogRequiredStableChecks < 0) {
+            throw new IllegalArgumentException("Watchdog required stable checks cannot be less than zero");
+        }
+        if (newWatchdogRequiredStableChecks == 0) {
+            throw new IllegalArgumentException("Watchdog required stable checks cannot be zero");
+        }
+        put(KEY_WATCHDOG_REQUIRED_STABLE_CHECKS, newWatchdogRequiredStableChecks);
+    }
+
+    public void setWatchdogPollIntervalMs(long newWatchdogPollIntervalMs) {
+        if (newWatchdogPollIntervalMs < 0) {
+            throw new IllegalArgumentException("Watchdog poll interval cannot be less than zero");
+        }
+        if (newWatchdogPollIntervalMs == 0) {
+            throw new IllegalArgumentException("Watchdog poll interval cannot be zero");
+        }
+        put(KEY_WATCHDOG_POLL_INTERVAL_MS, newWatchdogPollIntervalMs);
     }
 
     public void setWatchdog(boolean newWatchdog) {
