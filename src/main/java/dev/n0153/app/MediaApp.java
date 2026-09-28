@@ -226,11 +226,23 @@ public class MediaApp {
         return plugin.getValidator().validate(osTargetPath);
     }
 
-    private void watchLoop(WatchService watcher) throws InterruptedException {
+    private void watchLoop(WatchService watcher, Path osTargetPath) throws InterruptedException {
         while (true) {
             WatchKey key = watcher.take();
             for (WatchEvent<?> event : key.pollEvents()) {
-
+                WatchEvent.Kind<?> kind = event.kind();
+                if (kind == StandardWatchEventKinds.OVERFLOW) {
+                    continue;
+                }
+                @SuppressWarnings("unchecked")
+                WatchEvent<Path> ev = (WatchEvent<Path>) event;
+                Path filename = ev.context();
+                logger.info("Kind: {}, filename: {}", kind.name(), filename);
+                processFile(osTargetPath.resolve(filename));
+            }
+            boolean valid = key.reset();
+            if (!valid) {
+                break;
             }
         }
     }
@@ -241,7 +253,7 @@ public class MediaApp {
             dir.register(watcher, StandardWatchEventKinds.ENTRY_CREATE);
             logger.info("Directory {} was registered by watchdog, starting the loop...", dir);
             logger.info("Press Ctrl+c to stop Disarm");
-            watchLoop(watcher);
+            watchLoop(watcher, dir);
         } catch (IOException | InterruptedException e) {
             throw new DisarmException("File disarming failed");
         }
