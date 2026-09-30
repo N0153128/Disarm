@@ -43,6 +43,7 @@ public class TextConfig implements MediaConfig {
     private final int txtSizeLimit = 5_000_000; //5MB
     private final int logSizeLimit = 5_000_000; //5MB
     private final int jsonSizeLimit = 5_000_000; //5MB
+    private final boolean textDummyDebugTriggered = false;
 
     private final String KEY_MAX_TEXT_SIZE = "maxTextSize";
     private final String KEY_URL_SCHEMES = "urlSchemes";
@@ -56,6 +57,7 @@ public class TextConfig implements MediaConfig {
     private final String KEY_TXT_SIZE_LIMIT = "txtSizeLimit";
     private final String KEY_JSON_SIZE_LIMIT = "jsonSizeLimit";
     private final String KEY_LOG_SIZE_LIMIT = "logSizeLimit";
+    private final String KEY_TEXT_DUMMY_DEBUG_TRIGGERED = "textDummyDebugTriggered";
 
     private final Map<String, Object> configStorage = new HashMap<>() {{
         put(KEY_MAX_TEXT_SIZE, maxTextSize);
@@ -69,6 +71,7 @@ public class TextConfig implements MediaConfig {
         put(KEY_TXT_SIZE_LIMIT, txtSizeLimit);
         put(KEY_LOG_SIZE_LIMIT, logSizeLimit);
         put(KEY_JSON_SIZE_LIMIT, jsonSizeLimit);
+        put(KEY_TEXT_DUMMY_DEBUG_TRIGGERED, textDummyDebugTriggered);
     }};
 
     private boolean[] buildControlCharactersStripTable(List<ControlCharactersRange> ranges) {
@@ -138,6 +141,13 @@ public class TextConfig implements MediaConfig {
             case "json" -> getJsonSizeLimit();
             default -> throw new IllegalArgumentException("Unsupported mime: " + mime);
         };
+    }
+
+    public boolean getTextDummyDebugTriggered() {
+        return Objects.requireNonNullElse(
+                get(KEY_TEXT_DUMMY_DEBUG_TRIGGERED, Boolean.class),
+                textDummyDebugTriggered
+        );
     }
 
     public int getTxtSizeLimit() {
@@ -224,6 +234,10 @@ public class TextConfig implements MediaConfig {
                 get(KEY_OUTPUT_ENCODING, Charset.class),
                 outputEncoding
         );
+    }
+
+    public void setTextDummyDebugTriggered(boolean newTextDummyDebugTriggered) {
+        put(KEY_TEXT_DUMMY_DEBUG_TRIGGERED, newTextDummyDebugTriggered);
     }
 
     public void setTxtSizeLimit(int newTxtSizeLimit) {

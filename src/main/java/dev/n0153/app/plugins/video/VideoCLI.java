@@ -187,6 +187,11 @@ public class VideoCLI implements Runnable {
                     Example for 320kbps: -vfbbr 320000""")
     private int vorbisFallbackBitrate;
 
+    @CommandLine.Option(names = {"-vddt", "--video-dummy-debug-triggered"}, description =
+            """
+                   video dummy""")
+    private boolean videoDummyDebugTriggered;
+
     @Override
     public void run() {
         if (maxVideoDuration > 0) {
@@ -299,6 +304,9 @@ public class VideoCLI implements Runnable {
         }
         if (vorbisFallbackBitrate > 0) {
             this.config.setVorbisFallbackBitrate(vorbisFallbackBitrate);
+        }
+        if (videoDummyDebugTriggered) {
+            this.config.setVideoDummyDebugTriggered(true);
         }
         registry.updateConfig("video", config);
     }

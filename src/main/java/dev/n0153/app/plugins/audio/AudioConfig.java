@@ -100,6 +100,7 @@ public class AudioConfig implements MediaConfig {
     private final int wavSizeLimit = 5_000_000; //5MB
     private final int auSizeLimit = 5_000_000; //5MB
     private final int aifSizeLimit = 5_000_000; //5MB
+    private final boolean audioDummyDebugTriggered = false;
 
     private final String KEY_MAX_AUDIO_DURATION = "maxAudioDuration";
     private final String KEY_MAX_BITRATES = "maxBitrates";
@@ -122,6 +123,8 @@ public class AudioConfig implements MediaConfig {
     private final String KEY_WAV_SIZE_LIMIT = "wavSizeLimit";
     private final String KEY_AU_SIZE_LIMIT = "auSizeLimit";
     private final String KEY_AIF_SIZE_LIMIT = "aifSizeLimit";
+    private final String KEY_AUDIO_DUMMY_DEBUG_TRIGGERED = "audioDummyDebugTriggered";
+
 
     @Override
     public void put(String key, Object value) {
@@ -153,6 +156,7 @@ public class AudioConfig implements MediaConfig {
         put(KEY_WAV_SIZE_LIMIT, wavSizeLimit);
         put(KEY_AU_SIZE_LIMIT, auSizeLimit);
         put(KEY_AIF_SIZE_LIMIT, aifSizeLimit);
+        put(KEY_AUDIO_DUMMY_DEBUG_TRIGGERED, audioDummyDebugTriggered);
     }};
 
     @Override
@@ -204,6 +208,13 @@ public class AudioConfig implements MediaConfig {
     }
 
     //getters
+
+    public boolean getAudioDummyDebugTriggered() {
+        return Objects.requireNonNullElse(
+                get(KEY_AUDIO_DUMMY_DEBUG_TRIGGERED, Boolean.class),
+                audioDummyDebugTriggered
+        );
+    }
 
     public int getMp3SizeLimit() {
         return Objects.requireNonNullElse(
@@ -344,6 +355,10 @@ public class AudioConfig implements MediaConfig {
         );
     }
     //setters
+
+    public void setAudioDummyDebugTriggered(boolean newAudioDummyDebugTriggered) {
+        put(KEY_AUDIO_DUMMY_DEBUG_TRIGGERED, newAudioDummyDebugTriggered);
+    }
 
     public void setMp3SizeLimit(int newMp3SizeLimit) {
         if (newMp3SizeLimit == 0) {

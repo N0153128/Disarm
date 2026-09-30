@@ -135,6 +135,11 @@ public class ImageCLI implements Runnable {
                     Example for 3MB ceiling: -webpfs 3000000""")
     private int webpFileSize;
 
+    @CommandLine.Option(names = {"-iddt", "--image-dummy-debug-triggered"}, description =
+            """
+                    image dummy""")
+    private boolean imageDummyDebugTriggered;
+
     @Override
     public void run() {
         if (logoSizeLimit > 0) {
@@ -181,6 +186,9 @@ public class ImageCLI implements Runnable {
         }
         if (webpFileSize > 0) {
             this.config.setWebpSizeLimit(webpFileSize);
+        }
+        if (imageDummyDebugTriggered) {
+            this.config.setImageDummyDebugTriggered(true);
         }
         registry.updateConfig("image", config);
     }

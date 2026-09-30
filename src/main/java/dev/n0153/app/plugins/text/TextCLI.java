@@ -119,6 +119,11 @@ public class TextCLI  implements Runnable {
                     Example for 3MB ceiling: -jsonpfs 3000000""")
     private int jsonFileSize;
 
+    @CommandLine.Option(names = {"-tddt", "--text-dummy-debug-triggered"}, description =
+            """
+                    text dummy""")
+    private boolean textDummyDebugTriggered;
+
     @Override
     public void run() {
         if (textSize > 0) {
@@ -206,6 +211,9 @@ public class TextCLI  implements Runnable {
         }
         if (jsonFileSize > 0) {
             this.config.setJsonSizeLimit(jsonFileSize);
+        }
+        if (textDummyDebugTriggered) {
+            this.config.setTextDummyDebugTriggered(true);
         }
         registry.updateConfig("text", config);
     }

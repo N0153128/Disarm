@@ -116,6 +116,7 @@ public class VideoConfig implements MediaConfig {
     private final int webmSizeLimit = 5_000_000; //5MB
     private final int movSizeLimit = 5_000_000; //5MB
     private final int vorbisFallbackBitrate = 256_000;
+    private final boolean videoDummyDebugTriggered = false;
 
     private final String KEY_MAX_VIDEO_DURATION = "maxVideoDuration";
     private final String KEY_MAX_FILE_SIZE = "maxFileSize";
@@ -143,6 +144,7 @@ public class VideoConfig implements MediaConfig {
     private final String KEY_WEBM_SIZE_LIMIT = "webmSizeLimit";
     private final String KEY_MOV_SIZE_LIMIT = "movSizeLimit";
     private final String KEY_VORBIS_FALLBACK_BITRATE = "vorbisFallbackBitrate";
+    private final String KEY_VIDEO_DUMMY_DEBUG_TRIGGERED = "videoDummyDebugTriggered";
 
     private final Map<String, Object> configStorage = new HashMap<>() {{
         put(KEY_MAX_VIDEO_DURATION, maxVideoDuration);
@@ -171,6 +173,7 @@ public class VideoConfig implements MediaConfig {
         put(KEY_WEBM_SIZE_LIMIT, webmSizeLimit);
         put(KEY_MOV_SIZE_LIMIT, movSizeLimit);
         put(KEY_VORBIS_FALLBACK_BITRATE, vorbisFallbackBitrate);
+        put(KEY_VIDEO_DUMMY_DEBUG_TRIGGERED, videoDummyDebugTriggered);
     }};
 
     @Override
@@ -228,6 +231,13 @@ public class VideoConfig implements MediaConfig {
     }
 
     // getters
+
+    public boolean getVideoDummyDebugTriggered() {
+        return Objects.requireNonNullElse(
+                get(KEY_VIDEO_DUMMY_DEBUG_TRIGGERED, Boolean.class),
+                videoDummyDebugTriggered
+        );
+    }
 
     public int getVorbisFallbackBitrate() {
         return Objects.requireNonNullElse(
@@ -398,6 +408,10 @@ public class VideoConfig implements MediaConfig {
     }
 
     //setters
+
+    public void setVideoDummyDebugTriggered(boolean newVideoDummyDebugTriggered) {
+        put(KEY_VIDEO_DUMMY_DEBUG_TRIGGERED, newVideoDummyDebugTriggered);
+    }
 
     public void setVorbisFallbackBitrate(int newVorbisFallbackBitrate) {
         if (newVorbisFallbackBitrate == 0) {

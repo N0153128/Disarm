@@ -153,6 +153,11 @@ public class AudioCLI implements Runnable {
                     Example for 3MB ceiling: -aiffs 3000000""")
     private int aifFileSize;
 
+    @CommandLine.Option(names = {"-addt", "--audio-dummy-debug-triggered"}, description =
+            """
+                    audio dummy""")
+    private boolean audioDummyDebugTriggered;
+
     @Override
     public void run() {
         if (maxAudioDuration > 0) {
@@ -215,6 +220,9 @@ public class AudioCLI implements Runnable {
         }
         if (aifFileSize > 0) {
             this.config.setAifSizeLimit(aifFileSize);
+        }
+        if (audioDummyDebugTriggered) {
+            this.config.setAudioDummyDebugTriggered(true);
         }
         registry.updateConfig("audio", config);
     }

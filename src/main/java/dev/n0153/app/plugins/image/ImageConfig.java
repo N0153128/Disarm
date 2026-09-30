@@ -26,6 +26,7 @@ public class ImageConfig implements MediaConfig {
     private final int pngSizeLimit = 5_000_000; //5MB;
     private final int jpgSizeLimit = 5_000_000; //5MB;
     private final int webpSizeLimit = 5_000_000; //5MB;
+    private final boolean imageDummyDebugTriggered = false;
 
     private final String KEY_LOGO_SIZE_LIMIT = "logoSizeLimit";
     private final String KEY_KEEP_LOGO = "keepLogo";
@@ -42,6 +43,7 @@ public class ImageConfig implements MediaConfig {
     private final String KEY_PNG_SIZE_LIMIT = "pngSizeLimit";
     private final String KEY_JPG_SIZE_LIMIT = "jpgSizeLimit";
     private final String KEY_WEBP_SIZE_LIMIT = "webpSizeLimit";
+    private final String KEY_IMAGE_DUMMY_DEBUG_TRIGGERED = "imageDummyDebugTriggered";
 
     private final Map<String, Object> configStorage = new HashMap<>() {{
         put(KEY_LOGO_SIZE_LIMIT, logoSizeLimit);
@@ -59,6 +61,7 @@ public class ImageConfig implements MediaConfig {
         put(KEY_PNG_SIZE_LIMIT, pngSizeLimit);
         put(KEY_JPG_SIZE_LIMIT, jpgSizeLimit);
         put(KEY_WEBP_SIZE_LIMIT, webpSizeLimit);
+        put(KEY_IMAGE_DUMMY_DEBUG_TRIGGERED, imageDummyDebugTriggered);
     }};
 
     @Override
@@ -115,6 +118,13 @@ public class ImageConfig implements MediaConfig {
     }
 
     //getters
+
+    public boolean getImageDummyDebugTriggered() {
+        return Objects.requireNonNullElse(
+                get(KEY_IMAGE_DUMMY_DEBUG_TRIGGERED, Boolean.class),
+                imageDummyDebugTriggered
+        );
+    }
 
     public int getPngSizeLimit() {
         return Objects.requireNonNullElse(
@@ -209,6 +219,10 @@ public class ImageConfig implements MediaConfig {
     }
 
     //setters
+
+    public void setImageDummyDebugTriggered(boolean newImageDummyDebugTriggered) {
+        put(KEY_IMAGE_DUMMY_DEBUG_TRIGGERED, newImageDummyDebugTriggered);
+    }
 
     public void setPngSizeLimit(int newPngSizeLimit) {
         if (newPngSizeLimit == 0) {
