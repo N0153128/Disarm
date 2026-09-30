@@ -22,7 +22,7 @@ public class MediaApp {
         this.processingContext = new ProcessingContext(globalConfig);
     }
 
-    public void deleteOriginal(Path osTargetPath) {
+    public void deleteOriginalIfRequired(Path osTargetPath) {
         if (!globalConfig.isKeepOriginal()) {
             try{
                 Utils.fileDispose(osTargetPath);
@@ -175,6 +175,7 @@ public class MediaApp {
             getProcessor(plugin, mediaConfig).process(osTargetPath);
 
             // delete optionally
+            deleteOriginalIfRequired(osTargetPath);
             if (globalConfig.getDeleteResult()) {
                 try {
                     Utils.fileDispose(globalConfig.getGeneralOutputPath()
@@ -315,7 +316,6 @@ public class MediaApp {
             logger.info("File processed in {}ms", duration);
             processingContext.setStage("processing finished");
         }
-        deleteOriginal(osTargetPath);
         processingContext.release();
     }
 }
