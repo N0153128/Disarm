@@ -213,10 +213,6 @@ public class DisarmCLI implements Runnable{
     public void run() {
         for (Path input : inputPath) {
             // related plugin auto-detection
-            if (!Files.isRegularFile(input)) {
-                logger.info("Skipping non-file path: {}", input);
-                continue;
-            }
             String fileType = Utils.getFileType(input);
             Runnable handler = registry.resolveCli(fileType);
             if (handler != null) {
