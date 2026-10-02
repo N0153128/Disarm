@@ -37,7 +37,8 @@ public class GlobalConfig {
     private final long watchdogPollIntervalMs = 500;
     private final int watchdogRequiredStableChecks = 3;
     private final long watchdogTimeoutMs = 10 * 60_000;
-    private final boolean endOfCycleReport = false;
+    public enum EndOfCycleReporting { OFF, CONSOLE, FILE, BOTH }
+    private final EndOfCycleReporting endOfCycleReport = EndOfCycleReporting.OFF;
 
 
     private final String KEY_GENERAL_SIZE_LIMIT = "generalSizeLimit";
@@ -124,9 +125,9 @@ public class GlobalConfig {
         return type.cast(globalConfigStorage.get(key));
     }
 
-    public boolean getEndOfCycleReport() {
+    public EndOfCycleReporting getEndOfCycleReport() {
         return Objects.requireNonNullElse(
-                get(KEY_END_OF_CYCLE_REPORT, Boolean.class),
+                get(KEY_END_OF_CYCLE_REPORT, EndOfCycleReporting.class),
                 endOfCycleReport);
     }
 
@@ -297,7 +298,10 @@ public class GlobalConfig {
         );
     }
 
-    public void setEndOfCycleReport(boolean newEndOfCycleReport) {
+    public void setEndOfCycleReport(EndOfCycleReporting newEndOfCycleReport) {
+        if (newEndOfCycleReport == null) {
+            throw new IllegalArgumentException("End of cycle report cannot be null");
+        }
         put(KEY_END_OF_CYCLE_REPORT, newEndOfCycleReport);
     }
 
