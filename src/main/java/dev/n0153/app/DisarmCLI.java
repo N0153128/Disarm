@@ -202,6 +202,15 @@ public class DisarmCLI implements Runnable{
                     """)
     private long watchdogTimeoutMs;
 
+    @CommandLine.Option(names = {"-eocr", "--end-of-cycle-report"}, description =
+            """
+                    Enables end of processing cycle reporting. After each processed file, a detailed report will be
+                    printed to the console.
+                    Disabled by default.
+                    Example: -eocr
+                    """)
+    private boolean endOfCycleReport;
+
 
     @CommandLine.Spec
     CommandLine.Model.CommandSpec spec;
@@ -326,6 +335,9 @@ public class DisarmCLI implements Runnable{
             }
             if (watchdogTimeoutMs > 0) {
                 this.globalConfig.setWatchdogTimeoutMs(watchdogTimeoutMs);
+            }
+            if (endOfCycleReport) {
+                this.globalConfig.setEndOfCycleReport(true);
             }
             // finalise parameters
             MediaApp app = new MediaApp(registry, globalConfig);
