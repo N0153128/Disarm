@@ -46,7 +46,7 @@ public class MediaApp {
         Files.writeString(toFile, report, StandardCharsets.UTF_8);
     }
 
-    public void dumpErrorReport(Path osTargetPath, DisarmException exception) {
+    public void dumpReport(Path osTargetPath) {
         // file info
         String filename = osTargetPath.getFileName().toString();
         String mime = processingContext.getMimeType();
@@ -56,6 +56,76 @@ public class MediaApp {
         try {
              pluginResolved = getPlugin(mime).echo();
              pluginVersion = getPlugin(mime).getConfig().getVersion();
+        } catch (UnsupportedFileTypeException e) {
+            pluginResolved = "unsupported";
+            pluginVersion = 0.0;
+        }
+
+        // configs
+        String outputPath = globalConfig.getGeneralOutputPath().toString();
+        int sizeLimit = globalConfig.getGeneralSizeLimit();
+        boolean skipUnsupported = globalConfig.getSkipUnsupported();
+        boolean skipCrashed = globalConfig.getSkipCrashed();
+        boolean benchmarking = globalConfig.getBenchmarking();
+        boolean keepOriginal = globalConfig.isKeepOriginal();
+        GlobalConfig.VerboseErrors isVerbose = globalConfig.getVerboseErrors();
+        String configSnapshot;
+        try {
+            configSnapshot = processingContext.getConfigSnapshot().toDebugString();
+        } catch (NullPointerException e) {
+            configSnapshot = "unsupported";
+        }
+        String globalConfigSnapshot = globalConfig.toDebugString();
+
+        // timing
+        String bootTime = "" + globalConfig.getBootTime();
+        String failTime = "" + Instant.now();
+
+        String report = """
+                \n
+                === DISARM ERROR REPORT ===
+                # File info
+                File name:             %s
+                Mime type:             %s
+                File type:             %s
+                Plugin resolved:       %s
+                Plugin version:        %s
+                
+                # Configs
+                Output path:           %s
+                Size limit:            %s
+                Skip unsupported:      %s
+                Skip crashed:          %s
+                Benchmarking:          %s
+                Keep original:         %s
+                Verbosity:             %s
+                Config snapshot:       %s
+                Global Config Snapshot %s
+                
+                # Timing
+                Boot time:             %s
+                Failure time:          %s
+                
+                === END OF REPORT ===
+                """.formatted(filename, mime, fileType,
+                pluginResolved, pluginVersion,
+                outputPath, sizeLimit,
+                skipUnsupported, skipCrashed, benchmarking,
+                keepOriginal, isVerbose, configSnapshot,
+                globalConfigSnapshot, bootTime, failTime);
+        logger.info(report);
+    }
+
+    public void dumpReport(Path osTargetPath, DisarmException exception) {
+        // file info
+        String filename = osTargetPath.getFileName().toString();
+        String mime = processingContext.getMimeType();
+        String fileType = processingContext.getFileType();
+        String pluginResolved;
+        double pluginVersion;
+        try {
+            pluginResolved = getPlugin(mime).echo();
+            pluginVersion = getPlugin(mime).getConfig().getVersion();
         } catch (UnsupportedFileTypeException e) {
             pluginResolved = "unsupported";
             pluginVersion = 0.0;
@@ -139,7 +209,8 @@ public class MediaApp {
                 createReportFile(report);
             } catch (IOException e) {
                 logger.error("Failed to create report file");
-            }        }
+            }
+        }
     }
 
     private void processFile(Path osTargetPath) {
@@ -187,6 +258,9 @@ public class MediaApp {
                             globalConfig.getGeneralOutputPath().resolve(processingContext.getFilename()));
                 }
             }
+            if (globalConfig.getEndOfCycleReport()) {
+                dumpReport(osTargetPath);
+            }
         } catch (DisarmException e) {
             boolean isUnsupported = e instanceof UnsupportedFileTypeException;
             if (isUnsupported && globalConfig.getSkipUnsupported()) {
@@ -195,7 +269,7 @@ public class MediaApp {
                         e.getClass().getSimpleName(),
                         e.getMessage());
                 if (globalConfig.getVerboseErrors() != GlobalConfig.VerboseErrors.OFF) {
-                    dumpErrorReport(osTargetPath, e);
+                    dumpReport(osTargetPath, e);
                 }
             } else if (!isUnsupported && globalConfig.getSkipCrashed()){
                 logger.warn("Skipped crashed [{}] - {}: {}",
@@ -203,7 +277,7 @@ public class MediaApp {
                         e.getClass().getSimpleName(),
                         e.getMessage());
                 if (globalConfig.getVerboseErrors() != GlobalConfig.VerboseErrors.OFF) {
-                    dumpErrorReport(osTargetPath, e);
+                    dumpReport(osTargetPath, e);
                 }
             } else {
                 throw e;
