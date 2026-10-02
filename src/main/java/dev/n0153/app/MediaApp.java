@@ -113,7 +113,24 @@ public class MediaApp {
                 skipUnsupported, skipCrashed, benchmarking,
                 keepOriginal, isVerbose, configSnapshot,
                 globalConfigSnapshot, bootTime, failTime);
-        logger.info(report);
+        if (globalConfig.getEndOfCycleReport() == GlobalConfig.EndOfCycleReporting.CONSOLE) {
+            logger.info(report);
+        }
+        if (globalConfig.getEndOfCycleReport() == GlobalConfig.EndOfCycleReporting.FILE) {
+            try {
+                createReportFile(report);
+            } catch (IOException e) {
+                logger.error("Failed to create report file");
+            }
+        }
+        if (globalConfig.getEndOfCycleReport() == GlobalConfig.EndOfCycleReporting.BOTH) {
+            logger.info(report);
+            try {
+                createReportFile(report);
+            } catch (IOException e) {
+                logger.error("Failed to create report file");
+            }
+        }
     }
 
     public void dumpReport(Path osTargetPath, DisarmException exception) {
@@ -258,7 +275,7 @@ public class MediaApp {
                             globalConfig.getGeneralOutputPath().resolve(processingContext.getFilename()));
                 }
             }
-            if (globalConfig.getEndOfCycleReport()) {
+            if (globalConfig.getEndOfCycleReport() != GlobalConfig.EndOfCycleReporting.OFF) {
                 dumpReport(osTargetPath);
             }
         } catch (DisarmException e) {
