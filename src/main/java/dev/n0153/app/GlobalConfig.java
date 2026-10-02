@@ -37,7 +37,7 @@ public class GlobalConfig {
     private final long watchdogPollIntervalMs = 500;
     private final int watchdogRequiredStableChecks = 3;
     private final long watchdogTimeoutMs = 10 * 60_000;
-
+    private final boolean endOfCycleReport = false;
 
 
     private final String KEY_GENERAL_SIZE_LIMIT = "generalSizeLimit";
@@ -67,6 +67,7 @@ public class GlobalConfig {
     private final String KEY_WATCHDOG_POLL_INTERVAL_MS = "watchdogPollIntervalMs";
     private final String KEY_WATCHDOG_REQUIRED_STABLE_CHECKS = "watchdogRequiredStableChecks";
     private final String KEY_WATCHDOG_TIMEOUT_MS = "watchdogTimeoutMs";
+    private final String KEY_END_OF_CYCLE_REPORT = "endOfCycleReport";
 
     private final Map<String, Object> globalConfigStorage = new HashMap<>() {{
         put(KEY_GENERAL_SIZE_LIMIT, generalSizeLimit);
@@ -96,6 +97,7 @@ public class GlobalConfig {
         put(KEY_WATCHDOG_POLL_INTERVAL_MS, watchdogPollIntervalMs);
         put(KEY_WATCHDOG_REQUIRED_STABLE_CHECKS, watchdogRequiredStableChecks);
         put(KEY_WATCHDOG_TIMEOUT_MS, watchdogTimeoutMs);
+        put(KEY_END_OF_CYCLE_REPORT, endOfCycleReport);
     }};
 
     public void put(String key, Object value) {
@@ -120,6 +122,12 @@ public class GlobalConfig {
 
     public <$ValueType> $ValueType get(String key, Class<$ValueType> type) {
         return type.cast(globalConfigStorage.get(key));
+    }
+
+    public boolean getEndOfCycleReport() {
+        return Objects.requireNonNullElse(
+                get(KEY_END_OF_CYCLE_REPORT, Boolean.class),
+                endOfCycleReport);
     }
 
     public long getWatchdogTimeoutMs() {
@@ -287,6 +295,10 @@ public class GlobalConfig {
                 get(KEY_GENERAL_SIZE_LIMIT, Integer.class),
                 generalSizeLimit
         );
+    }
+
+    public void setEndOfCycleReport(boolean newEndOfCycleReport) {
+        put(KEY_END_OF_CYCLE_REPORT, newEndOfCycleReport);
     }
 
     public void setWatchdogTimeoutMs(long newWatchdogTimeoutMs) {
