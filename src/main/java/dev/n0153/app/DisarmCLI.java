@@ -205,11 +205,12 @@ public class DisarmCLI implements Runnable{
     @CommandLine.Option(names = {"-eocr", "--end-of-cycle-report"}, description =
             """
                     Enables end of processing cycle reporting. After each processed file, a detailed report will be
-                    printed to the console.
+                    printed to the console, saved as text file or both.
                     Disabled by default.
-                    Example: -eocr
+                    Accepts the following values: CONSOLE, FILE, BOTH
+                    Example: -eocr FILE
                     """)
-    private boolean endOfCycleReport;
+    private GlobalConfig.EndOfCycleReporting endOfCycleReport;
 
 
     @CommandLine.Spec
@@ -336,8 +337,8 @@ public class DisarmCLI implements Runnable{
             if (watchdogTimeoutMs > 0) {
                 this.globalConfig.setWatchdogTimeoutMs(watchdogTimeoutMs);
             }
-            if (endOfCycleReport) {
-                this.globalConfig.setEndOfCycleReport(true);
+            if (endOfCycleReport != null) {
+                this.globalConfig.setEndOfCycleReport(endOfCycleReport);
             }
             // finalise parameters
             MediaApp app = new MediaApp(registry, globalConfig);
