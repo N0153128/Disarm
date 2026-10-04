@@ -7,6 +7,8 @@ import picocli.CommandLine;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collection;
+import java.util.Map;
 
 
 public class Main {
@@ -27,15 +29,11 @@ public class Main {
                 if (arg.startsWith("-")) continue; // skip options
                 Path path = Path.of(arg);
                 if (!Files.exists(path)) continue; // skip non-existent paths
-                if (Files.isDirectory(path)) continue; // skip directories
-                try {
-                    String fileType = Utils.getFileType(path);
-                    Runnable handler = registry.resolveCli(fileType);
-                    if (handler != null) {
-                        cli.addMixin(fileType, handler);
-                    }
-                } catch (Exception e) {
-                    // not a valid path, skip
+//                if (Files.isDirectory(path)) continue; // skip directories
+                Map<String, Runnable> cliRegistry = registry.getCliRegistry();
+                for (Map.Entry<String, Runnable> entry: cliRegistry.entrySet()) {
+                    cli.addMixin(entry.getKey(), entry.getValue());
+                    logger.info("added mixins for: {}, {}", entry.getKey(), entry.getValue());
                 }
             }
 

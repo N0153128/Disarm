@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Command(name = "disarm", description = "Sanitize media files", mixinStandardHelpOptions = true, version = "disarm v0.1")
 
@@ -223,12 +224,9 @@ public class DisarmCLI implements Runnable{
     public void run() {
         for (Path input : inputPath) {
             // related plugin auto-detection
-            String fileType = Utils.getFileType(input);
-            Runnable handler = registry.resolveCli(fileType);
-            if (handler != null) {
-                handler.run();
-            } else {
-                logger.info("no CLI handler found for {}", input.getFileName());
+            Map<String, Runnable> cliRegistry = registry.getCliRegistry();
+            for (Map.Entry<String, Runnable> entry : cliRegistry.entrySet()) {
+                entry.getValue().run();
             }
             // getters and setters
             logger.info("Specified path: {}", input);

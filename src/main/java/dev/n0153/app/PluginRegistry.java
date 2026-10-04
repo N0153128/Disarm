@@ -66,6 +66,18 @@ public class PluginRegistry {
         return cliRegistry.get(fileType);
     }
 
+    public Collection<Runnable> getAllCliRunners() {
+        return cliRegistry.values();
+    }
+
+    public Collection<String> getAllMimes() {
+        return cliRegistry.keySet();
+    }
+
+    public Map<String, Runnable> getCliRegistry() {
+        return cliRegistry;
+    }
+
     public MediaConfig resolveConfig(String fileType) {
         return configRegistry.get(fileType);
     }

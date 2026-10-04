@@ -6,7 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine;
 
-@CommandLine.Command(name = "video", description = "Video Processing Plugin.", mixinStandardHelpOptions = true)
+@CommandLine.Command(name = "video", description = "Video Processing Plugin.")
 public class VideoCLI implements Runnable {
     private static final Logger logger = LogManager.getLogger(VideoCLI.class);
 
@@ -307,6 +307,7 @@ public class VideoCLI implements Runnable {
         }
         if (videoDummyDebugTriggered) {
             this.config.setVideoDummyDebugTriggered(true);
+            logger.info("Video dummy debug param triggered");
         }
         registry.updateConfig("video", config);
     }

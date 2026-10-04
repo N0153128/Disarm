@@ -382,7 +382,12 @@ public class MediaApp {
     }
 
     private void watchdog(Path osTargetPath) {
-        Path dir = osTargetPath.toAbsolutePath();
+        Path dir;
+        if (Files.isRegularFile(osTargetPath)) {
+            dir = osTargetPath.toAbsolutePath().getParent();
+        } else {
+            dir = osTargetPath.toAbsolutePath();
+        }
         try (WatchService watcher = FileSystems.getDefault().newWatchService()) {
             dir.register(watcher, StandardWatchEventKinds.ENTRY_CREATE);
             logger.info("Directory {} was registered by watchdog, starting the loop...", dir);

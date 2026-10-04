@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-@Command(name = "text", description = "Text Processing Plugin.", mixinStandardHelpOptions = true)
+@Command(name = "text", description = "Text Processing Plugin.")
 public class TextCLI  implements Runnable {
     private static final Logger logger = LogManager.getLogger(TextCLI.class);
 
@@ -214,6 +214,7 @@ public class TextCLI  implements Runnable {
         }
         if (textDummyDebugTriggered) {
             this.config.setTextDummyDebugTriggered(true);
+            logger.info("Text dummy debug param triggered");
         }
         registry.updateConfig("text", config);
     }

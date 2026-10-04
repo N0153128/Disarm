@@ -11,7 +11,7 @@ import picocli.CommandLine.Command;
 
 import java.nio.file.Path;
 
-@Command(name = "image", description = "Image Processing Plugin.", mixinStandardHelpOptions = true)
+@Command(name = "image", description = "Image Processing Plugin.")
 public class ImageCLI implements Runnable {
     private static final Logger logger = LogManager.getLogger(ImageCLI.class);
 
@@ -189,6 +189,7 @@ public class ImageCLI implements Runnable {
         }
         if (imageDummyDebugTriggered) {
             this.config.setImageDummyDebugTriggered(true);
+            logger.info("Image dummy debug param triggered");
         }
         registry.updateConfig("image", config);
     }
