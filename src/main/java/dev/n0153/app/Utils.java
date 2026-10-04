@@ -685,6 +685,18 @@ public class Utils {
         }
     }
 
+    public static String getTitleForcedTagRandomCharacters(String forcedTag, String mime) {
+        final String CHARACTERS =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        final SecureRandom RANDOM = new SecureRandom();
+        StringBuilder objectName = new StringBuilder(40);
+        for (int i = 0; i < 40; i++) {
+            int index = RANDOM.nextInt(CHARACTERS.length());
+            objectName.append(CHARACTERS.charAt(index));
+        }
+        return forcedTag+"_"+objectName+"."+mime;
+    }
+
     /**
      * Shortcut method, generates title for a file that is currently in processing.
      * The title is then saved to state and can be accessed with state.getGeneralFileTitle().

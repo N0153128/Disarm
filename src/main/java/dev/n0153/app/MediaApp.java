@@ -41,8 +41,14 @@ public class MediaApp {
             logger.warn("Output directory for reports doesn't exist, attempting to create one...");
             Utils.createDirectory(globalConfig.getReportsOutputPath());
         }
-        Path toFile = globalConfig.getReportsOutputPath().
-                resolve(Utils.getTitleForcedTagTimeStamp("ERROR_REPORT", "txt"));
+        Path toFile;
+        if (globalConfig.getRandomCharactersTitle()) {
+            toFile = globalConfig.getReportsOutputPath().
+                    resolve(Utils.getTitleForcedTagRandomCharacters("ERROR_REPORT", "txt"));
+        } else {
+            toFile = globalConfig.getReportsOutputPath().
+                    resolve(Utils.getTitleForcedTagTimeStamp("ERROR_REPORT", "txt"));
+        }
         Files.writeString(toFile, report, StandardCharsets.UTF_8);
     }
 
