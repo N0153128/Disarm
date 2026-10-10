@@ -124,11 +124,24 @@ public class TextValidator implements MediaValidator {
     }
 
     public boolean checkSizeLimit(Path osTargetPath, TextConfig config) {
-        try {
-            return Files.size(osTargetPath) <= config.getMaxTextSize();
-        } catch (IOException e) {
-            throw new ValidationException("Failed to check size limit");
+        String mime = Utils.getMimeType(osTargetPath);
+        int size = (int) Utils.getSize(osTargetPath);
+        if (size > config.maxFileSizeInBytes(mime)) {
+            return false;
         }
+//        "text", "plain", "log", "json", "txt"
+        if (mime.equals("text") && size > config.getTxtSizeLimit()) {
+            return false;
+        } else if (mime.equals("plain") && size > config.getTxtSizeLimit()) {
+            return false;
+        } else if (mime.equals("log") && size > config.getLogSizeLimit()) {
+            return false;
+        } else if (mime.equals("json") && size > config.getJsonSizeLimit()) {
+            return false;
+        } else if (mime.equals("txt") && size > config.getTxtSizeLimit()) {
+            return false;
+        }
+        return true;
     }
 
 
