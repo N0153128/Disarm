@@ -160,9 +160,21 @@ public class VideoValidator implements MediaValidator {
 
     @Override
     public boolean validateFileSize(Path osTargetPath) {
-        String mime = Utils.getMimeType(osTargetPath);
+        String mime = config.getFormatFromMime(Utils.getMimeType(osTargetPath));
         int size = (int) Utils.getSize(osTargetPath);
-        return size <= config.maxFileSizeInBytes(mime);
+        if (size > config.maxFileSizeInBytes(mime)) {
+            return false;
+        }
+        if (mime.equals("mp4") && size > config.getMp4SizeLimit()) {
+            return false;
+        } else if (mime.equals("matroska") && size > config.getMatroskaSizeLimit()) {
+            return false;
+        } else if (mime.equals("webm") && size > config.getWebmSizeLimit()) {
+            return false;
+        } else if (mime.equals("mov") && size > config.getMovSizeLimit()) {
+            return false;
+        }
+        return true;
     }
 
     @Override
