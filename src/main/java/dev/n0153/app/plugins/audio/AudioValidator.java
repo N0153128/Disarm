@@ -99,7 +99,23 @@ public class AudioValidator implements MediaValidator {
     public boolean validateFileSize(Path osTargetPath) {
         String mime = config.getFormatFromMime(Utils.getMimeType(osTargetPath));
         int size = (int) Utils.getSize(osTargetPath);
-        return size <= config.maxFileSizeInBytes(mime);
+        if (size > config.maxFileSizeInBytes(mime)) {
+            return false;
+        }
+        if (mime.equals("mp3") && size > config.getMp3SizeLimit()) {
+            return false;
+        } else if (mime.equals("ogg") && size > config.getOggSizeLimit()) {
+            return false;
+        } else if (mime.equals("flac") && size > config.getFlacSizeLimit()) {
+            return false;
+        } else if (mime.equals("wav") && size > config.getWavSizeLimit()) {
+            return false;
+        } else if (mime.equals("au") && size > config.getAuSizeLimit()) {
+            return false;
+        } else if (mime.equals("aif") && size > config.getAifSizeLimit()) {
+            return false;
+        }
+        return true;
     }
 
     @Override
