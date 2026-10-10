@@ -222,13 +222,12 @@ public class DisarmCLI implements Runnable{
     }
 
     public void run() {
+        // related plugin auto-detection
+        Map<String, Runnable> cliRegistry = registry.getCliRegistry();
+        for (Map.Entry<String, Runnable> entry : cliRegistry.entrySet()) {
+            entry.getValue().run();
+        }
         for (Path input : inputPath) {
-            // related plugin auto-detection
-            Map<String, Runnable> cliRegistry = registry.getCliRegistry();
-            for (Map.Entry<String, Runnable> entry : cliRegistry.entrySet()) {
-                entry.getValue().run();
-            }
-            // getters and setters
             logger.info("Specified path: {}", input);
             if (outputPath != null) {
                 globalConfig.setGeneralOutputPath(this.outputPath);

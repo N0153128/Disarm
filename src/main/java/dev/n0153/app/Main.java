@@ -24,19 +24,11 @@ public class Main {
         try {
             DisarmCLI app = new DisarmCLI(registry, globalConfig);
             CommandLine cli = new CommandLine(app);
-
-            for (String arg : args) {
-                if (arg.startsWith("-")) continue; // skip options
-                Path path = Path.of(arg);
-                if (!Files.exists(path)) continue; // skip non-existent paths
-//                if (Files.isDirectory(path)) continue; // skip directories
-                Map<String, Runnable> cliRegistry = registry.getCliRegistry();
-                for (Map.Entry<String, Runnable> entry: cliRegistry.entrySet()) {
-                    cli.addMixin(entry.getKey(), entry.getValue());
-                    logger.info("added mixins for: {}, {}", entry.getKey(), entry.getValue());
-                }
+            Map<String, Runnable> cliRegistry = registry.getCliRegistry();
+            for (Map.Entry<String, Runnable> entry: cliRegistry.entrySet()) {
+                cli.addMixin(entry.getKey(), entry.getValue());
+                logger.info("added mixins for: {}, {}", entry.getKey(), entry.getValue());
             }
-
             app.discoverCommands().forEach(cmd ->
                     cli.addSubcommand(DisarmCLI.getCommandName(cmd), new CommandLine(cmd)));
 
