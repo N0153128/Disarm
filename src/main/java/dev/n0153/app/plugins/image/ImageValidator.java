@@ -30,7 +30,17 @@ public class ImageValidator implements MediaValidator {
     public boolean validateFileSize(Path osTargetPath) {
         String mime = Utils.getMimeType(osTargetPath);
         int size = (int) Utils.getSize(osTargetPath);
-        return size <= config.maxFileSizeInBytes(mime);
+        if (size > config.maxFileSizeInBytes(mime)) {
+            return false;
+        }
+        if (mime.equals("webp") && size > config.getWebpSizeLimit()) {
+            return false;
+        } else if (mime.equals("jpeg") && size > config.getJpgSizeLimit()) {
+            return false;
+        } else if (mime.equals("png") && size > config.getPngSizeLimit()) {
+            return false;
+        }
+        return true;
     }
 
     public boolean checkMeta() {
