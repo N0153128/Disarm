@@ -1,6 +1,8 @@
 package dev.n0153.app.plugins.image;
 
 import dev.n0153.app.MediaConfig;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.plaf.PanelUI;
 import java.nio.file.Path;
@@ -10,6 +12,7 @@ import java.util.Objects;
 import java.util.Set;
 
 public class ImageConfig implements MediaConfig {
+    private static final Logger logger = LogManager.getLogger(ImageConfig.class);
 
     private final int logoSizeLimit = 5_000_000; //5MB
     private final boolean keepLogo = false;

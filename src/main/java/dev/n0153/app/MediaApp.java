@@ -247,7 +247,7 @@ public class MediaApp {
             logger.info("detected plugin: {}", plugin.echo());
             MediaConfig mediaConfig = registry.resolveConfig(fileType);
             processingContext.populateContext(osTargetPath, plugin.echo(), mediaConfig);
-            processingContext.setConfigSnapshot(plugin.getConfig());
+            processingContext.setConfigSnapshot(registry.resolveConfig(fileType));
             logger.info("general context populated");
             plugin.registerGlobalConfig(globalConfig);
             processingContext.setStage("context populated");
