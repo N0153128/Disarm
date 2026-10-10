@@ -3,7 +3,7 @@ package dev.n0153.app;
 public interface MediaPlugin {
     GlobalConfig getGlobalConfig();
     public MediaProcessor<?> getProcessor(MediaConfig config);
-    public MediaValidator getValidator();
+    public MediaValidator getValidator(MediaConfig config);
     public MediaConfig getConfig();
     void register(PluginRegistry registry, MediaConfig config) throws IllegalStateException;
     void registerGlobalConfig(GlobalConfig globalConfig);

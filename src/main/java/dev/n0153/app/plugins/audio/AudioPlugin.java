@@ -24,7 +24,7 @@ public class AudioPlugin implements MediaPlugin {
     }
 
     @Override
-    public MediaValidator getValidator() {
+    public MediaValidator getValidator(MediaConfig config) {
         validator.createMeta((AudioConfig) config, context);
         return validator;
     }

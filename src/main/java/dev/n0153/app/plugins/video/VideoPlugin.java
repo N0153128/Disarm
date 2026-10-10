@@ -24,7 +24,7 @@ public class VideoPlugin implements MediaPlugin {
     }
 
     @Override
-    public MediaValidator getValidator() {
+    public MediaValidator getValidator(MediaConfig config) {
         validator.createMeta((VideoConfig) config, context);
         return validator;
     }

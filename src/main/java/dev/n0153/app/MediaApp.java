@@ -317,11 +317,11 @@ public class MediaApp {
     }
 
     public boolean validatePlugin(MediaPlugin plugin, Path osTargetPath) {
-        if (plugin.getValidator() == null) {
+        if (plugin.getValidator(registry.resolveConfig(Utils.getFileType(osTargetPath))) == null) {
             logger.info("This plugin doesn't support plugin-level validation");
             return true;
         }
-        return plugin.getValidator().validate(osTargetPath);
+        return plugin.getValidator(registry.resolveConfig(Utils.getFileType(osTargetPath))).validate(osTargetPath);
     }
 
     private static final long POLL_INTERVAL_MS = 500;

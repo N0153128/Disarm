@@ -24,7 +24,7 @@ public class TextPlugin implements MediaPlugin {
     }
 
     @Override
-    public MediaValidator getValidator() {
+    public MediaValidator getValidator(MediaConfig config) {
         validator.createMeta((TextConfig) config, context);
         return validator;
     }
