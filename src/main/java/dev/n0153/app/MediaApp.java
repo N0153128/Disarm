@@ -293,6 +293,8 @@ public class MediaApp {
                         e.getMessage());
                 if (globalConfig.getVerboseErrors() != GlobalConfig.VerboseErrors.OFF) {
                     dumpReport(osTargetPath, e);
+                } else if (globalConfig.getEndOfCycleReport() != GlobalConfig.EndOfCycleReporting.OFF) {
+                    dumpReport(osTargetPath);
                 }
             } else if (!isUnsupported && globalConfig.getSkipCrashed()){
                 logger.warn("Skipped crashed [{}] - {}: {}",
@@ -301,6 +303,8 @@ public class MediaApp {
                         e.getMessage());
                 if (globalConfig.getVerboseErrors() != GlobalConfig.VerboseErrors.OFF) {
                     dumpReport(osTargetPath, e);
+                } else if (globalConfig.getEndOfCycleReport() != GlobalConfig.EndOfCycleReporting.OFF) {
+                    dumpReport(osTargetPath);
                 }
             } else {
                 throw e;
