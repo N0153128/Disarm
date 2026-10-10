@@ -324,16 +324,12 @@ public class MediaApp {
         return plugin.getValidator(registry.resolveConfig(Utils.getFileType(osTargetPath))).validate(osTargetPath);
     }
 
-    private static final long POLL_INTERVAL_MS = 500;
-    private static final int REQUIRED_STABLE_CHECKS = 3;
-    private static final long TIMEOUT_MS = 10 * 60_000;
-
     private boolean waitUntilStable(Path osTargetPath) throws InterruptedException {
         long startedAt = System.currentTimeMillis();
         long lastSize = -1;
         int stableChecks = 0;
 
-        while (System.currentTimeMillis() - startedAt < TIMEOUT_MS) {
+        while (System.currentTimeMillis() - startedAt < globalConfig.getWatchdogTimeoutMs()) {
             try {
                 if (!Files.exists(osTargetPath) || Files.isDirectory(osTargetPath)) {
                     return false;
@@ -345,13 +341,13 @@ public class MediaApp {
                     stableChecks = 0;
                     lastSize = size;
                 }
-                if (stableChecks >= REQUIRED_STABLE_CHECKS) {
+                if (stableChecks >= globalConfig.getWatchdogRequiredStableChecks()) {
                     return true;
                 }
             } catch (IOException e) {
                 return false;
             }
-            Thread.sleep(POLL_INTERVAL_MS);
+            Thread.sleep(globalConfig.getWatchdogPollIntervalMs());
         }
         logger.error("Timed out whiles waiting for: {}", osTargetPath);
         return false;
