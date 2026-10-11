@@ -5,54 +5,61 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine;
 
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-
 public class Main {
     private static final Logger logger = LogManager.getLogger(Main.class);
-    private static final AtomicBoolean exiting = new AtomicBoolean(false);
-    private static volatile boolean crashed = false;
+    private enum Status { RUNNING, FINISHED, FAILED }
+    private static volatile Status status = Status.RUNNING;
 
     public static void main(String[] args) {
-    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-        if (!exiting.compareAndSet(false, true)) return;
-        if (crashed) {
-            System.out.println("Something went wrong. Exiting...");
-        } else {
-            System.out.println("Disarm finished working.");
-        }
-    }, "exit-message"));
+        installExitHandlers();
+        int exitCode = run(args);
+        status = (exitCode == 0) ? Status.FINISHED : Status.FAILED;
+        System.exit(exitCode);
+    }
 
-    Thread.setDefaultUncaughtExceptionHandler((thread, ex) -> {
-        crashed = true;
-        System.err.println("Error: " + ex.getMessage());
-        ex.printStackTrace();
-        System.exit(1);
-    });
-        OpenCV.loadLocally();
-        logger.info("Working directory: {}",  System.getProperty("user.dir"));
-        PluginRegistry registry = new PluginRegistry();
-        GlobalConfig globalConfig = new GlobalConfig();
-        Utils.init(globalConfig);
-        DisarmPlugins plugins = new DisarmPlugins(globalConfig);
-        plugins.registerAll(registry);
+    private static int run (String[] args) {
         try {
+            logger.info("Working directory: {}",  System.getProperty("user.dir"));
+            OpenCV.loadLocally();
+            PluginRegistry registry = new PluginRegistry();
+            GlobalConfig globalConfig = new GlobalConfig();
+            Utils.init(globalConfig);
+            new DisarmPlugins(globalConfig).registerAll(registry);
             DisarmCLI app = new DisarmCLI(registry, globalConfig);
-            CommandLine cli = new CommandLine(app);
-            Map<String, Runnable> cliRegistry = registry.getCliRegistry();
-            for (Map.Entry<String, Runnable> entry: cliRegistry.entrySet()) {
-                cli.addMixin(entry.getKey(), entry.getValue());
-                logger.info("added mixins for: {}, {}", entry.getKey(), entry.getValue());
-            }
-            app.discoverCommands().forEach(cmd ->
-                    cli.addSubcommand(DisarmCLI.getCommandName(cmd), new CommandLine(cmd)));
 
-            int exitCode = cli.execute(args);
-            System.exit(exitCode);
-
+            return buildCli(app, registry).execute(args);
         } catch (Exception e) {
-            logger.error("Something went wrong: %s".formatted(e));
+            logger.error("Something went wrong", e);
+            return 1;
         }
+    }
+
+    private static CommandLine buildCli(DisarmCLI app, PluginRegistry registry) {
+        CommandLine cli = new CommandLine(app);
+
+        registry.getCliRegistry().forEach((name, mixin) -> {
+            cli.addMixin(name, mixin);
+            logger.info("added mixin for: {}, {}", name, mixin);
+        });
+
+        app.discoverCommands().forEach(cmd ->
+                cli.addSubcommand(DisarmCLI.getCommandName(cmd), new CommandLine(cmd)));
+        return cli;
+    }
+
+    private static void installExitHandlers() {
+        Thread.setDefaultUncaughtExceptionHandler((thread, ex) -> {
+            status = Status.FAILED;
+            logger.error("Uncaught exception in thread {}", thread.getName(), ex);
+            System.exit(1);
+        });
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            switch (status) {
+                case FINISHED -> System.out.println("Disarm finished working.");
+                case FAILED -> System.out.println("Something went wrong. Exiting...");
+                case RUNNING -> System.out.println("\nInterrupted. Exiting...");
+            }
+        }, "exit-message"));
     }
 }
