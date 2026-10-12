@@ -27,7 +27,17 @@ public class MediaApp {
             try{
                 Utils.fileDispose(osTargetPath);
             } catch (IOException e) {
-                logger.info("Failed to delete specified file");
+                logger.error("Failed to delete specified file");
+            }
+        }
+    }
+
+    public void moveOriginalIfRequired(Path osTargetPath) {
+        if (globalConfig.getMoveOriginalTo() != null) {
+            try {
+                Utils.fileMoveTo(osTargetPath, globalConfig.getMoveOriginalTo());
+            } catch (IOException e) {
+                logger.error("Failed to move specified file");
             }
         }
     }

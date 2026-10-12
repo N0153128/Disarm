@@ -2,6 +2,7 @@ package dev.n0153.app;
 
 import dev.n0153.app.exceptions.*;
 
+import dev.n0153.app.exceptions.InvalidPathException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.config.Configurator;
@@ -11,15 +12,12 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.*;
+import java.nio.file.*;
 import java.security.SecureRandom;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.FileSystemException;
-import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
-import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -796,6 +794,18 @@ public class Utils {
         boolean deleted = Files.deleteIfExists(file.toPath());
         if (!deleted) {
             throw new FileSystemException(osTargetFilePath.toString());
+        }
+    }
+
+    public static void fileMoveTo(Path osTargetPath, Path destination) throws IOException {
+        if (!Files.isDirectory(destination)) {
+            logger.error("Specified directory doesn't exist. Creating new directory at: {}", destination);
+            createDirectory(destination);
+        }
+        try {
+            Files.move(osTargetPath, destination);
+        } catch (IOException e) {
+            throw new FileSystemException("Failed to move file");
         }
     }
 
