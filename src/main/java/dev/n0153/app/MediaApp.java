@@ -24,20 +24,28 @@ public class MediaApp {
 
     public void deleteOriginalIfRequired(Path osTargetPath) {
         if (!globalConfig.isKeepOriginal()) {
-            try{
-                Utils.fileDispose(osTargetPath);
-            } catch (IOException e) {
-                logger.error("Failed to delete specified file");
+            if (globalConfig.getMoveOriginalTo() == null) {
+                try{
+                    Utils.fileDispose(osTargetPath);
+                } catch (IOException e) {
+                    logger.error("Failed to delete specified file");
+                }
+            } else {
+                logger.error("Cannot delete original file because moveOriginalTo is enabled.");
             }
         }
     }
 
     public void moveOriginalIfRequired(Path osTargetPath) {
         if (globalConfig.getMoveOriginalTo() != null) {
-            try {
-                Utils.fileMoveTo(osTargetPath, globalConfig.getMoveOriginalTo());
-            } catch (IOException e) {
-                logger.error("Failed to move specified file");
+            if (globalConfig.isKeepOriginal()) {
+                try {
+                    Utils.fileMoveTo(osTargetPath, globalConfig.getMoveOriginalTo());
+                } catch (IOException e) {
+                    logger.error("Failed to move specified file");
+                }
+            } else {
+                logger.error("Cannot move specified file because keepOriginal is disabled");
             }
         }
     }
