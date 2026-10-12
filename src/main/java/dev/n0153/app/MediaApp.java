@@ -28,7 +28,7 @@ public class MediaApp {
                 try{
                     Utils.fileDispose(osTargetPath);
                 } catch (IOException e) {
-                    logger.error("Failed to delete specified file");
+                    logger.error("Failed to delete specified file", e);
                 }
             } else {
                 logger.error("Cannot delete original file because moveOriginalTo is enabled.");
@@ -42,7 +42,7 @@ public class MediaApp {
                 try {
                     Utils.fileMoveTo(osTargetPath, globalConfig.getMoveOriginalTo());
                 } catch (IOException e) {
-                    logger.error("Failed to move specified file");
+                    logger.error("Failed to move specified file", e);
                 }
             } else {
                 logger.error("Cannot move specified file because keepOriginal is disabled");

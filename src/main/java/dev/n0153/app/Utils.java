@@ -802,11 +802,7 @@ public class Utils {
             logger.error("Specified directory doesn't exist. Creating new directory at: {}", destination);
             createDirectory(destination);
         }
-        try {
-            Files.move(osTargetPath, destination);
-        } catch (IOException e) {
-            throw new FileSystemException("Failed to move file");
-        }
+        Files.move(osTargetPath, destination.resolve(osTargetPath.getFileName()));
     }
 
     public static void createDirectory(Path dirToCreate) {
