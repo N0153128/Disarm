@@ -39,6 +39,7 @@ public class GlobalConfig {
     private final long watchdogTimeoutMs = 10 * 60_000;
     public enum EndOfCycleReporting { OFF, CONSOLE, FILE, BOTH }
     private final EndOfCycleReporting endOfCycleReport = EndOfCycleReporting.OFF;
+    private final Path moveOriginalTo = null;
 
 
     private final String KEY_GENERAL_SIZE_LIMIT = "generalSizeLimit";
@@ -69,6 +70,7 @@ public class GlobalConfig {
     private final String KEY_WATCHDOG_REQUIRED_STABLE_CHECKS = "watchdogRequiredStableChecks";
     private final String KEY_WATCHDOG_TIMEOUT_MS = "watchdogTimeoutMs";
     private final String KEY_END_OF_CYCLE_REPORT = "endOfCycleReport";
+    private final String KEY_MOVE_ORIGINAL_TO = "moveOriginalTo";
 
     private final Map<String, Object> globalConfigStorage = new HashMap<>() {{
         put(KEY_GENERAL_SIZE_LIMIT, generalSizeLimit);
@@ -99,6 +101,7 @@ public class GlobalConfig {
         put(KEY_WATCHDOG_REQUIRED_STABLE_CHECKS, watchdogRequiredStableChecks);
         put(KEY_WATCHDOG_TIMEOUT_MS, watchdogTimeoutMs);
         put(KEY_END_OF_CYCLE_REPORT, endOfCycleReport);
+        put(KEY_MOVE_ORIGINAL_TO, moveOriginalTo);
     }};
 
     public void put(String key, Object value) {
@@ -129,6 +132,13 @@ public class GlobalConfig {
         return Objects.requireNonNullElse(
                 get(KEY_END_OF_CYCLE_REPORT, EndOfCycleReporting.class),
                 endOfCycleReport);
+    }
+
+    public Path getMoveOriginalTo() {
+        return Objects.requireNonNullElse(
+                get(KEY_MOVE_ORIGINAL_TO, Path.class),
+                moveOriginalTo
+        );
     }
 
     public long getWatchdogTimeoutMs() {
@@ -296,6 +306,13 @@ public class GlobalConfig {
                 get(KEY_GENERAL_SIZE_LIMIT, Integer.class),
                 generalSizeLimit
         );
+    }
+
+    public void setMoveOriginalTo(Path newMoveOriginalTo) {
+        if (newMoveOriginalTo == null) {
+            throw new IllegalArgumentException("Move Original To cannot be null");
+        }
+        put(KEY_MOVE_ORIGINAL_TO, newMoveOriginalTo.normalize());
     }
 
     public void setEndOfCycleReport(EndOfCycleReporting newEndOfCycleReport) {
