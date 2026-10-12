@@ -213,6 +213,16 @@ public class DisarmCLI implements Runnable{
                     """)
     private GlobalConfig.EndOfCycleReporting endOfCycleReport;
 
+    @CommandLine.Option(names = {"-mot", "--move-original-to"}, description =
+            """
+                    Moves original input file into specified directory. Such directory can be a trash/recycle bin
+                    or any other directory within file system.
+                    Disabled by default.
+                    Accepts valid system-specific path.
+                    Example for linux: -mot trash:///
+                    Example for Windows: C:\\$Recycle.Bin
+                    """)
+    private Path moveOriginalTo;
 
     @CommandLine.Spec
     CommandLine.Model.CommandSpec spec;
@@ -336,6 +346,9 @@ public class DisarmCLI implements Runnable{
             }
             if (endOfCycleReport != null) {
                 this.globalConfig.setEndOfCycleReport(endOfCycleReport);
+            }
+            if (moveOriginalTo != null) {
+                this.globalConfig.setMoveOriginalTo(moveOriginalTo);
             }
             // finalise parameters
             MediaApp app = new MediaApp(registry, globalConfig);
