@@ -280,6 +280,7 @@ public class MediaApp {
 
             // delete optionally
             deleteOriginalIfRequired(osTargetPath);
+            moveOriginalIfRequired(osTargetPath);
             if (globalConfig.getDeleteResult()) {
                 try {
                     Utils.fileDispose(globalConfig.getGeneralOutputPath()
