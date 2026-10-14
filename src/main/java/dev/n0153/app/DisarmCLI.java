@@ -224,6 +224,14 @@ public class DisarmCLI implements Runnable{
                     """)
     private Path moveOriginalTo;
 
+    @CommandLine.Option(names = {"-sst", "--show-stack-trace"}, description =
+            """
+                    Shows full stack trace on errors. This is used to diagnose issues with the software.
+                    Disabled by default.
+                    Example: -sst
+                    """)
+    private boolean showStackTrace;
+
     @CommandLine.Spec
     CommandLine.Model.CommandSpec spec;
 
@@ -349,6 +357,9 @@ public class DisarmCLI implements Runnable{
             }
             if (moveOriginalTo != null) {
                 this.globalConfig.setMoveOriginalTo(moveOriginalTo);
+            }
+            if (showStackTrace) {
+                Main.setShowStackTrace(true);
             }
             // finalise parameters
             MediaApp app = new MediaApp(registry, globalConfig);
