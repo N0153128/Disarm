@@ -1,9 +1,9 @@
 package dev.n0153.app.plugins.image;
 
-import dev.n0153.app.*;
+import dev.n0153.app.core.MediaValidator;
+import dev.n0153.app.core.Utils;
 import dev.n0153.app.exceptions.ValidationException;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class ImageValidator implements MediaValidator {

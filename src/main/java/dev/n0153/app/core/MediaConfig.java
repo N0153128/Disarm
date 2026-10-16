@@ -1,4 +1,4 @@
-package dev.n0153.app;
+package dev.n0153.app.core;
 
 import java.util.Set;
 

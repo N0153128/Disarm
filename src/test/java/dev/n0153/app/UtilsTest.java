@@ -1,16 +1,14 @@
 package dev.n0153.app;
 
+import dev.n0153.app.core.GlobalConfig;
+import dev.n0153.app.core.ProcessingContext;
+import dev.n0153.app.core.Utils;
 import dev.n0153.app.exceptions.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import ws.schild.jave.EncoderException;
-import ws.schild.jave.InputFormatException;
-import ws.schild.jave.info.VideoSize;
 
-import javax.sound.sampled.AudioFileFormat;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;

@@ -1,7 +1,7 @@
 package dev.n0153.app.plugins.video;
 
-import dev.n0153.app.MediaValidator;
-import dev.n0153.app.Utils;
+import dev.n0153.app.core.MediaValidator;
+import dev.n0153.app.core.Utils;
 import dev.n0153.app.exceptions.MimeTypeDetectionException;
 import dev.n0153.app.exceptions.ValidationException;
 import dev.n0153.app.plugins.MediaUtils;

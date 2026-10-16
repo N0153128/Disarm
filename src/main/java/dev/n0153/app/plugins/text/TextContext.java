@@ -1,6 +1,6 @@
 package dev.n0153.app.plugins.text;
 
-import dev.n0153.app.MediaContext;
+import dev.n0153.app.core.MediaContext;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,10 +1,8 @@
 package dev.n0153.app.plugins.image;
 
-import dev.n0153.app.MediaContext;
-import dev.n0153.app.Utils;
+import dev.n0153.app.core.MediaContext;
 import org.opencv.core.Mat;
-import org.opencv.imgcodecs.Imgcodecs;
-import java.nio.file.Path;
+
 import java.util.HashMap;
 import java.util.Map;
 

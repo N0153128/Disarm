@@ -1,6 +1,7 @@
 package dev.n0153.app.plugins.audio;
 
-import dev.n0153.app.*;
+import dev.n0153.app.core.MediaValidator;
+import dev.n0153.app.core.Utils;
 import dev.n0153.app.exceptions.MimeTypeDetectionException;
 import dev.n0153.app.exceptions.ValidationException;
 import dev.n0153.app.plugins.MediaUtils;

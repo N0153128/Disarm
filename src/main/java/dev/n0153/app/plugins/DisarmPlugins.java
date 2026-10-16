@@ -1,7 +1,7 @@
 package dev.n0153.app.plugins;
 
-import dev.n0153.app.GlobalConfig;
-import dev.n0153.app.PluginRegistry;
+import dev.n0153.app.core.GlobalConfig;
+import dev.n0153.app.core.PluginRegistry;
 import dev.n0153.app.plugins.audio.AudioConfig;
 import dev.n0153.app.plugins.audio.AudioPlugin;
 import dev.n0153.app.plugins.image.ImageConfig;

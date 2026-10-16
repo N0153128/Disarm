@@ -1,6 +1,9 @@
 package dev.n0153.app.plugins.image;
 
-import dev.n0153.app.*;
+import dev.n0153.app.core.GlobalConfig;
+import dev.n0153.app.core.MediaContext;
+import dev.n0153.app.core.MediaProcessor;
+import dev.n0153.app.core.Utils;
 import dev.n0153.app.exceptions.ImageProcessingException;
 import dev.n0153.app.exceptions.MimeTypeDetectionException;
 import org.apache.logging.log4j.LogManager;

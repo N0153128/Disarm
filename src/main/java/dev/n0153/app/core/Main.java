@@ -1,4 +1,4 @@
-package dev.n0153.app;
+package dev.n0153.app.core;
 import dev.n0153.app.plugins.DisarmPlugins;
 import nu.pattern.OpenCV;
 import org.apache.logging.log4j.LogManager;

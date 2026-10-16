@@ -1,6 +1,6 @@
 package dev.n0153.app.plugins.video;
 
-import dev.n0153.app.MediaContext;
+import dev.n0153.app.core.MediaContext;
 import ws.schild.jave.info.VideoSize;
 
 import java.util.HashMap;

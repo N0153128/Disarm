@@ -1,6 +1,6 @@
 package dev.n0153.app.plugins.text;
 
-import dev.n0153.app.MediaConfig;
+import dev.n0153.app.core.MediaConfig;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;

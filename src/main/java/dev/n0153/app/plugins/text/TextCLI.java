@@ -1,7 +1,7 @@
 package dev.n0153.app.plugins.text;
 
-import dev.n0153.app.DisarmCLI;
-import dev.n0153.app.PluginRegistry;
+import dev.n0153.app.core.DisarmCLI;
+import dev.n0153.app.core.PluginRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine;

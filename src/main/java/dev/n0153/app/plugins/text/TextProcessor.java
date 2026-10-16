@@ -1,9 +1,9 @@
 package dev.n0153.app.plugins.text;
 
-import dev.n0153.app.GlobalConfig;
-import dev.n0153.app.MediaContext;
-import dev.n0153.app.MediaProcessor;
-import dev.n0153.app.Utils;
+import dev.n0153.app.core.GlobalConfig;
+import dev.n0153.app.core.MediaContext;
+import dev.n0153.app.core.MediaProcessor;
+import dev.n0153.app.core.Utils;
 import dev.n0153.app.exceptions.TextProcessingException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
