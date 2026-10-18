@@ -1,8 +1,8 @@
 package dev.n0153.app.core;
 
-import dev.n0153.app.exceptions.InvalidPathException;
-import dev.n0153.app.exceptions.UnsafePathException;
-import dev.n0153.app.exceptions.ValidationException;
+import dev.n0153.app.core.exceptions.InvalidPathException;
+import dev.n0153.app.core.exceptions.UnsafePathException;
+import dev.n0153.app.core.exceptions.ValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

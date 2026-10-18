@@ -1,7 +1,7 @@
 package dev.n0153.app.plugins.text;
 
 import dev.n0153.app.core.*;
-import dev.n0153.app.exceptions.DisarmException;
+import dev.n0153.app.core.exceptions.DisarmException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

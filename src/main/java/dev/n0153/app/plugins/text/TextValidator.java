@@ -2,7 +2,7 @@ package dev.n0153.app.plugins.text;
 
 import dev.n0153.app.core.MediaValidator;
 import dev.n0153.app.core.Utils;
-import dev.n0153.app.exceptions.ValidationException;
+import dev.n0153.app.core.exceptions.ValidationException;
 
 import java.io.IOException;
 import java.nio.charset.Charset;

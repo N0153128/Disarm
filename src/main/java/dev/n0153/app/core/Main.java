@@ -1,5 +1,4 @@
 package dev.n0153.app.core;
-import dev.n0153.app.plugins.DisarmPlugins;
 import nu.pattern.OpenCV;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,7 +32,7 @@ public class Main {
             PluginRegistry registry = new PluginRegistry();
             GlobalConfig globalConfig = new GlobalConfig();
             Utils.init(globalConfig);
-            new DisarmPlugins(globalConfig).registerAll(registry);
+            PluginLoader.registerPlugins(PluginLoader.discoverPluginDirs(), registry, globalConfig);
             DisarmCLI app = new DisarmCLI(registry, globalConfig);
 
             CommandLine cli = buildCli(app, registry);

@@ -4,7 +4,7 @@ import dev.n0153.app.core.GlobalConfig;
 import dev.n0153.app.core.MediaContext;
 import dev.n0153.app.core.MediaProcessor;
 import dev.n0153.app.core.Utils;
-import dev.n0153.app.exceptions.VideoProcessingException;
+import dev.n0153.app.core.exceptions.VideoProcessingException;
 import dev.n0153.app.plugins.MediaUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

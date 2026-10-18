@@ -3,7 +3,7 @@ package dev.n0153.app;
 import dev.n0153.app.core.GlobalConfig;
 import dev.n0153.app.core.ProcessingContext;
 import dev.n0153.app.core.Utils;
-import dev.n0153.app.exceptions.*;
+import dev.n0153.app.core.exceptions.DisarmException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 

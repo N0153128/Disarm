@@ -1,17 +1,17 @@
-package dev.n0153.app.exceptions;
+package dev.n0153.app.core.exceptions;
 
 import java.nio.file.Path;
 
-public class CodecDetectionException extends DisarmException {
+public class FileTypeDetectionException extends DisarmException {
 
     private final Path pathToFile;
 
-    public CodecDetectionException(String message, Path path) {
+    public FileTypeDetectionException(String message, Path path) {
         super(message);
         this.pathToFile = path;
     }
 
-    public CodecDetectionException(String message, Path path, Throwable cause) {
+    public FileTypeDetectionException(String message, Path path, Throwable cause) {
         super(message, cause);
         this.pathToFile = path;
     }

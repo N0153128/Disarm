@@ -1,4 +1,4 @@
-package dev.n0153.app.exceptions;
+package dev.n0153.app.core.exceptions;
 
 public class ValidationException extends DisarmException {
 

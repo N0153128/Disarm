@@ -1,6 +1,6 @@
 package dev.n0153.app.core;
 
-import dev.n0153.app.exceptions.MimeTypeDetectionException;
+import dev.n0153.app.core.exceptions.MimeTypeDetectionException;
 
 import java.nio.file.Path;
 import java.time.Instant;

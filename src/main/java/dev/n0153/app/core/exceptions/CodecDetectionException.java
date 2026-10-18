@@ -1,23 +1,22 @@
-package dev.n0153.app.exceptions;
+package dev.n0153.app.core.exceptions;
 
-import java.io.IOException;
 import java.nio.file.Path;
 
-public class MimeTypeDetectionException extends DisarmException {
+public class CodecDetectionException extends DisarmException {
 
     private final Path pathToFile;
 
-    public MimeTypeDetectionException(String message, Path path) {
+    public CodecDetectionException(String message, Path path) {
         super(message);
         this.pathToFile = path;
     }
 
-    public MimeTypeDetectionException(String message, Path path, Throwable cause) {
+    public CodecDetectionException(String message, Path path, Throwable cause) {
         super(message, cause);
         this.pathToFile = path;
     }
 
-    public Path getDetectedMime() {
+    public Path getPathToFile() {
         return pathToFile;
     }
 

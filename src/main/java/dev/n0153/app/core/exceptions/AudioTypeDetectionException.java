@@ -1,17 +1,17 @@
-package dev.n0153.app.exceptions;
+package dev.n0153.app.core.exceptions;
 
 import java.nio.file.Path;
 
-public class FileTypeDetectionException extends DisarmException {
+public class AudioTypeDetectionException extends DisarmException {
 
     private final Path pathToFile;
 
-    public FileTypeDetectionException(String message, Path path) {
+    public AudioTypeDetectionException(String message, Path path) {
         super(message);
         this.pathToFile = path;
     }
 
-    public FileTypeDetectionException(String message, Path path, Throwable cause) {
+    public AudioTypeDetectionException(String message, Path path, Throwable cause) {
         super(message, cause);
         this.pathToFile = path;
     }
@@ -19,6 +19,7 @@ public class FileTypeDetectionException extends DisarmException {
     public Path getPathToFile() {
         return pathToFile;
     }
+
 
     @Override
     public String getMessage() {

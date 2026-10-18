@@ -1,8 +1,9 @@
 package dev.n0153.app.core;
 
-import dev.n0153.app.exceptions.*;
+import dev.n0153.app.core.exceptions.FileTypeDetectionException;
+import dev.n0153.app.core.exceptions.MimeTypeDetectionException;
 
-import dev.n0153.app.exceptions.InvalidPathException;
+import dev.n0153.app.core.exceptions.InvalidPathException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.config.Configurator;

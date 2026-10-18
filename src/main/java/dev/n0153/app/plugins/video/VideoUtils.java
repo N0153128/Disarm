@@ -1,6 +1,6 @@
 package dev.n0153.app.plugins.video;
 
-import dev.n0153.app.exceptions.CodecDetectionException;
+import dev.n0153.app.core.exceptions.CodecDetectionException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ws.schild.jave.EncoderException;

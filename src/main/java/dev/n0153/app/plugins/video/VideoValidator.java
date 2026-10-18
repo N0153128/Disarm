@@ -2,8 +2,8 @@ package dev.n0153.app.plugins.video;
 
 import dev.n0153.app.core.MediaValidator;
 import dev.n0153.app.core.Utils;
-import dev.n0153.app.exceptions.MimeTypeDetectionException;
-import dev.n0153.app.exceptions.ValidationException;
+import dev.n0153.app.core.exceptions.MimeTypeDetectionException;
+import dev.n0153.app.core.exceptions.ValidationException;
 import dev.n0153.app.plugins.MediaUtils;
 import ws.schild.jave.EncoderException;
 import ws.schild.jave.info.VideoSize;

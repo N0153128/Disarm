@@ -1,8 +1,6 @@
 package dev.n0153.app.plugins;
 
-import dev.n0153.app.exceptions.CodecDetectionException;
-import dev.n0153.app.exceptions.InvalidDurationException;
-import dev.n0153.app.exceptions.ValidationException;
+import dev.n0153.app.core.exceptions.CodecDetectionException;
 import ws.schild.jave.EncoderException;
 import ws.schild.jave.MultimediaObject;
 import ws.schild.jave.info.MultimediaInfo;

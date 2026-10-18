@@ -1,6 +1,6 @@
 package dev.n0153.app.core;
 
-import dev.n0153.app.exceptions.DisarmException;
+import dev.n0153.app.core.exceptions.DisarmException;
 
 import java.nio.file.Path;
 
