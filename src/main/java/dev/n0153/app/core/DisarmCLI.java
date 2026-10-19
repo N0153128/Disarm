@@ -365,7 +365,6 @@ public class DisarmCLI implements Runnable{
             // runners
             app.fileDisarm(input);
         }
-        registry.wipePluginResources();
         globalConfig.release();
     }
 }

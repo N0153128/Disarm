@@ -27,7 +27,7 @@ public class GlobalConfig {
     private final boolean restrictInputFromRoot = false;
     private final Path inputRootPath = Paths.get("resources");
     public enum LoggingLevels { OFF, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, ALL }
-    private final LoggingLevels logLevel = LoggingLevels.DEBUG;
+    private final LoggingLevels logLevel = LoggingLevels.INFO;
     private final boolean randomCharactersTitle = false;
     public final int sampleSizeInBytes = 8192;
     private final double maxControlCharacterRatio = 0.02;
@@ -39,7 +39,7 @@ public class GlobalConfig {
     private final long watchdogTimeoutMs = 10 * 60_000;
     public enum EndOfCycleReporting { OFF, CONSOLE, FILE, BOTH }
     private final EndOfCycleReporting endOfCycleReport = EndOfCycleReporting.OFF;
-    private final Path moveOriginalTo = null;
+    private final Path moveOriginalTo = Path.of("resources/originals");
 
 
     private final String KEY_GENERAL_SIZE_LIMIT = "generalSizeLimit";

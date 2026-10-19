@@ -26,7 +26,7 @@ public class MediaApp {
 
     public void deleteOriginalIfRequired(Path osTargetPath) {
         if (!globalConfig.isKeepOriginal()) {
-            if (globalConfig.getMoveOriginalTo() == null) {
+            if (globalConfig.getMoveOriginalTo().equals(Path.of("resources/originals"))) {
                 try{
                     Utils.fileDispose(osTargetPath);
                 } catch (IOException e) {
@@ -39,7 +39,7 @@ public class MediaApp {
     }
 
     public void moveOriginalIfRequired(Path osTargetPath) {
-        if (globalConfig.getMoveOriginalTo() != null) {
+        if (!globalConfig.getMoveOriginalTo().equals(Path.of("resources/originals"))) {
             if (globalConfig.isKeepOriginal()) {
                 try {
                     Utils.fileMoveTo(osTargetPath, globalConfig.getMoveOriginalTo());

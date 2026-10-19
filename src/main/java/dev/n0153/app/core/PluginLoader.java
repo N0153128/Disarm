@@ -40,7 +40,7 @@ public class PluginLoader extends ClassLoader {
     }
 
     public static List<Path> discoverPluginDirs() throws IOException {
-        try (Stream<Path> entries = Files.list(Path.of("plugins/"))) {
+        try (Stream<Path> entries = Files.list(Path.of("src/main/java/dev/n0153/app/plugins/"))) {
             return entries
                     .filter(Files:: isDirectory)
                     .filter(path -> path.getFileName().toString().contains("compiled"))
@@ -56,6 +56,7 @@ public class PluginLoader extends ClassLoader {
                 String entry = loader.jar.getManifest().getMainAttributes().getValue("Disarm-Plugin-Class");
                 MediaPlugin plugin = (MediaPlugin) loader.loadClass(entry)
                         .getDeclaredConstructor().newInstance();
+                // register discovered plugin
                 plugin.registerGlobalConfig(config);
                 MediaConfig pluginConfig = plugin.getConfig();
                 plugin.register(registry, pluginConfig);
