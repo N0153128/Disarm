@@ -10,7 +10,7 @@
 
     <modules>
         <module>src/main/java/dev/n0153/app/core</module>
-        <module>src/main/java/dev/n0153/app/plugins/textcompiled</module>
+        <module>src/main/java/dev/n0153/app/plugins/TextPlugin</module>
         <!-- add one line per plugin -->
     </modules>
 

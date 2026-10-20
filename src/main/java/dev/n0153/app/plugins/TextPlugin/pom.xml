@@ -10,7 +10,7 @@
         <relativePath>../../../../../../../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>disarm-plugin-textcompiled</artifactId>
+    <artifactId>disarm-plugin-TextPlugin</artifactId>
 
     <dependencies>
         <dependency>
@@ -29,11 +29,6 @@
             <artifactId>log4j-api</artifactId>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.openpnp</groupId>
-            <artifactId>opencv</artifactId>
-            <scope>provided</scope>
-        </dependency>
     </dependencies>
 
     <build>
@@ -48,7 +43,7 @@
                     <outputDirectory>${project.basedir}</outputDirectory>
                     <archive>
                         <manifestEntries>
-                            <Disarm-Plugin-Class>dev.n0153.app.plugins.textcompiled.TextPlugin</Disarm-Plugin-Class>
+                            <Disarm-Plugin-Class>dev.n0153.app.plugins.TextPlugin.TextPlugin</Disarm-Plugin-Class>
                         </manifestEntries>
                     </archive>
                 </configuration>
