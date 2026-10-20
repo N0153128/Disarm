@@ -1,10 +1,9 @@
-package dev.n0153.app.plugins.audio;
+package dev.n0153.app.plugins.AudioPlugin;
 
 import dev.n0153.app.core.MediaValidator;
 import dev.n0153.app.core.Utils;
 import dev.n0153.app.core.exceptions.MimeTypeDetectionException;
 import dev.n0153.app.core.exceptions.ValidationException;
-import dev.n0153.app.plugins.MediaUtils;
 import ws.schild.jave.EncoderException;
 
 import java.io.IOException;
@@ -30,7 +29,7 @@ public class AudioValidator implements MediaValidator {
      * @since 0.1
      */
     public boolean validateAudioDuration(Path osTargetPath) {
-        long audioDuration = MediaUtils.getTrackLength(osTargetPath);
+        long audioDuration = AudioUtils.getTrackLength(osTargetPath);
         return audioDuration <= config.getMaxAudioDuration();
     }
 
@@ -136,20 +135,20 @@ public class AudioValidator implements MediaValidator {
         if (!validateAudioDuration(osTargetPath)) {
             throw new ValidationException("Audio Validator: Audio duration validation failed");
         }
-        if (!checkAudioCodecWhiteList(mime, MediaUtils.getCodec(osTargetPath, "audio"))) {
+        if (!checkAudioCodecWhiteList(mime, AudioUtils.getCodec(osTargetPath, "audio"))) {
             throw new ValidationException("Audio Validator: Codec whitelist validation failed");
         }
         if (!ensureSizeLimit(osTargetPath)) {
             throw new ValidationException("Audio Validator: Size limit validation failed");
         }
         try {
-            if (!checkAudioBitrate(mime, MediaUtils.getBitrate(osTargetPath, "audio"))) {
+            if (!checkAudioBitrate(mime, AudioUtils.getBitrate(osTargetPath, "audio"))) {
                 throw new ValidationException("Audio Validator: Bitrate validation failed");
             }
-            if (!checkAudioSamplingRate(mime, MediaUtils.getSamplingRate(osTargetPath))) {
+            if (!checkAudioSamplingRate(mime, AudioUtils.getSamplingRate(osTargetPath))) {
                 throw new ValidationException("Audio Validator: Sampling rate validation failed");
             }
-            if (!checkChannels(MediaUtils.getAudioChannels(osTargetPath))) {
+            if (!checkChannels(AudioUtils.getAudioChannels(osTargetPath))) {
                 throw new ValidationException("Audio Validator: Channels validation failed");
             }
         } catch (EncoderException | IOException e) {

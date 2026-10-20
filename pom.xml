@@ -11,6 +11,7 @@
     <modules>
         <module>src/main/java/dev/n0153/app/core</module>
         <module>src/main/java/dev/n0153/app/plugins/TextPlugin</module>
+        <module>src/main/java/dev/n0153/app/plugins/AudioPlugin</module>
         <!-- add one line per plugin -->
     </modules>
 

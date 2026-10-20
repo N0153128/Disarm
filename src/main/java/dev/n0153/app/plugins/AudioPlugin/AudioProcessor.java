@@ -1,4 +1,4 @@
-package dev.n0153.app.plugins.audio;
+package dev.n0153.app.plugins.AudioPlugin;
 
 import dev.n0153.app.core.GlobalConfig;
 import dev.n0153.app.core.MediaContext;
@@ -6,7 +6,6 @@ import dev.n0153.app.core.MediaProcessor;
 import dev.n0153.app.core.Utils;
 import dev.n0153.app.core.exceptions.AudioProcessingException;
 import dev.n0153.app.core.exceptions.MimeTypeDetectionException;
-import dev.n0153.app.plugins.MediaUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ws.schild.jave.Encoder;
@@ -187,7 +186,7 @@ public class AudioProcessor implements MediaProcessor<AudioConfig> {
         try {
             format = config.getFormatFromMime(context.getDetectedMime());
             if (!Objects.equals(format, "flac")) {
-                context.setAudioBitrate(MediaUtils.getBitrate(osTargetPath, "audio"));
+                context.setAudioBitrate(AudioUtils.getBitrate(osTargetPath, "audio"));
             }
             if (Objects.equals(config.getDefaultOutputTo(), "default")) {
                 context.setAudioTitle(Utils.getTitle(osTargetPath,
@@ -199,8 +198,8 @@ public class AudioProcessor implements MediaProcessor<AudioConfig> {
                         globalConfig.getRandomCharactersTitle()));
             }
 
-            context.setAudioSamplingRate(MediaUtils.getSamplingRate(osTargetPath));
-            context.setAudioChannels(MediaUtils.getAudioChannels(osTargetPath));
+            context.setAudioSamplingRate(AudioUtils.getSamplingRate(osTargetPath));
+            context.setAudioChannels(AudioUtils.getAudioChannels(osTargetPath));
             reEncode(osTargetPath);
         } catch (IOException | EncoderException e) {
             throw new AudioProcessingException("failed to process audio", osTargetPath);

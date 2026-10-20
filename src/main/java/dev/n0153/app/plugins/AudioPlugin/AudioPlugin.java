@@ -1,4 +1,4 @@
-package dev.n0153.app.plugins.audio;
+package dev.n0153.app.plugins.AudioPlugin;
 
 import dev.n0153.app.core.*;
 import dev.n0153.app.core.exceptions.DisarmException;
@@ -6,7 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class AudioPlugin implements MediaPlugin {
-    private MediaConfig config;
+    private AudioConfig config = new AudioConfig();
     private final AudioContext context = new AudioContext();
     private final AudioValidator validator = new AudioValidator();
     private GlobalConfig globalConfig;
@@ -37,13 +37,13 @@ public class AudioPlugin implements MediaPlugin {
     @Override
     public void register(PluginRegistry registry, MediaConfig config) throws DisarmException {
         if (ensureGlobalConfig()) {
-            this.config = config;
+            this.config = (AudioConfig) config;
             registry.register(
                     config.supports(),
                     this,
                     new AudioCLI(registry),
                     "audio",
-                    config
+                    this.config
             );
         }
         logger.debug("AUDIO PLUGIN OBJECTS WERE CREATED AND REGISTERED");

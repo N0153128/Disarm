@@ -8,7 +8,7 @@ import dev.n0153.app.core.exceptions.CodecDetectionException;
 import dev.n0153.app.core.exceptions.DisarmException;
 import dev.n0153.app.core.exceptions.ValidationException;
 import dev.n0153.app.plugins.MediaUtils;
-import dev.n0153.app.plugins.audio.AudioUtils;
+import dev.n0153.app.plugins.AudioPlugin.AudioUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import ws.schild.jave.EncoderException;

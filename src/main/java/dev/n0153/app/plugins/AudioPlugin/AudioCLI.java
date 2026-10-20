@@ -1,4 +1,4 @@
-package dev.n0153.app.plugins.audio;
+package dev.n0153.app.plugins.AudioPlugin;
 
 import dev.n0153.app.core.DisarmCLI;
 import dev.n0153.app.core.PluginRegistry;
