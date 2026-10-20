@@ -1,4 +1,4 @@
-package dev.n0153.app.plugins.text;
+package dev.n0153.app.plugins.TextPlugin;
 
 import dev.n0153.app.core.*;
 import dev.n0153.app.core.exceptions.DisarmException;
@@ -6,7 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class TextPlugin implements MediaPlugin {
-    private MediaConfig config;
+    private TextConfig config = new TextConfig();
     private final TextContext context = new TextContext();
     private final TextValidator validator = new TextValidator();
     private GlobalConfig globalConfig;
@@ -37,13 +37,13 @@ public class TextPlugin implements MediaPlugin {
     @Override
     public void register(PluginRegistry registry, MediaConfig config) throws DisarmException {
         if (ensureGlobalConfig()) {
-            this.config = config;
+            this.config = (TextConfig) config;
             registry.register(
                     config.supports(),
                     this,
                     new TextCLI(registry),
                     "text",
-                    config
+                    this.config
             );
         }
         logger.debug("TEXT PLUGIN OBJECTS WERE CREATED AND REGISTERED");

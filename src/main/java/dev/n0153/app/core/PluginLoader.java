@@ -43,7 +43,7 @@ public class PluginLoader extends ClassLoader {
         try (Stream<Path> entries = Files.list(Path.of("src/main/java/dev/n0153/app/plugins/"))) {
             return entries
                     .filter(Files:: isDirectory)
-                    .filter(path -> path.getFileName().toString().contains("compiled"))
+                    .filter(path -> path.getFileName().toString().contains("Plugin"))
                     .toList();
         }
     }

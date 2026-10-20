@@ -1,4 +1,4 @@
-package dev.n0153.app.plugins.text;
+package dev.n0153.app.plugins.TextPlugin;
 
 import dev.n0153.app.core.GlobalConfig;
 import dev.n0153.app.core.MediaContext;

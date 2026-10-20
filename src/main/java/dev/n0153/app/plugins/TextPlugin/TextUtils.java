@@ -1,4 +1,4 @@
-package dev.n0153.app.plugins.text;
+package dev.n0153.app.plugins.TextPlugin;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
