@@ -7,10 +7,10 @@
         <groupId>dev.n0153</groupId>
         <artifactId>disarm-parent</artifactId>
         <version>0.2</version>
-        <relativePath>../../../../../../../../pom.xml</relativePath>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>disarm-plugin-AudioPlugin</artifactId>
+    <artifactId>disarm-plugin-TextPlugin</artifactId>
 
     <dependencies>
         <dependency>
@@ -29,49 +29,24 @@
             <artifactId>log4j-api</artifactId>
             <scope>provided</scope>
         </dependency>
-    <!-- https://mvnrepository.com/artifact/ws.schild/jave-core -->
-    <dependency>
-        <groupId>ws.schild</groupId>
-        <artifactId>jave-core</artifactId>
-        <version>3.5.0</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/ws.schild/jave-all-deps -->
-    <dependency>
-        <groupId>ws.schild</groupId>
-        <artifactId>jave-all-deps</artifactId>
-        <version>3.5.0</version>
-    </dependency>
     </dependencies>
 
     <build>
         <!-- Remove after moving to the standard layout (pom next to src/main/java) -->
-        <sourceDirectory>${project.basedir}</sourceDirectory>
+        <sourceDirectory>../../src/main/java/dev/n0153/app/plugins/TextPlugin</sourceDirectory>
 
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
-                    <outputDirectory>${project.basedir}</outputDirectory>
+                    <outputDirectory>../../src/main/java/dev/n0153/app/plugins/TextPlugin</outputDirectory>
                     <archive>
                         <manifestEntries>
-                            <Disarm-Plugin-Class>dev.n0153.app.plugins.AudioPlugin.AudioPlugin</Disarm-Plugin-Class>
+                            <Disarm-Plugin-Class>dev.n0153.app.plugins.TextPlugin.TextPlugin</Disarm-Plugin-Class>
                         </manifestEntries>
                     </archive>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals><goal>shade</goal></goals>
-                        <configuration>
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
