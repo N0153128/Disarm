@@ -5,7 +5,6 @@ import dev.n0153.app.core.MediaContext;
 import dev.n0153.app.core.MediaProcessor;
 import dev.n0153.app.core.Utils;
 import dev.n0153.app.core.exceptions.VideoProcessingException;
-import dev.n0153.app.plugins.MediaUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ws.schild.jave.Encoder;
@@ -147,15 +146,15 @@ public class VideoProcessor implements MediaProcessor<VideoConfig> {
                         globalConfig.getRandomCharactersTitle()));
             }
 
-            context.setVideoBitrate(MediaUtils.getBitrate(osTargetPath, "video"));
+            context.setVideoBitrate(VideoUtils.getBitrate(osTargetPath, "video"));
             context.setVideoFrameRate(VideoUtils.getVideoFrameRate(osTargetPath));
             context.setVideoSize(VideoUtils.getVideoDimensions(osTargetPath));
             context.setVideoCodec(VideoUtils.getVideoCodec(osTargetPath, config.getSwapAV1()));
-            context.setAudioCodec(MediaUtils.getCodec(osTargetPath, "audio"));
-            context.setAudioChannels(MediaUtils.getAudioChannels(osTargetPath));
+            context.setAudioCodec(VideoUtils.getCodec(osTargetPath, "audio"));
+            context.setAudioChannels(VideoUtils.getAudioChannels(osTargetPath));
 
-            context.setAudioBitrate(MediaUtils.getBitrate(osTargetPath, "audio"));
-            context.setAudioSamplingRate(MediaUtils.getSamplingRate(osTargetPath));
+            context.setAudioBitrate(VideoUtils.getBitrate(osTargetPath, "audio"));
+            context.setAudioSamplingRate(VideoUtils.getSamplingRate(osTargetPath));
 
             reEncodeVideo(osTargetPath, format);
         } catch (IOException | EncoderException e) {
