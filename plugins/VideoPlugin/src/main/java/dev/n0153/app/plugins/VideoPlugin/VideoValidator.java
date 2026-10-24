@@ -4,7 +4,6 @@ import dev.n0153.app.core.MediaValidator;
 import dev.n0153.app.core.Utils;
 import dev.n0153.app.core.exceptions.MimeTypeDetectionException;
 import dev.n0153.app.core.exceptions.ValidationException;
-import dev.n0153.app.plugins.MediaUtils;
 import ws.schild.jave.EncoderException;
 import ws.schild.jave.info.VideoSize;
 
@@ -119,7 +118,7 @@ public class VideoValidator implements MediaValidator {
      * @since 0.1
      */
     public boolean validateVideoDuration(Path osTargetPath) {
-        long videoDuration = MediaUtils.getTrackLength(osTargetPath);
+        long videoDuration = VideoUtils.getTrackLength(osTargetPath);
         return videoDuration <= config.getMaxVideoDuration();
     }
 
@@ -191,13 +190,13 @@ public class VideoValidator implements MediaValidator {
             throw new ValidationException("Video Validator: meta is empty");
         }
         try {
-            if (!checkAudioBitrateForVideo(format, MediaUtils.getBitrate(osTargetPath, "audio"))) {
+            if (!checkAudioBitrateForVideo(format, VideoUtils.getBitrate(osTargetPath, "audio"))) {
                 throw new ValidationException("Video Validator: Audio bitrate validation failed");
             }
-            if (!checkVideoBitrate(format, MediaUtils.getBitrate(osTargetPath, "video"))) {
+            if (!checkVideoBitrate(format, VideoUtils.getBitrate(osTargetPath, "video"))) {
                 throw new ValidationException("Video Validator: Video bitrate validation failed");
             }
-            if (!checkAudioSampleRateForVideo(format, MediaUtils.getSamplingRate(osTargetPath))) {
+            if (!checkAudioSampleRateForVideo(format, VideoUtils.getSamplingRate(osTargetPath))) {
                 throw new ValidationException("Video Validator: Audio sampling rate validation failed");
             }
             if (!checkFrameRate(VideoUtils.getVideoFrameRate(osTargetPath))) {
@@ -209,10 +208,10 @@ public class VideoValidator implements MediaValidator {
         } catch (EncoderException | IOException e) {
             throw new ValidationException("Failed to detect bitrate");
         }
-        if (!checkVideoCodecWhiteList(format, MediaUtils.getCodec(osTargetPath, "video"))) {
+        if (!checkVideoCodecWhiteList(format, VideoUtils.getCodec(osTargetPath, "video"))) {
             throw new ValidationException("Video Validator: Video codec validation failed");
         }
-        if (!checkAudioCodecWhiteListForVideo(format, MediaUtils.getCodec(osTargetPath, "audio"))) {
+        if (!checkAudioCodecWhiteListForVideo(format, VideoUtils.getCodec(osTargetPath, "audio"))) {
             throw new ValidationException("Video Validator: Audio codec validation failed");
         }
         if (!validateVideoDuration(osTargetPath)) {
