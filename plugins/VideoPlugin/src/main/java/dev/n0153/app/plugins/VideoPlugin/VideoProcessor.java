@@ -1,4 +1,4 @@
-package dev.n0153.app.plugins.video;
+package dev.n0153.app.plugins.VideoPlugin;
 
 import dev.n0153.app.core.GlobalConfig;
 import dev.n0153.app.core.MediaContext;

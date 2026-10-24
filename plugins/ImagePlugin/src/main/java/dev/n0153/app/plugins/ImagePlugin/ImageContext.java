@@ -1,4 +1,4 @@
-package dev.n0153.app.plugins.image;
+package dev.n0153.app.plugins.ImagePlugin;
 
 import dev.n0153.app.core.MediaContext;
 import org.opencv.core.Mat;
