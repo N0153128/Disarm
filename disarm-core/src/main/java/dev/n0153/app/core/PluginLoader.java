@@ -74,7 +74,6 @@ public class PluginLoader extends ClassLoader {
             try (Stream<Path> files = Files.list(dir)) {
                 Path jarPath = files.filter(path -> path.toString().endsWith(".jar")).findFirst().orElseThrow();
                 PluginLoader loader = new PluginLoader(jarPath);
-                logger.info("ffmpeg resource = {}", loader.getResource("ws/schild/jave/nativebin/ffmpeg-amd64"));
                 String entry = loader.jar.getManifest().getMainAttributes().getValue("Disarm-Plugin-Class");
                 MediaPlugin plugin = (MediaPlugin) loader.loadClass(entry)
                         .getDeclaredConstructor().newInstance();

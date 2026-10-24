@@ -12,6 +12,7 @@
         <module>disarm-core</module>
         <module>plugins/TextPlugin</module>
         <module>plugins/AudioPlugin</module>
+        <module>plugins/ImagePlugin</module>
         <!-- add one line per plugin -->
     </modules>
 

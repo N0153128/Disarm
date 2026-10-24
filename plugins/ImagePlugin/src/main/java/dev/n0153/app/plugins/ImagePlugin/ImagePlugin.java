@@ -7,7 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class ImagePlugin implements MediaPlugin {
-    private MediaConfig config;
+    private ImageConfig config = new ImageConfig();
     private final ImageContext context = new ImageContext();;
     private final ImageValidator validator = new ImageValidator();
     private GlobalConfig globalConfig;
@@ -38,13 +38,13 @@ public class ImagePlugin implements MediaPlugin {
     @Override
     public void register(PluginRegistry registry, MediaConfig config) throws DisarmException {
         if (ensureGlobalConfig()) {
-            this.config = config;
+            this.config = (ImageConfig) config;
             registry.register(
                     config.supports(),
                     this,
                     new ImageCLI(registry, context),
                     "image",
-                    config);
+                    this.config);
         } else {
             throw new ValidationException("Global config must be provided");
         }
