@@ -6,7 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class VideoPlugin implements MediaPlugin {
-    private MediaConfig config;
+    private VideoConfig config = new VideoConfig();
     private final VideoContext context = new VideoContext();
     private final VideoValidator validator = new VideoValidator();
     private GlobalConfig globalConfig;
@@ -37,13 +37,13 @@ public class VideoPlugin implements MediaPlugin {
     @Override
     public void register(PluginRegistry registry, MediaConfig config) throws DisarmException {
         if (ensureGlobalConfig()) {
-            this.config = config;
+            this.config =  (VideoConfig) config;
             registry.register(
                     config.supports(),
                     this,
                     new VideoCLI(registry),
                     "video",
-                    config
+                    this.config
             );
         }
         logger.debug("VIDEO PLUGIN OBJECTS WERE CREATED AND REGISTERED");
