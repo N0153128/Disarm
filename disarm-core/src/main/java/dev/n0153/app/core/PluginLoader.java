@@ -6,6 +6,9 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -16,9 +19,11 @@ import java.util.stream.Stream;
 public class PluginLoader extends ClassLoader {
     private static final Logger logger = LogManager.getLogger(PluginLoader.class);
     private final JarFile jar;
+    private final Path jarPath;
 
     private PluginLoader(Path jarPath) throws IOException {
         super(PluginLoader.class.getClassLoader());
+        this.jarPath = jarPath;
         this.jar = new JarFile(jarPath.toFile());
     }
 
@@ -35,12 +40,28 @@ public class PluginLoader extends ClassLoader {
         }
     }
 
+    @Override
+    protected URL findResource(String name) {
+        if (jar.getJarEntry(name) == null) return null;
+        try {
+            return URI.create("jar:" + jarPath.toUri() + "!/" + name).toURL();
+        } catch (MalformedURLException e) {
+            logger.error(e);
+            return null;
+        }
+    }
+
     public void close() throws IOException {
         jar.close();
     }
 
     public static List<Path> discoverPluginDirs() throws IOException {
-        try (Stream<Path> entries = Files.list(Path.of("src/main/java/dev/n0153/app/plugins/"))) {
+        Path pluginsDir = Path.of("plugins");
+        if (!Files.isDirectory(pluginsDir)) {
+            logger.warn("Plugins directory not found: {}", pluginsDir.toAbsolutePath());
+            return List.of();
+        }
+        try (Stream<Path> entries = Files.list(pluginsDir)) {
             return entries
                     .filter(Files:: isDirectory)
                     .filter(path -> path.getFileName().toString().contains("Plugin"))
@@ -53,6 +74,7 @@ public class PluginLoader extends ClassLoader {
             try (Stream<Path> files = Files.list(dir)) {
                 Path jarPath = files.filter(path -> path.toString().endsWith(".jar")).findFirst().orElseThrow();
                 PluginLoader loader = new PluginLoader(jarPath);
+                logger.info("ffmpeg resource = {}", loader.getResource("ws/schild/jave/nativebin/ffmpeg-amd64"));
                 String entry = loader.jar.getManifest().getMainAttributes().getValue("Disarm-Plugin-Class");
                 MediaPlugin plugin = (MediaPlugin) loader.loadClass(entry)
                         .getDeclaredConstructor().newInstance();

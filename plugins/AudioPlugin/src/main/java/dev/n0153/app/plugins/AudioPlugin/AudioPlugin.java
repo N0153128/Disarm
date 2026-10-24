@@ -36,6 +36,13 @@ public class AudioPlugin implements MediaPlugin {
 
     @Override
     public void register(PluginRegistry registry, MediaConfig config) throws DisarmException {
+        ClassLoader previous = Thread.currentThread().getContextClassLoader();
+        Thread.currentThread().setContextClassLoader(AudioPlugin.class.getClassLoader());
+        try {
+            new ws.schild.jave.process.ffmpeg.DefaultFFMPEGLocator();
+        } finally {
+            Thread.currentThread().setContextClassLoader(previous);
+        }
         if (ensureGlobalConfig()) {
             this.config = (AudioConfig) config;
             registry.register(
