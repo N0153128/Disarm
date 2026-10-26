@@ -1,5 +1,3 @@
-package dev.n0153.app;
-
 import dev.n0153.app.core.GlobalConfig;
 import dev.n0153.app.core.ProcessingContext;
 import dev.n0153.app.core.Utils;
