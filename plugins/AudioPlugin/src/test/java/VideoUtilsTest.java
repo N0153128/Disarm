@@ -1,5 +1,3 @@
-package dev.n0153.app;
-
 import dev.n0153.app.core.DebugPaths;
 import dev.n0153.app.plugins.MediaUtils;
 import dev.n0153.app.plugins.video.VideoUtils;
