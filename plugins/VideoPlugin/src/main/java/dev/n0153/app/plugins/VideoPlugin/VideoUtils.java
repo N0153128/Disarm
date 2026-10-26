@@ -40,6 +40,13 @@ public class VideoUtils {
         return (int) source.getInfo().getVideo().getFrameRate();
     }
 
+    /**
+     * Returns video codec of a given video file. Allows to swap AV1 codec with any other supported video codec.
+     * @param osTargetPath Path to input video file.
+     * @param swapAV1 Codec to swap AV1 to.
+     * @return Codec of a given video file. If input vide file is AV1 - swap with swapAV1 param.
+     * @throws CodecDetectionException If failed to detect video codec.
+     */
     public static String getVideoCodec(Path osTargetPath, String swapAV1) throws CodecDetectionException {
         try {
             MultimediaObject media = new MultimediaObject(osTargetPath.toFile());
@@ -61,6 +68,12 @@ public class VideoUtils {
         }
     }
 
+    /**
+     * Returns track length for audio and video files.
+     * @param osTargetPath Path to file.
+     * @return Audio/Video track length as Long
+     * @since 0.1
+     */
     public static long getTrackLength(Path osTargetPath) {
         try {
             File file = osTargetPath.toFile();
@@ -73,6 +86,15 @@ public class VideoUtils {
         }
     }
 
+    /**
+     * Returns bitrate for specified audio/video file.
+     * @param osTargetPath Path to input file.
+     * @param mediaType Detected media type.
+     * @return Audio/Video bitrate
+     * @throws EncoderException If failed to detect media.
+     * @throws IOException If failed to calculate bitrate.
+     * @since 0.1
+     */
     public static int getBitrate(Path osTargetPath, String mediaType) throws EncoderException, IOException {
         MultimediaObject input = new MultimediaObject(osTargetPath.toFile());
         int bitrate = -1;
@@ -87,6 +109,14 @@ public class VideoUtils {
         return bitrate;
     }
 
+    /**
+     * Calculates bitrate for video formats that don't specify bitrate in their headers.
+     * @param osTargetPath Path to input file.
+     * @return Calculated video bitrate.
+     * @throws IOException If video is less than 1 second.
+     * @throws EncoderException If failed to detect media.
+     * @since 0.1
+     */
     public static int calcVideoBitRate(Path osTargetPath) throws IOException, EncoderException {
         long fileSizeBytes = Files.size(osTargetPath);
         MultimediaObject source = new MultimediaObject(osTargetPath.toFile());
@@ -98,11 +128,25 @@ public class VideoUtils {
         return Math.toIntExact((fileSizeBytes * 8) / durationSeconds);
     }
 
+    /**
+     * Returns sampling rate for specified audio track.
+     * @param osTargetPath Path to input file.
+     * @return Sampling rate.
+     * @throws EncoderException If failed to detect media.
+     * @since 0.1
+     */
     public static int getSamplingRate(Path osTargetPath) throws EncoderException {
         MultimediaObject input = new MultimediaObject(osTargetPath.toFile());
         return input.getInfo().getAudio().getSamplingRate();
     }
 
+    /**
+     * Returns audio/video codec for the specified file.
+     * @param osTargetPath Path to file.
+     * @param mediaType Detected file type.
+     * @return Detected codec string.
+     * @since 0.1
+     */
     public static String getCodec(Path osTargetPath, String mediaType) throws CodecDetectionException {
         try {
             MultimediaObject media = new MultimediaObject(osTargetPath.toFile());
@@ -131,6 +175,13 @@ public class VideoUtils {
         }
     }
 
+    /**
+     * Return the number of audio channels for specified media file.
+     * @param osTargetPath Path to input file.
+     * @return Number of detected audio channels.
+     * @throws EncoderException If failed to detect media.
+     * @since 0.1
+     */
     public static int getAudioChannels(Path osTargetPath) throws EncoderException {
         MultimediaObject source = new MultimediaObject(osTargetPath.toFile());
         return source.getInfo().getAudio().getChannels();
