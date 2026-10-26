@@ -57,6 +57,12 @@ public class AudioUtils {
         return AudioFileFormat.Type.WAVE;
     }
 
+    /**
+     * Returns track length for audio and video files.
+     * @param osTargetPath Path to file.
+     * @return Audio/Video track length as Long
+     * @since 0.1
+     */
     public static long getTrackLength(Path osTargetPath) {
         try {
             File file = osTargetPath.toFile();
@@ -69,6 +75,13 @@ public class AudioUtils {
         }
     }
 
+    /**
+     * Returns audio/video codec for the specified file.
+     * @param osTargetPath Path to file.
+     * @param mediaType Detected file type.
+     * @return Detected codec string.
+     * @since 0.1
+     */
     public static String getCodec(Path osTargetPath, String mediaType) throws CodecDetectionException {
         try {
             MultimediaObject media = new MultimediaObject(osTargetPath.toFile());
@@ -97,17 +110,40 @@ public class AudioUtils {
         }
     }
 
+    /**
+     * Returns bitrate for specified audio/video file.
+     * @param osTargetPath Path to input file.
+     * @param mediaType Detected media type.
+     * @return Audio/Video bitrate
+     * @throws EncoderException If failed to detect media.
+     * @throws IOException If failed to calculate bitrate.
+     * @since 0.1
+     */
     public static int getBitrate(Path osTargetPath, String mediaType) throws EncoderException, IOException {
         MultimediaObject input = new MultimediaObject(osTargetPath.toFile());
         int bitrate = -1;
         return input.getInfo().getAudio().getBitRate();
     }
 
+    /**
+     * Returns sampling rate for specified audio track.
+     * @param osTargetPath Path to input file.
+     * @return Sampling rate.
+     * @throws EncoderException If failed to detect media.
+     * @since 0.1
+     */
     public static int getSamplingRate(Path osTargetPath) throws EncoderException {
         MultimediaObject input = new MultimediaObject(osTargetPath.toFile());
         return input.getInfo().getAudio().getSamplingRate();
     }
 
+    /**
+     * Return the number of audio channels for specified media file.
+     * @param osTargetPath Path to input file.
+     * @return Number of detected audio channels.
+     * @throws EncoderException If failed to detect media.
+     * @since 0.1
+     */
     public static int getAudioChannels(Path osTargetPath) throws EncoderException {
         MultimediaObject source = new MultimediaObject(osTargetPath.toFile());
         return source.getInfo().getAudio().getChannels();
