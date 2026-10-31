@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Usage: disarm-watchdog-video -t <seconds> [disarm flags...]
+source "$(dirname "${BASH_SOURCE[0]}")/disarm-watchdog-common.sh"
+watchdog_main video "" "$@"

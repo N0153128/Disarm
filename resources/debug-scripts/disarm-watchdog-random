@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Random file of a random type. Usage: disarm-watchdog-random -t <seconds> [disarm flags...]
+source "$(dirname "${BASH_SOURCE[0]}")/disarm-watchdog-common.sh"
+watchdog_main random "" "$@"
