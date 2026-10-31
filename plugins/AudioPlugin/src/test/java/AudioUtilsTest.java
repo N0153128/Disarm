@@ -5,9 +5,8 @@ import dev.n0153.app.core.Utils;
 import dev.n0153.app.core.exceptions.CodecDetectionException;
 import dev.n0153.app.core.exceptions.DisarmException;
 import dev.n0153.app.core.exceptions.ValidationException;
-import dev.n0153.app.plugins.MediaUtils;
 import dev.n0153.app.plugins.AudioPlugin.AudioUtils;
-import org.junit.jupiter.api.Test;
+import org.testng.annotations.Test;
 import org.junit.jupiter.api.io.TempDir;
 import ws.schild.jave.EncoderException;
 
@@ -136,7 +135,7 @@ public class AudioUtilsTest {
 
     @Test
     void getCodec_forAudio() {
-        String codec = assertDoesNotThrow(() -> MediaUtils.getCodec(DebugPaths.audioTestInputMp3, "audio"));
+        String codec = assertDoesNotThrow(() -> AudioUtils.getCodec(DebugPaths.audioTestInputMp3, "audio"));
         assertNotNull(codec);
         assertFalse(codec.isEmpty());
     }
@@ -144,39 +143,39 @@ public class AudioUtilsTest {
     @Test
     void getCodec_withEmptyMedia() {
         assertThrows(CodecDetectionException.class,
-                () -> MediaUtils.getCodec(DebugPaths.audioTestInputMp3, ""));
+                () -> AudioUtils.getCodec(DebugPaths.audioTestInputMp3, ""));
     }
 
     @Test
     void getCodec_nonExistent() {
         assertThrows(CodecDetectionException.class,
-                () -> MediaUtils.getCodec(tempDir.resolve("none.mp3"), "audio"));
+                () -> AudioUtils.getCodec(tempDir.resolve("none.mp3"), "audio"));
     }
 
     @Test
     void getCodec_withImage() {
         assertThrows(NullPointerException.class,
-                () -> MediaUtils.getCodec(DebugPaths.imageTestInputPng, "audio"));
+                () -> AudioUtils.getCodec(DebugPaths.imageTestInputPng, "audio"));
     }
 
 
     @Test
     void getBitrate_forAudio() {
-        int bitrate = assertDoesNotThrow(() -> MediaUtils.getBitrate(
+        int bitrate = assertDoesNotThrow(() -> AudioUtils.getBitrate(
                 DebugPaths.audioTestInputMp3, "audio"));
         assertNotEquals(0, bitrate);
     }
 
     @Test
     void getBitrate_noneExistent() {
-        assertThrows(EncoderException.class, () -> MediaUtils.getBitrate(
+        assertThrows(EncoderException.class, () -> AudioUtils.getBitrate(
                 tempDir.resolve("none.mp3"), "audio"));
     }
 
     @Test
     void getBitrate_withEmptyMedia() {
         try {
-            assertEquals(-1, MediaUtils.getBitrate(
+            assertEquals(-1, AudioUtils.getBitrate(
                     DebugPaths.audioTestInputMp3, ""));
         } catch (EncoderException | IOException e) {
             throw new RuntimeException(e);
@@ -187,101 +186,101 @@ public class AudioUtilsTest {
     @Test
     void getSamplingRate_withAudio() {
         int sampling = assertDoesNotThrow(() ->
-                MediaUtils.getSamplingRate(DebugPaths.audioTestInputMp3));
+                AudioUtils.getSamplingRate(DebugPaths.audioTestInputMp3));
         assertTrue(sampling > 0);
     }
 
     @Test
     void getSamplingRate_nonExistent() {
         assertThrows(EncoderException.class, () ->
-                MediaUtils.getSamplingRate(tempDir.resolve("none.test")));
+                AudioUtils.getSamplingRate(tempDir.resolve("none.test")));
     }
 
     @Test
     void getSamplingRate_withImage() {
         assertThrows(NullPointerException.class, () ->
-                MediaUtils.getSamplingRate(DebugPaths.imageTestInputPng));
+                AudioUtils.getSamplingRate(DebugPaths.imageTestInputPng));
     }
 
 
     @Test
     void getAudioChannels_withMp3() {
         int channels = assertDoesNotThrow(() ->
-                MediaUtils.getAudioChannels(DebugPaths.audioTestInputMp3));
+                AudioUtils.getAudioChannels(DebugPaths.audioTestInputMp3));
         assertTrue(channels > 0);
     }
 
     @Test
     void getAudioChannels_withAif() {
         int channels = assertDoesNotThrow(() ->
-                MediaUtils.getAudioChannels(DebugPaths.audioTestInputAif));
+                AudioUtils.getAudioChannels(DebugPaths.audioTestInputAif));
         assertTrue(channels > 0);
     }
 
     @Test
     void getAudioChannels_withAifc() {
         int channels = assertDoesNotThrow(() ->
-                MediaUtils.getAudioChannels(DebugPaths.audioTestInputAifc));
+                AudioUtils.getAudioChannels(DebugPaths.audioTestInputAifc));
         assertTrue(channels > 0);
     }
 
     @Test
     void getAudioChannels_withAu() {
         int channels = assertDoesNotThrow(() ->
-                MediaUtils.getAudioChannels(DebugPaths.audioTestInputAu));
+                AudioUtils.getAudioChannels(DebugPaths.audioTestInputAu));
         assertTrue(channels > 0);
     }
 
     @Test
     void getAudioChannels_withAiff() {
         int channels = assertDoesNotThrow(() ->
-                MediaUtils.getAudioChannels(DebugPaths.audioTestInputAiff));
+                AudioUtils.getAudioChannels(DebugPaths.audioTestInputAiff));
         assertTrue(channels > 0);
     }
 
     @Test
     void getAudioChannels_withFlac() {
         int channels = assertDoesNotThrow(() ->
-                MediaUtils.getAudioChannels(DebugPaths.audioTestInputFlac));
+                AudioUtils.getAudioChannels(DebugPaths.audioTestInputFlac));
         assertTrue(channels > 0);
     }
 
     @Test
     void getAudioChannels_withOgg() {
         int channels = assertDoesNotThrow(() ->
-                MediaUtils.getAudioChannels(DebugPaths.audioTestInputOgg));
+                AudioUtils.getAudioChannels(DebugPaths.audioTestInputOgg));
         assertTrue(channels > 0);
     }
 
     @Test
     void getAudioChannels_withWav() {
         int channels = assertDoesNotThrow(() ->
-                MediaUtils.getAudioChannels(DebugPaths.audioTestInputWav));
+                AudioUtils.getAudioChannels(DebugPaths.audioTestInputWav));
         assertTrue(channels > 0);
     }
 
     @Test
     void getAudioChannels_withVideo() {
         assertThrows(EncoderException.class, () ->
-                MediaUtils.getAudioChannels(DebugPaths.videoTestOutputMp4));
+                AudioUtils.getAudioChannels(DebugPaths.videoTestOutputMp4));
     }
 
     @Test
     void getAudioChannels_nonExistent() {
         assertThrows(EncoderException.class, () ->
-                MediaUtils.getAudioChannels(tempDir.resolve("none.test")));
+                AudioUtils.getAudioChannels(tempDir.resolve("none.test")));
     }
 
 
     @Test
     void getTrackLength() {
-        assertDoesNotThrow(() -> MediaUtils.getTrackLength(DebugPaths.audioTestInputMp3));
-        long trackLength = MediaUtils.getTrackLength(DebugPaths.audioTestInputMp3);
+        assertDoesNotThrow(() -> AudioUtils.getTrackLength(DebugPaths.audioTestInputMp3));
+        long trackLength = AudioUtils.getTrackLength(DebugPaths.audioTestInputMp3);
         assertNotEquals(0, trackLength);
     }
 
     @Test
     void getTrackLength_nonExistent() {
-        assertThrows(ValidationException.class, () -> MediaUtils.getTrackLength(tempDir.resolve("none.test")));
+        assertThrows(ValidationException.class, () -> AudioUtils.getTrackLength(tempDir.resolve("none.test")));
     }
 }
