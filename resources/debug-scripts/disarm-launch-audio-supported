@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+source "$(dirname "${BASH_SOURCE[0]}")/disarm-launch-common.sh"
+
+launch_files test-audio "audio supported" \
+  test-mp3.mp3 \
+  test-mp3-copy.mp3 \
+  test-ogg.ogg \
+  test-flac.flac \
+  test-wav.wav \
+  test-au.au \
+  test-aif.aif \
+  test-aiff.aiff \
+  test-aifc.aifc

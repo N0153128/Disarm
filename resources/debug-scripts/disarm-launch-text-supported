@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+source "$(dirname "${BASH_SOURCE[0]}")/disarm-launch-common.sh"
+
+launch_files test-text "text supported" \
+  test.txt \
+  test-ascii.txt \
+  test-clean.txt \
+  test-empty.txt \
+  test-html.txt \
+  test-shell.txt \
+  test-nobom.txt \
+  test-utf8.txt \
+  test-invalid-utf8.txt \
+  test-bom-utf8.txt \
+  test-bom-utf16le.txt \
+  test-bom-utf16be.txt \
+  test-bom-utf32be.txt \
+  test-unicode-clean.txt \
+  test-unicode-dirty.txt \
+  test-strip-clean.txt \
+  test-strip-dirty.txt \
+  test-strip.log \
+  test-strip.json

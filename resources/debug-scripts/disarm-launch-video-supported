@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+source "$(dirname "${BASH_SOURCE[0]}")/disarm-launch-common.sh"
+
+launch_files test-video "video supported" \
+  test-mp4.mp4 \
+  test-mkv.mkv \
+  test-webm.webm \
+  test-mov.mov

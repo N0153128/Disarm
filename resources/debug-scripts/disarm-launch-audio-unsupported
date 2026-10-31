@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+source "$(dirname "${BASH_SOURCE[0]}")/disarm-launch-common.sh"
+
+launch_files test-audio "audio unsupported" \
+  six-minutes.mp3

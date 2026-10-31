@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+source "$(dirname "${BASH_SOURCE[0]}")/disarm-launch-common.sh"
+
+launch_files test-img "image unsupported" \
+  test-gif.gif \
+  test-tiff.tiff

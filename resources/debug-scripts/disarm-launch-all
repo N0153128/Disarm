@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Runs every disarm-launch-<type>-<state> script.
+# Usage: disarm-launch-all [supported|unsupported]   (no argument = both)
+
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+STATE="${1:-}"
+
+case "$STATE" in
+  ""|supported|unsupported) ;;
+  *) echo "Usage: $(basename "$0") [supported|unsupported]" >&2; exit 2 ;;
+esac
+
+for state in supported unsupported; do
+  if [[ -n "$STATE" && "$STATE" != "$state" ]]; then continue; fi
+  for type in audio video image text; do
+    "$DIR/disarm-launch-$type-$state"
+  done
+done
