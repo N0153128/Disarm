@@ -1,7 +1,6 @@
 import dev.n0153.app.core.DebugPaths;
-import dev.n0153.app.plugins.MediaUtils;
-import dev.n0153.app.plugins.video.VideoUtils;
-import org.junit.jupiter.api.Test;
+import dev.n0153.app.plugins.VideoPlugin.VideoUtils;
+import org.testng.annotations.Test;
 import org.junit.jupiter.api.io.TempDir;
 import ws.schild.jave.EncoderException;
 import ws.schild.jave.info.VideoSize;
@@ -18,14 +17,14 @@ public class VideoUtilsTest {
 
     @Test
     void getCodec_forVideo() {
-        String codec = assertDoesNotThrow(() -> MediaUtils.getCodec(DebugPaths.videoTestInputMp4, "video"));
+        String codec = assertDoesNotThrow(() -> VideoUtils.getCodec(DebugPaths.videoTestInputMp4, "video"));
         assertNotNull(codec);
         assertFalse(codec.isEmpty());
     }
 
     @Test
     void getBitrate_forVideo() {
-        int bitrate = assertDoesNotThrow(() -> MediaUtils.getBitrate(
+        int bitrate = assertDoesNotThrow(() -> VideoUtils.getBitrate(
                 DebugPaths.videoTestInputMp4, "video"));
         assertNotEquals(0, bitrate);
     }
@@ -33,49 +32,49 @@ public class VideoUtilsTest {
     @Test
     void getSamplingRate_withVideo() {
         int sampling = assertDoesNotThrow(() ->
-                MediaUtils.getSamplingRate(DebugPaths.videoTestInputMp4));
+                VideoUtils.getSamplingRate(DebugPaths.videoTestInputMp4));
         assertTrue(sampling > 0);
     }
 
     @Test
     void calcVideoBitRate_withWebm() {
         int bitrate = assertDoesNotThrow(() ->
-                MediaUtils.calcVideoBitRate(DebugPaths.videoTestInputWebm));
+                VideoUtils.calcVideoBitRate(DebugPaths.videoTestInputWebm));
         assertTrue(bitrate > 0);
     }
 
     @Test
     void calcVideoBitRate_withMkv() {
         int bitrate = assertDoesNotThrow(() ->
-                MediaUtils.calcVideoBitRate(DebugPaths.videoTestInputMkv));
+                VideoUtils.calcVideoBitRate(DebugPaths.videoTestInputMkv));
         assertTrue(bitrate > 0);
     }
 
     @Test
     void calcVideoBitRate_withMp4() {
         int bitrate = assertDoesNotThrow(() ->
-                MediaUtils.calcVideoBitRate(DebugPaths.videoTestInputMp4));
+                VideoUtils.calcVideoBitRate(DebugPaths.videoTestInputMp4));
         assertTrue(bitrate > 0);
     }
 
     @Test
     void calcVideoBitRate_withMov() {
         int bitrate = assertDoesNotThrow(() ->
-                MediaUtils.calcVideoBitRate(DebugPaths.videoTestInputMov));
+                VideoUtils.calcVideoBitRate(DebugPaths.videoTestInputMov));
         assertTrue(bitrate > 0);
     }
 
     @Test
     void calcVideoBitRate_withAudio() {
         int bitrate = assertDoesNotThrow(() ->
-                MediaUtils.calcVideoBitRate(DebugPaths.audioTestInputMp3));
+                VideoUtils.calcVideoBitRate(DebugPaths.audioTestInputMp3));
         assertTrue(bitrate > 0);
     }
 
     @Test
     void calcVideoBitRate_nonExistent() {
         assertThrows(NoSuchFileException.class,
-                () -> MediaUtils.calcVideoBitRate(tempDir.resolve("none.test")));
+                () -> VideoUtils.calcVideoBitRate(tempDir.resolve("none.test")));
     }
 
     @Test
