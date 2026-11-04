@@ -18,11 +18,24 @@ public class DisarmCLI implements Runnable{
     private final PluginRegistry registry;
     private final GlobalConfig globalConfig;
 
+    /**
+     * Creates the root Disarm command, which the CLI is built around.
+     * Plugin CLIs are attached later as mixins and subcommands by Main.buildCli().
+     * @param registry Plugin registry holding the registered plugins, their configs and CLI runners.
+     * @param globalConfig Global configuration instance that the parsed global options are applied to.
+     * @since 0.2
+     */
     public DisarmCLI(PluginRegistry registry, GlobalConfig globalConfig) {
         this.globalConfig = globalConfig;
         this.registry = registry;
     }
 
+    /**
+     * Collects the CLI instances of all registered plugins, so they can be added as subcommands.
+     * The returned list is a copy, so changing it doesn't affect the registry.
+     * @return List of plugin CLI objects, one per registered file type.
+     * @since 0.2
+     */
     List<Object> discoverCommands() {
         return new ArrayList<>(this.registry.listCLI());
     }
@@ -234,10 +247,31 @@ public class DisarmCLI implements Runnable{
     @CommandLine.Spec
     CommandLine.Model.CommandSpec spec;
 
+    /**
+     * Resolves the subcommand name of a plugin CLI from its PicoCLI @Command annotation.
+     * NOTE! The class of the specified object must be annotated with @Command.
+     * @param cmd Plugin CLI instance.
+     * @return Command name declared in the annotation, e.g. "image".
+     * @throws NullPointerException If the object's class isn't annotated with @Command.
+     * @since 0.2
+     */
     static String getCommandName(Object cmd) {
         return cmd.getClass().getAnnotation(Command.class).name();
     }
 
+    /**
+     * Main CLI entry point, invoked by PicoCLI once the arguments are parsed.
+     * First runs every registered plugin CLI, so that each plugin pushes its parsed options
+     * into the plugin registry. Then, for each specified input path, applies the parsed global options
+     * to GlobalConfig and disarms the file using a new MediaApp instance.
+     * If detect mime mode (-dm) is enabled, the detected mime type is printed and the file is not processed.
+     * Global config storage is released once all inputs are processed.
+     * NOTE! Global options are re-applied for every input, and the config is not reset between inputs.
+     * @throws IllegalArgumentException If any of the specified option values fails config validation.
+     * @throws dev.n0153.app.core.exceptions.DisarmException If file processing fails and the matching
+     * skip option (-su or -sc) isn't enabled.
+     * @since 0.2
+     */
     public void run() {
         // related plugin auto-detection
         Map<String, Runnable> cliRegistry = registry.getCliRegistry();
