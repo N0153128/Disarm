@@ -10,6 +10,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/**
+ * Performs global, cross-plugin validation checks on input files and output
+ * paths before a file is handed off to a plugin-specific validator.
+ * @since 0.2
+ */
 public class GlobalValidator {
     private static final Logger logger = LogManager.getLogger(GlobalValidator.class);
 
@@ -45,6 +50,12 @@ public class GlobalValidator {
         return Files.isReadable(osTargetPath);
     }
 
+    /**
+     * Checks whether the given path exists on disk.
+     * @param osTargetPath path to check
+     * @return true if the path exists
+     * @since 0.2
+     */
     public static boolean outputExist(Path osTargetPath) {
         return Files.exists(osTargetPath);
     }
@@ -59,11 +70,25 @@ public class GlobalValidator {
         return Files.isWritable(osTargetPath);
     }
 
+    /**
+     * Checks that the input file does not exceed the configured global size ceiling.
+     * @param osTargetPath path to the input file
+     * @param config global config supplying the size limit
+     * @return true if the file's size is within {@link GlobalConfig#getGeneralSizeLimit()}
+     * @since 0.2
+     */
     public static boolean ensureGlobalSizeLimit(Path osTargetPath, GlobalConfig config) {
         long size = Utils.getSize(osTargetPath);
         return size <= config.getGeneralSizeLimit();
     }
 
+    /**
+     * Checks that the input file is not empty.
+     * @param osTargetPath path to the input file
+     * @return true if the file's size is greater than zero
+     * @throws ValidationException if the file size cannot be determined
+     * @since 0.2
+     */
     public static boolean checkEmpty(Path osTargetPath) {
         try {
             return Files.size(osTargetPath) > 0;
@@ -72,6 +97,20 @@ public class GlobalValidator {
         }
     }
 
+    /**
+     * Runs the full global validation sequence on an input file: path safety,
+     * readability, output directory existence/creation, output writability,
+     * non-empty check, and global size ceiling. The output directory is
+     * created automatically if missing.
+     * @param osTargetPath path to the input file
+     * @param config global config supplying paths and limits
+     * @return true if all checks pass
+     * @throws UnsafePathException if the path fails the path-safety check
+     * @throws InvalidPathException if the input file is not readable
+     * @throws java.nio.file.InvalidPathException if the output path is not writable
+     * @throws ValidationException if the input file is empty or exceeds the global size limit
+     * @since 0.2
+     */
     public static boolean validate(Path osTargetPath, GlobalConfig config) {
         if (!validatePath(osTargetPath, config)) {
             throw new UnsafePathException("Potentially unsafe path", osTargetPath);
