@@ -17,6 +17,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Static audio helpers for the Audio plugin: reading media details through JAVE/FFmpeg
+ * (duration, codec, bitrate, sampling rate, channels) and mapping formats to
+ * {@code javax.sound.sampled} file types for the native fallback.
+ * @since 0.2
+ */
 public class AudioUtils {
     private static final Logger logger = LogManager.getLogger(AudioUtils.class);
 
@@ -32,15 +38,24 @@ public class AudioUtils {
         EXT_TO_TYPE.put("aifc", AudioFileFormat.Type.AIFC);
     }
 
+    /**
+     * Returns the format-to-type map used by the native {@code javax.sound.sampled} fallback.
+     * It covers {@code wav}, {@code wave}, {@code au}, {@code snd}, {@code aif}, {@code aiff}
+     * and {@code aifc}.
+     * @return an unmodifiable view of the format-to-{@link AudioFileFormat.Type} map
+     * @since 0.2
+     */
     public static Map<String, AudioFileFormat.Type> getExtToType() {
         return Collections.unmodifiableMap(EXT_TO_TYPE);
     }
 
     /**
-     * Returns an appropriate AudioFileFormat.Type for specified audio file.
-     * @param osTargetFilePath Path to file.
-     * @return Specific AudioFileFormat.Type
-     * @throws AudioTypeDetectionException if specified file isn't an audio file.
+     * Returns the {@link AudioFileFormat.Type} for a format, used to pick the output container
+     * for native re-encoding. The lookup ignores case. If the format is {@code null} or
+     * not in the map, it falls back to {@link AudioFileFormat.Type#WAVE}.
+     * @param osTargetFilePath path to the input file
+     * @param format the input file's format (e.g. {@code "wav"}, {@code "aiff"})
+     * @return the matching file type, or {@code WAVE} if there is no match
      * @since 0.1
      */
     public static AudioFileFormat.Type getAudioType(Path osTargetFilePath, String format) throws AudioTypeDetectionException {
@@ -58,9 +73,10 @@ public class AudioUtils {
     }
 
     /**
-     * Returns track length for audio and video files.
-     * @param osTargetPath Path to file.
-     * @return Audio/Video track length as Long
+     * Returns the duration of an audio or video file as reported by JAVE/FFmpeg.
+     * @param osTargetPath path to the file
+     * @return the track length in milliseconds
+     * @throws CodecDetectionException if JAVE cannot read the file
      * @since 0.1
      */
     public static long getTrackLength(Path osTargetPath) {
@@ -76,10 +92,13 @@ public class AudioUtils {
     }
 
     /**
-     * Returns audio/video codec for the specified file.
-     * @param osTargetPath Path to file.
-     * @param mediaType Detected file type.
-     * @return Detected codec string.
+     * Returns the decoder name of a file's audio or video stream, as reported by JAVE/FFmpeg,
+     * in a form ready to pass back as an encoder name. Only the first word of the decoder
+     * string is kept; {@code vorbis} becomes {@code libvorbis} and {@code av1} becomes {@code vp8}.
+     * @param osTargetPath path to the file
+     * @param mediaType {@code "audio"} or {@code "video"}, selecting which stream to read
+     * @return the codec name, or an empty string if {@code mediaType} is neither {@code "audio"} nor {@code "video"}
+     * @throws CodecDetectionException if {@code mediaType} is empty or JAVE cannot read the file
      * @since 0.1
      */
     public static String getCodec(Path osTargetPath, String mediaType) throws CodecDetectionException {
@@ -111,12 +130,12 @@ public class AudioUtils {
     }
 
     /**
-     * Returns bitrate for specified audio/video file.
-     * @param osTargetPath Path to input file.
-     * @param mediaType Detected media type.
-     * @return Audio/Video bitrate
-     * @throws EncoderException If failed to detect media.
-     * @throws IOException If failed to calculate bitrate.
+     * Returns the bitrate of a file's audio stream, as reported by JAVE/FFmpeg.
+     * @param osTargetPath path to the input file
+     * @param mediaType the detected media type
+     * @return the audio bitrate in bits per second; JAVE returns {@code -1} if it cannot determine it
+     * @throws EncoderException if JAVE cannot read the file
+     * @throws IOException if an I/O error occurs
      * @since 0.1
      */
     public static int getBitrate(Path osTargetPath, String mediaType) throws EncoderException, IOException {
@@ -126,10 +145,10 @@ public class AudioUtils {
     }
 
     /**
-     * Returns sampling rate for specified audio track.
-     * @param osTargetPath Path to input file.
-     * @return Sampling rate.
-     * @throws EncoderException If failed to detect media.
+     * Returns the sampling rate of a file's audio stream, as reported by JAVE/FFmpeg.
+     * @param osTargetPath path to the input file
+     * @return the sampling rate in Hz
+     * @throws EncoderException if JAVE cannot read the file
      * @since 0.1
      */
     public static int getSamplingRate(Path osTargetPath) throws EncoderException {
@@ -138,10 +157,10 @@ public class AudioUtils {
     }
 
     /**
-     * Return the number of audio channels for specified media file.
-     * @param osTargetPath Path to input file.
-     * @return Number of detected audio channels.
-     * @throws EncoderException If failed to detect media.
+     * Returns the number of channels in a file's audio stream, as reported by JAVE/FFmpeg.
+     * @param osTargetPath path to the input file
+     * @return the channel count
+     * @throws EncoderException if JAVE cannot read the file
      * @since 0.1
      */
     public static int getAudioChannels(Path osTargetPath) throws EncoderException {
