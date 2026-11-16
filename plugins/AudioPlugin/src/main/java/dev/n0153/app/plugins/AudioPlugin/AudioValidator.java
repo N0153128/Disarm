@@ -1,5 +1,7 @@
 package dev.n0153.app.plugins.AudioPlugin;
 
+import dev.n0153.app.core.GlobalValidator;
+import dev.n0153.app.core.MediaConfig;
 import dev.n0153.app.core.MediaValidator;
 import dev.n0153.app.core.Utils;
 import dev.n0153.app.core.exceptions.MimeTypeDetectionException;
@@ -9,23 +11,46 @@ import ws.schild.jave.EncoderException;
 import java.io.IOException;
 import java.nio.file.Path;
 
+/**
+ * Audio-specific validation for the Audio plugin. It runs after {@link GlobalValidator}
+ * and before {@link AudioProcessor}. Each input file is checked against the ceilings in
+ * {@link AudioConfig}: file size (per format and overall), duration, the codec allowlist,
+ * bitrate, sampling rate and channel count. Media details are read through JAVE/FFmpeg
+ * via {@link AudioUtils}.
+ * <p>
+ * Before {@link #validate(Path)} is called, a config and context must be bound with
+ * {@link #createMeta(AudioConfig, AudioContext)}. {@link this.getValidator( MediaConfig )}
+ * does this.
+ * @since 0.2
+ */
 public class AudioValidator implements MediaValidator {
     private AudioConfig config;
     private AudioContext context;
 
+    /**
+     * Binds the config and context this validator checks against. Replaces any previously bound pair.
+     * @param config the Audio plugin's config, supplying validation ceilings
+     * @param context the per-file audio context
+     * @since 0.2
+     */
     public void createMeta(AudioConfig config, AudioContext context) {
         this.config = config;
         this.context = context;
     }
 
+    /**
+     * @return {@code true} if both a config and a context have been bound via
+     *         {@link #createMeta(AudioConfig, AudioContext)}
+     * @since 0.2
+     */
     public boolean checkMeta() {
         return this.config != null && this.context != null;
     }
 
     /**
-     * Ensures that the audio track duration doesn't exceed its configured limit.
-     * @param osTargetPath Path to input file.
-     * @return True if duration is appropriate.
+     * Checks that the audio track's duration doesn't exceed {@link AudioConfig#getMaxAudioDuration()}.
+     * @param osTargetPath path to the input file
+     * @return {@code true} if the duration is within the limit
      * @since 0.1
      */
     public boolean validateAudioDuration(Path osTargetPath) {
@@ -34,10 +59,10 @@ public class AudioValidator implements MediaValidator {
     }
 
     /**
-     * Ensures that the specified audio codec is allowed.
-     * @param mimeType Detected file type.
-     * @param codec Detected codec.
-     * @return True if codec is whitelisted.
+     * Checks a codec against the codec allowlist for a format.
+     * @param mimeType the input's format (e.g. {@code "mp3"}, {@code "wav"})
+     * @param codec the detected codec name
+     * @return {@code true} if the codec is allowed; {@code false} if it isn't, or if either argument is {@code null}
      * @since 0.1
      */
     public boolean checkAudioCodecWhiteList(String mimeType, String codec) {
@@ -51,9 +76,10 @@ public class AudioValidator implements MediaValidator {
     }
 
     /**
-     * Ensures that the specified file doesn't exceed configured size limits per format.
-     * @param osTargetPath Path to input file.
-     * @return True if file size doesn't exceed the limits.
+     * Checks that the file's size doesn't exceed the overall audio ceiling,
+     * {@link AudioConfig#getMaxFileSize()}.
+     * @param osTargetPath path to the input file
+     * @return {@code true} if the file size is within the overall ceiling
      * @since 0.1
      */
     public boolean ensureSizeLimit(Path osTargetPath) {
@@ -62,10 +88,13 @@ public class AudioValidator implements MediaValidator {
     }
 
     /**
-     * Check audio bitrate for given audio format.
-     * @param mimeType Detected audio format.
-     * @param bitrate Detected bitrate.
-     * @return True if bitrate is within configured bounds for specified format.
+     * Checks a bitrate against the configured ceiling for a format. {@code -1}, which JAVE
+     * returns when it cannot determine the bitrate, is accepted.
+     * @param mimeType the input's format (e.g. {@code "mp3"})
+     * @param bitrate the detected bitrate in bits per second
+     * @return {@code true} if the bitrate is within the format's ceiling; {@code false} if it
+     *         exceeds it, is below {@code -1}, or {@code mimeType} is {@code null}. A format with
+     *         no configured ceiling has a ceiling of {@code 0}.
      * @since 0.1
      */
     public boolean checkAudioBitrate(String mimeType, int bitrate) {
@@ -78,6 +107,16 @@ public class AudioValidator implements MediaValidator {
         return bitrate <= config.getMaxBitrates(mimeType);
     }
 
+    /**
+     * Checks a sampling rate against the configured ceiling for a format. {@code -1}, which JAVE
+     * returns when it cannot determine the sampling rate, is accepted.
+     * @param mimeType the input's format (e.g. {@code "mp3"})
+     * @param samplingRate the detected sampling rate in Hz
+     * @return {@code true} if the sampling rate is within the format's ceiling; {@code false} if it
+     *         exceeds it, is below {@code -1}, or {@code mimeType} is {@code null}. A format with
+     *         no configured ceiling has a ceiling of {@code 0}.
+     * @since 0.2
+     */
     public boolean checkAudioSamplingRate(String mimeType, int samplingRate) {
         if (samplingRate < -1) {
             return false;
@@ -88,6 +127,12 @@ public class AudioValidator implements MediaValidator {
         return samplingRate <= config.getMaxSampleRates(mimeType);
     }
 
+    /**
+     * Checks a channel count against {@link AudioConfig#getMaxChannels()}.
+     * @param channels the detected channel count
+     * @return {@code true} if the count is within the ceiling; {@code false} if it exceeds it or is negative
+     * @since 0.2
+     */
     public boolean checkChannels(int channels) {
         if (channels < 0) {
             return false;
@@ -95,6 +140,16 @@ public class AudioValidator implements MediaValidator {
         return channels <= config.getMaxChannels();
     }
 
+    /**
+     * {@inheritDoc}
+     * The file's format is detected from its signature, and its size is checked against that
+     * format's ceiling (e.g. {@link AudioConfig#getMp3SizeLimit()}).
+     * @param osTargetPath path to the input file
+     * @return {@code true} if the file size is within its format's ceiling
+     * @throws MimeTypeDetectionException if the file's MIME type cannot be detected
+     * @throws IllegalArgumentException if the detected format is not a supported audio format
+     * @since 0.2
+     */
     @Override
     public boolean validateFileSize(Path osTargetPath) {
         String mime = config.getFormatFromMime(Utils.getMimeType(osTargetPath));
@@ -118,6 +173,18 @@ public class AudioValidator implements MediaValidator {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Checks run in this order: bound meta, MIME detection, per-format file size, duration,
+     * codec allowlist, overall file size, bitrate, sampling rate, channel count. Validation
+     * stops at the first failure.
+     * @param osTargetPath path to the input file
+     * @return {@code true} if all checks pass; a failure throws rather than returning {@code false}
+     * @throws ValidationException if no config/context is bound, MIME detection fails, any check
+     *         fails, or the bitrate, sampling rate or channel count cannot be read
+     * @since 0.2
+     */
     @Override
     public boolean validate(Path osTargetPath) {
         if (!checkMeta()) {
