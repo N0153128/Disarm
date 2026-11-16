@@ -19,12 +19,28 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Objects;
 
+/**
+ * Re-encodes audio files for the Audio plugin. The main path uses JAVE/FFmpeg.
+ * For WAV, AIFF and AU there is a native {@code javax.sound.sampled} fallback.
+ * Before re-encoding, the input's MIME type, bitrate, sampling rate and channel
+ * count are stored in the {@link AudioContext} and an output title is generated.
+ * Output settings in {@link AudioConfig} override those detected values when set.
+ * <p>
+ * Output is written to {@link GlobalConfig#getGeneralOutputPath()}.
+ * @since 0.2
+ */
 public class AudioProcessor implements MediaProcessor<AudioConfig> {
     private final AudioConfig config;
     private final AudioContext context;
     private final GlobalConfig globalConfig;
     private static final Logger logger = LogManager.getLogger(AudioProcessor.class);
 
+    /**
+     * @param config the Audio plugin's config, supplying output settings and fallbacks
+     * @param context the per-file context used to store detected input values and the output title
+     * @param globalConfig the global config, supplying the output path and title mode
+     * @since 0.2
+     */
     public AudioProcessor(AudioConfig config, AudioContext context, GlobalConfig globalConfig) {
         this.config = config;
         this.context = context;
@@ -32,9 +48,17 @@ public class AudioProcessor implements MediaProcessor<AudioConfig> {
     }
 
     /**
-     * Native javax.sound.sampled implementation. Doesn't support MP3, OGG and FLAC.
-     * supports only WAV, AIFF, AU.
-     * @param osTargetPath Path to required file
+     * Re-encodes audio with {@code javax.sound.sampled}, used as the fallback when JAVE/FFmpeg
+     * re-encoding fails. Supports WAV, AIFF and AU only; MP3, OGG and FLAC are not supported.
+     * <p>
+     * Output is 16-bit signed little-endian PCM, keeping the input's sample rate and channel
+     * count. If direct conversion isn't supported, a plain PCM conversion is attempted instead.
+     * The output container matches the input's audio format, or WAVE if the file isn't
+     * detected as audio. The output is written to the general output path under the
+     * context's audio title.
+     * @param osTargetPath path to the input file
+     * @throws UnsupportedAudioFileException if the input format is not supported by {@code javax.sound.sampled}
+     * @throws AudioProcessingException if reading or writing the audio fails
      * @since 0.1
      */
     public void reEncodeAudioNative(Path osTargetPath) throws UnsupportedAudioFileException {
@@ -90,6 +114,20 @@ public class AudioProcessor implements MediaProcessor<AudioConfig> {
         }
     }
 
+    /**
+     * Builds the JAVE encoding attributes for the output. Bitrate, sampling rate and channels
+     * each use, in order of priority:
+     * <ol>
+     *   <li>The configured output value, if greater than {@code 0};</li>
+     *   <li>The configured fallback, if the detected input value is {@code 0} or less
+     *       (bitrate and sampling rate only);</li>
+     *   <li>The detected input value from the context.</li>
+     * </ol>
+     * Bitrate is not set when the detected MIME type is FLAC.
+     * @param audioAttrs the audio attributes to fill in; the codec should already be set
+     * @return encoding attributes wrapping {@code audioAttrs}
+     * @since 0.2
+     */
     private EncodingAttributes setAttributes(AudioAttributes audioAttrs) {
         if (!"flac".equals(context.getDetectedMime())) {
             int bitrate;
@@ -121,11 +159,14 @@ public class AudioProcessor implements MediaProcessor<AudioConfig> {
     }
 
     /**
-     * Main audio re-encoding method, utilises Jave (FFmpeg).
-     * Accepts an input file path and format to encode to.
-     * Sanitized output is saved to configured output path.
-     * @param osTargetPath Path to input file
-     * @param format Output format
+     * Re-encodes audio with JAVE/FFmpeg into the given output format. The codec comes from the
+     * context, with {@code vorbis} mapped to {@code libvorbis}. If no codec is set, FFmpeg
+     * picks its default codec for the output format. Bitrate, sampling rate and channels are
+     * set as described in {@link #setAttributes(AudioAttributes)}. The output is written to the
+     * general output path under the context's audio title.
+     * @param osTargetPath path to the input file
+     * @param format the FFmpeg output format (e.g. {@code "mp3"}, {@code "wav"})
+     * @throws AudioProcessingException if encoding fails
      * @since 0.1
      */
     public void reEncodeDefault(Path osTargetPath, String format) {
@@ -146,6 +187,18 @@ public class AudioProcessor implements MediaProcessor<AudioConfig> {
         }
     }
 
+    /**
+     * Re-encodes the input into the configured output format, or into the input's own format
+     * if the output format is {@code "default"}. If JAVE/FFmpeg re-encoding fails, falls back to
+     * {@link #reEncodeAudioNative(Path)} unless that fallback is turned off in the config.
+     * <p>
+     * In no-save mode, the output file is deleted after re-encoding; if that deletion fails,
+     * an error is logged and no exception is thrown.
+     * @param osTargetPath path to the input file
+     * @throws AudioProcessingException if MIME detection fails, re-encoding fails with the
+     *         native fallback turned off, or the native fallback also fails
+     * @since 0.2
+     */
     public void reEncode(Path osTargetPath) {
         try {
             if (Objects.equals(config.getDefaultOutputTo(), "default")) {
@@ -179,6 +232,17 @@ public class AudioProcessor implements MediaProcessor<AudioConfig> {
 
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Stores the input's details in the context: the detected MIME type, the bitrate (skipped
+     * for FLAC), the sampling rate, the channel count, and a generated output title whose
+     * extension matches the output format. Then runs {@link #reEncode(Path)}.
+     * @param osTargetPath path to the input file
+     * @throws AudioProcessingException if reading the input's details or re-encoding fails
+     * @throws MimeTypeDetectionException if the input's MIME type cannot be detected
+     * @since 0.2
+     */
     @Override
     public void process(Path osTargetPath) throws AudioProcessingException {
         String format;
@@ -207,6 +271,11 @@ public class AudioProcessor implements MediaProcessor<AudioConfig> {
         logger.info("audio re-encoded successfully");
     }
 
+    /**
+     * {@inheritDoc}
+     * @return this processor's {@link AudioContext}
+     * @since 0.2
+     */
     @Override
     public MediaContext getContext() {
         return context;
