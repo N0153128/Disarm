@@ -26,18 +26,44 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * General utilities class, immutable.
+ * Static utilities shared by the core and plugins: magic-byte MIME detection,
+ * text charset detection, file type detection, output file title generation,
+ * file operations (rename, move, delete, directory creation, size), and
+ * logging level control.
+ * <p>
+ * {@link #init(GlobalConfig)} must be called before any charset detection
+ * method, as the detection thresholds are read from {@link GlobalConfig}.
  * @since 0.1
  */
 public class Utils {
     private static final Logger logger = LogManager.getLogger(Utils.class);
     private static GlobalConfig globalConfig;
 
+    /**
+     * Sets the global config used for charset detection thresholds and sample size.
+     * Must be called once at startup, before any charset detection runs.
+     * @param globalConfig the global config instance
+     * @since 0.2
+     */
     public static void init(GlobalConfig globalConfig) {
         Utils.globalConfig = globalConfig;
     }
 
+    /**
+     * A file signature used for magic-byte MIME detection.
+     * @param byteSignature the expected bytes, matched from offset 0 of the file
+     * @param mask per-byte match flags; {@code false} marks a wildcard byte that is not compared
+     *             (e.g. the RIFF chunk size in WAV/WEBP, or the box size in MP4/MOV)
+     * @since 0.2
+     */
     record MimeSignature(byte[] byteSignature, boolean[] mask) {}
+
+    /**
+     * Known file signatures keyed by format. Keys of the form {@code "format/variant"}
+     * (e.g. {@code "mp3/id3"}, {@code "html/div_lower"}) group several signatures under
+     * one format; only the part before the {@code /} is returned on a match.
+     * @since 0.2
+     */
     private static final Map<String, MimeSignature> mimeSignatures = new HashMap<>() {{
         put("jpeg", new MimeSignature(
                 new byte[]{ (byte)0xFF, (byte)0xD8, (byte)0xFF},
@@ -301,12 +327,33 @@ public class Utils {
         ));
     }};
 
+    /**
+     * Text formats with no fixed magic bytes. These are identified by file
+     * extension, and the content must also pass charset detection.
+     * @since 0.2
+     */
     private static final List<String> textFormats = List.of("txt", "log", "json");
 
+    /**
+     * @param signedByte a raw byte
+     * @return the byte's unsigned value, 0–255
+     * @since 0.2
+     */
     private static int toUnsignedValue(byte signedByte) {
         return signedByte & 0xFF;
     }
 
+    /**
+     * Checks whether the bytes decode under the given charset with no malformed or
+     * unmappable input.
+     * @param charset the charset to test
+     * @param bytes the sample bytes
+     * @param length number of bytes in {@code bytes} to decode
+     * @param dataWasTruncated {@code true} if the sample is a prefix of a larger file;
+     *                         an incomplete multibyte sequence at the end is then tolerated
+     * @return {@code true} if the sample decodes cleanly
+     * @since 0.2
+     */
     private static boolean canBeDecoded(
         Charset charset,
         byte[] bytes,
@@ -333,6 +380,14 @@ public class Utils {
         }
     }
 
+    /**
+     * Detects a charset from a leading byte order mark. Checks for UTF-32 BE
+     * ({@code 00 00 FE FF}), UTF-8 ({@code EF BB BF}) and UTF-16 LE ({@code FF FE}).
+     * @param bytes the sample bytes
+     * @param length number of valid bytes in {@code bytes}
+     * @return the charset indicated by the BOM, or {@code null} if no recognised BOM is present
+     * @since 0.2
+     */
     private static Charset detectCharsetFromByteOrderMark(byte[] bytes, int length) {
         if (length >= 4) {
             int firstByte = toUnsignedValue(bytes[0]);
@@ -366,6 +421,17 @@ public class Utils {
         return null;
     }
 
+    /**
+     * Heuristically detects BOM-less UTF-32 by looking at NUL byte positions within
+     * each complete 4-byte group. BE is chosen when every group starts with NUL, not every
+     * group ends with NUL, and at least {@link GlobalConfig#getMinUtf32BasicPlaneRatio()}
+     * of groups have NUL in the second byte. LE is the same check mirrored, using the
+     * last byte and the third byte.
+     * @param bytes the sample bytes
+     * @param length number of valid bytes in {@code bytes}; fewer than 8 always returns {@code null}
+     * @return {@code UTF-32BE}, {@code UTF-32LE}, or {@code null} if neither pattern fits
+     * @since 0.2
+     */
     private static Charset guessUtf32WithoutByteOrderMark(byte[] bytes, int length) {
         if (length < 8) {
             return null;
@@ -412,6 +478,16 @@ public class Utils {
         return null;
     }
 
+    /**
+     * Confirms a guessed charset: the sample must decode cleanly and, once decoded,
+     * must not exceed the suspicious control character ratio.
+     * @param charset the guessed charset
+     * @param bytes the sample bytes
+     * @param length number of valid bytes in {@code bytes}
+     * @param dataWasTruncated {@code true} if the sample is a prefix of a larger file
+     * @return {@code true} if the sample is accepted as text in {@code charset}
+     * @since 0.2
+     */
     private static boolean isConfirmedText(
             Charset charset, byte[] bytes, int length, boolean dataWasTruncated
     ) {
@@ -422,6 +498,17 @@ public class Utils {
         return  !hasTooManyControlCharactersAfterDecoding(charset, bytes, length);
     }
 
+    /**
+     * Heuristically detects BOM-less UTF-16 by counting NUL bytes at even and odd
+     * positions. The more common position must hold more than
+     * {@link GlobalConfig#getMinUtf16NulRatio()} of the character count, and NULs at
+     * the other position must not exceed {@link GlobalConfig#getMaxControlCharacterRatio()}
+     * of that count. More NULs at even positions means BE, otherwise LE.
+     * @param bytes the sample bytes
+     * @param length number of valid bytes in {@code bytes}; fewer than 4 always returns {@code null}
+     * @return {@code UTF-16BE}, {@code UTF-16LE}, or {@code null} if the NUL pattern doesn't fit
+     * @since 0.2
+     */
     private static Charset guessUtf16WithoutByteOrderMark(byte[] bytes, int length) {
         if (length < 4) {
             return null;
@@ -463,6 +550,12 @@ public class Utils {
         return StandardCharsets.UTF_16LE;
     }
 
+    /**
+     * @param bytes the sample bytes
+     * @param length number of valid bytes in {@code bytes}
+     * @return {@code true} if any byte in range is {@code 0x00}
+     * @since 0.2
+     */
     private static boolean containsNulByte(byte[] bytes, int length) {
         for (int position = 0; position < length; position++) {
             if (bytes[position] == 0) {
@@ -472,6 +565,13 @@ public class Utils {
         return false;
     }
 
+    /**
+     * Checks whether a value is a C0 control character or DEL that is not normally
+     * found in text. Tab, LF, CR, form feed and ESC are allowed.
+     * @param value a byte or char value
+     * @return {@code true} if the value is a suspicious control character
+     * @since 0.2
+     */
     private static boolean isSuspiciousControlCharacter(int value) {
         boolean isControlCharacter = (value < 0x20) || (value == 0x7F);
 
@@ -483,6 +583,14 @@ public class Utils {
         return isControlCharacter && !isAllowedInText;
     }
 
+    /**
+     * Checks the raw byte sample for a suspicious control character ratio above
+     * {@link GlobalConfig#getMaxControlCharacterRatio()}.
+     * @param bytes the sample bytes
+     * @param length number of valid bytes in {@code bytes}
+     * @return {@code true} if the ratio is exceeded
+     * @since 0.2
+     */
     private static boolean hasTooManyControlCharacters(byte[] bytes, int length) {
         int suspiciousCount = 0;
         for (int position = 0; position < length; position++) {
@@ -495,6 +603,15 @@ public class Utils {
         return suspiciousCount > maximumAllowedCount;
     }
 
+    /**
+     * Decodes the sample with the given charset and checks the decoded characters for a
+     * suspicious control character ratio above {@link GlobalConfig#getMaxControlCharacterRatio()}.
+     * @param charset the charset to decode with
+     * @param bytes the sample bytes
+     * @param length number of valid bytes in {@code bytes}
+     * @return {@code true} if the ratio is exceeded
+     * @since 0.2
+     */
     private static boolean hasTooManyControlCharactersAfterDecoding(
             Charset charset, byte[] bytes, int length
     ) {
@@ -510,6 +627,12 @@ public class Utils {
         return suspiciousCount > maximumAllowedCount;
     }
 
+    /**
+     * @param bytes the sample bytes
+     * @param length number of valid bytes in {@code bytes}
+     * @return {@code true} if every byte in range is 7-bit ASCII
+     * @since 0.2
+     */
     private static boolean isPureAscii(byte[] bytes, int length) {
         for (int position = 0; position < length; position++) {
             int value = toUnsignedValue(bytes[position]);
@@ -520,6 +643,24 @@ public class Utils {
         return true;
     }
 
+    /**
+     * Detects the charset of a text sample, or rejects it as non-text. Checks run in order:
+     * <ol>
+     *   <li>Empty sample: UTF-8.</li>
+     *   <li>Byte order mark: the BOM's charset if the sample decodes cleanly, otherwise {@code null}.</li>
+     *   <li>BOM-less UTF-32, then BOM-less UTF-16 heuristics, each confirmed by decoding.</li>
+     *   <li>Any NUL byte, or too many suspicious control characters: {@code null}.</li>
+     *   <li>Pure ASCII: US-ASCII.</li>
+     *   <li>Clean UTF-8 decode: UTF-8.</li>
+     *   <li>Otherwise: ISO-8859-1.</li>
+     * </ol>
+     * Requires {@link #init(GlobalConfig)}.
+     * @param bytes the sample bytes
+     * @param length number of valid bytes in {@code bytes}
+     * @param dataWasTruncated {@code true} if the sample is a prefix of a larger file
+     * @return the detected charset, or {@code null} if the sample is not considered text
+     * @since 0.2
+     */
     public static Charset detectTextCharset(byte[] bytes, int length, boolean dataWasTruncated) {
         if (length == 0) {
             return StandardCharsets.UTF_8;
@@ -562,6 +703,15 @@ public class Utils {
         return StandardCharsets.ISO_8859_1;
     }
 
+    /**
+     * Reads up to {@link GlobalConfig#getSampleSizeInBytes()} bytes from the file and
+     * detects its charset using {@link #detectTextCharset(byte[], int, boolean)}.
+     * Requires {@link #init(GlobalConfig)}.
+     * @param osTargetPath path to the file
+     * @return the detected charset, or {@code null} if the file is not considered text
+     * @throws IOException if the file cannot be read
+     * @since 0.2
+     */
     public static Charset detectTextCharset(Path osTargetPath) throws IOException {
         try (InputStream fileStream = Files.newInputStream(osTargetPath)) {
             byte[] sampleBytes = fileStream.readNBytes(globalConfig.getSampleSizeInBytes());
@@ -570,6 +720,15 @@ public class Utils {
         }
     }
 
+    /**
+     * Tells WEBM and Matroska apart, since both share the same EBML magic bytes. Reads
+     * the first 64 bytes and searches them as ASCII for the EBML DocType string.
+     * @param osTargetPath path to the file
+     * @return {@code "webm"}, {@code "x-matroska"} (if both strings are present), or
+     *         {@code null} if neither DocType is found
+     * @throws MimeTypeDetectionException if the file cannot be read
+     * @since 0.2
+     */
     public static String checkWebmOrMkvOverDocType(Path osTargetPath) {
         String result = null;
         byte[] docType = new byte[64];
@@ -585,12 +744,32 @@ public class Utils {
         return result;
     }
 
+    /**
+     * @param osTargetPath path to the file
+     * @return the text after the last {@code .} in the file name, or an empty string if there is none
+     * @since 0.2
+     */
     public static String getFileExtension(Path osTargetPath) {
         String filename = osTargetPath.getFileName().toString();
         int dotIndex = filename.lastIndexOf('.');
         return dotIndex >= 0 ? filename.substring(dotIndex + 1) : "";
     }
 
+    /**
+     * Identifies a file's format from its first 16 bytes against the known signature table.
+     * On a match, returns the signature's format key; for grouped keys such as
+     * {@code "mp3/id3"} or {@code "html/div"}, only the part before the {@code /} is returned.
+     * WEBM/Matroska matches are resolved via {@link #checkWebmOrMkvOverDocType(Path)}.
+     * <p>
+     * If no signature matches, files with a {@code txt}, {@code log} or {@code json}
+     * extension are accepted as that extension, provided their content passes
+     * {@link #detectTextCharset(Path)}.
+     * @param osTargetPath path to the file
+     * @return the detected format (e.g. {@code "png"}, {@code "mp3"}, {@code "html"}, {@code "txt"})
+     * @throws MimeTypeDetectionException if the file cannot be read, its charset cannot be
+     *         detected, or its format is unrecognised or unsupported
+     * @since 0.2
+     */
     public static String getMimeFromSignature(Path osTargetPath) {
         byte[] header = new byte[16];
         try (FileInputStream stream = new FileInputStream(osTargetPath.toFile())) {
@@ -640,17 +819,34 @@ public class Utils {
         }
     }
 
+    /**
+     * Sets the log level for the JAVE library ({@code ws.schild.jave}).
+     * @param level the log level to apply
+     * @since 0.2
+     */
     public static void setJaveLogging(Level level) {
         Configurator.setLevel("ws.schild.jave", level);
     }
 
+    /**
+     * Sets the log level for all Disarm loggers ({@code dev.n0153.app}).
+     * @param level the log level to apply
+     * @since 0.2
+     */
     public static void setDisarmLogging(Level level) {
         Configurator.setLevel("dev.n0153.app", level);
     }
 
     /**
-     * Shortcut method, generates title for a file that is currently in processing.
-     * The title is then saved to state and can be accessed with state.getGeneralFileTitle().
+     * Generates an output file name for a file being processed. The name is either
+     * 40 random alphanumeric characters, or a timestamp prefixed with the file's type:
+     * {@code {fileType}_{year}_{month}_{day}_{hour}_{minute}_{second}_{nanosecond}_{millisecond}.{mime}}.
+     * Timestamp fields are not zero-padded.
+     * @param osTargetPath path to the file; used to detect the file type for timestamp names
+     * @param mime the format used as the file extension (e.g. {@code "png"})
+     * @param randomCharactersTitle {@code true} for a random name, {@code false} for a timestamped name
+     * @return the generated file name, including extension
+     * @throws FileTypeDetectionException if a timestamped name is requested and the file type cannot be detected
      * @since 0.1
      */
     public static String getTitle(Path osTargetPath, String mime, boolean randomCharactersTitle) {
@@ -684,6 +880,14 @@ public class Utils {
         }
     }
 
+    /**
+     * Generates an output file name made of a caller-supplied tag and 40 random
+     * alphanumeric characters: {@code {forcedTag}_{random}.{mime}}.
+     * @param forcedTag the prefix to use in place of the detected file type
+     * @param mime the format used as the file extension
+     * @return the generated file name, including extension
+     * @since 0.2
+     */
     public static String getTitleForcedTagRandomCharacters(String forcedTag, String mime) {
         final String CHARACTERS =
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -697,9 +901,14 @@ public class Utils {
     }
 
     /**
-     * Shortcut method, generates title for a file that is currently in processing.
-     * The title is then saved to state and can be accessed with state.getGeneralFileTitle().
-     * @since 0.1
+     * Generates a timestamped output file name with a caller-supplied tag in place of the
+     * detected file type:
+     * {@code {forcedTag}_{year}_{month}_{day}_{hour}_{minute}_{second}_{nanosecond}_{millisecond}.{mime}}.
+     * Timestamp fields are not zero-padded.
+     * @param forcedTag the prefix to use in place of the detected file type
+     * @param mime the format used as the file extension
+     * @return the generated file name, including extension
+     * @since 0.2
      */
     public static String getTitleForcedTagTimeStamp(String forcedTag, String mime) {
         LocalDateTime now = LocalDateTime.now();
@@ -717,10 +926,10 @@ public class Utils {
     }
 
     /**
-     * Renames specified file.
-     * @param osTargetFile Path to file.
-     * @param newTitle New title.
-     * @throws IOException If file isn't supported.
+     * Renames a file in place, within its current directory.
+     * @param osTargetFile path to the file
+     * @param newTitle the new file name
+     * @throws IOException if the move fails, including when a file with the new name already exists
      * @since 0.1
      */
     public static void renameFile(Path osTargetFile, String newTitle) throws IOException {
@@ -728,10 +937,16 @@ public class Utils {
     }
 
     /**
-     * Returns file type of given file.
-     * @param osTargetFile Path to file
-     * @return File type.
-     * @throws FileTypeDetectionException If fails to detect file type.
+     * Returns a file's top-level type (e.g. {@code "image"}, {@code "audio"}, {@code "video"},
+     * {@code "text"}), used to pick the matching plugin and CLI mixin.
+     * The base type comes from {@link Files#probeContentType(Path)}; files detected by
+     * {@link #getMimeType(Path)} as {@code json}, {@code log} or {@code html} are always
+     * reported as {@code "text"}.
+     * @param osTargetFile path to the file
+     * @return the file's top-level type
+     * @throws FileTypeDetectionException if the file doesn't exist, isn't a regular file,
+     *         or its type cannot be determined
+     * @throws MimeTypeDetectionException if signature-based MIME detection fails
      * @since 0.1
      */
     public static String getFileType(Path osTargetFile) throws FileTypeDetectionException {
@@ -764,13 +979,10 @@ public class Utils {
     }
 
     /**
-     * Shortcut method, get mime type of given file.
-     * NOTE! This method relies on Files.probeContentType(), which uses platform-specific implementations, which
-     * don't provide any content validation whatsoever.
-     * Proper magic bytes check coming in version 0.2.
-     * @param osTargetFilePath Path to file
-     * @return Subtype of a specified file's mime type.
-     * @throws MimeTypeDetectionException if fails to detect mime type.
+     * Returns a file's format via magic-byte detection; see {@link #getMimeFromSignature(Path)}.
+     * @param osTargetFilePath path to the file
+     * @return the detected format (e.g. {@code "png"}, {@code "mp3"}, {@code "txt"})
+     * @throws MimeTypeDetectionException if the format cannot be detected or isn't supported
      * @since 0.1
      */
     public static String getMimeType(Path osTargetFilePath) throws MimeTypeDetectionException {
@@ -782,9 +994,11 @@ public class Utils {
     }
 
     /**
-     * Shortcut method, delete any specified file.
-     * @param osTargetFilePath Path to file.
-     * @throws IOException If file doesn't exist or unable to delete.
+     * Deletes the specified file.
+     * @param osTargetFilePath path to the file
+     * @throws NoSuchFileException if the file doesn't exist
+     * @throws FileSystemException if the file could not be deleted
+     * @throws IOException if an I/O error occurs
      * @since 0.1
      */
     public static void fileDispose(Path osTargetFilePath) throws IOException {
@@ -798,6 +1012,15 @@ public class Utils {
         }
     }
 
+    /**
+     * Moves a file into the destination directory, keeping its file name. The destination
+     * directory, including any missing parents, is created if it doesn't exist.
+     * @param osTargetPath path to the file to move
+     * @param destination the target directory
+     * @throws IOException if the move fails, including when a file with the same name already exists there
+     * @throws InvalidPathException if the destination directory cannot be created
+     * @since 0.2
+     */
     public static void fileMoveTo(Path osTargetPath, Path destination) throws IOException {
         if (!Files.isDirectory(destination)) {
             logger.error("Specified directory doesn't exist. Creating new directory at: {}", destination);
@@ -806,6 +1029,12 @@ public class Utils {
         Files.move(osTargetPath, destination.resolve(osTargetPath.getFileName()));
     }
 
+    /**
+     * Creates a directory, including any missing parent directories. Does nothing if it already exists.
+     * @param dirToCreate the directory to create
+     * @throws InvalidPathException if the directory cannot be created
+     * @since 0.2
+     */
     public static void createDirectory(Path dirToCreate) {
         try {
             Files.createDirectories(dirToCreate);
@@ -816,9 +1045,9 @@ public class Utils {
     }
 
     /**
-     * Returns the size, in bytes of the specified file.
-     * @param osFilePath Path to file.
-     * @return File length.
+     * Returns a file's size in bytes, read from file system metadata without loading the file.
+     * @param osFilePath path to the file
+     * @return the file size in bytes, or {@code 0} if the file doesn't exist
      * @since 0.1
      */
     public static long getSize(Path osFilePath) {
