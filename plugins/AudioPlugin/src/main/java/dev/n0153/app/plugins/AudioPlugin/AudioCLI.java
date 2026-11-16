@@ -6,6 +6,21 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine;
 
+/**
+ * PicoCLI options for the Audio plugin. Main adds this class as a mixin to
+ * {@link DisarmCLI} only when an input file is detected as audio. Each option
+ * that is set overrides the matching value in this plugin's {@link AudioConfig}.
+ * <p>
+ * Covers validation ceilings (duration, file size overall and per format,
+ * bitrate and sampling rate per format, channels), output settings (bitrate,
+ * sample rate, channels, format), fallback values for input with a bad or
+ * unknown bitrate or sampling rate, turning off the native
+ * {@code javax.sound.sampled} fallback, and a benchmark-only no-save mode.
+ * <p>
+ * Numeric options apply only when greater than {@code 0}, and boolean options
+ * only when passed, so options that aren't given leave the config defaults unchanged.
+ * @since 0.2
+ */
 @CommandLine.Command(name = "audio", description = "Audio Processing Plugin.")
 public class AudioCLI implements Runnable {
     private static final Logger logger = LogManager.getLogger(AudioCLI.class);
@@ -13,11 +28,22 @@ public class AudioCLI implements Runnable {
     private final AudioConfig config = new AudioConfig();
     private final PluginRegistry registry;
 
+    /**
+     * Creates the Audio CLI with a fresh {@link AudioConfig} and registers that
+     * config under the {@code "audio"} file type, so the registry holds a default
+     * config before any options are applied.
+     * @param registry the plugin registry to register the config with
+     * @since 0.2
+     */
     public AudioCLI (PluginRegistry registry) {
         this.registry = registry;
         registry.updateConfig("audio", config);
     }
 
+    /**
+     * The parent {@link DisarmCLI} command, injected by PicoCLI.
+     * @since 0.2
+     */
     @CommandLine.ParentCommand
     DisarmCLI inputPath;
 
@@ -158,6 +184,17 @@ public class AudioCLI implements Runnable {
                     audio dummy""")
     private boolean audioDummyDebugTriggered;
 
+    /**
+     * Applies the parsed options to this plugin's {@link AudioConfig}, then
+     * re-registers that config under the {@code "audio"} file type.
+     * Options that weren't passed (numeric values of {@code 0} or less, booleans
+     * left {@code false}, {@code null} strings) are skipped.
+     * <p>
+     * {@code -smbf} and {@code -smsrf} take a {@code format:value} pair and set the
+     * ceiling for that format only.
+     * @throws IllegalArgumentException if a config setter rejects a value
+     * @since 0.2
+     */
     @Override
     public void run() {
         if (maxAudioDuration > 0) {
